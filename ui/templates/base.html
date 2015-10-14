@@ -1,0 +1,43 @@
+{# This is required by insert_above #}{% insert_handler %}<!DOCTYPE html>
+<html lang="en"><head>
+<title>CRC Portal :: {{ title }}</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="shortcut icon" href="/static/img/crc-icon.png">
+
+{% media_container prelude %}
+{% include 'messages-transient-header.html' %}
+
+<script type="text/javascript">
+    {% container prelude_js %}
+</script>
+<style type="text/css">
+    {% container prelude_css %}
+</style>
+{{ header_prelude }}
+{% block head %} {% endblock head %}
+</head>
+{% insert_str prelude "js/jquery.min.js" %}
+{% insert_str prelude "js/jquery.html5storage.min.js" %}
+{% insert_str prelude "js/messages-runtime.js" %}
+{% insert_str prelude "js/class.js" %}
+{% insert_str prelude "js/plugin-helper.js" %}
+{% insert_str prelude "js/mustache.js" %}
+{% insert_str prelude "js/plugin.js" %}
+{% insert_str prelude "js/manifold.js" %}
+{% insert_str prelude "js/topmenu.js" %}
+{% insert_str prelude "css/layout-unfold.css" %}
+{% insert_str prelude "css/manifold.css" %}
+{% insert_str prelude "css/plugin.css" %}
+{% insert_str prelude "css/onelab_marko.css" %}
+<body>
+{% block container %}
+  {% block topmenu %}
+  {% include 'widget-topmenu.html' %}
+  {% endblock topmenu %}
+{% include 'messages-transient.html' %}
+<div class="container"> <div class="row">
+  {% block base_content%}{% endblock %}
+</div></div>
+{% endblock container %}
+</body>
+</html>

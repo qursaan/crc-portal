@@ -1,0 +1,9 @@
+NEW SLICE REQUEST
+
+slice name      : {{slice_name}}
+number of nodes : {{number_of_nodes}}
+type of nodes   : {{type_of_nodes}}
+purpose         : {{purpose}}
+email           : {{email}}
+cc myself       : {{cc_myself}}
+

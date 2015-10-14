@@ -1,0 +1,102 @@
+<div id="plugin-{{ domid }}" class="row">
+    <div class="row m-b">
+        <div class="col-md-1">
+            <label for="inputEmail3" class="col-sm-2 control-label">Date</label>
+        </div>
+        <div class="col-md-9">
+            <input id="DateToRes" type="text" class="form-control" placeholder="Reservation Date">
+            <span class="glyphicon glyphicon-calendar"></span>
+        </div>
+        <div class="col-md-2 text-center">
+            <div id="TopologyModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="myModalLabel">Topology</h4>
+                    </div>
+                    <div class="modal-body">
+                        <img src="../../static/img/nitos_topo.png" alt="nitos topology" style="width:100%;" />
+                    </div>
+                </div><!-- /.modal-dialog -->
+            </div><!-- /.modal TopologyModal -->
+            <button type="button" class="btn btn-primary btn-md" data-toggle="modal" data-target="#TopologyModal">Topology</button>
+
+        </div>
+    </div>
+    <div class="row m-b">
+        <div class="col-md-1">
+            <label for="inputEmail3" class="col-sm-1 control-label">Time</label>
+        </div>
+        <div class="col-md-9">
+            <div id="time-range"></div>
+        </div>
+        <div class="col-md-2">
+            <span id="lbltime" class="label label-primary"></span>
+        </div>
+    </div>
+
+    <div class='query-editor-spacer'>
+        <div id="ShedulerNodes-scroll-container">
+            <table id="ShedulerNodes">
+                <tbody>
+                    {% comment %}
+                    {% for itms in nodes %}
+                    <tr>
+                        <td class="no-image verticalIndex" rowspan="{{ itms.1|length }}"><div class="verticalText">{{ itms.0 }}</div></td>
+
+                        {% for n in itms.1 %}
+                        {% if not forloop.first %}
+                    <tr>
+                        {% endif %}
+                        <td class="info fixed">{{ n }}</td>
+                    </tr>
+                    {% endfor %}
+                    {% endfor %}
+                    {% endcomment  %}
+                </tbody>
+            </table>
+        </div>
+        <div id="reservation-table-scroll-container">
+            <table id='{{domid}}-reservation-table' class='table table-bordered'>
+                <thead>
+                    <tr>
+                        {% for ts in time_slots %}
+                        <th class='center info'>{{ ts|safe }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% comment %}
+                    {% for itms in nodes %}
+                    {% for n in itms.1 %}
+                    <tr data-trindex="">
+                        {% for ts in time_slots %}
+                        {% if n == 'node020' %}
+                        <td class="maintenance closed" data-tdindex="{{forloop.counter}}"></td>
+                        {% elif n == 'node023' or n == 'node030' %}
+                        <td class="closed" data-tdindex="{{forloop.counter}}"></td>
+                        {% else %}
+                        <td class="" data-tdindex="{{forloop.counter}}"></td>
+                        {% endif %}
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                    {% endfor %}
+                    {% endcomment  %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="legend">
+            <ol>
+                <li class="free">free</li>
+                <li class="selected">selected</li>
+                <li class="closed">reserved</li>
+                <li class="maintenance">maintenance</li>
+            </ol>
+        </div>
+    </div><!-- / scheduler plugin -->
+    <script type="text/javascript">
+        //alert("1");
+    </script>
+</div>

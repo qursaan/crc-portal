@@ -1,0 +1,32 @@
+[manifold]
+url = http://127.0.0.1:8000/
+admin_user = pirate
+admin_password = food
+
+#[crc]
+# theme possible values = onelab, fed4fire, fibre, smartfire
+#theme=onelab
+#debug = true
+#httproot =
+#dataroot =
+# components = sla,forge
+
+#[database]
+# postgresql_psycopg2, mysql, sqlite3 or oracle
+#engine = sqlite3
+#name = crc
+#server =
+#port =
+#user =
+#password =
+
+#[activity]
+#server = http://athos.ipv6.lip6.fr/activity/push/log
+#apikey = 
+#secret = 
+
+#[iotlab]
+#production
+#url = https://www.iot-lab.info/rest/admin/users
+#admin_user = xxx
+#admin_password= xxx

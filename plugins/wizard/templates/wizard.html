@@ -1,0 +1,21 @@
+<!-- BEGIN Smart Wizard -->
+<div id="wizard" class="swMain">
+  <ul>
+    {% for son in sons %}
+    <li>
+      <a href="#step-{{forloop.counter}}">
+        <label class="stepNumber">{{forloop.counter}}</label>
+        <span class="stepDesc">Step {{forloop.counter}}<br/><small>{{ son.title }}</small></span>
+      </a>
+    </li>
+    {% endfor %}
+  </ul>
+  
+  {% for son in sons %}
+  <div id="step-{{forloop.counter}}">	
+    <h2 class="StepTitle">{{ son.title }}</h2>
+    {{son.rendered}}
+  </div>
+  {% endfor %}
+</div> <!-- END wizard -->
+<!-- END Smart Wizard -->

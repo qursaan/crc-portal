@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block base_content %}
+    <div id="unfold2-main" class="col-xs-9 columns">
+      {% block unfold_main %}
+      "The main content area (define block 'unfold_main')"
+      {% endblock unfold_main %}
+    </div><!--col-xs-9-->
+    <div id='unfold2-margin' class='col-xs-3'>
+      {% block unfold_margin %}
+      "The related content area (define block 'unfold_margin')"
+      {% endblock unfold_margin %}
+    </div><!--col-xs-3-->
+{% endblock %}

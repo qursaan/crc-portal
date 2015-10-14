@@ -1,0 +1,146 @@
+{% extends "layout-unfold1.html" %}
+
+{% block unfold_main %}
+
+<div class="onelab-title well-lg">
+  <h2>CRC Experimenter Registration</h2>
+  <h3>For First Line Support please <a href="/portal/contact" >Contact Support</a></h3>
+</div>
+
+{% if errors %}
+<ul>
+  {% for error in errors %}
+  <li>{{ error }}</li>
+  {% endfor %}
+</ul>
+{% endif %}
+
+<div class="well">
+  <form class="cmxform form-horizontal" id="registrationForm" method="POST" action="" enctype="multipart/form-data" role="form">
+    <fieldset>
+    {% csrf_token %}
+    <div class="form-group">
+      <label for="firstname" class="col-xs-2 control-label">First Name</label>
+      <div class="col-xs-4">
+			<input id="firstname" type="text" name="firstname" class="form-control" minlength="2"
+			value="{{ firstname }}" placeholder="First Name" required />
+      </div>
+      <div class="col-xs-6"> <p class="form-hint">Enter your first name</p> </div>
+    </div>
+    <div class="form-group">
+      <label for="lastname" class="col-xs-2 control-label">Last Name</label>
+      <div class="col-xs-4">
+			<input id="lastname" type="text" name="lastname" size="25" class="form-control" minlength="2"
+			value="{{ lastname }}" placeholder="Last Name" required />
+      </div>
+      <div class="col-xs-6"><p class="form-hint">Enter your last name</p></div>
+    </div>
+    <div class="form-group">
+      <label for="authority_hrn" class="col-xs-2 control-label">Authority</label>
+      <div class="col-xs-4">
+        <div class="ui-widget">
+             <select id="authority_hrn" name="authority_hrn" class="form-control" value="{{ authority_hrn }}" required>
+                {% for row in authorities %}
+                    <option value="{{ row.authority_hrn }}" label="{{ row.site_name }}" ></option>
+                {% endfor %}
+             </select>
+            <!--input id="authority_hrn" name="authority_hrn" class="form-control" value="{{ authority_hrn }}" required-->
+        </div>
+     </div>
+      <div class="col-xs-6"><p class="form-hint">An authority responsible for vetting your account</p></div>
+    </div>
+
+	<!-- LOGIN
+	TODO: Login should be suggested from user email or first/last name, and
+	checked for existence. In addition, the full HRN should be shown to the
+	user.
+    <div class="form-group">
+      <label for="login" class="col-xs-2 control-label">Login</label>
+      <div class="col-xs-4">
+	  <input type="text" name="login" size="25" class="form-control" minlength="2" value="{{ login }}" placeholder="Login" required />
+      </div>
+      <div class="col-xs-6"><p class="form-hint">Enter your login</p></div>
+    </div>
+	-->
+
+    <div class="form-group">
+      <label for="email" class="col-xs-2 control-label">Email</label>
+      <div class="col-xs-4">
+		<input id="email" type="email" name="email" size="25"  class="form-control"
+               value="{{ email }}" required />
+      </div>
+      <div class="col-xs-6"><p class="form-hint">Enter a valid email address</p></div>
+    </div>
+    <div class="form-group">
+      <label for="password" class="col-xs-2 control-label">Password</label>
+      <div class="col-xs-4">
+			<input type="password" id="password" name="password"
+			 class="form-control" minlength="4" value="{{ password }}" required />
+      </div>
+      <div class="col-xs-6"><p class="form-hint">Enter password</p></div>
+    </div>
+    <div class="form-group">
+      <label for="confirmpassword" class="col-xs-2 control-label">Confirm Password</label>
+      <div class="col-xs-4">
+			<input type="password" id="confirmpassword" name="confirmpassword"
+			minlength="4" class="form-control" value="" placeholder="Confirm Password" required />
+      </div>
+      <div class="col-xs-6"><p class="form-hint">Retype the password</p></div>
+    </div>
+    <!--div class="form-group">
+      <label for="key-policy" class="col-xs-2 control-label">My Keys</label>
+      <div class="col-xs-4">
+			<select name="question" class="form-control" id="key-policy" required>
+			  <option value="generate">Generate key pairs for me </option>
+			  <option value="upload">Upload my public key </option>
+			</select>
+      </div>
+      <div class="col-xs-6"><p class="form-hint">Genkey: Account Delegation Automatic (Recommended)</p> </div>
+    </div>
+    <div id="upload_key" class="form-group" style="display:none;" >
+      <label for="user_public_key" class="col-xs-2 control-label">Upload public key</label>
+      <div class="col-xs-4">
+			<input id="user_public_key" type="file" name="user_public_key"
+                   class="form-control" required />
+			<p class="warning" id="pkey_del_msg">Once your account is validated, you will have to delegate your credentials manually using SFA [Advanced users only]</p>
+      </div>
+      <div class="col-xs-6"><p class="form-hint">Account Delegation: Manual (Advanced Users)</p></div>
+    </div-->
+    <div class="form-group" id="register">
+      <button class="submit btn btn-default col-xs-12" type="submit" >Register</button>
+    </div>
+  </fieldset>
+  </form>
+</div>
+<!--script>
+jQuery(document).ready(function(){
+    var availableTags = [
+    {% if authorities %}
+        {% for authority in authorities %}
+            {% if authority.name %}
+                {value:"{{ authority.authority_hrn }}",label:"{{authority.name}}"},
+            {% else %}
+                {value:"{{ authority.authority_hrn }}",label:"{{authority.authority_hrn}}"},
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        {value:"",label:"No authority found !!!"}
+    {% endif %}
+    ];
+    jQuery( "#authority_hrn" ).autocomplete({
+      source: availableTags,
+      minLength: 0,
+      change: function (event, ui) {
+          if(!ui.item){
+              //http://api.jqueryui.com/autocomplete/#event-change -
+              // The item selected from the menu, if any. Otherwise the property is null
+              //so clear the item for force selection
+              jQuery("#authority_hrn").val("");
+          }
+      }
+      //select: function( event, ui ) {console.log(jQuery(this))}
+    });
+});
+</script-->
+{% endblock %}
+

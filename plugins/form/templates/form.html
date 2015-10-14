@@ -1,0 +1,19 @@
+<div id="form_plugin_{{domid}}">
+  <form class="cmxform" id="form_{{domid}}" method="post" action="#" enctype="multipart/form-data" onsubmit="return validate_form_{{domid}}(this)">
+    <fieldset>
+
+      {% for f in fields %}
+      <div class="field">
+        <label for="lname">{{f.name}}</label>
+        <input type="{{f.type}}" id="{{domid}}-{{f.field}}" name="{{f.field}}" size="25" class="required" minlength="2" value="{{f.old_value}}"/>
+        <p class="hint">{{f.description}}</p>
+        <span id='err-{{domid}}-{{f.field}}'><font color='red'>{{f.validation_err}}</font></span>
+      </div>
+      {% endfor %}
+
+    </fieldset>
+  </form>
+
+</div>
+
+

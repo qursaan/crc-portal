@@ -1,0 +1,53 @@
+{% extends "layout-unfold1.html" %}
+
+{% block head %}
+{% endblock %}
+
+{% block unfold_main %}
+
+<div id='tophat_status'></div>
+<div id='ms-dashboard'>
+  	<div class="container">
+		<div class="row">
+			<div class='col-xs-4' id="ms-dashboard-profile">
+				<div class='ms-dashboard-caption'>
+					<h2>User profile</h2>
+				</div>
+				<div class='ms-dashboard-content'>
+					<ul>
+						{% if person.last_name %}
+                            <li><span id='username'>{{person.first_name}} {{person.last_name}}</span></li>
+                        {% endif %}
+						{% if person.email %}
+                            <li><b>Email: </b><a href='mailto:{{person.email}}'>{{person.email}}</a></li>
+                        {% endif %}
+					</ul>
+	  				<button id="account" onclick="location.href='/portal/account/'" class="btn btn-default">Modify</button>
+				</div>
+      		</div>
+			<div class='col-xs-4' id='ms-dashboard-testbeds'>
+				<div class='ms-dashboard-caption'>
+	  				<h2>Testbeds</h2>
+				</div>
+				<div class='ms-dashboard-content' id='tophat__list__platform__network_name'>
+					{{ testbeds }}
+					<button id="testbed_status" onclick="location.href='/portal/testbeds/map/'" class="btn btn-default">View Map</button>
+                    <!--button id="testbed_available" onclick="location.href='/portal/testbeds/slice/'" class="btn btn-default">Available Time</button-->
+				</div>
+   			</div>
+      		<div class='col-xs-4' id='ms-dashboard-slices'>
+				<div class='ms-dashboard-caption'>
+	  				<h2>Lab Panel</h2>
+				</div>
+				<div class='ms-dashboard-content' id='tophat__list__slice_hrn__slice_hrn'>
+	  				{{ slices }}
+                    <button id="lab_request" onclick="location.href='/portal/lab/slice_request/'" class="btn btn-default">Request Slice</button>
+                    <button id="lab_status"  onclick="location.href='/portal/lab/current/'" class="btn btn-default">Current Requests</button>
+                    <button id="lab_history" onclick="location.href='/portal/lab/history/'" class="btn btn-default">History</button>
+				</div>
+      		</div>
+    	</div>
+  	</div>
+</div>
+
+{% endblock %}

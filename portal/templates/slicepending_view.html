@@ -1,0 +1,94 @@
+{% extends "layout-unfold1.html" %}
+{% block unfold_main %}
+
+<div class="onelab-title well-lg">
+<h1>Reservation Panel</h1>
+</div>
+
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+
+<form id="viewForm"  method="POST" action="current_slice" enctype="multipart/form-data">
+
+<h2>Pending Process</h2>
+<h3><small>Current pending requests.</small></h3>
+<div id="middle" align="center">
+	<div class="well">
+		<table class="table table-bordered table-hover mytable">
+			<thead>
+    			<th>Slice Name</th>
+        		<th>Authority</th>
+				<th># of Nodes</th>
+        		<th>Request Time</th>
+				<th>Action</th>
+    		</thead>
+			{% for row in current_list %}
+   			<tr class="border_bottom">
+    			<td class="odd"> {{ row.slice_name }} </td>
+        		<td class="odd"> {{ row.authority_hrn }} </td>
+				<td class="odd"> {{ row.number_of_nodes }} </td>
+       			<td class="odd"> {{ row.created }}  </td>
+				<td class="even"><a href='/portal/lab/current/slice_cancel/{{ row.id }}'>Cancel</a>
+					<!--button class="btn btn-danger btn-xs" id="cancel"
+						   name="cancel" title="Cancel request"
+						   onclick="return confirm('Are you sure? You will cancel your slice request');location.href='/portal/lab/current/slice_cancel/{{ row.id }}';" >
+						Cancel</button-->
+				</td>
+    		</tr>
+			{% endfor %}
+		</table>
+	</div>
+</div>
+
+<h2>Active Process</h2>
+<h3><small>Active requests.</small></h3>
+    <h5>Current time: {{time_now}}</h5>
+<div id="middle" align="center">
+	<div class="well">
+		<table class="table table-bordered table-hover mytable">
+			<thead>
+    			<th>Slice Name</th>
+        		<th>Authority</th>
+				<th># of Nodes</th>
+        		<th>Requested At</th>
+				<th>Approved At</th>
+				<th>Start Time</th>
+				<th>End Time</th>
+				<th>Action</th>
+    		</thead>
+			{% for row in active_list %}
+   			<tr class="border_bottom">
+    			<td class="odd"> {{ row.slice_name }} </td>
+        		<td class="odd"> {{ row.authority_hrn }} </td>
+				<td class="odd"> {{ row.number_of_nodes }} </td>
+       			<td class="odd"> {{ row.created }}  </td>
+				<td class="odd"> {{ row.approve_date }}  </td>
+				<td class="odd"> {{ row.start_time }}  </td>
+				<td class="odd"> {{ row.end_time }}  </td>
+
+				<td class="even">
+					{% if row.end_time < time_now %}
+                        *Expired*
+                    {% elif row.end_time > time_now and row.start_time > time_now %}
+                        Waiting...
+                    {% else %}
+                        <a href='/portal/lab/current/slice_process/{{ row.id }}'>Control</a>
+                    {% endif %}
+				</td>
+    		</tr>
+			{% endfor %}
+		</table>
+	</div>
+</div>
+
+
+</form>
+
+
+{% endblock %}

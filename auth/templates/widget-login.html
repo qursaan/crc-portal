@@ -1,0 +1,26 @@
+<div class="well">
+	{% if state %}
+	<span class="help-block">{{ state }}</span>
+	{% endif %}
+	<form action="/login/" method="post" role="form">
+	  {% csrf_token %}
+	  {% if next %}
+	  <input type="hidden" name="next" value="{{ next }}" />
+	  {% endif %}
+	<div class="form-group">
+    	<label for="username">Email address / Username</label>
+    	<input type="email" class="form-control" name="username" placeholder="Enter Email / username">
+  	</div>
+  	<div class="form-group">
+    	<label for="password">Password</label>
+    	<input type="password" class="form-control" name="password" placeholder="Password">
+	</div>
+	<div class="login-submit">
+		<input class="btn btn-default" type="submit" value="Sign In" />
+		<span class="lost-password">&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="/portal/pass_reset/">Can't access your account?</a></span>
+	</div>
+	<div class="login-signup">
+		<a href="/portal/register">Sign Up</a>
+	</div>
+	</form>
+</div>

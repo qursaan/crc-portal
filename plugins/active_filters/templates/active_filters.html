@@ -1,0 +1,25 @@
+{% load staticfiles %}
+<div id='{{domid}}__myActiveFilters' style='clear:both;'>
+
+	<!-- TEMPLATE -->
+	<div id='{{domid}}__template' class='template'>
+		 <div id='{% templatetag openvariable %} id {% templatetag closevariable %}' class='filterButton' style='float:left;margin-bottom:10px;'>
+			<span>{% templatetag openvariable %} span {% templatetag closevariable %}</span>
+            <img src='{% static "img/details_close.png" %}' class='closeButton' style='padding-left:3px;'/>
+		</div>
+	</div>
+
+	{% for filter in filters %}
+	<div id='{{domid}}__filter__{{filter.key}}{{filter.op_str}}{{filter.value}}' class='filterButton' style='float:left;margin-bottom:10px;'>
+		<span>{{filter.key}}__{{filter.op}}__{{filter.value}}</span>
+        <img src='/static/img/details_close.png' class='closeButton' style='padding-left:3px;'/>
+	</div>
+	{% endfor %}
+
+</div>
+
+<div id='clearFilters' class='paging_full_numbers' style='clear:both;'>
+    <span class='paginate_button'>Clear</span>
+</div>
+
+<div style='clear:both;'></div>

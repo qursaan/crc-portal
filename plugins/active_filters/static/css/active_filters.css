@@ -1,0 +1,20 @@
+/* 
+    Document   : ActiveFilters
+    Created on : 26 juil. 2012, 11:19:10
+    Author     : loicbaron
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+.filterButton { 
+    border: 1px solid #AAA;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    padding: 2px 5px;
+    margin: 0 3px;
+    background-color:#D3D6FF;
+}
+.closeButton{
+    cursor: pointer;
+    vertical-align:middle;    
+}

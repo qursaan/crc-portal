@@ -1,0 +1,4 @@
+Your have registered for an account in {{site}}.
+
+Your activation key is :{{activation_key}}; it will expire in {{expiration_days}} days.
+

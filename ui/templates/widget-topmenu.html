@@ -1,0 +1,39 @@
+{% insert_str prelude "js/bootstrap.js" %}
+{% insert_str prelude "css/bootstrap.css" %}
+{% insert_str prelude "css/topmenu.css" %}
+{% insert_str prelude "js/logout.js" %}
+
+<div id="header">
+	<div class="wrapper">
+		<div class="logo">
+			<a href="/"><img src="{{ STATIC_URL }}img/crc-portal.png" alt="CRC - Communication and Networking Testbeds" /></a>
+		</div>
+		<div id="secondary">
+			<ul>
+				<li>News</li>
+				<li>About</li>
+				<li><a target="_blank" href="http://smartci.alexu.edu.eg/crc/doku.php?id=start">Public Website</a></li>
+				<li>Intranet</li>
+			</ul>
+		</div>
+	</div>
+
+	<div id="navigation">
+		<div class="wrapper">
+			{% if username %}
+			<ul>
+				<li><a href="/portal/dashboard/">DASHBOARD</a></li>
+				<li><a href="/portal/validate/">REQUESTS</a></li>
+				<!--li><a href="/portal/history/">HISTORY</a></li-->
+				<li><a href="/portal/support/">SUPPORT</a></li>
+				<li>|</li>
+				<li>{{ username }}</li>
+				<li><a href="/logout/" id="logout" data-username='{{ username }}'>LOGOUT</a></li>
+			</ul>
+			{% else %}
+			{% endif %}
+		</div>
+	</div>
+</div>
+
+

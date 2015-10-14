@@ -1,0 +1,35 @@
+{% extends "layout-unfold1.html" %}
+
+{% block head %}
+{{ wizard.form.media }}
+{% endblock %}
+
+{% block unfold_main %}
+
+
+<h1> Experiment Tools </h1>
+
+<h2>Secure Shell (SSH)</h2>
+<p>
+Secure Shell (SSH) is a cryptographic network protocol for secure data communication, remote command-line login, remote command execution, and other secure network services between two networked computers that connects, via a secure channel over an insecure network, a server and a client (running SSH server and SSH client programs, respectively). The protocol specification distinguishes between two major versions that are referred to as SSH-1 and SSH-2.
+</p>
+<p> More Info: <a href="http://en.wikipedia.org/wiki/Secure_Shell" target="_blank">http://en.wikipedia.org/wiki/Secure_Shell</a></p>
+
+
+<h2>NEPI</h2>
+<p>NEPI, the Network Experimentation Programming Interface, is a life-cycle management tool for network experiments. The idea behind NEPI is to provide a single tool to design, deploy, and control network experiments, and gather the experiment results. Going further, NEPI was specially conceived to function with arbitrary experimentation platforms, so researchers could use a single tool to work with network simulators, emulators, or physical testbeds, or even a mixture of them. To accomplish this, NEPI provides a high-level interface to describe experiments that is independent from any experimentation platform, but is able to capture platform specific configurations. Experiment definitions can be stored in XML format to be later reproduced, and modified according to experimentation needs. Experiment execution is orchestrated by a global experiment controller, that is platform independent, and different platform-dependent testbed controllers, creating a control hierarchy that is able t adapt to platform specific requirements while providing an integrated control scheme.</p>
+<p> More Info: <a href="http://nepi.inria.fr" target="_blank">http://nepi.inria.fr</a></p>
+
+<h2>OMF</h2>
+<p>OMF is a Testbed Control, Measurement and Management Framework.</p>
+<p>
+OMF was originally developed for the ORBIT wireless testbed at Winlab, Rutgers University. Since 2007, OMF has been actively extended to operate on testbeds with many different type of network and resource technologies. It is now deployed and used on different testbeds in Australia, Europe, and in the U.S. OMF is currently being extended further to support exciting new features and technologies. This website is hosting this ongoing activity. OMF development is now conducted essentially within the TEMPO project at NICTA (Australia) in strong collaboration with Winlab (Rutgers University).
+</p>
+
+<p>In addition to the main OMF software, this site also hosts OMF sub-projects addressing various related aspects of a testbed's control, measurement, and management.</p>
+
+
+<p>More Info: <a href="http://mytestbed.net/projects/omf" target="_blank">http://mytestbed.net/projects/omf</a></p>
+
+
+{% endblock %}

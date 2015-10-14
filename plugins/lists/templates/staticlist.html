@@ -1,0 +1,10 @@
+<table class='staticlist{%if with_datatables %} with-datatables{% endif %}'>
+{% if header %}
+<thead><tr><th class='staticlist'>{{ header }}</th></tr></thead>
+{% endif %}
+<tbody class='staticlist'>
+{% for item in list %}
+<tr><td>{{ item|safe }}</td></tr>
+{% endfor %}
+</tbody>
+</table>

@@ -1,0 +1,14 @@
+{% for js_url in js_urls %}
+    <script type='text/javascript' src='{{ js_url|safe }}'></script>
+{% endfor %}
+{% for css_url in css_urls %}
+    <link rel='stylesheet' type='text/css' href='{{ css_url|safe }}' />
+{% endfor %}
+<script type="text/javascript">
+    {% for js_chunk in all_js_chunks %} {{ js_chunk|safe }}
+    {% endfor %}
+</script>
+<style type="text/css">
+    {% for css_chunk in css_chunks %} {{ css_chunk|safe }}
+    {% endfor %}
+</style>

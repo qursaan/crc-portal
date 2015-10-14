@@ -1,0 +1,36 @@
+/* the bottom of the datatable needs more space */
+div.querygrid-spacer { padding: 8px 4px 15px 4px; }
+
+/* use same height as the googlemap plugin for nicer effect */
+div.querygrid {
+    width:  100%;
+    height: 600px;
+}
+
+/* this is crucial for slickgrid and bootstrap3 to play together nicely
+   https://github.com/mleibman/SlickGrid/issues/742
+ */
+div.querygrid div {
+  -webkit-box-sizing: content-box;
+     -moz-box-sizing: content-box;
+          box-sizing: content-box;
+}
+
+div.querygrid .slick-column-name {
+    font-weight: bold;
+    font-size: medium;
+    padding: 5px;
+ }
+
+div.querygrid {
+    font-size: small;
+}
+
+/* an example of the css classes used */
+.querygrid-column-network_hrn {
+    background-color:red;
+}
+
+.slick-checkbox {
+    background-color: blue;
+}

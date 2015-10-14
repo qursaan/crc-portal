@@ -1,0 +1,17 @@
+/* this is to get the content below the navbar */
+body {
+}
+
+/* center the buttons vertically in the header */
+div.topmenu { padding-top: 7px; }
+ul.logged-in { 
+    padding-top: 14px; 
+}
+button.logged-in { 
+    font-size: small; 
+    margin-left: 5px;
+}
+li.username {
+    margin-bottom: 10px;
+    font-size: x-small; 
+}

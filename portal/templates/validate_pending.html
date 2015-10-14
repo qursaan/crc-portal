@@ -1,0 +1,222 @@
+{% extends "layout-unfold1.html" %}
+
+{% block head %}
+<link rel="stylesheet" type="text/css" href='{{ STATIC_URL }}/css/validate_pending.css' />
+<link rel="stylesheet" type="text/css" href='{{ STATIC_URL }}/css/onelab.css' />
+<script type="text/javascript">
+	function on_click_event() {
+		var ids = []; 
+		$('.portal__validate__checkbox').each(function(i, el) {
+			if ($(el).prop('checked')) {
+				// portal__validate__checkbox__slice__2
+				var id_array = $(el).attr('id').split('__');
+				// push(slice__2)
+				ids.push(id_array[3] + '__' + id_array[4]);
+			}
+		});
+		if (ids.length > 0) {
+			var id_str = ids.join('/');
+
+			// XXX spinner
+
+			$.getJSON('/portal/validate_action/' + id_str,
+				function(status) {
+					$.each(status, function(request_type__id, request_status) {
+						// request_status: NAME -> dict (status, description)
+						var status_str = '';
+						$.each(request_status, function(name, result) {
+							if (status_str != '')
+								status_str += ' -- ';
+
+							if (result.status) {
+								status_str += '<font color="green">OK</font>';
+								$('#portal__validate__checkbox__' + request_type__id).hide();
+							} else {
+								status_str += '<font color="red">ERROR: ' + result.description + '</font>';
+							}
+						});
+						$('#portal__status__' + request_type__id).html(status_str)
+
+
+					});
+				}
+			);
+		}
+	}
+</script>
+{% endblock %}
+
+{% block unfold_main %}
+<div class="onelab-title well-lg">
+<h1>Pending requests</h1>
+</div>
+
+<div class="container">
+	<hr/>
+	<h2>My authorities</h2>
+
+	{% if my_authorities %}
+		{% for authority, requests in my_authorities.items %}
+			<h3>{{authority}}</h3>
+
+			<table width=100% border=1 class="table table-bordered table-hover">
+				<thead>
+                    <td></td>
+					<td>Type</td>
+					<td>ID</td>
+					<td>Details</td>
+					<td>Timestamp</td>
+					<td>Status</td>
+				</thead>
+				{% for request in requests %}
+				<tr class="{% if forloop.counter|divisibleby:2 %}even{% else %}odd{% endif %}">
+					<td>
+					{% if request.allowed == 'allowed' %}
+					<input class='portal__validate__checkbox'
+						   id='portal__validate__checkbox__{{request.type}}__{{request.id}}' type='checkbox'/>
+					{% else %}
+						{% if request.allowed == 'expired' %}
+							Expired
+						{% else %} {# denied #}
+							Pending
+						{% endif %}
+					{% endif %}
+					</td>
+					<td>{{ request.type }}</td>
+					<td>{{ request.id }}</td>
+					<td>
+					{% if request.type == 'user' %}
+					Login: {{request.login}} -- First name: {{request.first_name}} -- Last name: {{request.last_name}} -- Email: {{request.email}}
+					{% else %}
+						{% if request.type == 'slice' %}
+					Slice name: {{request.slice_name}} -- Number of nodes: {{request.number_of_nodes}} -- Request Date: {{request.request_date}} -- Purpose: {{request.purpose}}
+						{% else %} {# authority #}
+					Authority name: {{request.site_name}} -- authority_hrn: {{request.site_authority}} -- City: {{request.address_city}} -- Country: {{request.address_country}}
+						{% endif %}
+					{% endif %}
+					</td>
+					<td>{{ request.timestamp }}</td>
+					<td><span id='portal__status__{{request.type}}__{{request.id}}'></span>
+					<div class='portal_validate_request {{request.type}}'>
+                        </div></td>
+				</tr>
+				{% endfor %}
+			</table>
+		{% endfor %}
+	{% else %}
+		<u><i>There is no pending request waiting for validation.</i></u>
+	{% endif %}
+<!--qursaan
+{% if sub_authorities %}
+	<hr/>
+	<h2>Sub-Authorities</h2>
+
+	{% for authority, requests in sub_authorities.items %}
+	<h3>{{authority}}</h3>
+		<table width=100% border=1>
+		  <th>
+			<td>type</td>
+			<td>id</td>
+			<td>details</td>
+			<td>timestamp</td>
+			<td>status</td>
+		  </th>
+		{% for request in requests %}
+		  <tr>
+			<td>
+			{% if request.allowed == 'allowed' %}
+			<input class='portal__validate__checkbox' id='portal__validate__checkbox__{{request.type}}__{{request.id}}' type='checkbox'/>
+			{% else %}
+				{% if request.allowed == 'expired' %}
+					expired
+				{% else %} {# denied #}
+					denied
+				{% endif %}
+			{% endif %}
+			</td>
+			<td>{{ request.type }}</td>
+			<td>{{ request.id }}</td>
+			<td>
+			{% if request.type == 'user' %}
+			Login: {{request.login}} -- First name: {{request.first_name}} -- Last name: {{request.last_name}} -- Email: {{request.email}}
+			{% else %}
+				{% if request.type == 'slice' %}
+			Slice name: {{request.slice_name}} -- Number of nodes: {{request.number_of_nodes}} -- Type of nodes: {{request.type_of_nodes}} -- Purpose: {{request.purpose}}
+				{% else %} {# authority #}
+			Authority name: {{request.site_name}} -- authority_hrn: {{request.site_authority}} -- City: {{request.address_city}} -- Country: {{request.address_country}}
+				{% endif %}
+			{% endif %}
+			</td>
+			<td>{{ request.timestamp }}</td>
+
+			<td><span id='portal__status__{{request.type}}__{{request.id}}'></span></td>
+
+		<!--<div class='portal_validate_request {{request.type}} {% if forloop.counter|divisibleby:2 %}even{% else %}odd{% endif %}'> 		  </tr>
+		{% endfor %}
+		</table>
+	{% endfor %}
+	<hr/>
+
+{% endif %}
+-->
+<!--qursaan
+{% if delegation_authorities %}
+<hr/>
+<h2>Authorities with delegation</h2>
+
+{% for authority, requests in delegation_authorities.items %}
+	<h3>{{authority}}</h3>
+		<table width=100% border=1>
+		  <th>
+			<td>type</td>
+			<td>id</td>
+			<td>details</td>
+			<td>timestamp</td>
+			<td>status</td>
+		  </th>
+		{% for request in requests %}
+		  <tr>
+			<td>
+			{% if request.allowed == 'allowed' %}
+			<input class='portal__validate__checkbox' id='portal__validate__checkbox__{{request.type}}__{{request.id}}' type='checkbox'/>
+			{% else %}
+				{% if request.allowed == 'expired' %}
+					expired
+				{% else %} {# denied #}
+					denied
+				{% endif %}
+			{% endif %}
+			</td>
+			<td>{{ request.type }}</td>
+			<td>{{ request.id }}</td>
+			<td>
+			{% if request.type == 'user' %}
+			Login: {{request.login}} -- First name: {{request.first_name}} -- Last name: {{request.last_name}} -- Email: {{request.email}}
+			{% else %}
+				{% if request.type == 'slice' %}
+			Slice name: {{request.slice_name}} -- Number of nodes: {{request.number_of_nodes}} -- Type of nodes: {{request.type_of_nodes}} -- Purpose: {{request.purpose}}
+				{% else %} {# authority #}
+			Authority name: {{request.site_name}} -- authority_hrn: {{request.site_authority}} -- City: {{request.address_city}} -- Country: {{request.address_country}}
+				{% endif %}
+		   {% endif %}
+			</td>
+			<td>{{ request.timestamp }}</td>
+
+			<td><span id='portal__status__{{request.type}}__{{request.id}}'></span></td>
+
+		<!--<div class='portal_validate_request {{request.type}} {% if forloop.counter|divisibleby:2 %}even{% else %}odd{% endif %}'>
+		  </tr>
+		{% endfor %}
+		</table>
+	{% endfor %}
+	<hr/>
+
+	{% endif %}-->
+    <hr/>
+	{% if my_authorities  %}
+        <input type='button' id='portal__validate' value='Validate' onclick='on_click_event();'
+                {% if is_admin != 1 %} disabled {% endif %}/>
+    {% endif %}
+</div>
+<!-- End of the container div -->
+{% endblock %}

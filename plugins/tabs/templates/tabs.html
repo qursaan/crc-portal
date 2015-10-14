@@ -1,0 +1,12 @@
+<ul class="nav nav-tabs{%if persistent_active%} persistent-active{%endif%}" id='tabs-{{ domid }}'>
+{% for son in sons %}
+<li{% if son.is_active %} class='active'{% endif %}> <a href="#tab-{{ son.domid }}" data-toggle="tab">{{ son.title }}</a> </li>
+{% endfor %}
+</ul><!--nav-tabs-->
+<div class="tab-content">
+{% for son in sons %}
+<div class="tab-pane fade in{% if son.is_active %} active{% endif %}" id="tab-{{ son.domid }}">
+{{ son.rendered }}
+</div><!--tab-pane-->
+{% endfor %}
+</div><!--tab-content-->

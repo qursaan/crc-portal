@@ -1,0 +1,360 @@
+div.query-editor-spacer {
+    padding: 15px 5px;
+}
+
+table.query-editor {
+    width: 95%;
+    padding-bottom: 10px;
+}
+
+/* Add a scrollbar to autocomplete fields */
+.ui-autocomplete {
+    max-height: 100px;
+    overflow-y: auto;
+    /* prevent horizontal scrollbar */
+    overflow-x: hidden;
+    /* add padding to account for vertical scrollbar */
+    padding-right: 20px;
+    
+    /* NEED TO BE IMPROVED LATER... */
+    /* How to use properties from content class in /templates/myslice/css/myslice.css ? */
+    /* How to factorize this ? Maybe applied differently in other plugins ? */        
+    font-size: 11px;
+}
+.queryeditor-auto-filter{
+    width:200px;
+}
+/* IE 6 doesn't support max-height
+ * we use height instead, but this forces the menu to always be this tall
+ */
+* html .ui-autocomplete {
+    height: 100px;
+}
+
+table.query-editor {
+    margin: 0 auto;
+    clear: both;
+    /* width: 80%;*/
+    width: 300px;
+}
+
+table.query-editor input { 
+    font: normal 12px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+}    
+
+table.query-editor thead th {
+    padding: 3px 18px 3px 3px; 
+    border-bottom: 1px solid black;
+    font-weight: bold;
+    cursor: pointer;
+    * cursor: hand;
+}
+
+table.query-editor tfoot th {
+    padding: 3px 18px 3px 10px;
+    border-top: 1px solid black;
+    font-weight: bold;
+}
+
+table.query-editor td {
+    padding: 2px 5px;
+    font: normal 12px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+}
+
+table.query-editor td.center, table.query-editor th.center {
+    text-align: center;
+}
+
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * DataTables row classes
+ */
+table.query-editor tr.odd.gradeA {
+    background-color: #ddffdd;
+}
+
+table.query-editor tr.even.gradeA {
+    background-color: #eeffee;
+}
+
+table.query-editor tr.odd.gradeC {
+    background-color: #ddddff;
+}
+
+table.query-editor tr.even.gradeC {
+    background-color: #eeeeff;
+}
+
+table.query-editor tr.odd.gradeX {
+    background-color: #ffdddd;
+}
+
+table.query-editor tr.even.gradeX {
+    background-color: #ffeeee;
+}
+
+table.query-editor tr.odd.gradeU {
+    background-color: #ddd;
+}
+
+table.query-editor tr.even.gradeU {
+    background-color: #eee;
+}
+
+/* change color: T / even -> odd +1 +5 -3*/
+table.query-editor tr.odd.row_sliver td {
+    background-color: #9FAFD1;
+}
+
+table.query-editor tr.even.row_added td {
+    background-color: #b1d19f;
+}
+table.query-editor tr.odd.row_added td {
+    background-color: #a3c98f;
+}
+
+table.query-editor tr.even.row_removed td {
+    background-color: #d9b0b0;
+}
+
+table.query-editor tr.odd.row_removed td {
+    background-color: #d1a09f;
+}
+
+table.query-editor tr.gradeA {
+    background-color: #eeffee;
+}
+
+table.query-editor tr.gradeC {
+    background-color: #ddddff;
+}
+
+table.query-editor tr.gradeX {
+    background-color: #ffdddd;
+}
+
+table.query-editor tr.gradeU {
+    background-color: #ddd;
+}
+
+
+
+
+div.selected{background-color:gray; color:black}
+
+/* icons */
+.myslice-icon-timestamp {
+    background-image: url('images/myslice-icon-timestamp.png') !important;
+}
+.myslice-icon-filter {
+    background-image: url('images/myslice-icon-filter.png') !important;
+}
+.myslice-icon-fields {
+    background-image: url('images/myslice-icon-fields.png') !important;
+}
+.myslice-icon-groups {
+    background-image: url('images/myslice-icon-groups.png') !important;
+}
+.myslice-icon-summary {
+    background-image: url('images/myslice-icon-summary.png') !important;
+}
+.myslice-icon-resources {
+    background-image: url('images/myslice-icon-resources.png') !important;
+}
+.myslice-icon-users {
+    background-image: url('images/myslice-icon-users.png') !important;
+}
+
+a.source-url{
+    font-weight: bold;
+}
+
+span.bold {
+    font-weight: bold;
+}
+
+div#selectdescr {
+    padding-top:2em;
+    color: #555555;
+}
+
+span.short {
+    height:10px;
+}
+
+span.column-title {
+    font-size: 15px;
+    font-weight: bold;
+}
+
+span.column-detail {
+    font-size: 11px; 
+    font-style: italic;
+}
+
+span.group_info {
+    font-size: 11px; 
+    color: green;
+    font-weight: bold;
+}
+
+span.filter_info {
+    color: red;
+    font-weight: bold;
+}
+
+
+/* column configuation style */
+
+OPTION.out{
+    background-color:white;
+    color:black;
+}
+OPTION.in{
+    background-color:#CAE8EA; 
+    color:#4f6b72;
+}
+
+/* jordan disabled
+   div.out{background-color:white; color:black}
+   div.in{background-color:#CAE8EA; color:#4f6b72}
+   div.selected{background-color:gray; color:black}
+   div.invisible{display:none}
+   */
+
+div.note-div {
+    padding: 4px;
+    background-color: #cae8ea;
+    width: 800px;
+    margin-left:auto;
+    margin-right:auto;
+}
+
+div#scrolldiv_old {
+    border : solid 2px grey; 
+    padding:4px; 
+    width:300px; 
+    height:180px; 
+    overflow:auto;
+}
+
+th,td.top {
+    vertical-align: top;
+    text-align: left;
+    padding:10px;
+}
+
+tr.hidden {
+    display:none;
+}
+
+td.smallright {
+    text-align: right;
+    width:20px;
+}
+
+table.center {
+    margin-left:auto; 
+    margin-right:auto;
+}
+
+table.columnlist {
+    width:270px;
+}
+
+table.query-editor td.header {
+    background-color: #CAE8EA;
+    text-align: center;
+    width:30px;
+}
+
+span.header {
+    font-weight: bold;
+    color: #3399CC;
+}
+
+a.source-url{
+    font-weight: bold;
+}
+
+span.menubig {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+span.menusmall {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+span.menuright {
+    font-weight: bold;
+    float: right;
+}
+
+span.simpleright {
+    float: right;
+}
+
+span.gray{
+    color: #555555;
+}
+
+span.short {
+    height:10px;
+}
+
+span.column-title {
+    font-size: 13px;
+    font-weight: bold;
+}
+
+span.column-detail {
+    font-size: 11px; 
+    font-style: italic;
+}
+
+span.myslice_small {
+    font-size: 11px; 
+}
+
+span#username {
+    font-weight: bold;
+    font-size: 1.3em;
+}
+
+.filter_popup{
+    position:relative; /*this is the key*/
+    float: right;
+    z-index:24;
+    background: url('images/myslice-icon-filter.png') no-repeat;
+    /*background-color:#ccc;*/
+    width: 200px;
+    height: 300px;
+    color:#000;
+    text-decoration:none;
+    clear: both;
+}
+
+.filter_popup:hover{
+    z-index:25;
+/*background-color:#ff0*/
+}
+
+.filter_popup span{
+    display: none;
+}
+
+.filter_popup:hover span{ /*the span will display just on :hover state*/
+    display:block;
+    position:absolute;
+    /*top:1em;*/
+    left:-19em;
+    width: 20em;
+    font-size: 8pt;
+    border:1px solid #ccdddd;
+    background-color:#ddeeee;
+    color:#000;
+    text-align: left;
+    padding: 0em 0em 0em 1em;
+}

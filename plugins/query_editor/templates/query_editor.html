@@ -1,0 +1,41 @@
+<!--
+    	$infopopup = <<<EOF
+<span class='info'><span> This tab allows you to customize the visible columns in the resource list, below. Note that information on the nodes comes from a variety of monitoring sources.  If you, as either a user or a provider of monitoring data, would like to see additional columns made available, please send us your request in mail to <a href='mailto:support@myslice.info'>support@myslice.info</a>. You can find more information about the MySlice project at <a href='http://trac.myslice.info'>http://trac.myslice.info</a>.  </span></span>
+EOF;
+
+	    $filter_input = "<input id='filter_value' type=text size=5></input>";
+
+EOF; -->
+<div class='query-editor-spacer'>
+  <table id='{{domid}}__table' class='query-editor'>
+    <thead>
+      <tr>
+        <th class='center'>Info</th>
+        <th class='center'>Field</th>
+        <th class='center'>Resource</th>
+        <th class='center'>Type</th>
+        <th class='center'>Filter</th>
+        <th class='center'>+/-</th>
+      </tr>
+    </thead>
+    <tbody>
+
+    {# Loop through metadata and display related information #}
+    {% for field in fields %}
+
+      <tr>
+        <td class='center'><span class='glyphicon glyphicon-chevron-right' style='cursor:pointer'></span></td>
+        <td class='center'>{{ field.name }}</td>
+        <td class='center'>{{ field.resource_type }}</td>
+        <td class='center'>{{ field.type }}</td>
+        <td class='center'>{{ field.filter_input }}</td>
+        <td class='center'>
+          <input class='queryeditor-check' id='{{domid}}__check__{{ field.name }}' name='{{ field.header }}' type='checkbox' autocomplete='off' value='{{ field.name }}' {% if field.checked %} checked {% endif %}></input>
+        </td>
+      </tr>
+		
+	{% endfor %}
+
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,11 @@
+.swMain {
+	width: 100% !important;
+}
+
+.swMain .stepContainer div.content {
+	width: 100% !important;
+}
+
+.swMain .stepContainer {
+	overflow: scroll !important;
+}

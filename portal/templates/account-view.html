@@ -1,0 +1,329 @@
+{% extends "layout-unfold1.html" %}
+{% block unfold_main %}
+
+<div class="" style="text-align:center">
+<h2>User Profile</h2>
+</div>
+<div class="container">
+{% if messages %}
+    <ul class="messages">
+    {% for message in messages %}
+    <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+
+<form id="editForm"  method="POST" action="account_process" enctype="multipart/form-data">
+	<div id="middle" align="center">
+		<div class="well">
+	  	{% csrf_token %}
+	  		<table class="profile">          
+	    		<tr class="odd">
+	      			<td colspan="2">
+						<div id="info">Platform: CRC Portal</div>
+	      			</td>
+	    		</tr>
+	    		<tr class="even">
+	      			<td class="key">Email</td>
+	      			<td class="value">
+						<span id="emailval" class="value" >{{ person.email }}</span>
+						<button class="btn btn-default btn-xs" type="button" id="edit_email" onclick="editAlert()"  title="To change your affiliation please contact the administrator">
+    						<span class="glyphicon glyphicon-question-sign"></span> Edit
+						</button>
+					</td>
+	      		</tr>
+	      		<tr class="odd">
+					<td class="key">Password</td>
+					<td class="value"> 
+		  				<button class="btn btn-default btn-xs" type="button" title="Password" name="edit_pass" id="edit_pass">
+							<span class="glyphicon glyphicon-edit"></span> Edit
+						</button>
+		  				<span id="passval"class="value">******** </span>
+		  				<span class="hide_this" id="span_pass">
+		    				<button type="button" class="btn btn-default btn-xs" title="Cancel" id="cancel_pass_change"> Cancel </button>
+		    				<div style='display:none;' id="pass_form">
+		    					<input type='hidden'  value='' />
+							</div>
+		    				<table id="edit_password">
+		      					<tr>
+									<td>Enter password: </td>
+									<td class="field"> <input type="password" name="password" id="password" /> </td>
+		      						</tr>
+		      						<tr>
+									<td>Confirm password: </td>
+									<td class="field"> 
+			  							<input type="password" name="confirmpassword" id="confirmpassword" /> 
+			  							<input type="submit" class="btn btn-default btn-xs" name="submit_pass" value="Save"/> 
+									</td>
+		      					</tr>
+		    				</table>
+		  				</span>	
+					</td>
+	      		</tr>
+	      		<tr class="even">
+					<td class="key">Full Name</td>
+					<td class="value">
+		  				<span id="nameval" class="value" >{{ fullname }} </span>
+		  				<span class="hide_this" id="span_name">
+		    				<button type="button" class="btn btn-default btn-xs" title="Cancel" id="cancel_name_change"> Cancel </button> 
+		    				<div style='display:none;'><input type='hidden'  name='nameform'  /></div>
+		    				<input id="fname" type="text" name="fname" class="required"  maxlength="200" value="{{firstname}}" />
+		    				<input id="lname" type="text" name="lname" class="required"  maxlength="200" value="{{lastname}}" />
+		    				<input type="submit" class="btn btn-default btn-xs" name="submit_name" value="Save"/>
+		  				</span>
+		  				<button class="btn btn-default btn-xs" type="button"title="Full Name" id="edit_name">
+							<span class="glyphicon glyphicon-edit"></span> Edit
+						</button>
+					</td>
+	      		</tr>
+	      		<tr class="odd">
+					<td class="key">Authority</td>
+					<td class="value">
+		  				<span id="affval" class="value">{{ authority }}</span>
+						 <button class="btn btn-default btn-xs" type="button" id="edit_auth" onclick="editAlert()"  title="To change your authority please contact the administrator">
+     						<span class="glyphicon glyphicon-question-sign"></span> Edit
+						 </button>
+		  			</td>
+				</tr>
+				<!--tr class="even">
+		  			<td class="key">Generate Keys</td>
+		  			<td>
+						<input type="submit" name="generate" class="btn btn-danger btn-xs" value="Generate a new Key Pair" id="generate_keypair" 
+							   onclick="return confirm('Are you sure? If you do so, your current credentials will be overwritten.');" 
+							   title="It will generate a new key Pair and your current credentials will be overwritten."/>
+	      			</td> 
+	    		</tr-->
+	    		<!--tr class="odd">
+	      			<td class="key">Public Key</td>
+	      			<td class="value">
+						<span id="keyval" class="value">******** </span>
+						<span class="hide_this" id="span_upload">
+		  					<button type="button" class="btn btn-default btn-xs" title="Cancel" id="cancel_upload"> Cancel </button>
+		  					<div style='display:none;'>
+		  						<input type='hidden'  name='upload'  /></div>
+		  						<input type="file" name="pubkey" class="required" id="pubkey"/>  
+		  						<input class="btn btn-default btn-xs" name="upload_key" id="upload_key"  type="submit" title="Upload your public key" value="Upload"
+								   onclick="return confirm('Are you sure? It will overwrite your current credentials and you have delegate it manually.');"/>
+						</span>
+						<div style='display:none;'> <input type='hidden'  name='dload'  /> </div> 
+						<button type="submit" name="dl_pubkey" class="btn btn-default btn-xs" title="Download your public key" id="dl_file">
+							<span class="glyphicon glyphicon-download"></span> Download
+						</button>
+						<button class="btn btn-default btn-xs" id="upload_file" type="button" title="Upload a public key">
+							<span class="glyphicon glyphicon-upload"></span> Upload
+						</button>       
+	      			</td>
+	    		</tr-->
+	    		<!--tr class="even" id="pkey_row">
+				 	{%if 'N/A' not in user_private_key%}
+	      				<td class="key">Private Key </td> <!--Hide if priv_key doesn't exist in myslice platform--
+						<td class="value">********<a href="#">
+							<button type="submit" name="dl_pkey" class="btn btn-default btn-xs" title="Download your privaye key" id="dl_pkey">
+								<span class="glyphicon glyphicon-download"></span> Download
+							</button>
+							<input class="btn btn-danger btn-xs" id="delete"
+								   name="delete" type="submit"  value="Delete"
+								   title="Delete your private key"
+								   onclick="return confirm('Are you sure? If you do so, you have to delegate your credentials manually.');" />
+	    				</td>
+				 	{%else%}
+						<td class="key">Private Key </td> <!-- Hide if priv_key doesn't exist in myslice platform   --
+						<td class="value">********<a href="#">
+							<button type="submit" name="dl_pkey" class="btn btn-default btn-xs disabled" title="Download your privaye key" id="dl_pkey">
+								<span class="glyphicon glyphicon-download"></span> Download
+							</button>
+							<input class="btn btn-danger btn-xs disabled" id="delete" name="delete" type="submit" title="Delete your private key"
+									value="Delete"	/>
+						</td>
+				 	{%endif%}
+	  			</tr-->
+	  			<!--tr class="odd">
+	    			<td colspan="2">
+	      				<p class="message" id="pkey_del_msg"><b> Tradeoff:</b> Ease-of-use vs Security.<br>
+							<b>Ease-of-use:</b> Automatic account delegation. Don't delete private key.<br>
+							<b>Security:</b> Manual account delegation. Download & Delete private key.
+						</p>
+	    			</td>
+	  			</tr-->
+			</table>
+	</div>
+	</div>
+
+	<!--h2>Account Information</h2>
+	<!--h3>Principal Account <small>Account used for delegating credentials</small></h3-->
+	<!--div id="middle" align="center">
+		<div class="well">
+			<table class="table table-bordered table-hover  mytable">
+				<tr class="odd">
+					<th>Platform</th>
+					<th>Account Type</th>
+					<!--th>Account Delegation</th>
+					<th>User hrn</th>
+					<th>User Status</th>
+					<!--<th>Pub Key</th>
+				</tr>
+				{% for row in principal_acc %}
+				<tr class="border_bottom">
+					<td class="odd"> {{ row.platform_name }} </td>
+					<td class="odd"> {{ row.account_type }} </td>
+					<!--td class="odd"> {{ row.delegation_type }} </td>
+					<td class="odd"> {{ row.usr_hrn }}  </td>
+					<td class="odd"> {{ row.user_status }}  </td>
+					<!--<td class="even"> {{ row.usr_pubkey }} </td>
+				</tr>
+				{% endfor %}
+			</table>
+		</div>
+	</div-->
+	<!--
+	{% if 'Enabled' in user_status %}
+	<h3 id="show-pending" class="plugin-show" style="display: block;">
+		<span class="glyphicon glyphicon-chevron-right"></span>
+		<a href="#" class="plugin-tooltip" data-toggle="tooltip" data-original-title="Show plugin &quot;Pending operations&quot; (QueryUpdater)"></a>
+		Credentials</h3>
+	<div id="hide-pending" class="plugin-hide" style="display: none;">
+		<span class="glyphicon glyphicon-chevron-down"></span>
+		<a href="#" class="plugin-tooltip" data-toggle="tooltip" data-original-title="Hide plugin &quot;Pending operations&quot; (QueryUpdater)">Credentials</a>
+
+		<h5>Delegated Credentials to Principal Account</h5>
+		<div id="middle" align="center">
+		<div class="well">
+			<table class="mytable table table-bordered table-hover">
+				<caption><b>Delegated User Credential</b></caption>
+				<tr class="odd">
+					<th>Expiration Date</th>
+					<th>Download</th>
+				</tr>
+				{% for row in my_users %}
+				<tr class="border_bottom">
+					<td class="odd"> {{ row.cred_exp }} </td>
+					<td class="odd">
+						<button class="btn btn-default btn-xs" name= "dl_user_cred" type="submit" title="Download User Credential">
+							<span class="glyphicon glyphicon-download"></span> Download
+						</button>
+					</td>
+				</tr>
+				{%endfor%}
+			 </table>
+			<p></p>
+			<table class="mytable table table-bordered table-hover">
+				<caption><b>Delegated Slice Credentials</b></caption>
+				<tr class="odd">
+					<th>Slice Name</th>
+					<th>Expiration Date</th>
+					<th>Download</th>
+				</tr>
+				{% for row in my_slices %}
+				<tr class="border_bottom">
+					<td class="odd"> {{ row.slice_name }} </td>
+					<td class="odd"> {{ row.cred_exp }} </td>
+					<td class="odd">
+						<button class="btn btn-default btn-xs" name= "dl_{{row.slice_name}}" type="submit" title="Download Slice Credentials">
+							<span class="glyphicon glyphicon-download"></span> Download
+						</button>
+					</td>
+				</tr>
+				{%endfor%}
+			</table>
+			<p></p>
+			<table class="mytable table table-bordered table-hover">
+				<caption><b>Delegated Authority Credentials</b></caption>
+				<tr class="odd">
+					<th>Authority Name</th>
+					<th>Expiration Date</th>
+					<th>Download</th>
+				</tr>
+				{% for row in my_auths %}
+				<tr class="border_bottom">
+					<td class="odd"> {{ row.auth_name }} </td>
+					<td class="odd"> {{ row.cred_exp }} </td>
+					<td class="odd">
+						<button class="btn btn-default btn-xs" name= "dl_{{row.auth_name}}" type="submit" title="Download Authority Credentials">
+							<span class="glyphicon glyphicon-download"></span> Download
+						</button>
+					</td>
+				</tr>
+				{%endfor%}
+			</table>
+			<p></p>
+			 {%if '' not in my_users%}
+			<p><button class="btn btn-danger btn-lg btn-block"   name= "clear_cred" type="submit" title="Clear All Credentials">Clear Credentials</button></p>
+			{%else%}
+			<p><button class="btn btn-danger btn-lg btn-block disabled"   name= "clear_cred" type="submit" title="Clear All Credentials">Clear Credentials</button></p>
+			{%endif%}
+		</div>
+	</div>
+	</div>
+
+	<h3 id="show-filters" class="plugin-show" style="display: block;">
+		<span class="glyphicon glyphicon-chevron-right"></span>
+		<a href="#" class="plugin-tooltip" data-toggle="tooltip" data-original-title="Show plugin &quot;Pending operations&quot; (QueryUpdater)"></a>
+		TestBed Accounts</h3>
+	<div id="hide-filters" class="plugin-hide" style="display: none;">
+	<span class="glyphicon glyphicon-chevron-down"></span>
+	<a href="#" class="plugin-tooltip" data-toggle="tooltip" data-original-title="Hide plugin &quot;Pending operations&quot; (QueryUpdater)">TestBed Accounts</a>
+
+	<h5>Reference Accounts in the following testbeds</h5>
+	<div id="middle" align="center">
+		<div class="well">
+			<table class="mytable table table-bordered table-hover">
+				<tr class="odd">
+					<th>Platform</th>
+					<th>Account Type</th>
+					<th>Reference to</th>
+					<th>Remove Account</th>
+				</tr>
+				{% for row in ref_acc %}
+				<tr class="border_bottom">
+					<td class="odd"> {{ row.platform_name }} </td>
+					<td class="odd"> {{ row.account_type }} </td>
+					<td class="odd"> {{ row.account_reference }} </td>
+					<td class="odd">
+						<button class="btn btn-danger btn-xs" name="delete_{{row.platform_name}}" type="submit" title="Delete account from this platform">
+							<span class="glyphicon glyphicon-minus"></span>
+						</button>
+					</td>
+				</tr>
+				{%endfor%}
+			</table>
+		</div>
+	</div>
+	</div>
+
+	<h3 id="show-resources" class="plugin-show" style="display: block;">
+		<span class="glyphicon glyphicon-chevron-right"></span>
+		<a href="#" class="plugin-tooltip" data-toggle="tooltip" data-original-title="Show plugin &quot;Pending operations&quot; (QueryUpdater)"></a>
+		Add Accounts</h3>
+	<div id="hide-resources" class="plugin-hide" style="display: none;">
+		<span class="glyphicon glyphicon-chevron-down"></span>
+		<a href="#" class="plugin-tooltip" data-toggle="tooltip" data-original-title="Hide plugin &quot;Pending operations&quot; (QueryUpdater)">Add Accounts</a>
+
+
+		<h5>Add reference account to the following testbeds</h5>
+		<div id="middle" align="center">
+			<div class="well">
+				<table class="mytable table table-bordered table-hover">
+					<tr class="odd">
+						<th>Platforms</th>
+						<th>Add Account</th>
+					</tr>
+					{% for platform in platform_list %}
+					<tr class="border_bottom">
+						<td class="odd"> {{ platform.platform_no_access }} </td>
+						<td class="odd">
+							<button class="btn btn-success btn-sm" name= "add_{{platform.platform_no_access}}" type="submit" title="Add account to this platform">
+								<span class="glyphicon glyphicon-plus"></span>
+							</button>
+						</td>
+					</tr>
+					{%endfor%}
+				</table>
+			</div>
+		</div>
+	</div>
+	{% endif %} -->
+
+</form>
+</div>
+{% endblock %}
