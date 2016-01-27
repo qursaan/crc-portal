@@ -1,0 +1,200 @@
+/*
+NB:
+- Font-size 0 on rows to avoid gaps between the columns (inline-blocks)
+- Position relative needed for z-index
+- For ... ellipsis on overflowing text, need also white-space: no-wrap and overflow: hidden
+- On the rows, need white-space: no-wrap, because the columns are inline-blocks and would wrap instead of overflow
+*/
+.sjs-wrapper {
+  color: #333;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 12px;
+  line-height: 1.42857143;
+}
+.sjs-wrapper * {
+  box-sizing: border-box;
+}
+.sjs-wrapper a {
+  color: #333;
+  text-decoration: none;
+}
+.sjs-wrapper a:hover {
+  text-decoration: underline;
+}
+.sjs-name-col {
+  border-bottom: 1px solid #dddddd;
+  text-align: center;
+  float: left;
+}
+.sjs-name {
+  height: 40px;
+  padding: 5px 15px;
+  line-height: 30px;
+  vertical-align: middle;
+  max-width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.sjs-name:nth-child(2n) {
+  background-color: #f9f9f9;
+}
+.sjs-name-head {
+  height: 15px;
+  border-bottom: 1px solid #dddddd;
+}
+.sjs-app-col {
+  border-left: 1px solid #dddddd;
+  position: relative;
+  overflow-x: scroll;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.sjs-grid {
+  z-index: 0;
+  border-bottom: 1px solid #dddddd;
+  position: absolute;
+}
+.sjs-grid-row {
+  height: 40px;
+  overflow: hidden;
+  white-space: nowrap;
+  font-size: 0;
+}
+.sjs-grid-row:nth-child(2n) {
+  background-color: #f9f9f9;
+}
+.sjs-grid-row-head {
+  height: 15px;
+  white-space: nowrap;
+  font-size: 0;
+  border-bottom: 1px solid #dddddd;
+}
+.sjs-grid-row-head:nth-child(2n) {
+  background-color: #f9f9f9;
+}
+.sjs-grid-col {
+  height: 40px;
+  padding: 2px 3px;
+  display: inline-block;
+}
+.sjs-grid-col:nth-child(2n) {
+  background-color: #f9f9f9;
+}
+.sjs-grid-col-head {
+  height: 14px;
+  display: inline-block;
+  font-size: 12px;
+}
+.sjs-grid-col-head:nth-child(2n) {
+  background-color: #f9f9f9;
+}
+.sjs-grid-overlay {
+  z-index: 1;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.sjs-grid-overlay-row {
+  height: 40px;
+  white-space: nowrap;
+  font-size: 0;
+}
+.sjs-grid-overlay-row-head {
+  height: 15px;
+  border-bottom: 1px solid transparent;
+}
+.sjs-grid-overlay-col {
+  height: 40px;
+  padding: 2px 3px;
+  display: inline-block;
+  background-color: rgba(255, 18, 0, 0.3);
+  vertical-align: top;
+  font-size: 12px;
+  /* Following three settings to make ... work in case of long text */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.sjs-grid-overlay-col-clickable {
+  cursor: pointer;
+}
+.sjs-selector {
+  margin-top: 15px;
+  cursor: move;
+  background-color: rgba(0, 0, 255, 0.2);
+  top: 0;
+  left: 0;
+  position: absolute;
+  z-index: 3;
+}
+.sjs-selector-edge {
+  width: 15px;
+  cursor: col-resize;
+  height: 100%;
+  top: 0;
+  position: absolute;
+  z-index: 3;
+}
+.sjs-selector-left {
+  left: 0;
+}
+.sjs-selector-right {
+  right: 0;
+}
+.sjs-selector-inner {
+  position: relative;
+  height: 100%;
+}
+.sjs-selector-text {
+  position: absolute;
+  white-space: nowrap;
+  padding: 2px;
+  height: 22px;
+  width: 100%;
+  bottom: 0;
+  background-color: #fff;
+  text-align: center;
+  border-top: 1px solid #dddddd;
+}
+
+/*legend*/
+
+.legend ol {
+    font-size: 0.8em;
+    list-style: none;
+
+    padding: 0;
+}
+
+.legend ol li{
+    background: #a6c9e2; /* Old browsers */
+    background: -moz-linear-gradient(left, #a6c9e2 28px, #e0e0e0 28px); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, right top, color-stop(28px,#a6c9e2), color-stop(28px,#e0e0e0)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(left, #a6c9e2 28px,#e0e0e0 28px); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(left, #a6c9e2 28px,#e0e0e0 28px); /* Opera 11.10+ */
+    background: -ms-linear-gradient(left, #a6c9e2 28px,#e0e0e0 28px); /* IE10+ */
+    background: linear-gradient(to right, #a6c9e2 28px,#e0e0e0 28px); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a6c9e2', endColorstr='#e0e0e0',GradientType=1 ); /* IE6-9 */
+    padding: 3px 0 3px 30px;
+    width: 109px;
+  display: inline-block;
+}
+
+.legend ol li.free{
+
+}
+.legend ol li.closed{
+    background: url("../img/closed-lock-15.png") no-repeat scroll 8px 50% #DD4444;
+}
+
+.legend ol li.maintenance {
+    background: url("../img/tools-15.png") no-repeat scroll 8px 50% #EDA428;
+}
+.legend ol li.selected {
+    background: #25BA25;
+}

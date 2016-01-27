@@ -1,0 +1,9 @@
+/* single column layout - layout-unfold1.html */
+#unfold1-main {
+}
+/* dual column layout   - layout-unfold2.html */
+#unfold2-main {
+}
+#unfold2-margin {
+/* trying to set a right padding here results in undesired results (spans beyond right end) */
+}

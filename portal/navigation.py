@@ -10,16 +10,15 @@
 import subprocess
 from random         import randint
 from django.utils   import timezone
-from datetime       import datetime
 #
 from django.http       import HttpResponseRedirect # Http404, HttpResponse
 from django.shortcuts  import render
 from django.contrib    import messages
 from ui.topmenu        import topmenu_items, the_user
 #
-from portal.models import MyUserImage, PendingSlice, Node
+from portal.models import UserImage, PendingSlice  #, Node
 from portal.actions import get_user_by_email
-
+from portal.backend_actions import load_images,vm_restart,vm_shutdown,vm_start, exe_script
 
 #  ********** Non Completed Page ************* #
 def un_complete_page(request):
@@ -29,36 +28,44 @@ def un_complete_page(request):
         })
 
 
-# ********** View Testbed Map Page *********** #
-def testbed_map(request):
-    node_lists = Node.objects.all()
-    for n in node_lists:
-        ol = check_node(n.id)
-        if n.status != ol:
-            n.status = ol
-            n.save()
-    node_list = Node.objects.all()
-    return render(request, 'testbedview.html', {
-        'topmenu_items': topmenu_items('test_page', request),
-        'username': the_user(request),
-        'title': 'TESTBEDS VIEW',
-        'node_list': node_list,
-        'last_update': datetime.now()
-        })
 
-
-def check_node(node_id):
+"""def check_node(node_id):
     t = -1
     try:
         t = subprocess.check_output(["sshpass","-p","CRC123","ssh","-o","StrictHostKeyChecking=no","crc-am@10.0.0.200","echo CRC123 | sudo -S ./getNodeStatus.sh node"+str(node_id)])
         print t
     finally:
         return t
+"""
+
+
+def remote_node(request):
+    try:
+        if request.method == 'POST':
+            node_name = request.POST.get('node_group','')
+            if not node_name:
+                messages.error(request, 'Error: Please select at least one node')
+            r = 0
+            if "b_restart" in request.POST:
+                r = vm_restart(node_name)
+            elif "b_shutdown" in request.POST:
+                r = vm_shutdown(node_name)
+            elif "b_start" in request.POST:
+                r = vm_start(node_name)
+
+            if r == 1:
+                messages.success(request, 'Success: Loading of image(s)')
+            else:
+                messages.error(request, 'Error: Unable to Load image(s)')
+    finally:
+        request.session['active_page'] = 1
+    return HttpResponseRedirect('/portal/lab/control/')
+
 
 
 def load_image(request):
     try:
-        auto_save = request.POST.get('autosave','0')
+        #auto_save = request.POST.get('autosave','0')
         node_group = request.POST.getlist('node_group',[])
         os_location = request.POST.get('osimage','')
         if not node_group:
@@ -71,14 +78,15 @@ def load_image(request):
             return HttpResponseRedirect('/portal/lab/control/')
 
         slice_id = int(slice_id)
-        current_slice = PendingSlice.objects.get(id=slice_id)
-        time_diff = current_slice.end_time - timezone.now()
-        rem_time = time_diff.total_seconds()
-        username = request.user.email.replace("@", "_").replace(".","_")
-        password = request.user.email
+        #current_slice = PendingSlice.objects.get(id=slice_id)
+        #time_diff = current_slice.end_time - timezone.now()
+        #rem_time = time_diff.total_seconds()
+        #username = request.user.email.replace("@", "_").replace(".","_")
+        #password = request.user.email
 
-        r = load_images(','.join(repr(e) for e in node_group), os_location,str(rem_time),auto_save,username,password)
-        if r == 0:
+        r = load_images(slice_id, os_location, ".", node_group)
+        #r = load_images(','.join(repr(e) for e in node_group), os_location,str(rem_time),auto_save,username,password)
+        if r == 1: #0:
             messages.success(request, 'Success: Loading of image(s)')
         else:
             messages.error(request, 'Error: Unable to Load image(s)')
@@ -86,7 +94,7 @@ def load_image(request):
         request.session['active_page'] = 1
     return HttpResponseRedirect('/portal/lab/control/')
 
-
+"""
 def load_images(node_lst,image_name,rem_time,auto_save,username,password):
     t = -1
     #u = -1
@@ -97,7 +105,7 @@ def load_images(node_lst,image_name,rem_time,auto_save,username,password):
         print t#, u
     finally:
         return t#+u
-
+"""
 
 def save_image(request):
     user_image_name = request.POST.get('image_name','untitled')
@@ -141,7 +149,7 @@ def save_images(node_lst,image_name):
 
 def update_user_images(image_name, user):
     try:
-        new_image = MyUserImage(
+        new_image = UserImage(
             user_ref     = user,
             image_name   = image_name,
             location     = image_name+".ndz",
@@ -161,13 +169,13 @@ def omf_exe(request):
     text_file = open(file_name, "w")
     text_file.write("%s" % script)
     text_file.close()
-    t = omf_execute(file_name)
+    t = exe_script(file_name)
     messages.success(request, 'Success: Send Script')
     request.session['active_page'] = 3
     request.session['output'] = t
     return HttpResponseRedirect('/portal/lab/control/')
 
-
+"""
 def omf_execute(filename):
     t = -1
     try:
@@ -179,7 +187,6 @@ def omf_execute(filename):
         return t
 
 
-"""
 import sys
 p = subprocess.Popen(["python printandwait.py"], shell=True, stdout=subprocess.PIPE)
 while True:

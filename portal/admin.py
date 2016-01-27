@@ -1,6 +1,9 @@
 from django.contrib import admin
-from portal.models import MyUser, Platform, Account, MyUserImage, Node, Image, Authority, PendingSlice
-
+from portal.models import MyUser, Platform, Account, \
+                            PhysicalNode, ResourcesInfo, VirtualNode, NodeConnection, SimulationVM,\
+                            UserImage, TestbedImage, SimulationImage,\
+                            Authority, PendingSlice, \
+                            Reservation, ReservationDetail, SimReservation
 
 @admin.register(Platform)
 class PlatformAdmin(admin.ModelAdmin):
@@ -16,12 +19,7 @@ class PlatformAdmin(admin.ModelAdmin):
 
 @admin.register(MyUser)
 class MyUserAdmin(admin.ModelAdmin):
-    list_display = ('id', 'first_name', 'last_name', 'email', 'status', 'created')
-
-
-@admin.register(Node)
-class NodeAdmin(admin.ModelAdmin):
-    list_display = ('id', 'node_name', 'node_ip', 'status', 'location')
+    list_display = ('id', 'first_name', 'last_name', 'username', 'email', 'authority_hrn', 'active_email', 'status', 'created')
 
 
 @admin.register(Account)
@@ -34,21 +32,69 @@ class AuthorityAdmin(admin.ModelAdmin):
     list_display = ('id', 'site_name', 'site_authority', 'authority_hrn', 'created', 'email')
 
 
-#@admin.register(PendingUser):
-#class AccountPendingUser(admin.ModelAdmin):
+# Resources ****************************************************
+@admin.register(ResourcesInfo)
+class ResourceInfoAdmin(admin.ModelAdmin):
+    list_display = ('id', 'type')
 
 
-@admin.register(Image)
-class ImageAdmin(admin.ModelAdmin):
+@admin.register(PhysicalNode)
+class PhysicalNodeAdmin(admin.ModelAdmin):
+    list_display = ('id', 'node_name', 'node_ip', 'num_virtual', 'num_interface', 'status', 'location')
+
+
+@admin.register(VirtualNode)
+class VirtualNodeAdmin(admin.ModelAdmin):
+    list_display = ('id', 'node_ref', 'device_ref', 'vm_name','hv_name')
+
+
+@admin.register(NodeConnection)
+class NodeConnectionAdmin(admin.ModelAdmin):
+    list_display = ('id', 'description', 'node_src_ref', 'node_dst_ref')
+
+
+@admin.register(SimulationVM)
+class SimulationVMAdmin(admin.ModelAdmin):
+    list_display = ('id', 'vm_name', 'specification')
+
+
+# Images *******************************************************
+@admin.register(TestbedImage)
+class TestbedImageAdmin(admin.ModelAdmin):
     list_display = ('id', 'image_name', 'location', 'image_type',)
 
 
-@admin.register(PendingSlice)
-class PendingSliceAdmin(admin.ModelAdmin):
-    list_display = ('id', 'slice_name', 'user_hrn', 'authority_hrn', 'type_of_nodes', 'start_time', 'end_time', 'status')
+@admin.register(SimulationImage)
+class SimulationImageAdmin(admin.ModelAdmin):
+    list_display = ('id', 'image_name', 'location', 'image_type',)
 
 
-@admin.register(MyUserImage)
+@admin.register(UserImage)
 class MyUserImageAdmin(admin.ModelAdmin):
     list_display = ('id', 'user_ref', 'image_name', 'location', 'image_type', 'created')
 
+
+# Reservations *******************************************************
+@admin.register(Reservation)
+class ReservationAdmin(admin.ModelAdmin):
+    list_display = ('id', 'user_ref', 'start_time', 'end_time', 'f_start_time', 'f_end_time',
+                    'slice_name', 'slice_duration', 'approve_date', 'request_date',
+                    'request_type', 'base_image_ref', 'purpose', 'status', 'created')
+
+
+@admin.register(ReservationDetail)
+class ReservationDetailAdmin(admin.ModelAdmin):
+    list_display = ('id', 'node_ref', 'image_ref',)
+
+
+@admin.register(SimReservation)
+class SimReservationAdmin(admin.ModelAdmin):
+    list_display = ('id', 'user_ref', 'start_time', 'end_time', 'f_start_time', 'f_end_time',
+                    'slice_name', 'slice_duration', 'approve_date', 'request_date',
+                    'request_type', 'vm_ref', 'base_image_ref', 'purpose', 'status', 'created')
+
+
+# Old *******************************************************
+@admin.register(PendingSlice)
+class PendingSliceAdmin(admin.ModelAdmin):
+    list_display = ('id', 'slice_name', 'user_hrn', 'authority_hrn', 'server_type', 'request_type', 'start_time', 'end_time', 'status',)

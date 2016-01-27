@@ -1,0 +1,62 @@
+/* the bottom of the datatable needs more space */
+div.querytable-spacer { padding: 8px 4px 15px 4px; }
+
+div.QueryTable table.dataTable th {
+    font: bold 12px/22px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+    color: #4f6b72;
+    border-right: 1px solid #C1DAD7;
+    border-bottom: 1px solid #C1DAD7;
+    border-top: 1px solid #C1DAD7;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    text-align: left;
+    padding: 8px 12px 4px 20px;
+    vertical-align:middle;
+/*    background: #CAE8EA url(../img/tablesort-header.jpg) no-repeat; */
+}
+
+div.QueryTable table.dataTable th.checkbox {
+    padding-left: 14px;
+}
+
+div.QueryTable table.dataTable td, div.QueryTable table.dataTable textarea, div.QueryTable table.dataTable input [type="text"] {
+    font: normal 12px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+    border-right: 1px solid #C1DAD7;
+    border-bottom: 1px solid #C1DAD7;
+}
+div.QueryTable table.dataTable td {
+    padding: 4px 8px 4px 8px;
+    /* this applies on even rows only, odd ones have a setting in bootstrap of rbg 249.249.249 */
+    background-color: #f4f4f4;
+}
+div.QueryTable table.dataTable td a {
+    font-weight:normal;
+}
+/* these come from bootstrap */
+div.QueryTable div.dataTables_info {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+/* one could think or using repeat-x here but that's not working because of the arrows
+ * we might need to make these wider some day 
+ * and/or to add background-color: #caebea
+ * which would look less conspicuous in case of overflow
+*/
+
+div.QueryTable table.dataTable thead .sorting { background: url('../img/tablesort-header-sortable.png') no-repeat; }
+div.QueryTable table.dataTable thead .sorting_asc { background: url('../img/tablesort-header-up.png') no-repeat; }
+div.QueryTable table.dataTable thead .sorting_desc { background: url('../img/tablesort-header-down.png') no-repeat; }
+/* this icons set does not have that exact equivalent - using an approximation for now */
+div.QueryTable table.dataTable thead .sorting_asc_disabled { background: url('../img/tablesort-header.png') repeat-x; }
+div.QueryTable table.dataTable thead .sorting_desc_disabled { background: url('../img/tablesort-header.png') repeat-x; }
+
+/* the footers are not active */
+div.QueryTable table.dataTable tfoot { 
+    background: url('../img/tablesort-header.png') repeat-x;
+    background-color: #caebea;
+}
+/* and when sorting is turned off it's useful to set this on header too */
+div.QueryTable table.dataTable thead { 
+    background: url('../img/tablesort-header.png') repeat-x;
+    background-color: #caebea;
+}

@@ -1,29 +1,24 @@
 import os.path, re
 import json
 from random import randint
-
+from crc.settings               import SUPPORT_EMAIL
 from django.core.mail           import send_mail
 from django.contrib.auth.models import User
-
 from django.template.loader     import render_to_string
 from django.shortcuts           import render
 from django.contrib.auth        import get_user_model
-
 from unfold.page                import Page
 from unfold.loginrequired       import FreeAccessView
 from ui.topmenu                 import topmenu_items
-#
-from crc.settings               import SUPPORT_EMAIL
+# @qursaan
+from portal.forms  import CaptchaTestForm
+from portal.models import PendingUser
+from portal.models import Authority, MyUser, Account, Platform
 
 # @qursaan: comment
 #from manifold.manifoldapi       import execute_admin_query
 #from manifold.core.query        import Query
-
-from portal.models              import PendingUser, MyUser, Account, Platform
-#from portal.actions             import authority_get_pi_emails, manifold_add_user, manifold_add_account
-
-# @qursaan
-from portal.models import Authority
+#from portal.actions import authority_get_pi_emails, manifold_add_user, manifold_add_account
 
 
 class RegistrationView (FreeAccessView):
@@ -44,7 +39,6 @@ class RegistrationView (FreeAccessView):
 
         # @qursaan: get authorities from db
         authorities = Authority.objects.all()
-
         if authorities is not None:
             authorities = sorted(authorities)
 
@@ -54,21 +48,22 @@ class RegistrationView (FreeAccessView):
         page = Page(request)
         page.add_js_files(["js/jquery.validate.js", "js/my_account.register.js", ])
         page.add_css_files(["css/onelab.css", "css/registration.css", ])
-        page.add_css_files(["http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css", ])
+        #page.add_css_files(["http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css", ])
 
-        print 'registration view, method', method
+        # @qursaan: just for test
+        # print 'registration view, method', method
 
         #user_query  = Query().get('local:user').select('user_id', 'email')
         # @qursaan: change to user table
         user_details = User.objects.all()  # execute_admin_query(self.request, user_query)
 
         if method == 'POST':
-            # @qursaan: get values
+            # @qursaan: get post values
             #get_email = PendingUser.objects.get(email)
             reg_fname  = request.POST.get('firstname', '')
             reg_lname  = request.POST.get('lastname', '')
             reg_auth   = request.POST.get('authority_hrn', '')
-            #reg_login  = request.POST.get('login', '')
+            reg_username  = request.POST.get('username', '')
             reg_email  = request.POST.get('email','').lower()
             #prepare user_hrn
             split_email = reg_email.split("@")[0]
@@ -77,19 +72,23 @@ class RegistrationView (FreeAccessView):
             print "User_Hrn: ", user_hrn
             UserModel = get_user_model()
 
-            #POST value validation
-            if (re.search(r'^[\w+\s.@+-]+$', reg_fname)==None):
+            form = CaptchaTestForm(request.POST)
+            if not form.is_valid():
+                errors.append('Invalid Captcha')
+
+            # POST values validation
+            if re.search(r'^[\w+\s.@+-]+$', reg_fname) == None:
                 errors.append('First Name may contain only letters, numbers, spaces and @/./+/-/_ characters.')
-            if (re.search(r'^[\w+\s.@+-]+$', reg_lname)==None):
+            if re.search(r'^[\w+\s.@+-]+$', reg_lname) == None:
                 errors.append('Last Name may contain only letters, numbers, spaces and @/./+/-/_ characters.')
 
-
             # checking in django_db !!
-
             if MyUser.objects.filter(email__iexact=reg_email, status=1):
                 errors.append('Email is pending for validation. Please provide a new email address.')
             elif MyUser.objects.filter(email__iexact=reg_email, status=0):
                 errors.append('This account is disabled. Please contact the administrator')
+            elif MyUser.objects.filter(username__iexact=reg_username):
+                errors.append('Username is already registered in CRC Server. Please provide an unique username')
             #if PendingUser.objects.filter(email__iexact=reg_email):
             #    errors.append('Email is pending for validation. Please provide a new email address.')
             elif UserModel._default_manager.filter(email__iexact=reg_email):
@@ -155,7 +154,7 @@ class RegistrationView (FreeAccessView):
                 )
                 pnd_user.save()"""
                 # saves the user to django auth_user table [needed for password reset]
-                web_user = User.objects.create_user(reg_email, reg_email, request.POST['password'])
+                web_user = User.objects.create_user(reg_username, reg_email, request.POST['password'])
                 # @qursaan: set user inactive
                 web_user.first_name = reg_fname
                 web_user.last_name = reg_lname
@@ -177,12 +176,13 @@ class RegistrationView (FreeAccessView):
                     first_name    = reg_fname,
                     last_name     = reg_lname,
                     authority_hrn = reg_auth,
-                    #login        = reg_login,
+                    username      = reg_username,
                     email         = reg_email,
                     password      = request.POST['password'],
                     keypair       = account_config,
                     user_hrn      = user_hrn,
                     status        = 1,  # set 1 = Pending
+                    active_email  = 0,  # set 0 = not activated
                 )
                 itf_user.id = web_user.id
                 itf_user.save()
@@ -212,6 +212,7 @@ class RegistrationView (FreeAccessView):
                     'last_name'     : reg_lname,
                     'authority_hrn' : reg_auth,
                     'email'         : reg_email,
+                    'username'      : reg_username,
                     'user_hrn'      : user_hrn,
                     'public_key'    : public_key,
                     }
@@ -228,16 +229,19 @@ class RegistrationView (FreeAccessView):
                 return render(request, 'user_register_complete.html')
 
         # Error or Get
+
         template_env = {
             'topmenu_items': topmenu_items('Register', page.request),
             'errors': errors,
             'firstname': request.POST.get('firstname', ''),
             'lastname': request.POST.get('lastname', ''),
+            'username': request.POST.get('username',''),
             'authority_hrn': request.POST.get('authority_hrn', ''),
             'email': request.POST.get('email', ''),
             'password': request.POST.get('password', ''),
             'authorities': authorities,
             'title': 'Registration',
+            'form': CaptchaTestForm(),
           }
         template_env.update(page.prelude_env())
-        return render(request, 'registration_view.html', template_env)
+        return render(request, 'registration-view.html', template_env)

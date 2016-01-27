@@ -1,0 +1,131 @@
+{% extends "layout-unfold1.html" %}
+{% block unfold_main %}
+
+<script type="text/javascript" src="{{ STATIC_URL }}js/moment.min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap-datetimepicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/bootstrap-datetimepicker.min.css" />
+
+<link rel="stylesheet" type="text/css" href='{{ STATIC_URL }}css/registration.css' />
+<link rel="stylesheet" type="text/css" href='{{ STATIC_URL }}css/timeline.css' />
+<script src='{{ STATIC_URL }}js/timeline-min.js'></script>
+
+<div style="text-align:center" class="well-sm">
+    <h2>Timeline</h2>
+</div>
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+
+<div class='well'>
+    <form name ="omf-form" id="omf-form" role="form" class="form-horizontal" > <!--class="cmxform form-horizontal" id="exe-image-form"
+    method="post" action="create_post"  enctype="multipart/form-data" -->
+        <fieldset>
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="server_type" class="col-xs-2 control-label">Server</label>
+                <div class="col-xs-4">
+                    <div class="ui-widget">
+                        <select id="server_type" name="server_type" class="form-control"
+                        value="{{ server_type }}" >
+                            <option value="omf" label="Controller Server" ></option>
+                            <option value="sim" label="Simulation Server" ></option>
+                        </select>
+                    </div>
+                </div>
+                    <script type="text/javascript">
+                       $('#server_type').change(function(){
+                            if($(this).val()=="omf"){
+                                 $('#omf_group').show();
+                                 $('#sim_group').hide();
+                            } else {
+                                 $('#sim_group').show();
+                                 $('#omf_group').hide();
+                            }
+                       });
+                    </script>
+                <div class="col-xs-6">
+                    <p class="form-hint">Determine the Type of Experiment Server</p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="request_date" class="col-xs-2 control-label">Start Date & Time</label>
+                <div class="col-xs-4">
+                    <div class="ui-widget">
+                        <div class='input-group date' id='datetimepicker1'>
+                            <input id="request_date" name="request_date"  type='text'  placeholder="Timeline Date" class="form-control" required />
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                        <script type="text/javascript">
+                            $(function () {
+                                $('#datetimepicker1').datetimepicker();
+                            });
+                        </script>
+                        </div>
+                    <!--h5>Current Server time: {{time_now}} Zone: (Africa/Cairo)</h5-->
+                </div>
+                <div class="col-xs-6">
+                    <button class="submit btn btn-danger" type="submit" name="g_reserve">Fetch</button>
+                </div>
+            </div>
+            <div class="form-group">
+                <div id='timeline-embed' style="width: 100%; height: 500px"></div>
+            </div>
+        </fieldset>
+    </form>
+</div>
+
+<script type="text/javascript">
+var additionalOptions = {
+    timenav_height_percentage: 75,
+    start_at_end: true,
+    initial_zoom:1,
+    timenav_position:"top",
+    default_bg_color: {r:250, g:250, b:250},
+}
+var timeline_json = make_the_json(); // you write this part
+window.timeline = new TL.Timeline('timeline-embed', timeline_json, additionalOptions);
+
+
+function make_the_json() {
+    var slide1 = {
+        "start_date" :{"year":"2016",month:"1","day":"1","hour":"1","minute":"0","second":"0"},
+        "end_date"   :{"year":"2016",month:"1","day":"1","hour":"2","minute":"0","second":"1"},
+        "text"       :{"headline":"R1","text":"Ahamd"},
+    };
+    var slide2 = {
+        "start_date" :{"year":"2016",month:"1","day":"1","hour":"2","minute":"0","second":"0"},
+        "end_date"   :{"year":"2016",month:"1","day":"1","hour":"3","minute":"0","second":"1"},
+        "text"       :{"headline":"R2","text":"Ahamd"},
+    };
+    var slide3 = {
+        "start_date" :{"year":"2016",month:"1","day":"1","hour":"3","minute":"0","second":"0"},
+        "end_date"   :{"year":"2016",month:"1","day":"1","hour":"4","minute":"0","second":"1"},
+        "text"       :{"headline":"R3","text":"Ahamd"},
+    };
+    var era1 = {
+        "start_date" :{"year":"2016",month:"1","day":"1"},
+        "end_date"   :{"year":"2016",month:"1","day":"2"},
+        "text"       :{"headline":"Node 1","text":"Node1"},
+    };
+    var era2 = {
+        "start_date" :{"year":"2016",month:"1","day":"2"},
+        "end_date"   :{"year":"2016",month:"1","day":"3"},
+        "text"       :{"headline":"Node 2","text":"Node2"},
+    };
+    var result = {
+        "title":{"text":{"headline":"Resources","text":"Reservation Information"}},
+        "events":[slide1,slide2,slide3],
+        "eras":[era1,era2],
+    };
+    console.log(result);
+    return result;
+};
+</script>
+{% endblock %}

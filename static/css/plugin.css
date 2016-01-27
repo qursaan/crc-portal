@@ -1,0 +1,38 @@
+div.plugin-toggle {
+    margin:		3px;
+    padding:		5px;
+    border-style:	dotted;
+    border-width:	1px;
+}
+div.plugin, div.plugin-toggle {
+}
+div.plugin-outline-complete, div.plugin-outline-body {
+    border:		1px solid;
+    border-radius:	8px;
+    border-color:	#ccc;
+    padding:		5px;
+    margin:		5px;
+}
+h4.plugin-show {
+    cursor: s-resize;
+}
+h4.plugin-hide { 
+    cursor: n-resize;
+}
+h4.plugin-show, h4.plugin-hide {
+    margin:8px;
+}
+i.icon-hand-right,i.icon-hand-down {
+    padding-right: 4px;
+}
+a.plugin-tooltip { 
+    font-size: 130%;
+    font-style: italic;
+    font-weight: normal;
+    padding: 4px;
+    color: #808080;
+}
+a.plugin-tooltip:hover { 
+    color: #102050; 
+    text-decoration: none;
+}

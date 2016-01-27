@@ -4,7 +4,8 @@ admin_user = pirate
 admin_password = food
 
 #[crc]
-# theme possible values = onelab, fed4fire, fibre, smartfire
+#max_request = 10
+#theme possible values = onelab, fed4fire, fibre, smartfire
 #theme=onelab
 #debug = true
 #httproot =

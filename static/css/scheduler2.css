@@ -1,0 +1,246 @@
+/*
+#
+# Copyright (c) 2012 NITLab, University of Thessaly, CERTH, Greece
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+# THE SOFTWARE.
+#
+#
+# This is a MySlice plugin for the NITOS Scheduler
+# NITOScheduler v8
+#
+*/
+.m-t {
+    margin-top:5px;
+}
+.m-b {
+    margin-bottom:5px;
+}
+.m-none {
+    margin:0;
+}
+
+.form-control {
+    padding-right: 30px;
+}
+
+.form-control + .glyphicon {
+    position: absolute;
+    right: 0;
+    padding: 8px 27px;
+}
+
+#time-range {
+    margin-top:10px;
+}
+#TopologyModal .modal-dialog {
+    width: 700px;
+}
+#TopologyModal .modal-body {
+    position: relative;
+    overflow-y: auto;
+    max-height: 100%;
+    padding: 15px;
+}
+#TopologyModal .modal-header, #TopologyModal .modal-body, #TopologyModal .modal-footer {
+    background: none repeat scroll 0 0 #FFFFFF;
+}
+#TopologyModal .modal-header {
+    border-radius: 11px 11px 0 0;
+}
+#TopologyModal .modal-body {
+    border-radius: 0 0 11px 11px;
+}
+
+#scheduler .table {
+    background:#fff;
+}
+
+#scheduler .control-label {
+    margin-top: 5px;
+}
+#lbltime {
+    display: inline-block;
+    font-size: 1.2em;
+    margin-top: 0;
+    padding: 6px;
+}
+
+/** tables css **/
+#ShedulerNodes-scroll-container {
+    float: left;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    width: 15%;
+}
+#ShedulerNodes {
+    border-collapse: collapse;
+    border-spacing: 0;
+    max-width: 500px;
+    width: 450px;
+    margin-top:55px;
+}
+
+#ShedulerNodes th{
+    height: 60px;
+}
+
+#ShedulerNodes td{
+    background: url("../img/podcast-15-w.png") no-repeat scroll 3px 50% #30196D;
+    border: 1px solid #CDCDCD;
+    color: #FFFFFF;
+    height: 27px;
+    padding: 0 3px 0 19px;
+}
+
+#ShedulerNodes td.verticalIndex {
+    padding: 0 2px !important;
+}
+
+#ShedulerNodes td .verticalText {
+    -webkit-transform: rotate(-90deg);
+    -moz-transform: rotate(-90deg);
+    -ms-transform: rotate(-90deg);
+    -o-transform: rotate(-90deg);
+    filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+    margin-left: -30px;
+    position: absolute;
+    transform: rotate(-90deg); 
+}
+
+#reservation-table-scroll-container {
+    overflow-x: scroll;
+    overflow-y: visible;
+    padding-bottom: 1px;
+    width:85%;
+}
+
+
+#scheduler-reservation-table {
+    border-spacing:0;
+    border-collapse:collapse;
+    margin-bottom: 0 !important;
+    overflow: auto;
+    width: 100%;
+}
+
+#scheduler-reservation-table tr{
+    background-color: #A6C9E2 ;
+}
+
+#scheduler-reservation-table tr.even{
+    background-color: #E0E0E0 ;
+}
+
+/*background: url("../img/opened-lock-15.png") no-repeat scroll 50% 50% transparent;*/
+#scheduler-reservation-table td {
+    border: 1px solid #FFFFFF;
+    cursor: pointer;
+    height: 27px;
+    padding: 3px 0 2px;
+    text-align: center;
+    width: 25px;
+}
+
+#scheduler-reservation-table td img{
+    height: 15px;
+}
+
+#scheduler-reservation-table td.fixed, #scheduler-reservation-table th.fixed{
+    position:absolute; 
+    width:4em; 
+    top:auto;
+    border-right: 2px none black; 
+}
+
+#scheduler-reservation-table td.info, #scheduler-reservation-table th  {
+    background: #30196D;
+    font-weight:normal;
+    color: #fff;
+    height: 25px;
+    padding: 0 3px;
+    width: auto;
+}
+
+#scheduler-reservation-table th span {
+    display: block;
+    line-height: 3px;
+    margin: 0 auto;
+    padding: 0 5px;
+    width: 3px;
+}
+
+#scheduler-reservation-table td.free {
+}
+
+#scheduler-reservation-table td.closed {
+    background: url("../img/closed-lock-15.png") no-repeat scroll 50% 50% #DD4444;
+    cursor: not-allowed;
+}
+
+#scheduler-reservation-table td.maintenance {
+    background: url("../img/tools-15.png") no-repeat scroll 50% 50% #EDA428;
+}
+
+#scheduler-reservation-table td.free:hover ,#scheduler-reservation-table td.selected, #scheduler-reservation-table td.selected_tmp {
+    background: #25BA25;
+}
+
+td.no-image {
+    background-image: none !important;
+    padding: 0 !important;
+}
+
+
+/*legend*/
+
+.legend ol {
+    font-size: 0.8em;
+    list-style: none;
+    padding: 0;
+}
+
+.legend ol li{
+    background: #a6c9e2; /* Old browsers */
+    background: -moz-linear-gradient(left, #a6c9e2 28px, #e0e0e0 28px); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, right top, color-stop(28px,#a6c9e2), color-stop(28px,#e0e0e0)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(left, #a6c9e2 28px,#e0e0e0 28px); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(left, #a6c9e2 28px,#e0e0e0 28px); /* Opera 11.10+ */
+    background: -ms-linear-gradient(left, #a6c9e2 28px,#e0e0e0 28px); /* IE10+ */
+    background: linear-gradient(to right, #a6c9e2 28px,#e0e0e0 28px); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a6c9e2', endColorstr='#e0e0e0',GradientType=1 ); /* IE6-9 */
+
+    padding: 3px 0 3px 30px;
+    width: 109px;
+}
+
+.legend ol li.free{
+
+}
+
+.legend ol li.closed{
+    background: url("../img/closed-lock-15.png") no-repeat scroll 8px 50% #DD4444;
+}
+
+.legend ol li.maintenance {
+    background: url("../img/tools-15.png") no-repeat scroll 8px 50% #EDA428;
+}
+
+.legend ol li.selected {
+    background: #25BA25;
+}

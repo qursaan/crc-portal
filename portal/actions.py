@@ -1,7 +1,9 @@
 from datetime import datetime, timedelta
 import json
 from django.http                import HttpResponse
-from portal.models              import Authority, MyUser, PendingSlice, PendingAuthority #PendingUser,
+from portal.models              import Authority, MyUser, PendingSlice,\
+                                        PendingAuthority, VirtualNode, Reservation
+from portal.backend_actions import create_backend_user
 from django.contrib.auth.models import User
 
 # Thierry: moving this right into the code so
@@ -30,6 +32,32 @@ def schedule_slice(slice_id):
     curr_slice.save()
     return True
 
+def schedule_online(reserve_id):
+    curr_slice = Reservation.objects.get(id=reserve_id)
+    request_time = curr_slice.created
+
+    overlap = Reservation.objects.filter(status=3, start_time=request_time)
+
+    if overlap.exists():
+        return False
+    else:
+        #new_slice = Reservation(
+        #        user_ref       = curr_slice.user_hrn,
+        #        created       = datetime.now(),
+        #        request_date  = curr_slice.created,
+        #        start_time    = curr_slice.start_time,
+        #        end_time      = curr_slice.end_time,
+        #        approve_date  = datetime.now(),
+        #        status = 3)
+        curr_slice.status = 3
+        curr_slice.save()
+
+        curr_slice.start_time = request_time
+        curr_slice.end_time = get_next_hour(request_time)
+        curr_slice.approve_date = datetime.now()
+        curr_slice.status = 3
+        curr_slice.save()
+        return True
 
 # ************* Get Next Free Hour/Day **************** #
 def get_next_hour(request_time):
@@ -64,6 +92,17 @@ def get_authority_emails(authority):
         return ['qursaan@crclab.org']
 
 
+# ************* Update Node Status ******************* #
+def update_node_status(node_id, new_status):
+    node = VirtualNode.objects.get(vm_name=node_id)
+    if node is not None:
+        if node.status != new_status:
+            node.status = new_status
+            node.save()
+        return 1
+    else:
+        return 0
+
 # ******** Generate user request from user Object ***** #
 def make_request_user(user):
     request = {}
@@ -74,7 +113,7 @@ def make_request_user(user):
     request['first_name']    = user.first_name
     request['last_name']     = user.last_name
     request['email']         = user.email
-    request['login']         = user.email   # login
+    request['login']         = user.username   # login
     request['keypair']       = user.keypair
     return request
 
@@ -90,7 +129,7 @@ def make_request_slice(slice):
     request['authority_hrn'] = slice.authority_hrn
     request['slice_name'] = slice.slice_name
     request['number_of_nodes'] = slice.number_of_nodes
-    request['type_of_nodes'] = slice.type_of_nodes
+    #request['type_of_nodes'] = slice.type_of_nodes
     request['purpose'] = slice.purpose
     return request
 
@@ -376,13 +415,18 @@ def portal_validate_request(wsgi_request, request_ids):
 ##                    }
 ##                    manifold_add_account(request, manifold_account_params)
                 up_user = MyUser.objects.get(id=request['id'])
-                up_user.status = 2
-                up_user.save()
                 web_user = User.objects.get(id=up_user.id)
-                web_user.is_active = True
-                web_user.save()
+                # TODO: Create user file here
+                result = create_backend_user(up_user.username, up_user.password)
+                if result == 1:
+                    up_user.status = 2
+                    up_user.save()
+                    web_user.is_active = True
+                    web_user.save()
 
-                request_status['CRC user'] = {'status': True}
+                    request_status['CRC user'] = {'status': True}
+                else:
+                    request_status['CRC user'] = {'status': False, 'description': 'Server Error'}
 
             except Exception, e:
                  request_status['CRC user'] = {'status': False, 'description': str(e)}

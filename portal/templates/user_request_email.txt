@@ -1,7 +1,11 @@
 NEW USER REQUEST
 
 First Name   : {{first_name}}
-Last Name    : {{last_name}} 
+Last Name    : {{last_name}}
 Authority hrn: {{authority_hrn}}
 Email        : {{email}}
+Username     : {{username}}
 Request Date : {{request_date}}
+Request Type : {{request_type}}
+Server Type  : {{server_type}}
+Purpose      : {{purpose}}

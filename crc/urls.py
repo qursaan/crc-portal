@@ -18,6 +18,9 @@ from django.conf import settings
 from django.contrib import admin
 from django.conf.urls.static import static
 
+# qursaan: removed
+# from filebrowser.sites import site
+
 # to enable insert_above stuff
 from django.template.base import add_to_builtins
 add_to_builtins('insert_above.templatetags.insert_tags')
@@ -42,6 +45,13 @@ urlpatterns = [
     url(r'^/?$', the_default_view),
     # Portal
     url(r'^portal/', include('portal.urls')),
+    # filer
+    # url(r'^filer/', include('filer.urls')),
+
+    # File Browsers
+    #url(r'^admin/filebrowser/', include(site.urls)),
+    #url(r'^grappelli/', include('grappelli.urls')),
+    # Admin Pages
     url(r'^admin/', include(admin.site.urls)),
     # login / logout
     url(r'^login-ok/?$', the_after_login_view, {'state': 'Welcome to CRC'}),
@@ -50,5 +60,7 @@ urlpatterns = [
     # seems to be what login_required uses to redirect ...
     url(r'^accounts/login/$', the_login_view),
 
+    # captcha
+    url(r'^captcha/', include('captcha.urls')),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

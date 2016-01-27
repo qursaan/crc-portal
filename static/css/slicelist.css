@@ -1,0 +1,23 @@
+/* font size for regular (non datatable'd) slicelists */
+tbody.slicelist {
+    font-size: 150%;
+}
+/* datatable'd tables behave differently */
+table.with-datatables>tbody.slicelist {
+    font-size: 80%;
+}
+/* larger headers */
+thead.slicelist>tr>th {
+    font-size: 150%;
+    padding: 10px 10px 20px 10px;
+}
+/* some space after the arrow */ 
+tbody.slicelist i {
+    padding-right: 8px;
+}
+
+.slicelist {
+    font-size: 100%;
+    text-align: center !important;
+    margin: 0 auto;
+}

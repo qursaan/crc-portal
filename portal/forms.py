@@ -9,13 +9,18 @@ from django import forms
 #from crispy_forms.layout import Submit
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.tokens import default_token_generator
-from django.contrib.auth import authenticate, get_user_model
+from django.contrib.auth import get_user_model #authenticate,
 from django.contrib.sites.models import get_current_site
 from django.utils.http import int_to_base36
 from django.template import loader
+from captcha.fields import CaptchaField
+
+
+class CaptchaTestForm(forms.Form):
+    captcha = CaptchaField()
 
 # TODO: Remove these automated forms and use html templates and views like any other page !
-from django.contrib.auth.hashers import identify_hasher
+# from django.contrib.auth.hashers import identify_hasher
 # adapted from https://sourcegraph.com/github.com/fusionbox/django-authtools/symbols/python/authtools/forms
 
 def is_password_unusable(pw):
@@ -30,10 +35,7 @@ def is_password_unusable(pw):
         from django.contrib.auth.hashers import UNUSABLE_PASSWORD_PREFIX
         return pw.startswith(UNUSABLE_PASSWORD_PREFIX)
 
-
-
-
-# xxx painful, but... 
+# xxx painful, but...
 # bootstrap3 requires the <input> fields to be tagged class='form-control'
 # my first idea was to add this in the view template of course, BUT
 # I can't find a way to access the 'type=' value for a given field
@@ -56,9 +58,10 @@ class ContactForm(forms.Form):
     last_name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}))
     authority = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}))
     email = forms.EmailField(widget=forms.TextInput(attrs={'class':'form-control'}))
-    subject = forms.CharField(max_length=100,widget=forms.TextInput(attrs={'class':'form-control'}))
+    subject = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'class':'form-control'}))
     description = forms.CharField(widget=forms.Textarea(attrs={'class':'form-control'}))
-    cc_myself = forms.BooleanField(required=False,widget=forms.CheckboxInput(attrs={'class':'form-control'}))
+    captcha = CaptchaField()
+    cc_myself = forms.BooleanField(required=False, widget=forms.CheckboxInput(attrs={'class':'form-control'}))
 
 
 class PassResetForm(forms.Form):
@@ -184,9 +187,8 @@ class SetPasswordForm(forms.Form):
     A form that lets a user change set his/her password without entering the
     old password
     """
-    error_messages = {
-        'password_mismatch': _("The two password fields didn't match."),
-    }
+
+    error_messages = {'password_mismatch': _("The two password fields didn't match."), }
     new_password1 = forms.CharField(label=_("New password"),
                                     widget=forms.PasswordInput)
     new_password2 = forms.CharField(label=_("New password confirmation"),

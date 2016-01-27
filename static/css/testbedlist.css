@@ -1,0 +1,23 @@
+/* font size for regular (non datatable'd) testbedlists */
+tbody.testbedlist {
+    font-size: 300%;
+}
+/* datatable'd tables behave differently */
+table.with-datatables>tbody.testbedlist {
+    font-size: 80%;
+}
+/* larger headers */
+thead.testbedlist>tr>th {
+    font-size: 150%;
+    padding: 10px 10px 20px 10px;
+}
+/* some space after the arrow */ 
+tbody.testbedlist i {
+    padding-right: 8px;
+}
+
+.testbedlist {
+    font-size: 100%;
+    text-align: center !important;
+    margin: 0 auto;
+}

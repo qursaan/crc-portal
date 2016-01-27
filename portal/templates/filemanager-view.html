@@ -1,0 +1,47 @@
+{% extends "layout-unfold1.html" %}
+{% block unfold_main %}
+<!--link rel="stylesheet" type="text/css" href='{{ STATIC_URL }}css/onelab.css' /-->
+<link rel="stylesheet" type="text/css" href='{{ STATIC_URL }}css/registration.css' />
+<div style="text-align:center" class="well-sm">
+    <h2>User Cloud Disk</h2>
+</div>
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+
+<div class="well">
+    <form name ="file-form" class="cmxform form-horizontal" id="file-form" method="post" action=""
+        enctype="multipart/form-data" role="form">
+        <fieldset>
+            {% csrf_token %}
+            <div class="form-group">
+                <div class="col-xs-12">
+                    <div class="ui-widget btn-toolbar" role="group">
+                        <div class="btn-group" role="group">
+                            <button id="f_upload"  class="btn btn-default" name="f_upload">Upload</button>
+                            <button id="f_download" class="btn btn-default" name="f_download">Download</button>
+                        </div>
+                        <div class="btn-group" role="group">
+                            <button id="f_refresh" class="submit btn btn-danger" type="submit" name="g_refresh">Refresh</button>
+                        </div>
+                    </div>
+                    <div class="ui-widget" style="height: 10px;"></div>
+                </div>
+                <div class="col-xs-12">
+                    <h5>File Manager</h5>
+                    <div id="myfileholder"></div>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</div>
+
+<script>
+
+</script>
+{% endblock %}

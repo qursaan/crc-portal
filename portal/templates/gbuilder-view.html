@@ -1,0 +1,173 @@
+{% extends "layout-unfold1.html" %}
+{% block unfold_main %}
+<!--link rel="stylesheet" type="text/css" href='{{ STATIC_URL }}css/onelab.css' /-->
+<link rel="stylesheet" type="text/css" href='{{ STATIC_URL }}css/registration.css' />
+
+<link rel="stylesheet" type="text/css" href='{{ STATIC_URL }}css/joint.min.css' />
+<script src="{{STATIC_URL}}js/jquery.min.js"></script>
+<script src="{{STATIC_URL}}js/lodash.min.js"></script>
+<script src="{{STATIC_URL}}js/backbone-min.js"></script>
+<script src="{{STATIC_URL}}js/joint.min.js"></script>
+<style>
+    #myPaperHolder{
+        width:auto;
+        min-width:300px;
+        height:400px;
+        border:solid 1px;
+    }
+</style>
+<div style="text-align:center" class="well-sm">
+    <h2>Graphic Builder Tools</h2>
+</div>
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+<!--div id="home-dashboard">
+    <ul class="nav nav-tabs" role="tablist">
+      <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Instructions</a></li>
+      <li role="presentation" ><a id="map-form" href="#gbuilder" aria-controls="gbuilder" role="tab" data-toggle="tab">Graphic Builder</a></li>
+      </ul>
+    <div class="tab-content">
+        <div role="tabpanel"  class="tab-pane active"  id="home">
+        <h4>Instruction</h4>
+        <ol>
+            <li>Open <b><i>Build Graph </i></b> tab and Draw your own topology</li>
+        </ol>
+    </div>
+        <div role="tabpanel"  class="tab-pane" id="gbuilder"><!--class="tab-pane" -->
+    <!--h4>Graphic Builder</h4-->
+            <div class="well">
+                <form name ="graph-form" class="cmxform form-horizontal" id="graph-form" method="post" enctype="multipart/form-data" role="form">
+                    <fieldset>
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <div class="col-xs-12">
+                                <div class="ui-widget btn-toolbar" role="group">
+                                    <div class="btn-group" role="group">
+                                        <button id="g_add_node" class="btn btn-default" name="g_add_node">Add Node</button>
+                                        <button id="g_add_link" class="btn btn-default" name="g_add_link">Add Link</button>
+                                        <button id="g_reset" class="btn btn-warning" type="reset" name="g_reset">Reset</button>
+                                        <button id="g_clear" class="btn btn-default" type="reset" name="g_clear">Clear All</button>
+                                        <button id="g_load" class="btn btn-default" name="g_load">Load</button>
+                                        <button id="g_save" class="btn btn-default" name="g_save">Save</button>
+                                        <button id="g_check" class="btn btn-default" name="g_check">Check</button>
+                                    </div>
+                                    <div class="btn-group" role="group">
+                                        <button class="submit btn btn-danger" type="submit" name="g_reserve">Reserve</button>
+                                    </div>
+                                </div>
+                                <div class="ui-widget" style="height: 10px;"></div>
+                            </div>
+                            <div class="col-xs-12">
+                                <h5>Graph Paper</h5>
+                                <div id="myPaperHolder"></div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+
+            </div>
+        <!--/div>
+    </div>
+</div-->
+
+<script type="text/javascript">
+var graph;
+var paper;
+var nodes = [];
+var links = [];
+var n_nodes=0;
+var n_links=0;
+jQuery(document).ready(function(){
+    graph = new joint.dia.Graph;
+
+    paper = new joint.dia.Paper({
+            el: $('#myPaperHolder'),
+            width: $('#myPaperHolder').width(),
+            height: $('#myPaperHolder').height(),
+            model: graph,
+            gridSize: 1,
+    });
+    drawBaseMap();
+});
+
+$('#g_add_node').on('click', function(event){
+    n_nodes+=1;
+    var rect1 = new joint.shapes.basic.Circle({
+    position: { x: 100, y: 30 },
+    size: { width: 100, height: 30 },
+    attrs: {
+        rect: { fill: '#2C3E50', rx: 5, ry: 5, 'stroke-width': 2, stroke: 'black' },
+        text: { text: 'Node '+n_nodes, fill: '#3498DB', 'font-size': 18, 'font-weight': 'bold',
+            'font-variant': 'small-caps', 'text-transform': 'capitalize'}
+           }
+    });
+    nodes.push(rect1);
+    graph.addCells([rect1]);
+});
+
+$('#g_add_link').on('click', function(event){
+    n_links+=1;
+    var link = new joint.dia.Link({
+        source: { x: 100, y: 30  },
+        target: { x: 200, y: 40 }
+    });
+    link.set('smooth', true);
+    links.push(link);
+    graph.addCells([link]);
+});
+$('#g_clear').on('click', function(event){
+    clear();
+});
+$('#g_reset').on('click', function(event){
+    drawBaseMap();
+});
+$('#graph-form').on('submit', function(event){
+    event.preventDefault();
+});
+function clear(){
+    graph.clear();
+    n_nodes=0;
+    n_links=0;
+    nodes = [];
+    links = [];
+};
+function drawBaseMap() {
+    clear();
+    for (i = 0; i < 8; i++)
+    {
+        n_nodes+=1;
+        var rect1 = new joint.shapes.basic.Circle({
+            position: { x: 100*n_nodes, y: 30*n_nodes },
+            size: { width: 100, height: 30 },
+            attrs: {
+                rect: { fill: '#2C3E50', rx: 5, ry: 5, 'stroke-width': 2, stroke: 'black' },
+                text: { text: 'Node '+n_nodes, fill: '#3498DB', 'font-size': 18, 'font-weight': 'bold',
+                    'font-variant': 'small-caps', 'text-transform': 'capitalize'}
+                   }
+            });
+        nodes.push(rect1);
+    }
+    graph.addCells(nodes);
+    for (i = 0; i < 8; i++){
+        for (j = i+1; j < 8; j++)
+        {
+            n_links+=1;
+            var link = new joint.dia.Link({
+            source: { id: nodes[i].id },
+            target: { id: nodes[j].id }
+            });
+            link.set('smooth', true);
+            links.push(link);
+        }
+    }
+    graph.addCells(links);
+};
+</script>
+
+{% endblock %}

@@ -67,25 +67,25 @@ from django.contrib.sites.models import get_current_site
 from django.contrib.auth.hashers import identify_hasher
 
 ##
-import os.path, re
-import json
+#import os.path, re
+#import json
 
-from random                     import choice
+#from random                     import choice
 
 from django.core.mail           import send_mail
 from django.contrib             import messages
-from django.views.generic       import View
+#from django.views.generic       import View
 from django.shortcuts           import render
 from django.http                import HttpResponse, HttpResponseRedirect
 
-from unfold.loginrequired       import FreeAccessView
-from ui.topmenu                 import topmenu_items_live
+#from unfold.loginrequired       import FreeAccessView
+#from ui.topmenu                 import topmenu_items_live
 
-from manifold.manifoldapi       import execute_admin_query
-from manifold.core.query        import Query
+#from manifold.manifoldapi       import execute_admin_query
+#from manifold.core.query        import Query
 #from portal.actions             import manifold_update_user
 
-from portal.forms               import PassResetForm
+#from portal.forms               import PassResetForm
 #from portal.actions             import manifold_update_user
 from django.contrib.auth.models import User
 

@@ -1,0 +1,186 @@
+{% extends "layout-unfold1.html" %}
+{% block unfold_main %}
+
+<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/bootstrap-datetimepicker.min.css" />
+<link rel="stylesheet" type="text/css" href='{{STATIC_URL}}css/registration.css' />
+<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/jquery-ui-1.8.16.custom.css" />
+<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/slick.grid.css" />
+<!--script type="text/javascript" src="{{STATIC_URL}}js/jquery-1.7.min.js"></script-->
+<script type="text/javascript" src="{{STATIC_URL}}js/moment.min.js"></script>
+<script type="text/javascript" src="{{STATIC_URL}}js/bootstrap-datetimepicker.min.js"></script>
+<script type="text/javascript" src="{{STATIC_URL}}js/firebugx.js"></script>
+<script type="text/javascript" src="{{STATIC_URL}}js/jquery-ui.js"></script>
+<script type="text/javascript" src="{{STATIC_URL}}js/jquery.event.drag-2.2.js"></script>
+
+
+<style>
+    .cell-title {
+      font-weight: bold;
+    }
+    .cell-effort-driven {
+      text-align: center;
+    }
+    .load-free {
+      color: green;
+    }
+    .load-busy {
+      color: red;
+    }
+    .toggle {
+      height: 9px;
+      width: 9px;
+      display: inline-block;
+    }
+    .toggle.expand {
+      background: url(/static/img/expand.gif) no-repeat center center;
+    }
+    .toggle.collapse {
+      background: url(/static/img/collapse.gif) no-repeat center center;
+    }
+</style>
+
+<div style="text-align:center" class="well-sm">
+    <h2>Timeline</h2>
+</div>
+
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+        <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+<div class='well'>
+    <form name ="omf-form" id="omf-form" role="form" class="form-horizontal" >
+        <!--class="cmxform form-horizontal" id="exe-image-form" method="post" action="create_post"  enctype="multipart/form-data" -->
+        <fieldset>
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="server_type" class="col-xs-2 control-label">Server</label>
+                <div class="col-xs-4">
+                    <div class="ui-widget">
+                        <select id="server_type" name="server_type" class="form-control" value="{{ server_type }}" >
+                            <option value="omf" label="Controller Server" ></option>
+                            <option value="sim" label="Simulation Server" ></option>
+                        </select>
+                    </div>
+                </div>
+                    <script type="text/javascript">
+                       $('#server_type').change(function(){
+                            if($(this).val()=="omf"){
+                                 $('#omf_group').show();
+                                 $('#sim_group').hide();
+                            } else {
+                                 $('#sim_group').show();
+                                 $('#omf_group').hide();
+                            }
+                       });
+                    </script>
+                <div class="col-xs-6">
+                    <p class="form-hint">Determine the Type of Experiment Server</p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="request_date" class="col-xs-2 control-label">Start Date & Time</label>
+                <div class="col-xs-4">
+                    <div class="ui-widget">
+                        <div class='input-group date' id='datetimepicker1'>
+                            <input id="request_date" name="request_date"  type='text'  placeholder="Timeline Date" class="form-control" required />
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                        <script type="text/javascript">
+                            jQuery(function ($) {
+                                $('#datetimepicker1').datetimepicker();
+                            });
+                        </script>
+                        </div>
+                    <!--h5>Current Server time: {{time_now}} Zone: (Africa/Cairo)</h5-->
+                </div>
+                <div class="col-xs-6">
+                    <button class="submit btn btn-danger" type="submit" name="g_reserve">Fetch</button>
+                </div>
+            </div>
+            <div class="form-group">
+                <table width="100%">
+                  <tr>
+                    <td valign="top">
+                      <div id="myGrid" style="width:800px;height:500px;"></div>
+                    </td>
+                  </tr>
+                </table>
+            </div>
+        </fieldset>
+    </form>
+</div>
+
+<script type="text/javascript">
+    var NodeNameFormatter = function (row, cell, value, columnDef, dataContext) {
+          value = value.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+          var spacer = "<span style='display:inline-block;height:1px;width:" + (15 * dataContext["indent"]) + "px'></span>";
+          var idx = dataView.getIdxById(dataContext.id);
+          if (data[idx + 1] && data[idx + 1].indent > data[idx].indent) {
+            if (dataContext._collapsed) {
+              return spacer + " <span class='toggle expand'></span>&nbsp;" + value;
+            } else {
+              return spacer + " <span class='toggle collapse'></span>&nbsp;" + value;
+            }
+          } else {
+            return spacer + " <span class='toggle'></span>&nbsp;" + value;
+          }
+    };
+    function sliceFormatter(row, cell, value, columnDef, dataContext) {
+        if (value ==1) {
+          return "<span class='load-busy'>R</span>";
+        }
+        else if (value ==0) {
+          return "<span class='load-free'>F</span>";
+        }
+        else {
+          return value + "-";
+        }
+    }
+    var columns = [
+        {id: "Resource", name: "Resource", field: "resource", width: 120, cssClass: "cell-title", formatter: NodeNameFormatter},
+        {id: "Interface", name: "Interface", field: "interface"},
+        {id: "status", name: "Status", field: "status", cssClass: "cell-effort-driven", formatter: Slick.Formatters.Checkmark},
+        {id: "t1", name: "1:00", field: "t1", cssClass: "cell-effort-driven", formatter: sliceFormatter},
+        {id: "t2", name: "2:00", field: "t2", cssClass: "cell-effort-driven", formatter: sliceFormatter},
+        ];
+
+    var options = {
+        editable: false,
+        enableCellNavigation: true,
+        enableColumnReorder: false,
+        asyncEditorLoading: false
+    };
+    var dataView;
+    var grid;
+    var data = [];
+
+    jQuery(function ($) {
+        for (var i = 0; i < 15; i++) {
+            data[i] = {
+                id          : i,
+                resource    : "Node " + i,
+                interface   : "Wi-Fi",
+                status      : 1,
+                t1          : 1,
+                t2          : 0
+            };
+        }
+        // initialize the model
+        dataView = new Slick.Data.DataView();
+        dataView.beginUpdate();
+        dataView.setItems(data);
+        dataView.endUpdate();
+        // initialize the grid
+        grid = new Slick.Grid("#myGrid", dataView, columns, options);
+
+        //grid = new Slick.Grid("#myGrid", data, columns, options);
+    });
+</script>
+
+{% endblock %}

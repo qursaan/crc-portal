@@ -1,0 +1,59 @@
+.ms-dashboard {
+    width: 100%;
+}
+
+.ms-dashboard-caption {
+    padding-left: 40px;
+}
+
+.ms-dashboard-caption h2 {
+    position: relative;
+    border-bottom: solid 1px #CCC;
+    width: 100%;
+}
+
+.ms-dashboard-content {
+    padding-left: 40px;
+}
+
+#ms-dashboard-profile>div.ms-dashboard-caption {
+    background: no-repeat url(../img/user.png);
+}   
+
+#ms-dashboard-testbeds>div.ms-dashboard-caption {
+    background: no-repeat url(../img/testbeds.png);
+}   
+
+#ms-dashboard-slices>div.ms-dashboard-caption {
+    background: no-repeat url(../img/experiments.png);
+}   
+
+
+li.icn {
+    padding: 0 0 0 0;
+    list-style: none;
+    padding-left: 20px;
+}
+
+img.icn {
+    padding: 0 0 0 0;
+    position: relative;
+    top: 4px;
+    padding-right: 5px;
+}
+
+li.icn-warning {
+    background: no-repeat url(images/button-warning-12x12.png) 0 2px;
+}
+li.icn-play {
+    background: no-repeat url(images/button-play-12x12.png) 0 2px;
+}
+li.icn-stop {
+    background: no-repeat url(images/button-stop-12x12.png) 0 2px;
+}
+li.icn-forbidden {
+    background: no-repeat url(images/button-forbidden-12x12.png) 0 2px;
+}
+li.icn a {
+    text-decoration: none;
+}

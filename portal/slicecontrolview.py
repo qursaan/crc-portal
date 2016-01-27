@@ -6,8 +6,8 @@ from unfold.loginrequired    import LoginRequiredAutoLogoutView
 from unfold.page             import Page
 from ui.topmenu              import topmenu_items, the_user
 #
-from portal.models      import PendingSlice, Image, MyUserImage
-from portal.navigation  import load_image, save_image, omf_exe, omf_execute
+from portal.models      import Reservation, ReservationDetail, TestbedImage, UserImage, VirtualNode
+from portal.navigation  import load_image, save_image, omf_exe, remote_node
 from portal.actions     import get_user_by_email
 #
 from django.http                        import HttpResponse, HttpResponseRedirect
@@ -15,8 +15,9 @@ from django.contrib                     import messages
 from django.contrib.auth.decorators     import login_required
 from django.template.loader             import render_to_string
 
+
 class SliceControlView(LoginRequiredAutoLogoutView):
-    template_name = "slicecontrol-view.html"
+    template_name = "slice-control-view.html"
 
     def dispatch(self, *args, **kwargs):
         return super(SliceControlView, self).dispatch(*args, **kwargs)
@@ -25,20 +26,18 @@ class SliceControlView(LoginRequiredAutoLogoutView):
 
         page = Page(self.request)
         page.add_js_files(["js/jquery.validate.js", "js/my_account.register.js", "js/my_account.edit_profile.js" ] )
-        page.add_css_files(["css/onelab.css", "css/plugin.css" ] )
+        page.add_css_files(["css/onelab.css", "css/plugin.css"])
 
-        image_list = Image.objects.all()
+        image_list = TestbedImage.objects.all()
         user = get_user_by_email(the_user(self.request))
         user_image_list = []
         if user:
-            user_image_list = MyUserImage.objects.filter(user_ref=user).all()
-        node_list = 1
-        slice_id = page.request.session.get('slice_id','')
+            user_image_list = UserImage.objects.filter(user_ref=user).all()
+        node_list = []
+        slice_id = page.request.session.get('slice_id', '')
         if slice_id is not None:
-            current_slice = PendingSlice.objects.get(id=slice_id)
-            node_list = []
-            for i in range(int(current_slice.number_of_nodes)):
-                node_list.append(i+1)
+            current_slice = Reservation.objects.get(id=slice_id)
+            node_list = ReservationDetail.objects.filter(reservation_ref=current_slice)
 
         if not slice_id:
             messages.error(page.request, 'Error: You have not permission to access this page.')
@@ -57,7 +56,7 @@ class SliceControlView(LoginRequiredAutoLogoutView):
         context['image_list'] = image_list
         context['user_image_list'] = user_image_list
         context['node_list'] = node_list
-        #context['active_page'] = active_page
+        # context['active_page'] = active_page
         context['output'] = output_script
         # XXX This is repeated in all pages
         # more general variables expected in the template
@@ -70,6 +69,11 @@ class SliceControlView(LoginRequiredAutoLogoutView):
         prelude_env = page.prelude_env()
         context.update(prelude_env)
         return context
+
+
+@login_required
+def control_remote_node(request):
+    return remote_node(request)
 
 
 @login_required

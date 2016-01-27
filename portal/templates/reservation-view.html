@@ -1,0 +1,402 @@
+{% extends "layout-unfold1.html" %}
+{% load i18n %}
+
+{% block head %}
+{{ wizard.form.media }}
+{% endblock %}
+
+{% block unfold_main %}
+
+<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/jquery.timepicker.css" />
+<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/bootstrap-datetimepicker.min.css" />
+<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/themes/ui-lightness/jquery-ui.min.css" />
+
+<script type="text/javascript" src="{{STATIC_URL}}js/moment.min.js"></script>
+<script type="text/javascript" src="{{STATIC_URL}}js/jquery.timepicker.min.js"></script>
+<script type="text/javascript" src="{{STATIC_URL}}js/bootstrap-datetimepicker.min.js"></script>
+<script type="text/javascript" src="{{STATIC_URL}}js/jquery.datepair.min.js"></script>
+<script type="text/javascript" src="{{STATIC_URL}}js/datepair.min.js"></script>
+
+
+<!--script type="text/javascript" src="{{STATIC_URL}}js/bootstrap-datepicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/bootstrap-datepicker.min.css" /-->
+<!--script type="text/javascript" src="{{STATIC_URL}}js/jquery-ui.js"></script-->
+
+<link rel="stylesheet" type="text/css" href='{{STATIC_URL}}css/onelab.css' />
+<link rel="stylesheet" type="text/css" href='{{STATIC_URL}}css/registration.css' />
+<style>
+    .table td ,.table th {
+        text-align: center;
+        vertical-align: middle !important;
+    }
+    .user-input, .checked {
+        color:#fc0040;/*#f6931f;*/
+        font-weight:bold;
+    }
+</style>
+<div style="text-align:center" class="well-sm">
+    <h1>Reservation System</h1>
+  <h2>Request a Slice</h2>
+</div>
+
+{% if errors %}
+<ul>
+  {% for error in errors %}
+  <li>{{ error }}</li>
+  {% endfor %}
+</ul>
+{% endif %}
+
+<div class='well'>
+  <form id="commentForm" class="form-horizontal" action="" method="post" role="form">
+      {% csrf_token %}
+      <fieldset>
+          <div class="form-group">
+              <label for="email" class="col-xs-2 control-label">Experimenter ID</label>
+              <div class="col-xs-4">
+                  <label id="email" class="col-xs-2 control-label" style="height:34px;">{{ email }}</label>
+              </div>
+              <div class="col-xs-6"> <p class="form-hint">Experimenter requesting a Slice</p> </div>
+          </div>
+
+          <div class="form-group">
+              <label for="slice_name" class="col-xs-2 control-label">Slice Name</label>
+              <div class="col-xs-4">
+                   <input id="slice_name" type="text" name="slice_name" class="form-control user-input" minlength="2" value="{{ slice_name }}" placeholder="Slice Name" required />
+              </div>
+              <div class="col-xs-6"> <p class="form-hint">The name of the slice you wish to create</p> </div>
+          </div>
+
+          <div class="form-group">
+              <label for="server_type" class="col-xs-2 control-label">Hardware Type</label>
+              <div class="col-xs-4">
+                  <div class="ui-widget">
+                      <select id="server_type" name="server_type" class="form-control user-input"
+                        value="{{ server_type }}" >
+                          <option value="omf" label="Testbed Nodes"></option>
+                          <option value="sim" label="Simulation Server"></option>
+                      </select>
+                  </div>
+              </div>
+
+              <script type="text/javascript">
+                   $('#server_type').change(function(){
+                        if($(this).val()=="omf"){
+                             $('#omf_group').show();
+                             $('#sim_group').hide();
+                        } else {
+                             $('#sim_group').show();
+                             $('#omf_group').hide();
+                        }
+                   });
+               </script>
+
+              <div class="col-xs-6">
+                  <p class="form-hint">Determine the Type of Experiment Server</p>
+              </div>
+          </div>
+
+          <div class="form-group">
+              <label for="request_type" class="col-xs-2 control-label">Request Plan</label>
+
+              <div class="col-xs-4">
+                  <div class="ui-widget">
+                    <select id="request_type" name="request_type" class="form-control user-input" value="{{ request_type }}" >
+                        <option value="active_t" label="Active (Scheduling)" ></option>
+                        <option value="lazy_t" label="Last Minutes (Same-Day)" ></option>
+                    </select>
+                  </div>
+              </div>
+
+              <script type="text/javascript">
+                   $('#request_type').change(function(){
+                        if($(this).val()=="active_t"){
+                             $('#active_group').show();
+                             $('#lazy_group').hide();
+                             $( "#active_time .date" ).datepicker('option', 'maxDate' ,'1m');
+                             $( "#active_time .date" ).datepicker('option', 'minDate' ,'1d');
+                             $( "#active_time .date" ).removeAttr("disabled");
+                        }
+                        else{
+                             $('#lazy_group').show();
+                             $('#active_group').hide();
+                             $( "#active_time .date" ).datepicker('option', 'maxDate' ,'1d');
+                             $( "#active_time .date" ).val(moment().format('YYYY-MM-DD'));
+                             $( "#active_time .date" ).attr("disabled","disabled");
+                        }
+                   });
+               </script>
+
+              <div class="col-xs-6"> <p class="form-hint">Determine the request plan type</p>
+              </div>
+          </div>
+
+          <!--div class="form-group">
+
+              <label for="request_date" class="col-xs-2 control-label">Expect Date & Time</label>
+
+              <div class="col-xs-4">
+                  <div class="ui-widget">
+                   <div class='input-group date' id='datetimepicker1'>
+                        <input id="request_date" name="request_date" type='text' placeholder="Expected Date" class="form-control" required />
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                        <script type="text/javascript">
+                            $(function () {
+                                $('#datetimepicker1').datetimepicker();
+                            });
+                        </script>
+                  </div>
+                  <h5>Current Server time: {{time_now}} Zone: (Africa/Cairo)</h5>
+              </div>
+
+              <div class="col-xs-6"><p class="form-hint">Expect datetime for your request</p></div>
+          </div-->
+
+          <div class="form-group">
+              <label for="active_time" class="col-xs-2 control-label">Flexible Date & Time</label>
+              <div class="col-xs-4">
+                  <div class="ui-widget">
+                       <div class="input-group" id="active_time">
+                           <input name="req_time_date1" type="text" class="form-control user-input date start" placeholder="Start date" readonly required/>
+                           <input name="req_time_time1" type="text" class="form-control user-input time start" placeholder="Start time" required/>
+                           <div class="input-group-addon">to</div>
+                           <input name="req_time_date2" type="text" class="form-control user-input date end" placeholder="End date" readonly required/>
+                           <input name="req_time_time2" type="text" class="form-control user-input time end" placeholder="End time" required/>
+                       </div>
+                      <!--script type="text/javascript" src="{{STATIC_URL}}js/jquery-ui.js"></script-->
+                      <script>
+                            $('#active_time .time').timepicker({
+                                'showDuration': true,
+                                'timeFormat'  : 'g:iA',
+                                'step'        : '60',
+                            });
+                            $('#active_time .date').datepicker({
+                                'format'   : 'YYYY-MM-DD',
+                                'autoclose': true,
+                                'minDate'  : '1d',
+                            });
+                            $('#active_time').on('rangeSelected', function(){
+                                updateRanger();
+                            });
+                            $('#active_time').datepair({
+                                  parseDate: function(input){
+                                        return $(input).datepicker('getDate');
+                                    },
+                                  updateDate: function(input, dateObj){
+                                      return $(input).datepicker('setDate', dateObj);
+                                  }
+                            });
+                            $('#active_time').datepair();
+                            //$( "#active_time .date" ).val(moment().format('YYYY-MM-DD'));
+                       </script>
+                  </div>
+              </div>
+              <!--div class="col-xs-6"> <p class="form-hint">Determine the request plan type</p>
+               </div-->
+          </div>
+
+          <div class="form-group">
+                <label for="slice_duration" class="col-xs-2 control-label">Slice duration (hr)</label>
+                <div class="col-xs-4">
+                    <div class="ui-widget">
+                        <script>
+                          $(function() {
+                            $( "#slider-range-min" ).slider({
+                              range: "min",
+                              value: 1,
+                              min: 1,
+                              max: {{max_duration}},
+                              slide: function( event, ui ) {
+                                $( "#slice_duration" ).val(ui.value);
+                              }
+                            });
+                            $( "#slice_duration" ).val( $( "#slider-range-min" ).slider( "value" ) );
+                          });
+                         </script>
+                        <div class="input-group">
+                            <input type="text" class="form-control user-input" id="slice_duration" readonly >
+                            <div class="input-group-addon">hr</div>
+                        </div>
+                        <div id="slider-range-min"></div>
+                    </div>
+                </div>
+                <div class="col-xs-6"><p class="form-hint">The expected duration of request slice</p></div>
+           </div>
+
+          <div id="active_group">
+
+          </div>
+
+          <div id="lazy_group" hidden="hidden">
+              <!--div class="form-group">
+                  <label for="lazy_time" class="col-xs-2 control-label">Timeline</label>
+                  <div class="col-xs-10">
+                      <!--<div class="ui-widget">
+                           <select id="lazy_time" name="lazy_times" class="form-control" value="{{ lazy_time }}" >
+                           {% for row in sim_os_list %}
+                                <option value="{{ row }}" label="{{ row }}" ></option>
+                           {% endfor %}
+                           </select>
+                      </div>
+                  </div>
+                    <!--div class="col-xs-6">
+                        <p class="form-hint">The pre-defined operating system package</p>
+                    </div>
+              </div-->
+          </div>
+
+          <div id="sim_group" hidden="hidden">
+              <div class="form-group">
+                    <label for="sim_vm" class="col-xs-2 control-label">Virtual Machine</label>
+                    <div class="col-xs-4">
+                        <div class="ui-widget">
+                           <select id="sim_vm" name="sim_vm" class="form-control user-input" value="{{ sim_vm }}" >
+                           {% for row in sim_vm_list %}
+                                <option value="{{ row.id }}" label="{{ row.hv_name }} [{{ row.specification }}]" ></option>
+                           {% endfor %}
+                           </select>
+                        </div>
+                    </div>
+                    <div class="col-xs-6"><p class="form-hint">The pre-defined operating system package</p></div>
+               </div>
+              <div class="form-group">
+                    <label for="sim_img" class="col-xs-2 control-label">OS Version</label>
+                    <div class="col-xs-4">
+                        <div class="ui-widget">
+                           <select id="sim_img" name="sim_img" class="form-control user-input" value="{{ sim_img }}" >
+                           {% for row in sim_img_list %}
+                                <option value="{{ row.id }}" label="{{ row.image_name }}::{{ row.image_type }}" ></option>
+                           {% endfor %}
+                           </select>
+                        </div>
+                    </div>
+                    <div class="col-xs-6"><p class="form-hint">The pre-defined operating system package</p></div>
+               </div>
+          </div>
+
+          <div id="omf_group">
+              <div class="form-group">
+                    <label for="resources" class="col-xs-2 control-label">Resources</label>
+                    <div class="col-xs-10">
+                        <div class="ui-widget">
+                            <div id="resources" class="ui-widget">
+                                <table class="table table-bordered table-condensed table-striped" style="width:90%">
+                                    <tr><thead>
+                                    <th>#</th>
+                                    {% for row in node_list %}
+                                        <th>{{row}}</th>
+                                    {% endfor %}
+                                    </thead></tr>
+                                    <tbody>
+                                    {% for i in resource_info %}
+                                        <tr>
+                                            <th>VM {{i.id}}</th>
+                                            {% for n in node_list %}
+                                                <td>
+                                                    {% for r in resource_list %}
+                                                        {% if r.node_ref.id = n.id and r.device_ref.id = i.id %}
+                                                            <label class="checkbox-inline">
+                                                                <input type="checkbox" name="resource_group" value="{{r.id}}">{{ r.device_ref.type }}</input>
+                                                            </label>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </td>
+                                            {% endfor %}
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+              </div>
+              <div class="form-group">
+                <label for="omf_img" class="col-xs-2 control-label">Startup Image</label>
+                <div class="col-xs-4">
+                    <div class="ui-widget">
+                       <select id="omf_img" name="omf_img" class="form-control user-input" value="{{ omf_img }}" >
+                       {% for row in omf_img_list %}
+                            <option value="{{ row.id }}" label="{{ row.image_name }}::{{ row.image_type }}" ></option>
+                       {% endfor %}
+                       </select>
+                    </div>
+                </div>
+                <div class="col-xs-6"><p class="form-hint">The pre-defined operating system package</p></div>
+              </div>
+          </div>
+
+          <!--div class="form-group">
+            <label for="authority_hrn" class="col-xs-2 control-label">Authority</label>
+                <div class="col-xs-4">
+                    <div class="ui-widget">
+                        <input id="authority_hrn" name="authority_hrn" class="form-control" value="{{ authority_hrn }}" placeholder="Authority" required />
+                    </div>
+                </div>
+            <div class="col-xs-6"><p class="form-hint">An authority responsible for vetting your slice</p></div>
+          </div-->
+
+          <div class="form-group">
+
+              <label for="purpose" class="col-xs-2 control-label">Experiment purpose</label>
+
+              <div class="col-xs-4">
+
+                  <div class="ui-widget">
+
+                      <textarea id="purpose" name="purpose" class="form-control" style="height:110px;" placeholder="Purpose" required>{{ purpose }}</textarea>
+
+                  </div>
+
+              </div>
+
+              <div class="col-xs-6"><p class="form-hint">Purpose of your experiment (informative)</p></div>
+
+          </div>
+
+          <button class="submit btn btn-danger" type="submit">Request Slice</button>
+      </fieldset>
+  </form>
+</div>
+
+<script>
+$(":checkbox").on("change", function() {
+    $(this).parent().toggleClass("checked", this.checked);
+});
+function updateRanger(){
+    var milliseconds = $('#active_time').datepair('getTimeDiff');
+    var hrs=milliseconds/1000/60/60;
+    console.log(hrs);
+    if (isNaN(hrs))
+        messages.error("Error Range Selection");
+    if (hrs<{{max_duration}})
+        $( "#slider-range-min" ).slider("option", "max" ,hrs);
+    else
+        $( "#slider-range-min" ).slider("option", "max" ,{{max_duration}});
+};
+</script>
+<!--script>
+jQuery(document).ready(function(){
+    var availableTags = [
+     {% if authorities %}
+         {% for authority in authorities %}
+             {% if authority.name %}
+                 {value:"{{ authority.authority_hrn }}",label:"{{authority.name}}"},
+             {% else %}
+                 {value:"{{ authority.authority_hrn }}",label:"{{authority.authority_hrn}}"},
+             {% endif %}
+         {% endfor %}    
+     {% else %}
+         {value:"",label:"No authority found !!!"}
+     {% endif %}
+    ];
+    $( "#authority_hrn" ).autocomplete({
+      source: availableTags,
+      select: function( event, ui ) {console.log(jQuery(this))}
+    });
+});
+</script-->
+{% endblock %}
+

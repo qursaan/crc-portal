@@ -1,8 +1,8 @@
 NEW SLICE REQUEST
 
 slice name      : {{slice_name}}
-number of nodes : {{number_of_nodes}}
-type of nodes   : {{type_of_nodes}}
+server type     : {{server_type}}
+duration        : {{slice_duration}}
 purpose         : {{purpose}}
 email           : {{email}}
 cc myself       : {{cc_myself}}

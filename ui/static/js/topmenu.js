@@ -1,1 +1,1 @@
-$(function () { $(".dropdown-toggle").dropdown(); })
+jQuery(function ($) { $(".dropdown-toggle").dropdown(); })

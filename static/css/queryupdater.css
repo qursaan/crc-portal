@@ -1,0 +1,35 @@
+/* 
+    Document   : QueryUpdater
+    Created on : 9 aout 2012, 11:54:41
+    Author     : loicbaron
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+div.resources-selected-spacer {
+    margin: 20px 15px;
+}
+table.resources-selected {
+    width: 100%;
+    margin: 10px;
+}
+table.resources-selected th {
+    background: url('../img/tablesort-header.png') repeat-x; 
+    font-weight: normal;
+    font-style: italic;
+}
+tr.add td{ 
+    background-color: #E3F6CE;
+}
+tr.remove td{ 
+    background-color: #F6CECE;
+}
+
+.ResourceSelectedClose{
+    cursor: pointer;
+}
+
+#pending__table_paginate {
+    margin-bottom: 10px;
+}
+

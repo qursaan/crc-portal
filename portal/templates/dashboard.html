@@ -11,7 +11,7 @@
 		<div class="row">
 			<div class='col-xs-4' id="ms-dashboard-profile">
 				<div class='ms-dashboard-caption'>
-					<h2>User profile</h2>
+					<h2>User Account</h2>
 				</div>
 				<div class='ms-dashboard-content'>
 					<ul>
@@ -22,7 +22,8 @@
                             <li><b>Email: </b><a href='mailto:{{person.email}}'>{{person.email}}</a></li>
                         {% endif %}
 					</ul>
-	  				<button id="account" onclick="location.href='/portal/account/'" class="btn btn-default">Modify</button>
+	  				<button id="account" onclick="location.href='/portal/account/'" class="btn btn-default">Profile</button>
+                    <!--button id="file" onclick="location.href='/portal/lab/tools/file_manager/'" class="btn btn-default" disabled="true">Cloud Disk</button-->
 				</div>
       		</div>
 			<div class='col-xs-4' id='ms-dashboard-testbeds'>
@@ -32,7 +33,8 @@
 				<div class='ms-dashboard-content' id='tophat__list__platform__network_name'>
 					{{ testbeds }}
 					<button id="testbed_status" onclick="location.href='/portal/testbeds/map/'" class="btn btn-default">View Map</button>
-                    <!--button id="testbed_available" onclick="location.href='/portal/testbeds/slice/'" class="btn btn-default">Available Time</button-->
+					<button id="graphic_builder" onclick="location.href='/portal/lab/tools/builder/'" class="btn btn-default" >Use Builder</button>
+                    <button id="testbed_timeline" onclick="location.href='/portal/testbeds/scheduler/'" class="btn btn-default">Scheduler Timeline</button>
 				</div>
    			</div>
       		<div class='col-xs-4' id='ms-dashboard-slices'>
@@ -41,7 +43,7 @@
 				</div>
 				<div class='ms-dashboard-content' id='tophat__list__slice_hrn__slice_hrn'>
 	  				{{ slices }}
-                    <button id="lab_request" onclick="location.href='/portal/lab/slice_request/'" class="btn btn-default">Request Slice</button>
+                    <button id="lab_request" onclick="location.href='/portal/lab/reservation/'" class="btn btn-default">Request Slice</button>
                     <button id="lab_status"  onclick="location.href='/portal/lab/current/'" class="btn btn-default">Current Requests</button>
                     <button id="lab_history" onclick="location.href='/portal/lab/history/'" class="btn btn-default">History</button>
 				</div>

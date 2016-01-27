@@ -1,0 +1,181 @@
+{% extends "layout-unfold1.html" %}
+{% block unfold_main %}
+
+<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/jquery.timepicker.css" />
+<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/bootstrap-datetimepicker.min.css" />
+<!--link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/bootstrap-datepicker.css" /-->
+<script type="text/javascript" src="{{STATIC_URL}}js/moment.min.js"></script>
+<script type="text/javascript" src="{{STATIC_URL}}js/jquery.timepicker.min.js"></script>
+<script type="text/javascript" src="{{STATIC_URL}}js/bootstrap-datetimepicker.min.js"></script>
+<!--script type="text/javascript" src="{{STATIC_URL}}js/bootstrap-datepicker.js"></script-->
+<!--link rel="stylesheet" type="text/css" href='{{ STATIC_URL }}css/registration.css' /-->
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/scheduler.css"/>
+<script type="text/javascript"  src="{{ STATIC_URL }}js/hogan-3.0.2.min.js"></script>
+<script type="text/javascript"  src="{{ STATIC_URL }}js/scheduler.js"></script>
+
+<style>
+    .center{float:none;margin-left:auto;margin-right:auto;}
+</style>
+
+<div style="text-align:center" class="well-sm">
+    <h2>Testbeds Status Timeline</h2>
+</div>
+
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+
+<div class='well'>
+    <form name ="omf-form" id="omf-form" role="form" class="form-horizontal" method="post"> <!--class="cmxform form-horizontal" id="exe-image-form"
+     action="create_post"  enctype="multipart/form-data" -->
+        <fieldset>
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="server_type" class="col-xs-4 control-label">Hardware Type</label>
+                <div class="col-xs-4">
+                    <div class="ui-widget">
+                        <select id="server_type" name="server_type" class="form-control"
+                        value="{{ server_type }}" >
+                            <option value="omf" label="Testbed Nodes" ></option>
+                            <option value="sim" label="Simulation Server" ></option>
+                        </select>
+                    </div>
+                </div>
+                    <script type="text/javascript">
+                       $('#server_type').change(function(){
+                            if($(this).val()=="omf"){
+                                 $('#omf_group').show();
+                                 $('#sim_group').hide();
+                            } else {
+                                 $('#sim_group').show();
+                                 $('#omf_group').hide();
+                            }
+                       });
+                    </script>
+                <div class="col-xs-2">
+                    <!--p class="form-hint">Determine the Type of Experiment Server</p-->
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="request_date" class="col-xs-4 control-label">Start Date & Time</label>
+                <div class="col-xs-4">
+                    <div  class="ui-widget">
+                        <div id='active_time' data-provide="datepicker">
+                            <input id="request_date" name="request_date" type="text" class="form-control date"
+                                   placeholder="Timeline Date" required/>
+                      </div>
+                    </div>
+                    <script type="text/javascript">
+                        $('#request_date').datepicker({
+                            format: 'dd-mm-yyyy',
+                            todayBtn: 'linked',
+                            orientation: 'top auto',
+                            forceParse: false,
+                            minDate  : '0',
+                            autoclose: true,
+                            //onSelect: function(){
+                            // var request_date = $('#request_date').datepicker({ dateFormat: 'dd-mm-yyyy' }).val();
+                            //}
+                        });
+                        $('#request_date').datepicker({'format':'dd-mm-yyyy'});
+                        $('#request_date').val('{{request_date|date:"d-m-Y"}}');
+                    </script>
+                </div>
+                <div class="col-xs-2">
+                    <button class="input-group submit btn btn-info" type="submit" name="g_reserve">Refresh</button>
+                </div>
+            </div>
+            <div class="form-group">
+                <div id="scheduler"></div>
+            </div>
+            <div class="form-group">
+                <div class="col-xs-1"></div>
+                <div class="col-xs-6">
+                    <div class="legend">
+                        <ol>
+                            <li class="free">free</li>
+                            <li class="selected">selected</li>
+                            <li class="closed">reserved</li>
+                            <li class="maintenance">maintenance</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+        <!--div id="times"></div-->
+    </form>
+    <div class="form-group">
+        <!--div class="col-xs-2">
+            <button id="gettime" class="btn btn-danger">Get selected times</button>
+        </div>
+        <div class="col-xs-2">
+            <button id="toggle-selector-button" class="btn btn-default">Toggle selector</button>
+        </div-->
+    </div>
+</div>
+
+<script type="text/javascript">
+$(document).ready(function(){
+    //var server = document.getElementById("server_type");
+    //var type = server.options[server.selectedIndex].value;
+    var list = [];
+    {% for n in node_list %}
+        y = {'name': '{{n}}',
+            'appointments': [
+            {% for rr in reserve_list %}
+                {% if server_type == "omf" %}
+                    {% if rr.node_ref.id = n.id %}
+                        {'start': '{{ rr.reservation_ref.start_time|date:"H:i" }}',
+                         'end'  : '{{ rr.reservation_ref.end_time|date:"H:i" }}',
+                         'title': '{{ rr.reservation_ref.user_ref }}'},
+                    {% endif %}
+                {% elif server_type == "sim" %}
+                    {% if rr.vm_ref.id = n.id %}
+                        {'start': '{{ rr.start_time|date:"H:i" }}',
+                         'end'  : '{{ rr.end_time|date:"H:i" }}',
+                         'title': '{{ rr.user_ref }}'},
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        ]};
+        list.push(y);
+    {% endfor %}
+
+    var steps = [];
+    for(i=0; i<10;i++)
+        steps.push('0'+i+':00');
+    for(i=10; i<24;i++)
+        steps.push(i+':00');
+    steps.push('23:59');
+
+    var snapTo = 30;
+    var pixelsPerHour = 60;
+    var headName = 'Resource Names';
+    var defaultStartTime = '09:00';
+    var defaultEndTime = '10:00';
+    var onClickAppointment = function(payload){};
+    var $scheduler = $("#scheduler").schedulerjs({
+        'list': list,
+        'steps': steps,
+        'snapTo': snapTo,
+        'pixelsPerHour': pixelsPerHour,
+        'start': defaultStartTime,
+        'end': defaultEndTime,
+        'headName': headName,
+        'onClickAppointment': onClickAppointment
+    });
+    $("#gettime").click(function(){
+        var times = $scheduler.schedulerjs('selected');
+        $("#times").html(times.start + ' - ' + times.end);
+    });
+    $("#toggle-selector-button").click(function(){
+        $scheduler.schedulerjs('toggleSelector');
+    });
+});
+</script>
+{% endblock %}

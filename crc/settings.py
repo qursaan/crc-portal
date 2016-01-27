@@ -69,14 +69,14 @@ EMAIL_PORT = 25
 EMAIL_USE_TLS = False
 SUPPORT_EMAIL = "qursaan@gmail.com"
 
-ACCOUNT_ACTIVATION_DAYS = 7 # One-week activation window; you may, of course, use a different value.
+ACCOUNT_ACTIVATION_DAYS = 7  # One-week activation window; you may, of course, use a different value.
 
 ALLOWED_HOSTS = []
 
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
-#'django.template.loaders.eggs.Loader',
+    #'django.template.loaders.eggs.Loader',
 )
 
 # Application definition
@@ -100,7 +100,18 @@ INSTALLED_APPS = (
     'ui',
     'portal',
     #'djcelery',
+
+    # qursaan: file manager
+    #'grappelli',
+    #'filebrowser',
+
+    # filer
+    'filer',
+    'easy_thumbnails',
+    # captcha
+    'captcha',
 )
+
 #CELERY_RESULT_BACKEND=('djcelery.backends.database:DatabaseBackend',)
 
 MIDDLEWARE_CLASSES = (
@@ -188,6 +199,7 @@ STATICFILES_DIRS = (
     # Thierry : we do not need to detail the contents
     # of our 'apps' since they're mentioned in INSTALLED_APPS
     os.path.join(AUTHROOT, "static"),
+    #os.path.join(ROOT, "static"),
 )
 
 # Needed by PluginFinder
@@ -203,9 +215,13 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     'unfold.collectstatic.PluginFinder',
     'unfold.collectstatic.ThirdPartyFinder',
-    # 'django.contrib.staticfiles.finders.DefaultStorageFinder',
+    #'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
+# File Browser Default Directory
+# FILEBROWSER_DIRECTORY = "uploads/"
+THUMBNAIL_HIGH_RESOLUTION = True
+FILER_CANONICAL_URL = 'uploads/'
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to

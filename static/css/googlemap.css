@@ -1,0 +1,31 @@
+/* use same height as the querytable plugin for nicer effect */
+div.geo {
+  height: 600px;
+/* these don't play out too well - somehow the bottom is off
+  padding: 6px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #ccaaaa;
+*/
+}
+
+/* the content of the info windows */
+p.geo {
+    text-align: center;
+    font-weight: bold;
+    max-height: 200px;
+    width: 200px;
+    overflow: auto;
+}
+
+ul.geo {
+    list-style-type: none;
+    text-align: left;
+}
+
+li.geo {
+    font-style: italic;
+}
+span.geo {
+    padding-left: 20px;
+}

@@ -47,8 +47,8 @@ class ThirdPartyFinder(BaseFinder):
         #        ''   : ('.html',),
         'js' : ('.js',),
         'css': ('.css',),
-        'img': ('.png', '.ico',),
-        'fonts' : ('.svg', '.eot', '.ttf', '.woff'),
+        'img': ('.gif','.png', '.ico',),
+        'fonts': ('.svg', '.eot', '.ttf', '.woff'),
     }
 
     def find(self, search_path, all=False):
