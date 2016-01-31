@@ -26,7 +26,7 @@ class SliceControlView(LoginRequiredAutoLogoutView):
 
         page = Page(self.request)
         page.add_js_files(["js/jquery.validate.js", "js/my_account.register.js", "js/my_account.edit_profile.js" ] )
-        page.add_css_files(["css/onelab.css", "css/plugin.css"])
+        page.add_css_files(["css/plugin.css"]) #"css/onelab.css"
 
         image_list = TestbedImage.objects.all()
         user = get_user_by_email(the_user(self.request))
@@ -90,7 +90,7 @@ def control_save_image(request):
 def control_exe_script(request):
     return omf_exe(request)
 
-
+"""
 @login_required
 def create_exe_post(request):
     if request.method == 'POST':
@@ -113,7 +113,7 @@ def create_exe_post(request):
         return HttpResponse(
             json.dumps({"nothing to see": "this isn't happening"}),
             content_type="application/json"
-        )
+        )"""
 
 
 @login_required

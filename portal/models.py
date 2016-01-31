@@ -164,7 +164,7 @@ class Account(models.Model):
     config = models.TextField(null=True)
 
     def __unicode__(self):
-        return self.pk
+        return str(self.pk)
 
 
 class AccessHistory(models.Model):
@@ -172,7 +172,7 @@ class AccessHistory(models.Model):
     user_ref = models.ForeignKey(MyUser, null=True)
 
     def __unicode__(self):
-        return self.pk
+        return str(self.pk)
 
 
 # Resources *******************************************************
@@ -271,6 +271,9 @@ class Reservation(models.Model):
     # status 0-disabled, 1-pending, 3-active, 4-expired, 5-canceled
     status = models.IntegerField(default=0)
     created = models.DateTimeField(default=timezone.now)
+
+    def __unicode__(self):
+        return str(self.id)
 
 
 class ReservationDetail(models.Model):

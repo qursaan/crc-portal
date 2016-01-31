@@ -5,6 +5,7 @@
 {% endblock %}
 
 {% block unfold_main %}
+
 <div style="text-align:center" class="well-sm">
     <h1>Testbeds Status</h1>
 </div>
@@ -24,27 +25,63 @@
                 <button id="refresh" class="submit btn btn-danger" type="submit" name="update_nodes">Refresh</button>
                 </p>
             </div>
-            <table id="testbed_table" class="table table table-striped table-bordered table-hover">
-                <tr >
-                    <th>Physical Node Name</th>
-                    <th>Virtual Node Name</th>
-                    <th>Resource Info</th>
-                    <th>Status</th>
-                </tr>
-                {% for n in node_list %}
-                <tr >
-                    <td> {{ n.node_ref.node_name }} </td>
-                    <td> {{ n.vm_name }} </td>
-                    <td> {{ n.device_ref.type }} </td>
-                    {% if n.status == 0 %}
-                        <td id="node_{{ n.vm_name }}" class="text-danger">Offline</td>
-                    {% elif n.status == 1 %}
-                        <td id="node_{{ n.vm_name }}" class="text-success">Online</td>
-                    {% else %}
-                        <td id="node_{{ n.vm_name }}" class="text-warning">N/A</td>
-                    {% endif %}
-                </tr>
-                {% endfor %}
+
+            <table id="testbed_table" class="table table-striped table-bordered table-hover" style="border-collapse:collapse;">
+                 <thead>
+                     <tr >
+                        <th>Physical Node Name </th>
+                        <th># Interfaces </th>
+                        <th># Virtual Machine </th>
+                    </tr>
+                 </thead>
+                 <tbody>
+                    {% for r in node_list %}
+                        <tr data-toggle="collapse" data-target="#physical_{{r.id}}"
+                                class="accordion-toggle">
+                            <td>
+                                <button type="button" class="btn btn-default btn-xs">
+                                    <span class="glyphicon glyphicon-eye-open"></span>
+                                </button>  {{ r.node_name }}
+                            </td>
+                            <td>{{ r.num_interface }}</td>
+                            <td>{{ r.num_virtual }}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="4" class="hiddenRow">
+                                <div class="accordian-body collapse" id="physical_{{r.id}}">
+                                    <table class="table table-striped">
+                                          <thead>
+                                            <tr>
+                                                <th>Physical Node Name</th>
+                                                <th>Virtual Node Name</th>
+                                                <th>Resource Info</th>
+                                                <th>Status</th>
+                                            </tr>
+                                          </thead>
+                                          <tbody>
+                                          {% for n in vm_list %}
+                                                {% if n.node_ref.id == r.id %}
+                                                <tr >
+                                                    <td>  </td> <!--{{ n.node_ref.node_name }} -->
+                                                    <td> {{ n.vm_name }} </td>
+                                                    <td> {{ n.device_ref.type }} </td>
+                                                    {% if n.status == 0 %}
+                                                        <td id="node_{{ n.vm_name }}" class="text-danger">Offline</td>
+                                                    {% elif n.status == 1 %}
+                                                        <td id="node_{{ n.vm_name }}" class="text-success">Online</td>
+                                                    {% else %}
+                                                        <td id="node_{{ n.vm_name }}" class="text-warning">N/A</td>
+                                                    {% endif %}
+                                                </tr>
+                                                 {% endif %}
+                                            {% endfor %}
+                                          </tbody>
+                                    </table>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
             </table>
             </fieldset>
             <div id="results"></div>
@@ -61,7 +98,7 @@ $('#refresh_form').on('submit', function(event){
 });
 
 function update_testbeds(){
-    {% for n in node_list %}
+    {% for n in vm_list %}
         var node_id = '{{ n.vm_name }}';
         check_status(node_id);
     {% endfor %}

@@ -54,9 +54,9 @@ def remote_node(request):
                 r = vm_start(node_name)
 
             if r == 1:
-                messages.success(request, 'Success: Loading of image(s)')
+                messages.success(request, 'Success: action')
             else:
-                messages.error(request, 'Error: Unable to Load image(s)')
+                messages.error(request, 'Error: Unable to do action')
     finally:
         request.session['active_page'] = 1
     return HttpResponseRedirect('/portal/lab/control/')
@@ -133,6 +133,7 @@ def save_image(request):
     finally:
         request.session['active_page'] = 2
     return HttpResponseRedirect('/portal/lab/control/')
+
 
 
 def save_images(node_lst,image_name):

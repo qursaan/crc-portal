@@ -7,7 +7,7 @@ from unfold.page             import Page
 from ui.topmenu              import topmenu_items, the_user
 #
 from portal.models      import PendingSlice, TestbedImage, UserImage
-from portal.navigation  import load_image, save_image, omf_exe, omf_execute
+from portal.navigation  import load_image, omf_exe
 from portal.actions     import get_user_by_email
 #
 from django.http                        import HttpResponse, HttpResponseRedirect
@@ -54,7 +54,7 @@ class SimControlView(LoginRequiredAutoLogoutView):
         #finally:
         #    pass
 
-        context = super(SliceControlView, self).get_context_data(**kwargs)
+        context = super(SimControlView, self).get_context_data(**kwargs)
         context['image_list'] = image_list
         context['user_image_list'] = user_image_list
         context['node_list'] = node_list
@@ -71,69 +71,4 @@ class SimControlView(LoginRequiredAutoLogoutView):
         prelude_env = page.prelude_env()
         context.update(prelude_env)
         return context
-
-
-@login_required
-def control_load_image(request):
-    return load_image(request)
-
-
-@login_required
-def control_save_image(request):
-    return save_image(request)
-
-
-@login_required
-def control_exe_script(request):
-    return omf_exe(request)
-
-
-@login_required
-def create_exe_post(request):
-    if request.method == 'POST':
-        script_text = request.POST.get('the_post')
-        response_data = {}
-        #savefile
-        file_name = str(randint(1, 1000000)) +".rb"
-        text_file = open(file_name, "w")
-        text_file.write("%s" % script_text)
-        text_file.close()
-        t = omf_execute(file_name)
-        request.session['active_page'] = 3
-        response_data['result'] = t
-
-        return HttpResponse(
-            json.dumps(response_data),
-            content_type="application/json"
-        )
-    else:
-        return HttpResponse(
-            json.dumps({"nothing to see": "this isn't happening"}),
-            content_type="application/json"
-        )
-
-
-@login_required
-def control_load_sample(request):
-    if request.method == 'POST':
-        type = request.POST.get('the_post')
-        response_data = {}
-
-        t = "10"
-        if type=="sample-1":
-            t = render_to_string('sample-ping.rb')
-        elif type=="sample-2":
-            t = render_to_string('sample-urc.rb')
-
-        response_data['result'] = t
-
-        return HttpResponse(
-            json.dumps(response_data),
-            content_type="application/json"
-        )
-    else:
-        return HttpResponse(
-            json.dumps({"nothing to see": "this isn't happening"}),
-            content_type="application/json"
-        )
 

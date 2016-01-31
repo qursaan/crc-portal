@@ -12,7 +12,7 @@ from portal.dashboardview       import DashboardView
 from portal.validationview      import ValidatePendingView
 from portal.slicerequestview    import SliceRequestView
 from portal.slicependingview    import SlicePindingView, SliceHistoryView, slice_pending_process,slice_pending_cancel
-from portal.slicecontrolview    import SliceControlView, control_load_image, control_save_image, control_exe_script, create_exe_post, control_load_sample, control_remote_node
+from portal.slicecontrolview    import SliceControlView, control_load_image, control_save_image, control_exe_script, control_load_sample, control_remote_node
 from portal.sliceview           import SliceView
 from portal.testbedview         import TestbedView, check_status
 from portal.schedulerview       import SchedulerView
@@ -85,7 +85,7 @@ urlpatterns = [
     url(r'^lab/control/control_load_image/?$', control_load_image),
     url(r'^lab/control/control_save_image/?$', control_save_image),
     url(r'^lab/control/control_exe_script/?$', control_exe_script),
-    url(r'^lab/control/create_exe_post?$', create_exe_post),
+    #url(r'^lab/control/create_exe_post?$', create_exe_post),
     url(r'^lab/control/control_remote_node?$', control_remote_node),
     url(r'^lab/control/load_samples?$', control_load_sample),
     url(r'^lab/history/?$', SliceHistoryView.as_view(), name="slice_history"),

@@ -2,14 +2,11 @@ __author__ = 'pirate'
 from unfold.page            import Page
 from django.http            import HttpResponse  # HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
-from portal.models          import VirtualNode
+from portal.models          import VirtualNode, PhysicalNode
 from portal.backend_actions import get_vm_status
 from unfold.loginrequired   import LoginRequiredAutoLogoutView
 from ui.topmenu             import topmenu_items, the_user
 from datetime               import datetime
-# from django.contrib        import messages
-# from django.shortcuts      import render
-# from unfold.page           import Page
 
 
 # ********** View Testbed Map Page *********** #
@@ -21,9 +18,11 @@ class TestbedView(LoginRequiredAutoLogoutView):
 
     def get_context_data(self, **kwargs):
         page = Page(self.request)
-        node_list = VirtualNode.objects.all()
+        vm_list = VirtualNode.objects.all().order_by('node_ref')
+        node_list = PhysicalNode.objects.all()
 
         context = super(TestbedView, self).get_context_data(**kwargs)
+        context['vm_list'] = vm_list
         context['node_list'] = node_list
         context['last_update'] = datetime.now()
         context['title'] = 'TESTBEDS VIEW'
@@ -36,6 +35,9 @@ class TestbedView(LoginRequiredAutoLogoutView):
 
 @login_required
 def check_status(request):
-    n_id = request.POST.get('the_post')
-    ol = get_vm_status(n_id)
-    return HttpResponse(ol, content_type="application/json")
+    if "the_post" in request.POST:
+        n_id = request.POST.get('the_post')
+        ol = get_vm_status(n_id)
+        return HttpResponse(ol, content_type="application/json")
+    else:
+        return HttpResponse('{nothing}', content_type="application/json")

@@ -95,7 +95,7 @@ class ReservationView (LoginRequiredAutoLogoutView):
                     s = Reservation(
                         user_ref        = user,
                         f_start_time  = parser.parse(start_time).strftime('%Y-%m-%d %H:%M:%S'),
-                        f_end_time    = parser.parse(end_time).strftime('%Y-%m-%d %H:%M:%S'),
+                        f_end_time     = parser.parse(end_time).strftime('%Y-%m-%d %H:%M:%S'),
                         slice_name     = slice_name,
                         slice_duration = slice_duration,  #approve_date
                         request_date   = request_date,
@@ -110,6 +110,7 @@ class ReservationView (LoginRequiredAutoLogoutView):
                         p = ReservationDetail(
                             reservation_ref=s,
                             node_ref=VirtualNode.objects.get(id=i),
+                            image_ref=TestbedImage.objects.get(id=omf_img)
                         )
                         p.save()
 
