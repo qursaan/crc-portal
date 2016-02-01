@@ -1,31 +1,34 @@
 from django.views.generic.base import TemplateView
-#from django.views.generic      import TemplateView
-#from django.views              import generic
-from django.conf.urls           import url, include #patterns
+# from django.views.generic      import TemplateView
+# from django.views              import generic
+from django.conf.urls import url, include  # patterns
 
-from portal.homeview            import HomeView
-from portal.registrationview    import RegistrationView
-from portal.accountview         import AccountView, account_process
-from portal.supportview         import SupportView
-from portal.contactview         import ContactView
-from portal.dashboardview       import DashboardView
-from portal.validationview      import ValidatePendingView
-from portal.slicerequestview    import SliceRequestView
-from portal.slicependingview    import SlicePindingView, SliceHistoryView, slice_pending_process,slice_pending_cancel
-from portal.slicecontrolview    import SliceControlView, control_load_image, control_save_image, control_exe_script, control_load_sample, control_remote_node
-from portal.sliceview           import SliceView
-from portal.testbedview         import TestbedView, check_status
-from portal.schedulerview       import SchedulerView
-from portal.documentationview   import DocumentationView
-from portal.experimentview      import ExperimentView
-from portal.navigation          import *
-from portal.filemanagerview     import FileManagerView
-from portal.graphicview         import GraphicBuilderView
-from portal.reservationview     import ReservationView
+from portal.homeview import HomeView
+from portal.registrationview import RegistrationView
+from portal.accountview import AccountView, account_process
+from portal.supportview import SupportView
+from portal.contactview import ContactView
+from portal.dashboardview import DashboardView
+from portal.validationview import ValidatePendingView
+from portal.slicerequestview import SliceRequestView
+from portal.slicependingview import SliceCurrentView, SliceHistoryView, slice_pending_process, slice_pending_cancel
+from portal.slicecontrolview import SliceControlView, \
+    control_load_image, control_save_image, control_check_load, \
+    control_check_save, control_load_sample, control_remote_node
+from portal.sliceview import SliceView
+from portal.testbedview import TestbedView, check_status
+from portal.schedulerview import SchedulerView
+from portal.documentationview import DocumentationView
+from portal.experimentview import ExperimentView
+from portal.navigation import *
+from portal.filemanagerview import FileManagerView
+from portal.graphicview import GraphicBuilderView
+from portal.reservationview import ReservationView
 
 #
 #
-from portal.django_passresetview import password_reset, password_reset_done, password_reset_confirm, password_reset_complete
+from portal.django_passresetview import password_reset, password_reset_done, password_reset_confirm, \
+    password_reset_complete
 from portal.navigation import load_image
 
 urlpatterns = [
@@ -69,7 +72,7 @@ urlpatterns = [
     # Testbeds
     url(r'^testbeds/map/?$', TestbedView.as_view(), name="testbeds"),
     url(r'^testbeds/map/check_status?$', check_status),
-    #url(r'^testbeds/timeline/?$', TimelineView.as_view(), name='Timeline'),
+    # url(r'^testbeds/timeline/?$', TimelineView.as_view(), name='Timeline'),
     url(r'^testbeds/scheduler/?$', SchedulerView.as_view(), name='Scheduler'),
     url(r'^testbeds/slice/?$', SliceView.as_view(), name='slice'),
 
@@ -78,14 +81,15 @@ urlpatterns = [
     url(r'^lab/tools/file_manager/?$', FileManagerView.as_view(), name="file_manager"),
 
     # Reservation
-    url(r'^lab/current/?$', SlicePindingView.as_view(), name="slice_pending"),
+    url(r'^lab/current/?$', SliceCurrentView.as_view(), name="slice_pending"),
     url(r'^lab/current/slice_process/(\d{1,10})/?$', slice_pending_process),
     url(r'^lab/current/slice_cancel/(\d{1,10})/?$', slice_pending_cancel),
     url(r'^lab/control/?$', SliceControlView.as_view(), name="slice_control"),
     url(r'^lab/control/control_load_image/?$', control_load_image),
     url(r'^lab/control/control_save_image/?$', control_save_image),
-    url(r'^lab/control/control_exe_script/?$', control_exe_script),
-    #url(r'^lab/control/create_exe_post?$', create_exe_post),
+    url(r'^lab/control/control_check_load/?$', control_check_load),
+    url(r'^lab/control/control_check_save/?$', control_check_save),
+    # url(r'^lab/control/create_exe_post?$', create_exe_post),
     url(r'^lab/control/control_remote_node?$', control_remote_node),
     url(r'^lab/control/load_samples?$', control_load_sample),
     url(r'^lab/history/?$', SliceHistoryView.as_view(), name="slice_history"),

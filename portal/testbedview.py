@@ -40,4 +40,6 @@ def check_status(request):
         ol = get_vm_status(n_id)
         return HttpResponse(ol, content_type="application/json")
     else:
-        return HttpResponse('{nothing}', content_type="application/json")
+        return HttpResponse('{"Error": "Error"}', content_type="application/json")
+
+

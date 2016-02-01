@@ -52,7 +52,7 @@
                                     <table class="table table-striped">
                                           <thead>
                                             <tr>
-                                                <th>Physical Node Name</th>
+                                                <th>#</th>
                                                 <th>Virtual Node Name</th>
                                                 <th>Resource Info</th>
                                                 <th>Status</th>
@@ -115,10 +115,10 @@ function check_status(node_id) {
         data : { the_post : node_id }, //data sent with the post request
 
         success : function(json) {
-            console.log(json); // log the returned json to the console
+            //console.log(json); // log the returned json to the console
             //console.log("success"); // another sanity check
             var result = json['status'];
-            console.log(result);
+            //console.log(result);
             if(result=="on"){
                 $("#node_"+node_id).text("Online");
                 $("#node_"+node_id).removeAttr('class').attr('class', "text-success");
@@ -136,8 +136,8 @@ function check_status(node_id) {
             $("#node_"+node_id).text("N/A");
             $("#node_"+node_id).removeAttr('class').attr('class', "text-warning");
             $('#results').html("<div class='alert-box alert radius text-danger' data-alert>Oops! We have encountered an error: "+errmsg+
-                " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
-            //console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+                " <a href='#' class='close'>&times;</a></div>");
+            //console.log(xhr.status + ": " + xhr.responseText);
             enableRefresh();
         }
     });

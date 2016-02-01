@@ -414,12 +414,11 @@ div#navigation li:last-child {
 div#home-dashboard {
     color:black;
     margin:25px 0;
-}/*
+}
 div#home-dashboard table {
     margin:25px;
     width:100%;
 }
-
 div#home-dashboard table td {
     text-align:center;
     padding:15px 0;
@@ -432,7 +431,7 @@ div#home-dashboard table tr:first-child td {
 }
 div#home-dashboard table tr:last-child td {
     text-align:left;
-}*/
+}
 div#home-dashboard table td.support {
     font-size:14pt;
     vertical-align:top;

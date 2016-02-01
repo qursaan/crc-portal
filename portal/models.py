@@ -38,7 +38,7 @@ class PendingUser(models.Model):
     authority_hrn = models.TextField(null=True)
     login = models.TextField(null=True)
     user_hrn = models.TextField(null=True)
-    # pi           = models.TextField(null=True)
+    # pi  = models.TextField(null=True)
     created = models.DateTimeField(default=timezone.now)
 
     def __unicode__(self):
@@ -204,7 +204,7 @@ class VirtualNode(models.Model):
     hv_name = models.TextField('Hypervisor Name', default='NA')
 
     def __unicode__(self):
-        return self.hv_name + " { " + self.device_ref.type + " } @ " + self.node_ref.node_name
+        return self.node_ref.node_name +" @ " +self.hv_name + " { " + self.device_ref.type + " } "
 
 
 class NodeConnection(models.Model):
@@ -300,46 +300,3 @@ class SimReservation(models.Model):
     # status 0-disabled, 1-pending, 3-active, 4-expired, 5-canceled
     status = models.IntegerField(default=0)
     created = models.DateTimeField(default=timezone.now)
-
-
-"""class PendingReservation(models.Model):
-    user_id        = models.ForeignKey(PendingUser, null=True)
-    start_time     = models.DateTimeField(null=True)
-    end_time       = models.DateTimeField(null=True)
-    slice_name     = models.TextField(null=True)
-    slice_duration = models.TextField(default='1')
-    #server_type    = models.TextField(default='NA')  # 1=omf      2=sim
-    approve_date   = models.DateTimeField(null=True)
-    request_date   = models.DateTimeField(default=timezone.now)
-    request_type   = models.TextField(default='NA')  # 1=schedule 2=ontime
-    base_image     = models.ForeignKey(TestbedImage, null=True)
-    purpose        = models.TextField(default='NA')
-    # status 0-disabled, 1-pending, 3-active, 4-expired, 5-canceled
-    status        = models.IntegerField(default=0)
-    created       = models.DateTimeField(default=timezone.now)
-
-
-class PendingReservationDetail(models.Model):
-    pending_resev_id = models.ForeignKey(PendingReservation, null=True)
-    node_resource_id = models.ForeignKey(NodeResource, null=True)
-    image_id         = models.ForeignKey(TestbedImage, null=True)
-"""
-"""
-class SimPendingReservation(models.Model):
-    user_id        = models.ForeignKey(PendingUser, null=True)
-    start_time     = models.DateTimeField(null=True)
-    end_time       = models.DateTimeField(null=True)
-    f_start_time   = models.DateTimeField(null=True)
-    f_end_time     = models.DateTimeField(null=True)
-    slice_name     = models.TextField(null=True)
-    slice_duration = models.TextField(default='1')
-    approve_date   = models.DateTimeField(null=True)
-    request_date   = models.DateTimeField(default=timezone.now)
-    request_type   = models.TextField(default='NA')  # 1=schedule 2=onday
-    vm_name        = models.ForeignKey(SimulationVM, null=True)
-    base_image     = models.ForeignKey(SimulationImage, null=True)
-    purpose        = models.TextField(default='NA')
-    # status 0-disabled, 1-pending, 3-active, 4-expired, 5-canceled
-    status         = models.IntegerField(default=0)
-    created        = models.DateTimeField(default=timezone.now)
-"""

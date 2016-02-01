@@ -1,14 +1,13 @@
 {% extends "layout-unfold1.html" %}
 {% block unfold_main %}
 <!--link rel="stylesheet" type="text/css" href='{{ STATIC_URL }}css/onelab.css' /-->
-<link rel="stylesheet" type="text/css" href='{{ STATIC_URL }}css/registration.css' />
-
-<link rel="stylesheet" type="text/css" href='{{ STATIC_URL }}css/joint.min.css' />
-<script src="{{STATIC_URL}}js/jquery.min.js"></script>
-<script src="{{STATIC_URL}}js/lodash.min.js"></script>
-<script src="{{STATIC_URL}}js/backbone-min.js"></script>
-<script src="{{STATIC_URL}}js/joint.min.js"></script>
-<style>
+<link rel="stylesheet" type="text/css" href='{{ STATIC_URL }}css/registration.css'/>
+<link rel="stylesheet" type="text/css" href='{{ STATIC_URL }}css/joint.min.css'/>
+<script type="text/javascript" src="{{STATIC_URL}}js/jquery.min.js"></script>
+<script type="text/javascript" src="{{STATIC_URL}}js/lodash.min.js"></script>
+<script type="text/javascript" src="{{STATIC_URL}}js/backbone-min.js"></script>
+<script type="text/javascript" src="{{STATIC_URL}}js/joint.min.js"></script>
+<style  type="text/css" >
     #myPaperHolder{
         width:auto;
         min-width:300px;
@@ -40,40 +39,41 @@
         </ol>
     </div>
         <div role="tabpanel"  class="tab-pane" id="gbuilder"><!--class="tab-pane" -->
-    <!--h4>Graphic Builder</h4-->
-            <div class="well">
-                <form name ="graph-form" class="cmxform form-horizontal" id="graph-form" method="post" enctype="multipart/form-data" role="form">
-                    <fieldset>
-                        {% csrf_token %}
-                        <div class="form-group">
-                            <div class="col-xs-12">
-                                <div class="ui-widget btn-toolbar" role="group">
-                                    <div class="btn-group" role="group">
-                                        <button id="g_add_node" class="btn btn-default" name="g_add_node">Add Node</button>
-                                        <button id="g_add_link" class="btn btn-default" name="g_add_link">Add Link</button>
-                                        <button id="g_reset" class="btn btn-warning" type="reset" name="g_reset">Reset</button>
-                                        <button id="g_clear" class="btn btn-default" type="reset" name="g_clear">Clear All</button>
-                                        <button id="g_load" class="btn btn-default" name="g_load">Load</button>
-                                        <button id="g_save" class="btn btn-default" name="g_save">Save</button>
-                                        <button id="g_check" class="btn btn-default" name="g_check">Check</button>
-                                    </div>
-                                    <div class="btn-group" role="group">
-                                        <button class="submit btn btn-danger" type="submit" name="g_reserve">Reserve</button>
-                                    </div>
-                                </div>
-                                <div class="ui-widget" style="height: 10px;"></div>
-                            </div>
-                            <div class="col-xs-12">
-                                <h5>Graph Paper</h5>
-                                <div id="myPaperHolder"></div>
-                            </div>
+<!--h4>Graphic Builder</h4-->
+<div class="well">
+    <form name="graph-form" class="cmxform form-horizontal" id="graph-form" method="post" enctype="multipart/form-data"
+          role="form">
+        <fieldset>
+            {% csrf_token %}
+            <div class="form-group">
+                <div class="col-xs-12">
+                    <div class="ui-widget btn-toolbar" role="group">
+                        <div class="btn-group" role="group">
+                            <button id="g_add_node" class="btn btn-default" name="g_add_node">Add Node</button>
+                            <button id="g_add_link" class="btn btn-default" name="g_add_link">Add Link</button>
+                            <button id="g_reset" class="btn btn-warning" type="reset" name="g_reset">Reset</button>
+                            <button id="g_clear" class="btn btn-default" type="reset" name="g_clear">Clear All</button>
+                            <button id="g_load" class="btn btn-default" name="g_load">Load</button>
+                            <button id="g_save" class="btn btn-default" name="g_save">Save</button>
+                            <button id="g_check" class="btn btn-default" name="g_check">Check</button>
                         </div>
-                    </fieldset>
-                </form>
-
+                        <div class="btn-group" role="group">
+                            <button class="submit btn btn-danger" type="submit" name="g_reserve">Reserve</button>
+                        </div>
+                    </div>
+                    <div class="ui-widget" style="height: 10px;"></div>
+                </div>
+                <div class="col-xs-12">
+                    <h5>Graph Paper</h5>
+                    <div id="myPaperHolder"></div>
+                </div>
             </div>
-        <!--/div>
-    </div>
+        </fieldset>
+    </form>
+
+</div>
+<!--/div>
+</div>
 </div-->
 
 <script type="text/javascript">
@@ -168,6 +168,7 @@ function drawBaseMap() {
     }
     graph.addCells(links);
 };
+
 </script>
 
 {% endblock %}

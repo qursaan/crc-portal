@@ -1,22 +1,16 @@
 __author__ = 'pirate'
 
-from unfold.loginrequired               import LoginRequiredAutoLogoutView
+from unfold.loginrequired import LoginRequiredAutoLogoutView
 #
-from unfold.page                        import Page
-from ui.topmenu                         import topmenu_items, the_user
+from unfold.page import Page
+from ui.topmenu import topmenu_items, the_user
 #
-from portal.models                      import PendingSlice, Reservation, SimReservation
-from django.http                        import HttpResponse, HttpResponseRedirect
-from django.contrib                     import messages
-from django.contrib.auth.decorators     import login_required
-from portal.actions import get_user_by_email
-#from django.contrib.auth.models         import User
 from django.utils import timezone
-#from datetime import datetime
-#import datetime
-
-#import json, os, re, itertools
-# requires login
+from django.http import HttpResponse, HttpResponseRedirect
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from portal.actions import get_user_by_email
+from portal.models import PendingSlice, Reservation, SimReservation
 
 
 # status 0-disabled, 1-pending, 3-active, 4-expired, 5-canceled
@@ -29,9 +23,9 @@ class SliceHistoryView(LoginRequiredAutoLogoutView):
 
     def get_context_data(self, **kwargs):
         page = Page(self.request)
-        page.add_js_files(["js/jquery.validate.js", "js/my_account.register.js", "js/my_account.edit_profile.js" ] )
+        page.add_js_files(["js/jquery.validate.js", "js/my_account.register.js", "js/my_account.edit_profile.js"])
         page.add_css_files(["css/onelab.css",
-                            #"css/account_view.css",
+                            # "css/account_view.css",
                             "css/plugin.css"])
 
         c_user = get_user_by_email(the_user(self.request))
@@ -51,16 +45,15 @@ class SliceHistoryView(LoginRequiredAutoLogoutView):
         return context
 
 
-class SlicePindingView(LoginRequiredAutoLogoutView):
+class SliceCurrentView(LoginRequiredAutoLogoutView):
     template_name = "slicepending-view.html"
 
     def dispatch(self, *args, **kwargs):
-        return super(SlicePindingView, self).dispatch(*args, **kwargs)
+        return super(SliceCurrentView, self).dispatch(*args, **kwargs)
 
     def get_context_data(self, **kwargs):
-
         page = Page(self.request)
-        page.add_js_files(["js/jquery.validate.js", "js/my_account.register.js", "js/my_account.edit_profile.js" ] )
+        page.add_js_files(["js/jquery.validate.js", "js/my_account.register.js", "js/my_account.edit_profile.js"])
         page.add_css_files(["css/onelab.css",
                             "css/plugin.css"])
 
@@ -70,7 +63,7 @@ class SlicePindingView(LoginRequiredAutoLogoutView):
         pending_list_2 = SimReservation.objects.filter(user_ref=c_user, status=1)
         active_list_2 = SimReservation.objects.filter(user_ref=c_user, status=3)
 
-        context = super(SlicePindingView, self).get_context_data(**kwargs)
+        context = super(SliceCurrentView, self).get_context_data(**kwargs)
         context['current_list_1'] = pending_list_1
         context['active_list_1'] = active_list_1
         context['current_list_2'] = pending_list_2
@@ -81,10 +74,10 @@ class SlicePindingView(LoginRequiredAutoLogoutView):
         # more general variables expected in the template
         context['title'] = 'Reservation Panel'
         # the menu items on the top
-        #context['topmenu_items'] = topmenu_items('Reservation Status', page.request)  # @qursaan change from _live
+        # context['topmenu_items'] = topmenu_items('Reservation Status', page.request)  # @qursaan change from _live
         # so we can sho who is logged
         context['username'] = the_user(self.request)
-        #context ['firstname'] = config['firstname']
+        # context ['firstname'] = config['firstname']
         prelude_env = page.prelude_env()
         context.update(prelude_env)
         return context
@@ -116,9 +109,3 @@ def slice_pending_cancel(request, slice_id):
     current_slice.save()
     messages.success(request, 'Success: Cancel Slice.')
     return HttpResponseRedirect("/portal/lab/current/")
-
-
-"""
-def check_time(time1,time2):
-    if time1 > timezone.now() and time2 >
-    return 1"""

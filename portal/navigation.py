@@ -1,159 +1,120 @@
-#from django.core.context_processors import csrf
-#from django.contrib.auth            import authenticate, login, logout
-#from django.template                import RequestContext
-#from django.shortcuts               import render_to_response
-#from django.template.loader     import get_template
-#from django.template            import Context
-#from subprocess                 import call
-#from subprocess import Popen, PIPE, STDOUT
-
-import subprocess
-from random         import randint
-from django.utils   import timezone
-#
-from django.http       import HttpResponseRedirect # Http404, HttpResponse
-from django.shortcuts  import render
-from django.contrib    import messages
-from ui.topmenu        import topmenu_items, the_user
-#
-from portal.models import UserImage, PendingSlice  #, Node
+from random import randint
+from django.http import HttpResponseRedirect, Http404, HttpResponse
+from django.shortcuts import render
+from django.contrib import messages
+from ui.topmenu import topmenu_items, the_user
+from portal.models import UserImage, TestbedImage
 from portal.actions import get_user_by_email
-from portal.backend_actions import load_images,vm_restart,vm_shutdown,vm_start, exe_script
+from portal.backend_actions import load_images, save_images, vm_restart, vm_shutdown, vm_start, exe_script,check_load_images,check_save_images
+
 
 #  ********** Non Completed Page ************* #
 def un_complete_page(request):
     return render(request, 'uncomplete.html', {
         'topmenu_items': topmenu_items('test_page', request),
         'title': 'TEST PAGE',
-        })
+    })
 
 
-
-"""def check_node(node_id):
-    t = -1
-    try:
-        t = subprocess.check_output(["sshpass","-p","CRC123","ssh","-o","StrictHostKeyChecking=no","crc-am@10.0.0.200","echo CRC123 | sudo -S ./getNodeStatus.sh node"+str(node_id)])
-        print t
-    finally:
-        return t
-"""
-
-
+# OK OK OK OK
 def remote_node(request):
+    post_data = ''
+    r = 0
     try:
         if request.method == 'POST':
-            node_name = request.POST.get('node_group','')
+            node_name = request.POST.get('the_node', '')
+            action_name = request.POST.get('the_action', '')
             if not node_name:
                 messages.error(request, 'Error: Please select at least one node')
-            r = 0
-            if "b_restart" in request.POST:
+
+            if action_name == "Restart":
                 r = vm_restart(node_name)
-            elif "b_shutdown" in request.POST:
+            elif action_name == "Shutdown":  # in request.POST:
                 r = vm_shutdown(node_name)
-            elif "b_start" in request.POST:
+            elif action_name == "Start":  # in request.POST:
                 r = vm_start(node_name)
-
-            if r == 1:
-                messages.success(request, 'Success: action')
-            else:
-                messages.error(request, 'Error: Unable to do action')
+        if r == 1:
+            post_data = "Success"
+        else:
+            post_data = "Fail, Try again!"
     finally:
-        request.session['active_page'] = 1
-    return HttpResponseRedirect('/portal/lab/control/')
+        request.session['active_page'] = 4
+    return HttpResponse(post_data, content_type="text/plain")
 
 
-
+# OK OK OK OK
 def load_image(request):
     try:
-        #auto_save = request.POST.get('autosave','0')
-        node_group = request.POST.getlist('node_group',[])
-        os_location = request.POST.get('osimage','')
-        if not node_group:
-            messages.error(request, 'Error: Please select at least one node')
+        # auto_save = request.POST.get('autosave','0')
+        # node_group = request.POST.getlist('the_node',[])
+        node_name = request.POST.get('the_node', '')
+        os_id = request.POST.get('the_os', '')
+        os_type = request.POST.get('the_type', '')
+        if not node_name:
+            return HttpResponse("Error: Please select at least one node", content_type="text/plain")
 
-        ##TODO: update
-        slice_id = request.session.get('slice_id','')
+        slice_id = request.session.get('slice_id', '')
         if slice_id is None:
-            messages.error(request, 'Error: Unexpected Load your session, Please go back and try againg')
+            messages.error(request, 'Error: Unexpected Load your session, Please go back and try again')
             return HttpResponseRedirect('/portal/lab/control/')
 
         slice_id = int(slice_id)
-        #current_slice = PendingSlice.objects.get(id=slice_id)
-        #time_diff = current_slice.end_time - timezone.now()
-        #rem_time = time_diff.total_seconds()
-        #username = request.user.email.replace("@", "_").replace(".","_")
-        #password = request.user.email
+        os_location = ''
+        if os_type == 'base_image':
+            os_obj = TestbedImage.objects.get(id=os_id)
+            os_location = os_obj.location
+        elif os_type == 'user_image':
+            os_obj = UserImage.objects.get(id=os_id)
+            os_location = os_obj.location
 
-        r = load_images(slice_id, os_location, ".", node_group)
-        #r = load_images(','.join(repr(e) for e in node_group), os_location,str(rem_time),auto_save,username,password)
-        if r == 1: #0:
-            messages.success(request, 'Success: Loading of image(s)')
+        r = load_images(slice_id, os_location, ".", node_name)
+        if r == 1:  # 0:
+            return HttpResponse("Start Loading ...", content_type="text/plain")
         else:
-            messages.error(request, 'Error: Unable to Load image(s)')
+            return HttpResponse("Error: Unable to Load image", content_type="text/plain")
+
     finally:
         request.session['active_page'] = 1
     return HttpResponseRedirect('/portal/lab/control/')
 
-"""
-def load_images(node_lst,image_name,rem_time,auto_save,username,password):
-    t = -1
-    #u = -1
-    try:
-        node_lst = node_lst.replace("'","").replace("u","")
-        t = subprocess.call(["sshpass","-p","CRC123","ssh","-o","StrictHostKeyChecking=no","crc-am@10.0.0.200","echo CRC123 | sudo -S ./omf_load.sh", node_lst, image_name ])
-        #u = subprocess.call(["sshpass","-p","CRC123","ssh","-o","StrictHostKeyChecking=no","crc-am@10.0.0.200","echo CRC123 | sudo -S ./waitForEnd.sh", rem_time, username, password ])
-        print t#, u
-    finally:
-        return t#+u
-"""
 
+# OK OK OK OK
 def save_image(request):
-    user_image_name = request.POST.get('image_name','untitled')
-    node_group = request.POST.getlist('node_group',[])
-    if not node_group:
-        messages.error(request, 'Error: Please select at least one node')
-
-    user_name = the_user(request)
-    user = get_user_by_email(user_name)
     try:
-        result = save_images(' ,'.join(repr(e) for e in node_group), user_image_name)
-        if result != 0:
-            messages.error(request, 'Error: Unexpected error while save image')
-            return HttpResponseRedirect('/portal/lab/control/')
-        else:
-            messages.success(request, 'Success: Save of image')
+        user_image_name = request.POST.get('the_image', 'untitled').replace(" ","_")
+        node_name = request.POST.get('the_node', '')
+        if not node_name:
+            messages.error(request, 'Error: Please select at least one node')
 
-            for node_name in node_group:
-                ## TODO:
-                #image_time = timezone.now().strftime('[%X %d %M %Y]') #"_"+image_time+
-                image_name = user_image_name+ "_" +node_name
-                update_user_images(image_name,user )
-    except:
-        messages.error(request, 'Error: Unexpected error while save image')
+        user_name = the_user(request)
+        user = get_user_by_email(user_name)
+
+        slice_id = request.session.get('slice_id', '')
+        if slice_id is None:
+            messages.error(request, 'Error: Unexpected Load your session, Please go back and try again')
+            return HttpResponseRedirect('/portal/lab/control/')
+
+        r = save_images(slice_id, user_image_name, ".", node_name)
+
+        if r == 1:
+            image_name = user_image_name + "_" + node_name
+            update_user_images(image_name, user)
+            return HttpResponse("Start Saving ...", content_type="text/plain")
+        else:
+            return HttpResponse("Error: Unable to Save image", content_type="text/plain")
+
     finally:
         request.session['active_page'] = 2
     return HttpResponseRedirect('/portal/lab/control/')
 
 
-
-def save_images(node_lst,image_name):
-    t = -1
-    try:
-        node_lst = node_lst.replace("'","").replace("u","")
-        t = subprocess.call(["sshpass", "-p", "CRC123", "ssh", "-o", "StrictHostKeyChecking=no", "crc-am@10.0.0.200","echo CRC123 | sudo -S ./omf_save.sh",node_lst,image_name])
-        print t
-    except:
-        return -1
-    finally:
-        return t
-
-
+# OK OK OK OK
 def update_user_images(image_name, user):
     try:
         new_image = UserImage(
-            user_ref     = user,
-            image_name   = image_name,
-            location     = image_name+".ndz",
+            user_ref=user,
+            image_name=image_name,
+            location=image_name + ".ndz",
         )
         new_image.save()
     except:
@@ -161,12 +122,28 @@ def update_user_images(image_name, user):
     return True
 
 
+def check_load(request):
+    if "the_post" in request.POST:
+        n_id = request.POST.get('the_post')
+        ol = check_load_images(n_id)
+        if ol != 0:
+            return HttpResponse(ol, content_type="application/json")
+        else:
+            return HttpResponse('{"error": "Error"}', content_type="application/json")
+    else:
+        return HttpResponse('{"error": "Invalid Id"}', content_type="application/json")
+
+
+def check_save(request):
+    return 0
+
+
 def omf_exe(request):
     script = request.POST.get('script_text', '')
-    #ctx = {'script': script}
-    #file = render_to_string('omf_script.rb', ctx)
-    #savefile
-    file_name = str(randint(1, 1000000)) +".rb"
+    # ctx = {'script': script}
+    # file = render_to_string('omf_script.rb', ctx)
+    # savefile
+    file_name = str(randint(1, 1000000)) + ".rb"
     text_file = open(file_name, "w")
     text_file.write("%s" % script)
     text_file.close()
@@ -175,25 +152,3 @@ def omf_exe(request):
     request.session['active_page'] = 3
     request.session['output'] = t
     return HttpResponseRedirect('/portal/lab/control/')
-
-"""
-def omf_execute(filename):
-    t = -1
-    try:
-        subprocess.call(["sshpass", "-p", "CRC123", "scp", filename, "crc-am@10.0.0.200:~"])
-        t = subprocess.check_output(["sshpass", "-p", "CRC123", "ssh", "-o", "StrictHostKeyChecking=no",
-                                     "crc-am@10.0.0.200", "echo CRC123 | sudo -S omf_ec -u amqp://10.0.0.200 exec --oml_uri tcp:10.0.0.200:3003",filename])
-        print t
-    finally:
-        return t
-
-
-import sys
-p = subprocess.Popen(["python printandwait.py"], shell=True, stdout=subprocess.PIPE)
-while True:
-    print "Looping"
-    line = p.stdout.readline()
-    if not line:
-        break
-    print line.strip()
-    sys.stdout.flush()"""
