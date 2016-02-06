@@ -10,8 +10,10 @@ from portal.supportview import SupportView
 from portal.contactview import ContactView
 from portal.dashboardview import DashboardView
 from portal.validationview import ValidatePendingView
-from portal.slicerequestview import SliceRequestView
-from portal.slicependingview import SliceCurrentView, SliceHistoryView, slice_pending_process, slice_pending_cancel
+# from portal.slicerequestview import SliceRequestView
+from portal.slicependingview import SliceCurrentView, SliceHistoryView,\
+    slice_o_pending_process, slice_s_pending_process, \
+    slice_o_pending_cancel, slice_s_pending_cancel
 from portal.slicecontrolview import SliceControlView, \
     control_load_image, control_save_image, control_check_load, \
     control_check_save, control_load_sample, control_remote_node
@@ -23,13 +25,13 @@ from portal.experimentview import ExperimentView
 from portal.navigation import *
 from portal.filemanagerview import FileManagerView
 from portal.graphicview import GraphicBuilderView
-from portal.reservationview import ReservationView
+from portal.reservationview import ReservationView, check_availability
 
 #
 #
 from portal.django_passresetview import password_reset, password_reset_done, password_reset_confirm, \
     password_reset_complete
-from portal.navigation import load_image
+from portal.navigation import action_load_save_image
 
 urlpatterns = [
     url(r'^access/?$', HomeView.as_view(), name='access'),
@@ -82,8 +84,10 @@ urlpatterns = [
 
     # Reservation
     url(r'^lab/current/?$', SliceCurrentView.as_view(), name="slice_pending"),
-    url(r'^lab/current/slice_process/(\d{1,10})/?$', slice_pending_process),
-    url(r'^lab/current/slice_cancel/(\d{1,10})/?$', slice_pending_cancel),
+    url(r'^lab/current/slice_o_process/(\d{1,10})/?$', slice_o_pending_process),
+    url(r'^lab/current/slice_s_process/(\d{1,10})/?$', slice_s_pending_process),
+    url(r'^lab/current/slice_o_cancel/(\d{1,10})/?$', slice_o_pending_cancel),
+    url(r'^lab/current/slice_s_cancel/(\d{1,10})/?$', slice_s_pending_cancel),
     url(r'^lab/control/?$', SliceControlView.as_view(), name="slice_control"),
     url(r'^lab/control/control_load_image/?$', control_load_image),
     url(r'^lab/control/control_save_image/?$', control_save_image),
@@ -93,8 +97,9 @@ urlpatterns = [
     url(r'^lab/control/control_remote_node?$', control_remote_node),
     url(r'^lab/control/load_samples?$', control_load_sample),
     url(r'^lab/history/?$', SliceHistoryView.as_view(), name="slice_history"),
-    url(r'^lab/slice_request/?$', SliceRequestView.as_view(), name='slice_request'),
+    # url(r'^lab/slice_request/?$', SliceRequestView.as_view(), name='slice_request'),
     url(r'^lab/reservation/?$', ReservationView.as_view(), name='Reservation'),
+    url(r'^lab/reservation/check_availability?$', check_availability),
 
     # Others
     url(r'/?$', un_complete_page),

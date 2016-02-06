@@ -1,8 +1,12 @@
 from datetime import datetime, timedelta
+from django.utils import timezone
+import pytz
 import json
 from django.http                import HttpResponse
+from dateutil               import parser
 from portal.models              import Authority, MyUser, PendingSlice,\
-                                        PendingAuthority, VirtualNode, Reservation
+                                        PendingAuthority, VirtualNode, \
+                                Reservation, ReservationDetail, SimReservation, SimulationVM
 from portal.backend_actions import create_backend_user
 from django.contrib.auth.models import User
 
@@ -32,32 +36,107 @@ def schedule_slice(slice_id):
     curr_slice.save()
     return True
 
-def schedule_online(reserve_id):
+
+def schedule_omf_online(reserve_id):
     curr_slice = Reservation.objects.get(id=reserve_id)
-    request_time = curr_slice.created
+    curr_detail = ReservationDetail.objects.get(reservation_ref=curr_slice)
+    new_list = []
+    for n in curr_detail:
+        new_list.append(n.node_ref)
 
-    overlap = Reservation.objects.filter(status=3, start_time=request_time)
+    curr_time = curr_slice.f_start_time
+    while curr_time < curr_slice.f_end_time:
+        overlap = Reservation.objects.filter(status=3, start_time=curr_time)
+        # check nodes
+        for r in overlap:
+            details = ReservationDetail.objects.filter(reservation_ref=r, node_ref__in=new_list)
 
-    if overlap.exists():
-        return False
-    else:
-        #new_slice = Reservation(
-        #        user_ref       = curr_slice.user_hrn,
-        #        created       = datetime.now(),
-        #        request_date  = curr_slice.created,
-        #        start_time    = curr_slice.start_time,
-        #        end_time      = curr_slice.end_time,
-        #        approve_date  = datetime.now(),
-        #        status = 3)
-        curr_slice.status = 3
-        curr_slice.save()
+            if details.exists():
+                break
+        curr_time = curr_time + timedelta(hours=1)
 
-        curr_slice.start_time = request_time
-        curr_slice.end_time = get_next_hour(request_time)
+    # end search with time slot
+    if curr_time < curr_slice.f_end_time:
+        curr_slice.start_time = curr_time
+        curr_slice.end_time = curr_time + timedelta(hours=1)
         curr_slice.approve_date = datetime.now()
         curr_slice.status = 3
         curr_slice.save()
         return True
+    else:
+        return False
+
+
+def schedule_sim_online(reserve_id):
+    curr_slice = SimReservation.objects.get(id=reserve_id)
+    dur = int(curr_slice.slice_duration)
+    curr_time = curr_slice.f_start_time
+    lst_end = curr_slice.f_end_time - timedelta(hours=dur)
+    while curr_time < lst_end:
+        curr_end = curr_time + timedelta(hours=dur)
+        overlap = SimReservation.objects.filter(status=3, start_time=curr_time, end_time=curr_end)
+        # check nodes
+        if not overlap.exists():
+            break
+        curr_time = curr_time + timedelta(hours=1)
+
+    # end search with time slot
+    if curr_time < lst_end:
+        curr_slice.start_time = curr_time
+        curr_slice.end_time = curr_time + timedelta(hours=dur)
+        curr_slice.approve_date = datetime.now()
+        curr_slice.status = 3
+        curr_slice.save()
+        return True
+    else:
+        return False
+
+
+# to check time slot for omf testbeds
+def checking_omf_time(nodelist, start_datetime, end_datetime):
+    message = ""
+    new_list = []
+    for n in nodelist:
+        new_list.append(int(n))
+    curr_time = start_datetime
+    while curr_time < end_datetime:
+        overlap = Reservation.objects.filter(status=3, start_time=curr_time)
+        for r in overlap:
+            nodes = VirtualNode.objects.filter(pk__in=new_list)
+            details = ReservationDetail.objects.filter(reservation_ref=r).filter(node_ref__in=nodes)
+            for d in details:
+                d1 = utc_to_time(r.start_time).strftime("%Y-%m-%d %H:%M")
+                d2 = utc_to_time(r.end_time).strftime("%Y-%m-%d %H:%M")
+                message += "<li>Node: " + d.node_ref.vm_name + " Busy [" + d1 + " : " + d2 + "]</li>"
+        curr_time = curr_time + timedelta(hours=1)
+    if message:
+        message = "<ul>"+message+"</ul>"
+    return message
+
+
+# to check time slot for simulation
+def checking_sim_time(nodelist, start_datetime, end_datetime, slice_duration):
+    message = ""
+    curr_time = start_datetime
+    lst_end = end_datetime - timedelta(hours=int(slice_duration))
+    while curr_time < lst_end:
+        curr_end = curr_time + timedelta(hours=int(slice_duration))
+        nodes = SimulationVM.objects.filter(pk__in=nodelist)
+        overlap = SimReservation.objects.filter(status=3, start_time=curr_time, end_time=curr_end, vm_ref=nodes)
+
+        for r in overlap:
+            d1 = utc_to_time(r.start_time).strftime("%Y-%m-%d %H:%M")
+            d2 = utc_to_time(r.end_time).strftime("%Y-%m-%d %H:%M")
+            message += "<li>VM Node: " + r.vm_ref.vm_name + " Busy [" + d1 + " : " + d2 + "]</li>"
+        curr_time = curr_time + timedelta(hours=1)
+    if message:
+        message = "<ul>"+message+"</ul>"
+    return message
+
+
+def utc_to_time(naive):
+    current_tz = str(timezone.get_current_timezone()) # ="Africa/Cairo"
+    return naive.replace(tzinfo=pytz.utc).astimezone(pytz.timezone(current_tz))
 
 # ************* Get Next Free Hour/Day **************** #
 def get_next_hour(request_time):
@@ -72,6 +151,53 @@ def get_user_by_email(u_email):
     if user:
         return user[0]
     return None
+
+
+# ************* Get Task Id by Slice Id *************** #
+def get_task_id(slice_id, node_name):
+    slice = Reservation.objects.get(id=slice_id)
+    node  = VirtualNode.objects.get(vm_name=node_name)
+    res_detail = ReservationDetail.objects.filter(reservation_ref=slice, node_ref=node)
+    if res_detail:
+        return res_detail[0].id
+    return None
+
+
+def update_task_testbed(task_id, action):
+    res = ReservationDetail.objects.get(id=task_id)
+    if res:
+        res.last_action = datetime.now()
+        res.details = action
+        res.save()
+        return True
+    return False
+
+
+def check_next_task_duration(task_id):
+    res = ReservationDetail.objects.get(id=task_id)
+    last_time = res.last_action
+    curr_time = timezone.now()
+    if last_time:
+        next_time = last_time + timedelta(minutes=5)
+        return next_time < curr_time
+    return True
+
+
+def get_count_active_slice(c_user):
+    active_list_1 = Reservation.objects.filter(user_ref=c_user, status=3)
+    active_list_2 = SimReservation.objects.filter(user_ref=c_user, status=3)
+    current_time = timezone.now()
+    # confirm active session
+    for al in active_list_1:
+        if al.end_time < current_time:
+            al.status = 4
+            al.save()
+
+    for al in active_list_2:
+        if al.end_time < current_time:
+            al.status = 4
+            al.save()
+    return active_list_1.count() + active_list_2.count()
 
 
 # ************* Get Authority by User email *********** #
@@ -102,6 +228,7 @@ def update_node_status(node_id, new_status):
         return 1
     else:
         return 0
+
 
 # ******** Generate user request from user Object ***** #
 def make_request_user(user):
@@ -171,7 +298,7 @@ def make_requests(pending_users, pending_slices, pending_authorities):
 
 # ******** Get request by user id ********************* #
 def get_request_by_id(ids):
-    sorted_ids = { 'user': [], 'slice': [], 'authority': [] }
+    sorted_ids = {'user': [], 'slice': [], 'authority': []}
     for type__id in ids:
         type, id = type__id.split('__')
         sorted_ids[type].append(id)
@@ -201,8 +328,6 @@ def get_requests(authority_hrns=None):
         pending_authorities = PendingAuthority.objects.filter(authority_hrn__in=authority_hrns).all()
 
     return make_requests(pending_users, pending_slices, pending_authorities)
-
-
 
 
 # Get the list of authorities
@@ -329,8 +454,8 @@ def manifold_add_platform(request, platform_params):
     return result['platform_id']
 """
 
-# XXX Is it in sync with the form fields ?
 
+# XXX Is it in sync with the form fields ?
 def portal_validate_request(wsgi_request, request_ids):
     status = {}
 

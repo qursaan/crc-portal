@@ -6,7 +6,7 @@
 from unfold.page import Page
 from unfold.loginrequired import LoginRequiredAutoLogoutView
 from ui.topmenu import topmenu_items, the_user
-
+from portal.actions import get_count_active_slice, get_user_by_email
 
 # This view requires login
 class DashboardView(LoginRequiredAutoLogoutView):
@@ -59,7 +59,7 @@ class DashboardView(LoginRequiredAutoLogoutView):
         #    title = "testbeds",
         #    query = testbed_query,
         # )
-
+        c_user = the_user(self.request)
         context = super(DashboardView, self).get_context_data(**kwargs)
         # context['person']   = self.request.user
         # context['testbeds'] = testbedlist.render(self.request)
@@ -73,7 +73,7 @@ class DashboardView(LoginRequiredAutoLogoutView):
         context['topmenu_items'] = topmenu_items('Dashboard', page.request)
         # so we can sho who is logged
         context['username'] = the_user(self.request)
-
+        context['active_count'] = get_count_active_slice(get_user_by_email(c_user))
         # page.expose_js_metadata()
 
         # the page header and other stuff

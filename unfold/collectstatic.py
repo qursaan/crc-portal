@@ -46,9 +46,9 @@ class ThirdPartyFinder(BaseFinder):
         # third party stuff is not expected to provide templates,
         #        ''   : ('.html',),
         'js' : ('.js',),
-        'css': ('.css',),
+        'css': ('.css','.map',),
         'img': ('.gif','.png', '.ico',),
-        'fonts': ('.svg', '.eot', '.ttf', '.woff'),
+        'fonts': ('.svg', '.eot', '.ttf', '.woff', '.woff2',),
     }
 
     def find(self, search_path, all=False):

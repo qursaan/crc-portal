@@ -9,12 +9,11 @@ from django.utils import timezone
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from portal.actions import get_user_by_email
+from portal.actions import get_user_by_email, get_count_active_slice
 from portal.models import PendingSlice, Reservation, SimReservation
 
 
 # status 0-disabled, 1-pending, 3-active, 4-expired, 5-canceled
-
 class SliceHistoryView(LoginRequiredAutoLogoutView):
     template_name = "slicehistory-view.html"
 
@@ -58,6 +57,7 @@ class SliceCurrentView(LoginRequiredAutoLogoutView):
                             "css/plugin.css"])
 
         c_user = get_user_by_email(the_user(self.request))
+        get_count_active_slice(c_user)
         pending_list_1 = Reservation.objects.filter(user_ref=c_user, status=1)
         active_list_1 = Reservation.objects.filter(user_ref=c_user, status=3)
         pending_list_2 = SimReservation.objects.filter(user_ref=c_user, status=1)
@@ -84,9 +84,24 @@ class SliceCurrentView(LoginRequiredAutoLogoutView):
 
 
 @login_required
-def slice_pending_process(request, slice_id):
+def slice_o_pending_process(request, slice_id):
+    return slice_pending_process(request,slice_id,"omf")
+
+
+@login_required
+def slice_s_pending_process(request, slice_id):
+    return slice_pending_process(request,slice_id,"sim")
+
+
+@login_required
+def slice_pending_process(request, slice_id, stype):
     slice_id = int(slice_id)
-    current_slice = Reservation.objects.get(id=slice_id)
+    current_slice = None
+
+    if stype == "sim":
+        current_slice = SimReservation.objects.get(id=slice_id)
+    elif stype == "omf":
+        current_slice = Reservation.objects.get(id=slice_id)
 
     if current_slice is None or current_slice.status != 3:
         messages.success(request, 'Error: You have not permission to access this page.')
@@ -98,13 +113,24 @@ def slice_pending_process(request, slice_id):
         return HttpResponseRedirect("/portal/lab/current/")
 
     request.session['slice_id'] = slice_id
+    request.session['stype'] = stype
     return HttpResponseRedirect("/portal/lab/control/")
 
 
 @login_required
-def slice_pending_cancel(request, slice_id):
+def slice_o_pending_cancel(request, slice_id):
     slice_id = int(slice_id)
     current_slice = Reservation.objects.get(id=slice_id)
+    current_slice.status = 5
+    current_slice.save()
+    messages.success(request, 'Success: Cancel Slice.')
+    return HttpResponseRedirect("/portal/lab/current/")
+
+
+@login_required
+def slice_s_pending_cancel(request, slice_id):
+    slice_id = int(slice_id)
+    current_slice = SimReservation.objects.get(id=slice_id)
     current_slice.status = 5
     current_slice.save()
     messages.success(request, 'Success: Cancel Slice.')

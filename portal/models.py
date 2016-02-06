@@ -280,6 +280,8 @@ class ReservationDetail(models.Model):
     reservation_ref = models.ForeignKey(Reservation, null=True)
     node_ref = models.ForeignKey(VirtualNode, null=True)
     image_ref = models.ForeignKey(TestbedImage, null=True)
+    last_action = models.DateTimeField(null=True)
+    details = models.TextField(default='NA')
 
 
 class SimReservation(models.Model):

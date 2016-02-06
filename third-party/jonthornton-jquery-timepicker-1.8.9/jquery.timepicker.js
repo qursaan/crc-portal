@@ -493,7 +493,7 @@
 			}
 		}
 
-		for (var i=start, j=0; i <= end; j++, i += stepFunc(j)*60) {
+		for (var i=start+3600, j=0; i <= end; j++, i += stepFunc(j)*60) {
 			var timeInt = i;
 			var timeString = _int2time(timeInt, settings);
 

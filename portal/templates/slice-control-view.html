@@ -9,6 +9,7 @@
 <script type="text/javascript" src="{{STATIC_URL}}js/placeholder.js"></script>
 <script type="text/javascript" src="{{STATIC_URL}}js/ruby.js"></script>
 <script type="text/javascript" src="{{STATIC_URL}}js/fullscreen.js"></script>
+
 <style type="text/css">
     #fade {
     display: none;
@@ -40,10 +41,66 @@
     text-align:center;
     overflow: auto;
     }
-</style>
+    .table>tbody>tr>td{
+    padding: 2px;!important;
+    font-size: 12px;
+    }
 
-<div style="text-align:center" class="well-sm">
-    <h2>Testbeds Remote Control Panel</h2>
+    #clockdiv{
+    color: #fff;
+    display: inline-block;
+    font-weight: 100;
+    text-align: center;
+    font-size: 18px;
+    }
+
+    #clockdiv > div{
+    padding: 3px;
+    background: #00BF96;
+    display: inline-block;
+    }
+
+    #clockdiv div > span{
+    padding: 2px;
+    background: #00816A;
+    display: inline-block;
+    }
+
+    .smalltext{
+    padding-top: 5px;
+    font-size: 10px;
+    }
+    .headclock{
+    padding: 0px;
+    font-size: 10px;
+    }
+</style>
+<div class="col-xs-12">
+    <div class="col-xs-9" style="text-align:center" class="well-sm">
+        <h2>{{title}}</h2>
+    </div>
+    <div class="col-xs-3" id="clockdiv">
+        <div >
+            <span>Reminding</span>
+            <div class="smalltext">Slice Time</div>
+        </div>
+        <div>
+            <span class="days"></span>
+            <div class="smalltext">Days</div>
+        </div>
+        <div>
+            <span class="hours"></span>
+            <div class="smalltext">Hours</div>
+        </div>
+        <div>
+            <span class="minutes"></span>
+            <div class="smalltext">Minutes</div>
+        </div>
+        <div>
+            <span class="seconds"></span>
+            <div class="smalltext">Seconds</div>
+        </div>
+    </div>
 </div>
 
 {% if messages %}
@@ -58,19 +115,21 @@
     <div id="tabs" class="col-xs-9">
         <ul class="nav nav-tabs" role="tablist">
             <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">
-                <span class="glyphicon glyphicon-info-sign"></span> Instructions</a>
+                <span class="glyphicon glyphicon-info-sign"></span> Instructions </a>
             </li>
             <li role="presentation"><a href="#loadimage" aria-controls="loadimage" role="tab" data-toggle="tab">
-                <span class="glyphicon glyphicon-circle-arrow-down"></span> (1) Load Images</a>
+                <span class="glyphicon glyphicon-circle-arrow-down"></span> Load Images </a>
             </li>
+            {% if stype == "omf" %}
             <li role="presentation"><a href="#manager" aria-controls="manager" role="tab" data-toggle="tab">
-                <span class="glyphicon glyphicon-play"></span> (2) Execute Manager</a>
+                <span class="glyphicon glyphicon-play"></span> Execute Manager </a>
             </li>
+            {% endif %}
             <li role="presentation"><a href="#saveimage" aria-controls="saveimage" role="tab" data-toggle="tab">
-                <span class="glyphicon glyphicon-cloud-download"></span> (3) Save Image</a>
+                <span class="glyphicon glyphicon-cloud-download"></span> Save Images </a>
             </li>
             <li role="presentation"><a href="#remote" aria-controls="remote" role="tab" data-toggle="tab">
-                <span class="glyphicon glyphicon-flash"></span> Remote Control</a>
+                <span class="glyphicon glyphicon-flash"></span> Remote Control </a>
             </li>
         </ul>
         <div class="tab-content">
@@ -113,16 +172,16 @@
                                     </div>
                                 </div>
                             </div>
+                            {% if stype == "omf" %}
                             <div class="form-group">
                                 <label for="nodes" class="col-xs-2 control-label">Testbed Nodes</label>
                                 <div class="col-xs-4">
                                     <div id="nodes" class="ui-widget checkbox">
                                         {% for row in node_list %}
                                         <label>
-                                            <span name="node_{{ row.node_ref.vm_name }}" class="text-warning"></span>
                                             <input type="checkbox" name="node_group1"
-                                                   value="{{ row.node_ref.vm_name }}">
-                                            {{ row.node_ref }} </input>
+                                                   value="{{ row.node_ref.vm_name }}"><span
+                                                name="node_{{ row.node_ref.vm_name }}" class="text-warning"></span> {{row.node_ref}} </input>
                                             <br>
                                         </label>
                                         {% endfor %}
@@ -137,13 +196,12 @@
                                 <div class="col-xs-6">
                                     <div class="ui-widget radio">
                                         <label>
-                                            <input type="radio" name="image_type" value="base_image" checked>Base
-                                            Image</input>
+                                            <input type="radio" name="image_type" value="base_image" checked>Base Image</input>
                                         </label>
                                         <select id="osimage" name="osimage" class="form-control" value="{{ image_id }}">
                                             {% for row in image_list %}
-                                            <option value="{{ row.id }}"
-                                                    label="{{ row.image_name }} :: {{ row.image_type }}"></option>
+                                            <option value="{{ row.id }}" label="{{ row.image_name }} :: {{ row.image_type }}">
+                                                {{ row.image_name }} :: {{ row.image_type }}</option>
                                             {% endfor %}
                                         </select>
                                     </div>
@@ -155,7 +213,7 @@
                                                 value="{{ user_image_id }}">
                                             {% for row in user_image_list %}
                                             <option value="{{ row.location }}"
-                                                    label="{{ row.image_name }} :: Modified"></option>
+                                                    label="{{ row.image_name }} :: Modified">{{ row.image_name }} :: Modified</option>
                                             {% endfor %}
                                         </select>
                                     </div>
@@ -164,6 +222,7 @@
                                     <p class="form-hint">Select the Image</p>
                                 </div>
                             </div>
+                            {% endif %}
                             <!--div class="form-group">
                                 <label for="a_save" class="col-xs-2 control-label">Auto Save</label>
                                 <div class="col-xs-4">
@@ -203,15 +262,15 @@
                                     </div>
                                 </div>
                             </div>
+                            {% if stype == "omf" %}
                             <div class="form-group">
                                 <label for="nodes" class="col-xs-2 control-label">Nodes</label>
                                 <div class="col-xs-4">
                                     <div class="ui-widget radio">
                                         {% for row in node_list %}
                                         <label>
-                                            <span name="node_{{ row.node_ref.vm_name }}" class="text-warning"></span>
                                             <input type="radio" name="node_group2" value="{{ row.node_ref.vm_name }}">
-                                            {{ row.node_ref }} </input>
+                                            <span name="node_{{ row.node_ref.vm_name }}" class="text-warning"></span> {{row.node_ref}} </input>
                                             <br>
                                         </label>
                                         {% endfor %}
@@ -221,6 +280,7 @@
                                     <p class="form-hint">Select Target Testbed</p>
                                 </div>
                             </div>
+                            {% endif %}
                             <div class="form-group">
                                 <label for="image_name" class="col-xs-2 control-label">Image Name</label>
                                 <div class="col-xs-4">
@@ -268,15 +328,15 @@
                                     </div>
                                 </div>
                             </div>
+                            {% if stype == "omf" %}
                             <div class="form-group">
                                 <label for="nodes" class="col-xs-2 control-label">Nodes</label>
                                 <div class="col-xs-4">
                                     <div class="ui-widget radio">
                                         {% for row in node_list %}
                                         <label>
-                                            <span name="node_{{ row.node_ref.vm_name }}" class="text-warning"></span>
                                             <input type="radio" name="node_group3" value="{{ row.node_ref.vm_name }}">
-                                            {{ row.node_ref }} </input>
+                                            <span name="node_{{ row.node_ref.vm_name }}" class="text-warning"></span> {{row.node_ref}} </input>
                                             <br>
                                         </label>
                                         {% endfor %}
@@ -286,13 +346,14 @@
                                     <p class="form-hint">Select Target Node</p>
                                 </div>
                             </div>
-
+                            {% endif %}
                         </fieldset>
                     </form>
 
                 </div>
             </div>
 
+            {% if stype == "omf" %}
             <div role="tabpanel" class="tab-pane" id="manager">
                 <h4>Execute Script</h4>
                 <div class="well">
@@ -349,6 +410,7 @@
                 </div>
 
             </div>
+            {% endif %}
 
         </div>
 
@@ -358,335 +420,409 @@
         </div>
     </div>
     <div id="activity_list" class="col-xs-3" style="padding:0">
-        <div class="text-center">
+        <div class="col-xs-12" class="text-center">
             <h4><span class="glyphicon glyphicon-globe"></span> Activity List</h4>
         </div>
-        <table id="activity_tbl" style="margin:0; padding:0" class="table .table-condensed table-bordered table-hover">
-            <thead>
-            <tr>
-                <th>#</th>
-                <th>Action</th>
-                <th>Result</th>
-            </tr>
-            </thead>
-            <tbody>
-            </tbody>
-        </table>
+        <div class="col-xs-12" class="text-center">
+            <table id="activity_tbl" style="margin:0; padding:0" class="table .table-condensed table-hover">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Action</th>
+                    <th>Result</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr></tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
-
+<script type="text/javascript" src="{{STATIC_URL}}js/slice-control.js"></script>
 <script type="text/javascript">
+var count = 0;
+var loading_List=[];
 
-	var count = 0;
-    var loading_List=[];
-    var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
-        lineNumbers: true, theme: "rubyblue",
-        mode: {name:"ruby", globalVars: true},
-        styleActiveLine: true, matchBrackets: true,
-        extraKeys: {
-            "F11": function(editor) { editor.setOption("fullScreen", !editor.getOption("fullScreen"));},
-            "Esc" : function(editor) { if(editor.getOption("fullScreen")){editor.setOption("fullScreen", false);}}
-        }});
-    
-    $(document).ready(function(){
-    	editor.refresh();
-	 	update_testbeds();
-	 	var my_timer = setInterval(myTimer, 1000);
-	 });
+var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+    lineNumbers: true, theme: "rubyblue",
+    mode: {name:"ruby", globalVars: true},
+    styleActiveLine: true, matchBrackets: true,
+    extraKeys: {
+        "F11": function(editor) { editor.setOption("fullScreen", !editor.getOption("fullScreen"));},
+        "Esc" : function(editor) { if(editor.getOption("fullScreen")){editor.setOption("fullScreen", false);}}
+    }});
+
+$(document).ready(function(){
+    editor.refresh();
+    update_testbeds();
+    initializeClock('clockdiv', deadline);
+ });
+
+/*********************************************** Timer **/
+var deadline = new Date("{{ deadline.isoformat }}");
+
+function myTimer() {
+    for (var a in loading_List) {
+        checking_loading_image(loading_List[a][0], loading_List[a][1], a);
+    }
+};
+
+function getTimeRemaining(endtime) {
+    var t = Date.parse(endtime) - Date.parse(new Date());
+    var seconds = Math.floor((t / 1000) % 60);
+    var minutes = Math.floor((t / 1000 / 60) % 60);
+    var hours = Math.floor((t / (1000 * 60 * 60)) % 24);
+    var days = Math.floor(t / (1000 * 60 * 60 * 24));
+    return {
+        'total': t,'days': days,'hours': hours,'minutes': minutes,'seconds': seconds
+    };
+};
+
+function initializeClock(id, endtime) {
+    var clock = document.getElementById(id);
+    var daysSpan = clock.querySelector('.days');
+    var hoursSpan = clock.querySelector('.hours');
+    var minutesSpan = clock.querySelector('.minutes');
+    var secondsSpan = clock.querySelector('.seconds');
+
+    function updateClock() {
+        var t = getTimeRemaining(endtime);
+
+        daysSpan.innerHTML = t.days;
+        hoursSpan.innerHTML = ('0' + t.hours).slice(-2);
+        minutesSpan.innerHTML = ('0' + t.minutes).slice(-2);
+        secondsSpan.innerHTML = ('0' + t.seconds).slice(-2);
+
+        if (t.total <= 0) {
+          clearInterval(timeinterval);
+          //TODO update slice status
+          document.location.href = '/portal/dashboard/';
+        }
+    }
+    updateClock();
+    var timeinterval = setInterval(updateClock, 1000);
+    var timecheck = setInterval(myTimer, 60000);
+};
 
 /*********************************************** Remote Actions */
 
-	$('#remote_start').on('click', function(event){
-	    pre_remote("Start","node_group3");
-    });
-    
-    $('#remote_restart').on('click', function(event){
-        pre_remote("Restart","node_group3");
-    });
+$('#remote_start').on('click', function(event){
+    pre_remote("Start","node_group3");
+});
 
-    $('#remote_shutdown').on('click', function(event){
-        pre_remote("Shutdown","node_group3");
-    });
+$('#remote_restart').on('click', function(event){
+    pre_remote("Restart","node_group3");
+});
 
-    function pre_remote(action,node_group_name){
-        //event.preventDefault();
-        node_name = $('input[name='+node_group_name+']:checked').val();
-        aid = add_activity(action+" "+node_name);
-        remote(action,node_name,aid);
-    };
+$('#remote_shutdown').on('click', function(event){
+    pre_remote("Shutdown","node_group3");
+});
 
-    function remote(action,node_name,aid) {
-        $("#"+aid).text(action + " ...");
-        openModal();
-        $.ajax({
-            url : "control_remote_node",
-            type : "POST",
-            data : {the_action : action, the_node: node_name, },
-            success : function(result) {
-            	$("#"+aid).text(result);
-                closeModal();
-            },
-            error : function(xhr,errmsg,err) {
-                $("#"+aid).text(xhr.status + ": " + xhr.responseText);
-                closeModal();
+function pre_remote(action,node_group_name){
+    //event.preventDefault();
+    node_name = $('input[name='+node_group_name+']:checked').val();
+    aid = add_activity(action+" "+node_name);
+    remote(action,node_name,aid);
+};
+
+function remote(action,node_name,aid) {
+    $("#"+aid).text(action + " ...");
+    openModal();
+    $.ajax({
+        url : "control_remote_node",
+        type : "POST",
+        data : {the_action : action, the_node: node_name, },
+        success : function(result) {
+            if(result=="eof")
+            {
+                document.location.href = '/portal/lab/current/';
             }
-        });
-    };
+            else{
+                print_recolor(aid,1,result);
+            }
+            closeModal();
+        },
+        error : function(xhr,errmsg,err) {
+            print_recolor(aid,3,"Unexpected Error, try again later");
+            closeModal();
+        }
+    });
+};
 
 /*********************************************** Execute Actions */
+$('#code_fullscreen').on('click', function(event){
+    event.preventDefault();
+    editor.setOption("fullScreen", true);
+});
 
-    $('#code_fullscreen').on('click', function(event){
-        event.preventDefault();
-        editor.setOption("fullScreen", true);
+$('#code_clear').on('click', function(event){
+    event.preventDefault();
+    editor.setValue('');
+});
+
+$('#sample-1').on('click', function(event){
+    event.preventDefault();
+    aid = add_activity("Get PING Sample");
+    load_samples("sample-1",aid);
+});
+
+$('#sample-2').on('click', function(event){
+    event.preventDefault();
+    aid = add_activity("Get USRP Sample");
+    load_samples("sample-2",aid);
+});
+
+$('#exe-image-form').on('submit', function(event){
+    event.preventDefault();
+    create_exe_post();
+});
+
+function load_samples(sample_no,aid) {
+    $("#"+aid).text("Download ...");
+    openModal();
+    $.ajax({
+        url : "load_samples",
+        type : "POST",
+        data : { the_post : sample_no},
+        success : function(json) {
+            editor.setValue(json['result']);
+            print_recolor(aid,1,"Success");
+            closeModal();
+        },
+        error : function(xhr,errmsg,err) {
+            print_recolor(aid,3,"Unexpected Error, try again later");
+            closeModal();
+        }
     });
+};
 
-    $('#code_clear').on('click', function(event){
-        event.preventDefault();
-        editor.setValue('');
+function create_exe_post() {
+    openModal();
+    $.ajax({
+        url : "create_exe_post",
+        type : "POST",
+        data : { the_post : editor.getValue() },
+        success : function(json) {
+            $('#output').val(json['result']);
+            closeModal();
+        },
+        error : function(xhr,errmsg,err) {
+            print_recolor(aid,3,"Unexpected Error, try again later");
+            closeModal();
+        }
     });
-
-    $('#sample-1').on('click', function(event){
-        event.preventDefault();
-        aid = add_activity("Get PING Sample");
-        load_samples("sample-1",aid);
-    });
-
-    $('#sample-2').on('click', function(event){
-        event.preventDefault();
-        aid = add_activity("Get USRP Sample");
-        load_samples("sample-2",aid);
-    });
-
-    $('#exe-image-form').on('submit', function(event){
-        event.preventDefault();
-        create_exe_post();
-    });
-
-    function load_samples(sample_no,aid) {
-        $("#"+aid).text("Download ...");
-        openModal();
-        $.ajax({
-            url : "load_samples",
-            type : "POST",
-            data : { the_post : sample_no},
-            success : function(json) {
-                $("#"+aid).text("Success");
-                editor.setValue(json['result']);
-                closeModal();
-            },
-            error : function(xhr,errmsg,err) {
-                $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
-                    " <a href='#' class='close'>&times;</a></div>");
-                $("#"+aid).text(xhr.status + ": " + xhr.responseText);
-                closeModal();
-            }
-        });
-    };
-
-    function create_exe_post() {
-        openModal();
-        $.ajax({
-            url : "create_exe_post",
-            type : "POST",
-            data : { the_post : editor.getValue() },
-            success : function(json) {
-                console.log(json); // log the returned json to the console
-                console.log("success"); // another sanity check
-                $('#output').val(json['result']);
-                closeModal();
-            },
-            error : function(xhr,errmsg,err) {
-                $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
-                    " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
-                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
-                closeModal();
-            }
-        });
-    };
+};
 
 /******************************************** Loading & Save Actions ***/
+/* TODO: User i*/
+$('#load_image_btn').on('click', function(event){
+    event.preventDefault();
+    os_type = $('input[name="image_type"]:checked').val();
+    os_id   = $('#osimage option:selected').val();
 
-    $('#load_image_btn').on('click', function(event){
-        event.preventDefault();
-        os_type = $('input[name="image_type"]:checked').val();
-        os_id   = $('#osimage option:selected').val();
-
-        $('input[name="node_group1"]:checked').each(function() {
-            select_node = $(this).val();
-            aid     = add_activity("Loading Image on Node: " +select_node);
-            loading_image(select_node,os_id,os_type, aid);
-        });
+    $('input[name="node_group1"]:checked').each(function() {
+        select_node = $(this).val();
+        aid     = add_activity("Loading Image on Node: " +select_node);
+        loading_image(select_node,os_id,os_type, aid);
     });
+});
 
-    $('#save-image-btn').on('click', function(event){
-        event.preventDefault();
-        image_name = $('input[name="image_name"]').val();
-        node_name = $('input[name="node_group2"]:checked').val();
-        aid = add_activity("Saving Image on Node: " +node_name);
-        saving_image(node_name,image_name, aid);
-    });
+$('#save-image-btn').on('click', function(event){
+    event.preventDefault();
+    image_name = $('input[name="image_name"]').val();
+    node_name = $('input[name="node_group2"]:checked').val();
+    aid = add_activity("Saving Image on Node: " +node_name);
+    saving_image(node_name,image_name, aid);
+});
 
-    function loading_image(node_name, os_id, os_type, aid) {
-        $("#"+aid).text("loading ...");
-        openModal();
-        $.ajax({
-            url  : "control_load_image",
-            type : "POST",
-            data : {the_node: node_name, the_type:os_type ,the_os:os_id },
-            success : function(result) {
-            	$("#"+aid).text(result);
-                closeModal();
-            },
-            error : function(xhr,errmsg,err) {
-                $("#"+aid).text(xhr.status + ": " + xhr.responseText);
-                closeModal();
-            }
-        });
-    };
-
-    function saving_image(node_name,image_name, aid) {
-        $("#"+aid).text("Saving ...");
-        openModal();
-        $.ajax({
-            url  : "control_save_image",
-            type : "POST",
-            data : {the_node: node_name, the_image:image_name },
-            success : function(result) {
-            	$("#"+aid).text(result);
-            	loading_List.push(aid);
-                closeModal();
-            },
-            error : function(xhr,errmsg,err) {
-                $("#"+aid).text(xhr.status + ": " + xhr.responseText);
-                closeModal();
-            }
-        });
-    };
-
-    function myTimer() {
-        for (aid in loading_List) {
-            var task_id = {{ slice_id }};
-            checking_loading_image(task_id, aid);
-        }
-    };
-
-    function checking_loading_image(task_id, aid) {
-        $("#"+aid).text("0%");
-        $.ajax({
-            url  : "control_check_load",
-            type : "POST",
-            data : {the_post: task_id},
-            success : function(result) {
-                var is_error = result['error'];
-                if(is_error=='false')
-                {
-                    $("#"+aid).text(result['progress']+"%");
+function loading_image(node_name, os_id, os_type, aid) {
+    $("#"+aid).text("loading ...");
+    openModal();
+    $.ajax({
+        url  : "control_load_image",
+        type : "POST",
+        data : {the_node: node_name, the_type:os_type ,the_os:os_id },
+        success : function(result) {
+            if(result=="eof"){
+                document.location.href = '/portal/lab/current/';
+            }else{
+                if( result.startsWith("success")){
+                    print_recolor(aid,1,result);
+                }else if( result.startsWith("warning")){
+                    print_recolor(aid,2,result);
                 }else{
-                    $("#"+aid).text(result['progress']+"%");
+                    print_recolor(aid,3,result);
                 }
-            },
-            error : function(xhr,errmsg,err) {
-                $("#"+aid).text(xhr.status + ": " + xhr.responseText);
+                loading_List.push([node_name,aid]);
             }
-        });
-    };
-/*********************************************** ALL ***/
+            closeModal();
+        },
+        error : function(xhr,errmsg,err) {
+            print_recolor(aid,3,"Server Error, try again later");
+            closeModal();
+        }
+    });
+};
 
-    function add_activity(a_name) {
-    	count++;
-    	var table = document.getElementById("activity_tbl");
-    	var row = table.insertRow();
-    	var cell0 = row.insertCell(0);
-    	var cell1 = row.insertCell(1);
-    	var cell2 = row.insertCell(2);
-    	cell2.id = "activity_"+count;
-    	cell0.innerHTML = count;
-    	cell1.innerHTML = a_name;
-    	cell2.innerHTML = "-";
-    	return cell2.id;
-	};
+function saving_image(node_name,image_name, aid) {
+    $("#"+aid).text("Saving ...");
+    openModal();
+    $.ajax({
+        url  : "control_save_image",
+        type : "POST",
+        data : {the_node: node_name, the_image:image_name },
+        success : function(result) {
+            if(result=="eof"){
+                document.location.href = '/portal/lab/current/';
+            }else{
+                print_recolor(aid,1,result);
+            }
+            closeModal();
+        },
+        error : function(xhr,errmsg,err) {
+            print_recolor(aid,3,"Unexpected Error, try again later");
+            closeModal();
+        }
+    });
+};
 
-    function openModal() {
-        document.getElementById('modal').style.display = 'block';
-        document.getElementById('fade').style.display = 'block';
-    };
-
-    function closeModal() {
-        document.getElementById('modal').style.display = 'none';
-        document.getElementById('fade').style.display = 'none';
-    };
-    
-    function disableRefresh() {
-    	document.getElementById("refresh_btn1").innerHTML = "Checking Status ...";
-    	document.getElementById("refresh_btn1").disabled = true;
-    	document.getElementById("refresh_btn2").innerHTML = "Checking Status ...";
-    	document.getElementById("refresh_btn2").disabled = true;
-    	document.getElementById("refresh_btn3").innerHTML = "Checking Status ...";
-    	document.getElementById("refresh_btn3").disabled = true;
-    };
-
-	function enableRefresh() {
-    	document.getElementById("refresh_btn1").innerHTML= "Refresh Status";
-    	document.getElementById("refresh_btn1").disabled = false;
-    	document.getElementById("refresh_btn2").innerHTML= "Refresh Status";
-    	document.getElementById("refresh_btn2").disabled = false;
-    	document.getElementById("refresh_btn3").innerHTML= "Refresh Status";
-    	document.getElementById("refresh_btn3").disabled = false;
-	};
-
-    /*********************************************** Refresh */
-	
-	$("#refresh_btn3").on('click', function(event){
-    	event.preventDefault();
-    	update_testbeds();
-	});
-	$("#refresh_btn2").on('click', function(event){
-    	event.preventDefault();
-    	update_testbeds();
-	});
-	$("#refresh_btn1").on('click', function(event){
-    	event.preventDefault();
-    	update_testbeds();
-	});
-
-	function update_testbeds(){
-    	{% for n in node_list %}
-        	var node_id = '{{ n.node_ref.vm_name }}';
-        	check_status(node_id);
-    	{% endfor %}
-    };
-
-	function check_status(node_id) {
-        disableRefresh();
-        $.ajax({
-            url : "/portal/testbeds/map/check_status",
-            type : "POST",
-            data : { the_post : node_id },
-
-            success : function(json) {
-                var result = json['status'];
-                console.log(result);
-                if(result=="on"){
-                    //$("span[name=node_"+node_id+"]").text("Online");
-                    $("span[name=node_"+node_id+"]").removeAttr('class').attr('class', "glyphicon glyphicon-ok-sign text-success");
-                }else if(result=="off"){
-                    //$("span[name=node_"+node_id+"]").text("Offline");
-                    $("span[name=node_"+node_id+"]").removeAttr('class').attr('class', "glyphicon glyphicon-off text-danger");
+function checking_loading_image(node_name,aid,idx) {
+    $.ajax({
+        url  : "control_check_load",
+        type : "POST",
+        data : {the_node: node_name},
+        success : function(result) {
+            console.log(result);
+            var is_error = result['error'];
+            if(is_error=='false'){
+                print_recolor(aid,1,result['progress']+"%");
+            }else{
+                if (is_error=='true'){
+                    print_recolor(aid,3,"Server error");
                 }else{
-                    //$("span[name=node_"+node_id+"]").text("N/A");
-                    $("span[name=node_"+node_id+"]").removeAttr('class').attr('class', "glyphicon glyphicon-exclamation-sign text-warning");
-                };
-                enableRefresh();
-            },
-            error : function(xhr,errmsg,err) {
-                $("span[name=node_"+node_id+"]").text("N/A");
-                $("span[name=node_"+node_id+"]").removeAttr('class').attr('class', "text-warning");
-                enableRefresh();
+                    print_recolor(aid,3,is_error);
+                }
+                loading_List.splice(idx,1);
             }
-        });
-    };
+        },
+        error : function(xhr,errmsg,err) {
+           console.log(err);
+           print_recolor(aid,3,"Unexpected Error, try again later");
+        }
+    });
+};
 
+/*********************************************** ALL ***/
+function add_activity(a_name) {
+    count++;
+    var table = document.getElementById("activity_tbl");
+    var row = table.insertRow();
+    var cell0 = row.insertCell(0);
+    var cell1 = row.insertCell(1);
+    var cell2 = row.insertCell(2);
+    var cell3 = row.insertCell(3);
+    cell2.id = "activity_"+count;
+    cell3.id = cell2.id + "_ico";
+    cell0.innerHTML = count;
+    cell1.innerHTML = a_name;
+    cell2.innerHTML = "-";
+    cell3.innerHTML = "";
+    return cell2.id;
+};
+
+function openModal() {
+    document.getElementById('modal').style.display = 'block';
+    document.getElementById('fade').style.display = 'block';
+};
+
+function closeModal() {
+    document.getElementById('modal').style.display = 'none';
+    document.getElementById('fade').style.display = 'none';
+};
+
+function disableRefresh() {
+    document.getElementById("refresh_btn1").innerHTML = "Checking Status ...";
+    document.getElementById("refresh_btn1").disabled = true;
+    document.getElementById("refresh_btn2").innerHTML = "Checking Status ...";
+    document.getElementById("refresh_btn2").disabled = true;
+    document.getElementById("refresh_btn3").innerHTML = "Checking Status ...";
+    document.getElementById("refresh_btn3").disabled = true;
+};
+
+function enableRefresh() {
+    document.getElementById("refresh_btn1").innerHTML= "Refresh Status";
+    document.getElementById("refresh_btn1").disabled = false;
+    document.getElementById("refresh_btn2").innerHTML= "Refresh Status";
+    document.getElementById("refresh_btn2").disabled = false;
+    document.getElementById("refresh_btn3").innerHTML= "Refresh Status";
+    document.getElementById("refresh_btn3").disabled = false;
+};
+
+function print_recolor(aid, level, msg)
+{
+    $("#"+aid).text(msg);
+    if(level==1){
+        $("#"+aid).attr('class', "text-success");
+        $("#"+aid+"_ico").attr('class', "glyphicon glyphicon-ok text-success");
+    }else if( level ==2){
+        $("#"+aid).attr('class', "text-warning");
+        $("#"+aid+"_ico").attr('class', "glyphicon glyphicon-ban-circle text-warning");
+    }else{
+        $("#"+aid).attr('class', "text-danger");
+        $("#"+aid+"_ico").attr('class', "glyphicon glyphicon-remove text-danger");
+     }
+};
+/*********************************************** Refresh */
+
+$("#refresh_btn3").on('click', function(event){
+    event.preventDefault();
+    update_testbeds();
+});
+$("#refresh_btn2").on('click', function(event){
+    event.preventDefault();
+    update_testbeds();
+});
+$("#refresh_btn1").on('click', function(event){
+    event.preventDefault();
+    update_testbeds();
+});
+
+function update_testbeds(){
+    {% if stype == "omf" %}
+        {% for n in node_list %}
+            var node_id = '{{ n.node_ref.vm_name }}';
+            check_status(node_id);
+        {% endfor %}
+    {% endif %}
+};
+
+function check_status(node_id) {
+    disableRefresh();
+    $.ajax({
+        url : "/portal/testbeds/map/check_status",
+        type : "POST",
+        data : { the_post : node_id },
+        success : function(json) {
+            var result = json['status'];
+            console.log(result);
+            if(result=="on"){
+                $("span[name=node_"+node_id+"]").removeAttr('class').attr('class', "glyphicon glyphicon-play-circle text-success");
+            }else if(result=="off"){
+                $("span[name=node_"+node_id+"]").removeAttr('class').attr('class', "glyphicon glyphicon-off text-danger");
+            }else{
+                $("span[name=node_"+node_id+"]").removeAttr('class').attr('class', "glyphicon glyphicon-exclamation-sign text-warning");
+            };
+            enableRefresh();
+        },
+        error : function(xhr,errmsg,err) {
+            $("span[name=node_"+node_id+"]").text("N/A");
+            $("span[name=node_"+node_id+"]").removeAttr('class').attr('class', "text-warning");
+            enableRefresh();
+        }
+    });
+};
 
 </script>
-
 {% endblock %}

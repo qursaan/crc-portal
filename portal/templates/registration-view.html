@@ -41,7 +41,7 @@
         <div class="ui-widget">
              <select id="authority_hrn" name="authority_hrn" class="form-control" value="{{ authority_hrn }}" required>
                 {% for row in authorities %}
-                    <option value="{{ row.authority_hrn }}" label="{{ row.site_name }}" ></option>
+                    <option value="{{ row.authority_hrn }}" label="{{ row.site_name }}" >{{ row.site_name }}</option>
                 {% endfor %}
              </select>
             <!--input id="authority_hrn" name="authority_hrn" class="form-control" value="{{ authority_hrn }}" required-->

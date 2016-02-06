@@ -7,7 +7,7 @@ from unfold.page             import Page
 from ui.topmenu              import topmenu_items, the_user
 #
 from portal.models      import PendingSlice, TestbedImage, UserImage
-from portal.navigation  import load_image, omf_exe
+from portal.navigation  import action_load_save_image, omf_exe
 from portal.actions     import get_user_by_email
 #
 from django.http                        import HttpResponse, HttpResponseRedirect
