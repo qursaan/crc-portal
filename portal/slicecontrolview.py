@@ -4,10 +4,10 @@ from unfold.loginrequired import LoginRequiredAutoLogoutView
 from unfold.page import Page
 from ui.topmenu import topmenu_items, the_user
 #
-from portal.models import Reservation, ReservationDetail, SimReservation,\
-    TestbedImage, UserImage
+from portal.models import Reservation, ReservationDetail, SimReservation, \
+    TestbedImage, UserImage, SimulationImage
 from portal.navigation import action_load_save_image, omf_exe, remote_node, \
-    check_task_progress, slice_on_time
+    check_task_progress, check_exe_progress, slice_on_time
 from portal.actions import get_user_by_email
 #
 from django.shortcuts import render
@@ -30,7 +30,7 @@ class SliceControlView(LoginRequiredAutoLogoutView):
         page.add_css_files(["css/plugin.css"])  # "css/onelab.css"
 
         user = get_user_by_email(the_user(self.request))
-        image_list = TestbedImage.objects.all()
+        image_list = None
         current_slice = None
         user_image_list = []
         node_list = []
@@ -50,12 +50,17 @@ class SliceControlView(LoginRequiredAutoLogoutView):
             if stype == "omf":
                 current_slice = Reservation.objects.get(id=slice_id)
                 node_list = ReservationDetail.objects.filter(reservation_ref=current_slice)
+                image_list = TestbedImage.objects.all()
                 t = 'Testbeds Remote Control Panel'
             elif stype == "sim":
                 current_slice = SimReservation.objects.get(id=slice_id)
-                node_list = current_slice.vm_ref
+                node_list = SimReservation.objects.filter(id=slice_id)  # current_slice.vm_ref
+                image_list = SimulationImage.objects.all()
                 t = 'Simulation Remote Control Panel'
         # active_page = page.request.session.get('active_page','0')
+
+        if not current_slice:
+            return HttpResponseRedirect("/portal/lab/current/")
 
         output_script = ''
 
@@ -83,12 +88,11 @@ def control_remote_node(request):
     return remote_node(request)
 
 
-
 @login_required
 def control_load_image(request):
     if request.method != 'POST':
         return HttpResponseRedirect("/")
-    return action_load_save_image(request, "Load")
+    return action_load_save_image(request, "load")
 
 
 @login_required
@@ -102,8 +106,7 @@ def control_save_image(request):
 def control_check_load(request):
     if request.method != 'POST':
         return HttpResponseRedirect("/")
-    return check_task_progress(request, "Load")
-
+    return check_task_progress(request, "load")
 
 
 @login_required
@@ -120,6 +123,12 @@ def control_exe_script(request):
     return omf_exe(request)
 
 
+@login_required
+def control_check_exe(request):
+    if request.method != 'POST':
+        return HttpResponseRedirect("/")
+    return check_exe_progress(request)
+
 
 @login_required
 def control_load_sample(request):
@@ -127,7 +136,7 @@ def control_load_sample(request):
         s_type = request.POST.get('the_post')
         response_data = {}
 
-        t = "10"
+        t = None
         if s_type == "sample-1":
             t = render_to_string('sample-ping.rb')
         elif s_type == "sample-2":
@@ -135,12 +144,6 @@ def control_load_sample(request):
 
         response_data['result'] = t
 
-        return HttpResponse(
-            json.dumps(response_data),
-            content_type="application/json"
-        )
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
     else:
-        return HttpResponse(
-            json.dumps({"nothing to see": "this isn't happening"}),
-            content_type="application/json"
-        )
+        return HttpResponse(json.dumps({"error": "this isn't happening"}), content_type="application/json")

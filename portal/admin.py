@@ -84,14 +84,14 @@ class ReservationAdmin(admin.ModelAdmin):
 
 @admin.register(ReservationDetail)
 class ReservationDetailAdmin(admin.ModelAdmin):
-    list_display = ('id', 'node_ref', 'image_ref',)
+    list_display = ('id', 'reservation_ref', 'node_ref', 'image_ref',)
 
 
 @admin.register(SimReservation)
 class SimReservationAdmin(admin.ModelAdmin):
     list_display = ('id', 'user_ref', 'start_time', 'end_time', 'f_start_time', 'f_end_time',
                     'slice_name', 'slice_duration', 'approve_date', 'request_date',
-                    'request_type', 'vm_ref', 'base_image_ref', 'purpose', 'status', 'created')
+                    'request_type', 'node_ref', 'image_ref', 'purpose', 'status', 'created')
 
 
 # Old *******************************************************

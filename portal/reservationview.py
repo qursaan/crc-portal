@@ -138,7 +138,7 @@ class ReservationView (LoginRequiredAutoLogoutView):
                         self.errors.append('Sorry, Time slot are not free')
                         s.delete()
 
-                if server_type == "sim":
+                elif server_type == "sim":
                     s = SimReservation(
                         user_ref         = user,
                         slice_name      = slice_name,
@@ -148,8 +148,8 @@ class ReservationView (LoginRequiredAutoLogoutView):
                         f_end_time     = end_datetime,
                         authority_hrn   = authority_hrn,
                         request_type    = request_type,
-                        base_image_ref  = SimulationImage.objects.get(id=sim_img),  #ref
-                        vm_ref         = SimulationVM.objects.get(id=sim_vm),  #ref
+                        image_ref  = SimulationImage.objects.get(id=sim_img),  #ref
+                        node_ref         = SimulationVM.objects.get(id=sim_vm),  #ref
                         purpose         = purpose,
                         status          = 1,
                     )

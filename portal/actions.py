@@ -39,7 +39,7 @@ def schedule_slice(slice_id):
 
 def schedule_omf_online(reserve_id):
     curr_slice = Reservation.objects.get(id=reserve_id)
-    curr_detail = ReservationDetail.objects.get(reservation_ref=curr_slice)
+    curr_detail = ReservationDetail.objects.filter(reservation_ref=curr_slice)
     new_list = []
     for n in curr_detail:
         new_list.append(n.node_ref)
@@ -53,6 +53,8 @@ def schedule_omf_online(reserve_id):
 
             if details.exists():
                 break
+        if not overlap:
+            break
         curr_time = curr_time + timedelta(hours=1)
 
     # end search with time slot
@@ -72,7 +74,7 @@ def schedule_sim_online(reserve_id):
     dur = int(curr_slice.slice_duration)
     curr_time = curr_slice.f_start_time
     lst_end = curr_slice.f_end_time - timedelta(hours=dur)
-    while curr_time < lst_end:
+    while curr_time <= lst_end:
         curr_end = curr_time + timedelta(hours=dur)
         overlap = SimReservation.objects.filter(status=3, start_time=curr_time, end_time=curr_end)
         # check nodes
@@ -81,7 +83,7 @@ def schedule_sim_online(reserve_id):
         curr_time = curr_time + timedelta(hours=1)
 
     # end search with time slot
-    if curr_time < lst_end:
+    if curr_time <= lst_end:
         curr_slice.start_time = curr_time
         curr_slice.end_time = curr_time + timedelta(hours=dur)
         curr_slice.approve_date = datetime.now()
@@ -122,7 +124,7 @@ def checking_sim_time(nodelist, start_datetime, end_datetime, slice_duration):
     while curr_time < lst_end:
         curr_end = curr_time + timedelta(hours=int(slice_duration))
         nodes = SimulationVM.objects.filter(pk__in=nodelist)
-        overlap = SimReservation.objects.filter(status=3, start_time=curr_time, end_time=curr_end, vm_ref=nodes)
+        overlap = SimReservation.objects.filter(status=3, start_time=curr_time, end_time=curr_end, node_ref=nodes)
 
         for r in overlap:
             d1 = utc_to_time(r.start_time).strftime("%Y-%m-%d %H:%M")
@@ -137,6 +139,7 @@ def checking_sim_time(nodelist, start_datetime, end_datetime, slice_duration):
 def utc_to_time(naive):
     current_tz = str(timezone.get_current_timezone()) # ="Africa/Cairo"
     return naive.replace(tzinfo=pytz.utc).astimezone(pytz.timezone(current_tz))
+
 
 # ************* Get Next Free Hour/Day **************** #
 def get_next_hour(request_time):
@@ -153,18 +156,33 @@ def get_user_by_email(u_email):
     return None
 
 
-# ************* Get Task Id by Slice Id *************** #
-def get_task_id(slice_id, node_name):
-    slice = Reservation.objects.get(id=slice_id)
-    node  = VirtualNode.objects.get(vm_name=node_name)
-    res_detail = ReservationDetail.objects.filter(reservation_ref=slice, node_ref=node)
-    if res_detail:
-        return res_detail[0].id
+def get_username_by_email(u_email):
+    user = MyUser.objects.filter(email__iexact=u_email)
+    if user:
+        return user[0].username
     return None
 
 
-def update_task_testbed(task_id, action):
-    res = ReservationDetail.objects.get(id=task_id)
+# ************* Get Task Id by Slice Id *************** #
+def get_task_id(slice_id, node_name, stype):
+    if stype == "omf":
+        curr_slice = Reservation.objects.get(id=slice_id)
+        node  = VirtualNode.objects.get(vm_name=node_name)
+        res_detail = ReservationDetail.objects.filter(reservation_ref=curr_slice, node_ref=node)
+        if res_detail:
+            return res_detail[0].id
+    elif stype == "sim":
+        return slice_id
+    return None
+
+
+def update_task_testbed(task_id, action, stype):
+    res = None
+    if stype == "omf":
+        res = ReservationDetail.objects.get(id=task_id)
+    elif stype == "sim":
+        res = SimReservation.objects.get(id=task_id)
+
     if res:
         res.last_action = datetime.now()
         res.details = action
@@ -173,13 +191,21 @@ def update_task_testbed(task_id, action):
     return False
 
 
-def check_next_task_duration(task_id):
-    res = ReservationDetail.objects.get(id=task_id)
-    last_time = res.last_action
-    curr_time = timezone.now()
-    if last_time:
-        next_time = last_time + timedelta(minutes=5)
-        return next_time < curr_time
+def check_next_task_duration(task_id, stype):
+    if stype == "omf":
+        res = ReservationDetail.objects.get(id=task_id)
+        last_time = res.last_action
+        curr_time = timezone.now()
+        if last_time:
+            next_time = last_time + timedelta(minutes=5)
+            return next_time < curr_time
+    elif stype == "sim":
+        res = SimReservation.objects.get(id=task_id)
+        last_time = res.last_action
+        curr_time = timezone.now()
+        if last_time:
+            next_time = last_time + timedelta(minutes=5)
+            return next_time < curr_time
     return True
 
 

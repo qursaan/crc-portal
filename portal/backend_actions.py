@@ -2,6 +2,7 @@ __author__ = 'pirate'
 
 import urllib2
 import json
+import base64
 
 USER_HOME = "/home/crc-users/"
 
@@ -54,10 +55,10 @@ def vm_shutdown(vm_name):
 # Imaging ############################################################
 def load_images(task_id, img_name, img_path, node_list):
     post_data = {
-        "task_id": task_id,
+        "task_id": str(task_id),
         "name": img_name,
         "path": img_path,
-        "nodes_list": node_list
+        "nodes_list": [node_list]
     }
     post_data = json.dumps(post_data)
     result = urllib2.urlopen('http://193.227.16.154:7777/api/v1/image/load', data=post_data)
@@ -69,10 +70,10 @@ def load_images(task_id, img_name, img_path, node_list):
 
 def save_images(task_id, img_name, img_path, node_list):
     post_data = {
-        "task_id": task_id,
+        "task_id": str(task_id),
         "name": img_name,
         "path": img_path,
-        "nodes_list": node_list
+        "nodes_list": [node_list]
     }
     post_data = json.dumps(post_data)
     result = urllib2.urlopen('http://193.227.16.154:7777/api/v1/image/save', data=post_data)
@@ -83,31 +84,39 @@ def save_images(task_id, img_name, img_path, node_list):
 
 
 def check_load_images(task_id):
-    result = urllib2.urlopen('http://193.227.16.154:7777/api/v1/image/load/' + task_id, data='')
-    content = result.read()
+    result = urllib2.urlopen('http://193.227.16.154:7777/api/v1/image/load/' + str(task_id))
     if result.getcode() == 200:
-        return content
+        return result.read()
     else:
         return 0
 
 
 def check_save_images(task_id):
-    result = urllib2.urlopen('http://193.227.16.154:7777/api/v1/image/save/' + task_id, data='')
-    content = result.read()
+    result = urllib2.urlopen('http://193.227.16.154:7777/api/v1/image/save/' + str(task_id))
     if result.getcode() == 200:
-        return content
+        return result.read()
     else:
         return 0
 
 
 # Experiments ############################################################
-def exe_script(path):
+def exe_script(script, username):
     post_data = {
-        "path": path
+        "username": username,
+        "script": base64.b64encode(script)
     }
     post_data = json.dumps(post_data)
     result = urllib2.urlopen('http://193.227.16.154:7777/api/v1/experiment/', data=post_data)
     if result.getcode() == 200:
-        return 1
+        return result.read()
     else:
         return 0
+
+
+def exe_check(exp_id):
+    result = urllib2.urlopen('http://193.227.16.154:7777/api/v1/experiment/' + str(exp_id))
+    if result.getcode() == 200:
+        return result.read()
+    else:
+        return 0
+

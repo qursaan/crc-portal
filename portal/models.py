@@ -296,9 +296,12 @@ class SimReservation(models.Model):
     approve_date = models.DateTimeField(null=True)
     request_date = models.DateTimeField(default=timezone.now)
     request_type = models.TextField(default='NA')  # 1=schedule 2=onday
-    vm_ref = models.ForeignKey(SimulationVM, null=True)
-    base_image_ref = models.ForeignKey(SimulationImage, null=True)
+    node_ref = models.ForeignKey(SimulationVM, null=True)
+    image_ref = models.ForeignKey(SimulationImage, null=True)
     purpose = models.TextField(default='NA')
     # status 0-disabled, 1-pending, 3-active, 4-expired, 5-canceled
     status = models.IntegerField(default=0)
     created = models.DateTimeField(default=timezone.now)
+    last_action = models.DateTimeField(null=True)
+    details = models.TextField(default='NA')
+

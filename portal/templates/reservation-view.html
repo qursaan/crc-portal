@@ -91,7 +91,7 @@
                   <div class="ui-widget">
                     <select id="request_type"  name="request_type" class="form-control user-input" value="{{ request_type }}" >
                         <option value="active_t" >Normal (Scheduling)</option>
-                        <option value="lazy_t" >Urgent (Next-Day)</option>
+                        <option value="lazy_t" >Urgent (Same-Day)</option>
                     </select>
                   </div>
               </div>
@@ -136,12 +136,6 @@
                            <input name="req_time_time2" type="text" class="form-control user-input time end" placeholder="End time" required/>
                        </div>
                   </div>
-              </div>
-              <div class="col-xs-1">
-                  <button id="check_time_btn" class="btn btn-info form-control" type="button">Check</button>
-              </div>
-              <div class="col-xs-5">
-                  <span id="time_status" class="text-danger">...</span>
               </div>
           </div>
           <div class="form-group">
@@ -291,14 +285,19 @@
               <div class="col-xs-2"></div>
               <div class="col-xs-10">
                   <p id="validation_error" class="text-danger"></p>
+                  <span id="time_status" class="text-danger">...</span>
               </div>
           </div>
 
           <div class="form-group">
               <div class="col-xs-2"></div>
               <div class="col-xs-2">
+                  <button id="check_time_btn" class="btn btn-info form-control" type="button">Check</button>
+              </div>
+              <div class="col-xs-2">
                   <button class="submit btn btn-danger form-control" type="submit">Request Slice</button>
               </div>
+
           </div>
 
       </fieldset>
@@ -324,20 +323,16 @@ $(document).ready(function(){
 /******************************************* Validation **************/
 function validate(){
     $('#time_status').text( "..." );
-    if( select_type  == "omf" )         /*OMF Selection Validation*/
-    {
-        if(n_nodes==0)
-        {
+    if( select_type  == "omf" ){         /*OMF Selection Validation*/
+        if(n_nodes==0){
             $('#validation_error').text( "Please select at least one node." );
             return false;
         }
     }
-    else if (select_type  == "sim")     /*SIM Selection Validation*/
-    {
+    else if (select_type  == "sim"){     /*SIM Selection Validation*/
         //return true;
     }
-    if(v_range==0)
-    {
+    if(v_range==0){
         $('#validation_error').text( "Please check availability first before submit" );
         return false;
     }
@@ -351,8 +346,7 @@ $("#check_time_btn").on('click', function(event){
     d2 = $('input[name="req_time_date2"]').val();
     t1 = $('input[name="req_time_time1"]').val();
     t2 = $('input[name="req_time_time2"]').val();
-    if( d1=="" ||  d2=="" ||  t1=="" ||  t2=="" )
-    {
+    if( d1=="" ||  d2=="" ||  t1=="" ||  t2=="" ){
         $('#time_status').text( "Please select date and time range" );
         return false;
     }
@@ -384,14 +378,12 @@ function checking_availability(selected_node,d1,d2,t1,t2,type,duration) {
         type : "POST",
         data : {the_nodes: selected_node, date1:d1, date2:d2, time1:t1, time2:t2, the_type:type, the_dur:duration},
         success : function(result) {
-            //console.log(result);
-            if(result['free']=="1")
-            {
+            if(result['free']=="1") {
                 $('#time_status').html( "Congratulation, its a Free Slot/Resources" );
                 v_range=1;
-            }
-            else{
-                $('#time_status').html( "A Busy Slot\n" +result['msg'] );
+            } else {
+                $('#time_status').html( "A Busy slot(s)" +result['msg'] +"for more details see <a href='/portal/testbeds/scheduler/'>Timeline</a>");
+                v_range=0;
             }
         },
         error : function(xhr,errmsg,err) {
@@ -421,14 +413,21 @@ $('#request_type').change(function(){
     if($(this).val()=="active_t"){
          $('#active_group').show();
          $('#lazy_group').hide();
-         $( "#active_time .date" ).datepicker('option', 'maxDate' ,'2m');
+         $( "#active_time .date" ).datepicker('option', 'maxDate' ,'4m');
          $( "#active_time .date" ).datepicker('option', 'minDate' ,'1d');
+         $( "#active_time .time" ).timepicker('option', 'minTime' , -3600 );
          $( "#active_time .date" ).removeAttr("disabled");
     }
     else{
+         var d = new Date();
+         var n = d.getHours();
+         var t = (n + 1)*60*60;
          $('#lazy_group').show();
          $('#active_group').hide();
-         $( "#active_time .date" ).datepicker('option', 'maxDate' ,'1d');
+         $( "#active_time .date" ).datepicker('option', 'maxDate' ,'0d');
+         $( "#active_time .time" ).timepicker('option', 'minTime' , t );
+         $( "#active_time .time" ).timepicker('option', 'maxTime' , (23*60*60) );
+         $( "#active_time .time" ).val('');
          $( "#active_time .date" ).val(moment().format('DD-MMMM-YYYY'));
          $( "#active_time .date" ).attr("disabled","disabled");
     }
@@ -449,7 +448,6 @@ $(function() {
 });
 /*******************************************change time action*********/
 $('#active_time .time').timepicker({
-    minTime : -3600,
     showDuration: true,
     timeFormat  : 'g:iA',
     step        : 60,
