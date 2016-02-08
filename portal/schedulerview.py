@@ -30,10 +30,10 @@ class SchedulerView(LoginRequiredAutoLogoutView):
         node_list = []
         reserve_list = []
 
-        if method == 'POST':
+        if request.POST: # method == 'POST':
             self.errors = []
             request_date = request.POST.get('request_date', timezone.now())
-            server_type = request.POST.get('server_type', '')
+            server_type = request.POST.get('server_type', 'omf')
             request_date = parser.parse(request_date)
 
         # Resources
@@ -43,13 +43,17 @@ class SchedulerView(LoginRequiredAutoLogoutView):
         if server_type == "omf":
             node_list = VirtualNode.objects.all()
             reserve_list = ReservationDetail.objects.filter(reservation_ref__status=3,
-                                                            reservation_ref__start_time__gte=day_start,
-                                                            reservation_ref__end_time__lt=day_end)
+                                                            reservation_ref__start_time__gte=day_start) #,
+                                                            #reservation_ref__end_time__lt=day_end)
+           # for r in reserve_list:
+            #    if r.reservation_ref.end_time > day_end:
+            #        r.reservation_ref.end_time = day_end
+
         elif server_type == "sim":
             node_list = SimulationVM.objects.all()
             reserve_list = SimReservation.objects.filter(status=3,
-                                                         start_time__gte=day_start,
-                                                         end_time__lt=day_end)
+                                                         start_time__gte=day_start) #,
+                                                        # end_time__lt=day_end)
 
         template_env = {
             'topmenu_items': topmenu_items('Scheduler View', page.request),

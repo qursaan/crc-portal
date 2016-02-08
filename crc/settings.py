@@ -71,6 +71,10 @@ SUPPORT_EMAIL = "qursaan@gmail.com"
 
 ACCOUNT_ACTIVATION_DAYS = 7  # One-week activation window; you may, of course, use a different value.
 
+# System parameters
+MAX_OMF_DURATION = 8
+MAX_SIM_DURATION = 24*7
+
 ALLOWED_HOSTS = []
 
 TEMPLATE_LOADERS = (

@@ -17,6 +17,8 @@ from django.conf.urls import include, url
 from django.conf import settings
 from django.contrib import admin
 from django.conf.urls.static import static
+import portal.dashboardview
+import portal.homeview
 
 # qursaan: removed
 # from filebrowser.sites import site
@@ -26,16 +28,13 @@ from django.template.base import add_to_builtins
 add_to_builtins('insert_above.templatetags.insert_tags')
 
 #import portal.platformsview
-import portal.dashboardview
-import portal.homeview
-
 home_view       = portal.homeview.HomeView.as_view()
 dashboard_view  = portal.dashboardview.DashboardView.as_view()
 #dashboard_view = portal.navigation.dashboard
 #portal.dashboardview.DashboardView.as_view()
 #platforms_view=portal.platformsview.PlatformsView.as_view()
 
-the_default_view        = home_view
+the_default_view        = dashboard_view
 the_after_login_view    = dashboard_view
 the_login_view          = home_view
 #admin.autodiscover()

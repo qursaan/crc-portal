@@ -53,7 +53,7 @@
       <fieldset>
           <div class="form-group">
               <label for="email" class="col-xs-2 control-label">Experimenter ID</label>
-              <div class="col-xs-4">
+              <div class="col-xs-5">
                   <label id="email" class="col-xs-2 control-label" style="height:34px;">{{ email }}</label>
               </div>
               <!--div class="col-xs-6"> <p class="form-hint">Experimenter requesting a Slice</p> </div-->
@@ -61,15 +61,15 @@
 
           <div class="form-group">
               <label for="slice_name" class="col-xs-2 control-label">Slice Name</label>
-              <div class="col-xs-4">
+              <div class="col-xs-5">
                    <input id="slice_name" type="text" name="slice_name" class="form-control user-input" minlength="2" value="{{ slice_name }}" placeholder="Slice Name" required />
               </div>
-              <div class="col-xs-6"> <p class="form-hint">The name of the slice you wish to create</p> </div>
+              <div class="col-xs-5"> <p class="form-hint">The name of the slice you wish to create</p> </div>
           </div>
 
           <div class="form-group">
               <label for="server_type" class="col-xs-2 control-label">Hardware Type</label>
-              <div class="col-xs-4">
+              <div class="col-xs-5">
                   <div class="ui-widget">
                       <select id="server_type" name="server_type" class="form-control user-input"
                         value="{{ server_type }}" autocomplete="off">
@@ -79,7 +79,7 @@
                   </div>
               </div>
 
-              <div class="col-xs-6">
+              <div class="col-xs-5">
                   <p class="form-hint">Determine the Type of Experiment Server</p>
               </div>
           </div>
@@ -87,7 +87,7 @@
           <div class="form-group">
               <label for="request_type" class="col-xs-2 control-label">Request Plan</label>
 
-              <div class="col-xs-4">
+              <div class="col-xs-5">
                   <div class="ui-widget">
                     <select id="request_type"  name="request_type" class="form-control user-input" value="{{ request_type }}" >
                         <option value="active_t" >Normal (Scheduling)</option>
@@ -96,7 +96,7 @@
                   </div>
               </div>
 
-              <div class="col-xs-6"> <p class="form-hint">Determine the request plan type</p>
+              <div class="col-xs-5"> <p class="form-hint">Determine the request plan type</p>
               </div>
           </div>
 
@@ -126,7 +126,7 @@
 
           <div class="form-group">
               <label for="active_time" class="col-xs-2 control-label">Flexible Date & Time</label>
-              <div class="col-xs-4">
+              <div class="col-xs-5">
                   <div class="ui-widget">
                        <div class="input-group" id="active_time">
                            <input name="req_time_date1" type="text" class="form-control user-input date start" placeholder="Start date" required/>
@@ -140,7 +140,7 @@
           </div>
           <div class="form-group">
                 <label for="slice_duration" class="col-xs-2 control-label">Slice duration (hr)</label>
-                <div class="col-xs-4">
+                <div class="col-xs-5">
                     <div class="ui-widget">
                         <div class="input-group">
                             <input type="text" class="form-control user-input" name="slice_duration" id="slice_duration" readonly />
@@ -149,35 +149,19 @@
                         <div id="slider-range-min"></div>
                     </div>
                 </div>
-                <div class="col-xs-6"><p class="form-hint">The expected duration of request slice</p></div>
+                <div class="col-xs-5"><p class="form-hint">The expected duration of request slice</p></div>
            </div>
 
           <div id="active_group">
-
           </div>
 
           <div id="lazy_group" hidden="hidden">
-              <!--div class="form-group">
-                  <label for="lazy_time" class="col-xs-2 control-label">Timeline</label>
-                  <div class="col-xs-10">
-                      <!--<div class="ui-widget">
-                           <select id="lazy_time" name="lazy_times" class="form-control" value="{{ lazy_time }}" >
-                           {% for row in sim_os_list %}
-                                <option value="{{ row }}" label="{{ row }}" ></option>
-                           {% endfor %}
-                           </select>
-                      </div>
-                  </div>
-                    <!--div class="col-xs-6">
-                        <p class="form-hint">The pre-defined operating system package</p>
-                    </div>
-              </div-->
           </div>
 
           <div id="sim_group" hidden="hidden">
               <div class="form-group">
                     <label for="sim_vm" class="col-xs-2 control-label">Virtual Machine</label>
-                    <div class="col-xs-4">
+                    <div class="col-xs-5">
                         <div class="ui-widget">
                            <select id="sim_vm" name="sim_vm" class="form-control user-input" value="{{ sim_vm }}" >
                            {% for row in sim_vm_list %}
@@ -188,11 +172,11 @@
                            </select>
                         </div>
                     </div>
-                    <div class="col-xs-6"><p class="form-hint">The pre-defined operating system package</p></div>
+                    <div class="col-xs-5"><p class="form-hint">The pre-defined operating system package</p></div>
                </div>
               <div class="form-group">
                     <label for="sim_img" class="col-xs-2 control-label">OS Version</label>
-                    <div class="col-xs-4">
+                    <div class="col-xs-5">
                         <div class="ui-widget">
                            <select id="sim_img" name="sim_img" class="form-control user-input" value="{{ sim_img }}" >
                            {% for row in sim_img_list %}
@@ -204,7 +188,7 @@
 
                         </div>
                     </div>
-                    <div class="col-xs-6"><p class="form-hint">The pre-defined operating system package</p></div>
+                    <div class="col-xs-5"><p class="form-hint">The pre-defined operating system package</p></div>
                </div>
           </div>
 
@@ -248,7 +232,7 @@
               </div>
               <div class="form-group">
                     <label for="n_nodes" class="col-xs-2 control-label">No. of Resources</label>
-                    <div class="col-xs-4">
+                    <div class="col-xs-5">
                         <div class="ui-widget">
                             <input id="n_nodes" name="n_nodes" value="0" type="text" class="form-control user-input" id="n_resources" readonly required/>
                         </div>
@@ -256,7 +240,7 @@
               </div>
               <div class="form-group">
                   <label for="omf_img" class="col-xs-2 control-label">Startup Image</label>
-                  <div class="col-xs-4">
+                  <div class="col-xs-5">
                       <div class="ui-widget">
                           <select id="omf_img" name="omf_img" class="form-control user-input" value="{{ omf_img }}" >
                             {% for row in omf_img_list %}
@@ -267,18 +251,18 @@
                           </select>
                       </div>
                   </div>
-                  <div class="col-xs-6"><p class="form-hint">The pre-defined operating system package</p></div>
+                  <div class="col-xs-5"><p class="form-hint">The pre-defined operating system package</p></div>
               </div>
           </div>
 
           <div class="form-group">
               <label for="purpose" class="col-xs-2 control-label">Experiment purpose</label>
-              <div class="col-xs-4">
+              <div class="col-xs-5">
                   <div class="ui-widget">
                       <textarea id="purpose" name="purpose" class="form-control" style="height:110px;" placeholder="Purpose" required>{{ purpose }}</textarea>
                   </div>
               </div>
-              <div class="col-xs-6"><p class="form-hint">Purpose of your experiment</p></div>
+              <div class="col-xs-5"><p class="form-hint">Purpose of your experiment</p></div>
           </div>
 
           <div class="form-group">
@@ -417,11 +401,10 @@ $('#request_type').change(function(){
          $( "#active_time .date" ).datepicker('option', 'minDate' ,'1d');
          $( "#active_time .time" ).timepicker('option', 'minTime' , -3600 );
          $( "#active_time .date" ).removeAttr("disabled");
-    }
-    else{
+    }else{
          var d = new Date();
          var n = d.getHours();
-         var t = (n + 1)*60*60;
+         var t = (n-1)*60*60; // to reserve the current hour ??
          $('#lazy_group').show();
          $('#active_group').hide();
          $( "#active_time .date" ).datepicker('option', 'maxDate' ,'0d');
@@ -456,10 +439,10 @@ $('#active_time .time').timepicker({
 });
 $('#active_time .date').datepicker({
     dateFormat   : 'dd-MM-yy',
-    autoclose: true,
+    autoclose    : true,
     disableTextInput : true,
     disableTouchKeyboard : true,
-    minDate  : '1d',
+    minDate     : '1d',
 });
 $('#active_time').on('rangeSelected', function(){
     updateRanger();
@@ -499,6 +482,7 @@ $(":checkbox").on("change", function() {
     $('#time_status').text( "..." );
     v_range = 0;
 });
+
 </script>
 {% endblock %}
 

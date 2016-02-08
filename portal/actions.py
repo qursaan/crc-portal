@@ -213,17 +213,21 @@ def get_count_active_slice(c_user):
     active_list_1 = Reservation.objects.filter(user_ref=c_user, status=3)
     active_list_2 = SimReservation.objects.filter(user_ref=c_user, status=3)
     current_time = timezone.now()
+    total_count = active_list_1.count() + active_list_2.count()
     # confirm active session
     for al in active_list_1:
         if al.end_time < current_time:
             al.status = 4
             al.save()
+            total_count -= 1
 
     for al in active_list_2:
         if al.end_time < current_time:
             al.status = 4
             al.save()
-    return active_list_1.count() + active_list_2.count()
+            total_count -= 1
+
+    return total_count
 
 
 # ************* Get Authority by User email *********** #

@@ -46,20 +46,6 @@
                         </select>
                     </div>
                 </div>
-                    <script type="text/javascript">
-                       $('#server_type').change(function(){
-                            if($(this).val()=="omf"){
-                                 $('#omf_group').show();
-                                 $('#sim_group').hide();
-                            } else {
-                                 $('#sim_group').show();
-                                 $('#omf_group').hide();
-                            }
-                       });
-                    </script>
-                <div class="col-xs-2">
-                    <!--p class="form-hint">Determine the Type of Experiment Server</p-->
-                </div>
             </div>
             <div class="form-group">
                 <label for="request_date" class="col-xs-4 control-label">Start Date & Time</label>
@@ -70,25 +56,13 @@
                                    placeholder="Timeline Date" required/>
                       </div>
                     </div>
-                    <script type="text/javascript">
-                        $('#request_date').datepicker({
-                            format: 'dd-mm-yyyy',
-                            todayBtn: 'linked',
-                            orientation: 'top auto',
-                            forceParse: false,
-                            minDate  : '0',
-                            autoclose: true,
-                            //onSelect: function(){
-                            // var request_date = $('#request_date').datepicker({ dateFormat: 'dd-mm-yyyy' }).val();
-                            //}
-                        });
-                        $('#request_date').datepicker({'format':'dd-mm-yyyy'});
-                        $('#request_date').val('{{request_date|date:"d-m-Y"}}');
-                    </script>
                 </div>
-                <div class="col-xs-2">
-                    <button class="input-group submit btn btn-info" type="submit" name="g_reserve">Refresh</button>
+                <div class="col-xs-1">
+                    <button class="input-group submit btn btn-info" type="submit" name="g_reserve">GET</button>
                 </div>
+                <!--div class="col-xs-1">
+                    <button id="toggle-selector-button" class="btn btn-default" type="button">Toggle Selector</button>
+                </div-->
             </div>
             <div class="form-group">
                 <div id="scheduler"></div>
@@ -112,15 +86,42 @@
     <div class="form-group">
         <!--div class="col-xs-2">
             <button id="gettime" class="btn btn-danger">Get selected times</button>
-        </div>
-        <div class="col-xs-2">
-            <button id="toggle-selector-button" class="btn btn-default">Toggle selector</button>
         </div-->
+
     </div>
 </div>
 
 <script type="text/javascript">
+
+$('#server_type').change(function(){
+    if($(this).val()=="omf"){
+         $('#omf_group').show();
+         $('#sim_group').hide();
+    } else {
+         $('#sim_group').show();
+         $('#omf_group').hide();
+    }
+});
+
+$('#request_date').datepicker({
+    dateFormat   : 'dd-MM-yy',
+    todayBtn: 'linked',
+    orientation: 'top',
+    forceParse: false,
+    disableTextInput : true,
+    disableTouchKeyboard : true,
+    minDate  : '0',
+    autoclose: true,
+});
+
+
 $(document).ready(function(){
+    {% if server_type == 'sim' %}
+        $('#server_type').prop("selectedIndex", 1);
+    {% endif %}
+    $('#request_date').val('{{request_date|date:"d-F-Y"}}'); //moment().format('DD-MMMM-YYYY')); //
+    $('#request_date').datepicker({'format':'dd-mm-yyyy'});
+
     //var server = document.getElementById("server_type");
     //var type = server.options[server.selectedIndex].value;
     var list = [];
@@ -130,15 +131,11 @@ $(document).ready(function(){
             {% for rr in reserve_list %}
                 {% if server_type == "omf" %}
                     {% if rr.node_ref.id = n.id %}
-                        {'start': '{{ rr.reservation_ref.start_time|date:"H:i" }}',
-                         'end'  : '{{ rr.reservation_ref.end_time|date:"H:i" }}',
-                         'title': '{{ rr.reservation_ref.user_ref }}'},
+                        {'start': '{{ rr.reservation_ref.start_time|date:"H:i" }}', 'end'  : '{{ rr.reservation_ref.end_time|date:"H:i" }}', 'title': '{{ rr.reservation_ref.user_ref }}'},
                     {% endif %}
                 {% elif server_type == "sim" %}
                     {% if rr.vm_ref.id = n.id %}
-                        {'start': '{{ rr.start_time|date:"H:i" }}',
-                         'end'  : '{{ rr.end_time|date:"H:i" }}',
-                         'title': '{{ rr.user_ref }}'},
+                        {'start': '{{ rr.start_time|date:"H:i" }}', 'end'  : '{{ rr.end_time|date:"H:i" }}', 'title': '{{ rr.user_ref }}'},
                     {% endif %}
                 {% endif %}
             {% endfor %}
@@ -169,6 +166,7 @@ $(document).ready(function(){
         'headName': headName,
         'onClickAppointment': onClickAppointment
     });
+    $scheduler.schedulerjs('toggleSelector');
     $("#gettime").click(function(){
         var times = $scheduler.schedulerjs('selected');
         $("#times").html(times.start + ' - ' + times.end);
@@ -177,5 +175,6 @@ $(document).ready(function(){
         $scheduler.schedulerjs('toggleSelector');
     });
 });
+
 </script>
 {% endblock %}
