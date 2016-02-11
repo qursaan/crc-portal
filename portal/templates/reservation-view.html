@@ -1,23 +1,18 @@
 {% extends "layout-unfold1.html" %}
 {% load i18n %}
-
 {% block head %}
 {{ wizard.form.media }}
 {% endblock %}
 
 {% block unfold_main %}
-
 <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/jquery.timepicker.css" />
 <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/bootstrap-datetimepicker.min.css" />
 <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/themes/ui-lightness/jquery-ui.min.css" />
-
 <script type="text/javascript" src="{{STATIC_URL}}js/moment.min.js"></script>
 <script type="text/javascript" src="{{STATIC_URL}}js/jquery.timepicker.js"></script>
 <script type="text/javascript" src="{{STATIC_URL}}js/bootstrap-datetimepicker.min.js"></script>
 <script type="text/javascript" src="{{STATIC_URL}}js/jquery.datepair.min.js"></script>
 <script type="text/javascript" src="{{STATIC_URL}}js/datepair.min.js"></script>
-
-
 <!--script type="text/javascript" src="{{STATIC_URL}}js/bootstrap-datepicker.min.js"></script>
 <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/bootstrap-datepicker.min.css" /-->
 <!--script type="text/javascript" src="{{STATIC_URL}}js/jquery-ui.js"></script-->
@@ -268,8 +263,7 @@
           <div class="form-group">
               <div class="col-xs-2"></div>
               <div class="col-xs-10">
-                  <p id="validation_error" class="text-danger"></p>
-                  <span id="time_status" class="text-danger">...</span>
+                  <div id="validation_error" class="" role="alert"></div>
               </div>
           </div>
 
@@ -291,6 +285,7 @@
 <script>
 /******************************************* Main ****************/
 var max_duration = {{omf_max_duration}};
+var curr_datetime = new Date("{{ time_now.isoformat }}");
 var select_type  = "omf";
 var n_nodes = 0;
 var v_range = 0;
@@ -300,38 +295,50 @@ $(document).ready(function(){
         if(this.checked)
             n_nodes+=1;
         $('#n_nodes').val(n_nodes);
-        $('#time_status').text( "..." );
+        set_validation(0,"...");
         v_range = 0;
     });
 });
 /******************************************* Validation **************/
+function set_validation(v_type, msg){
+    $('#validation_error').removeAttr('class');
+    $('#validation_error').html( msg ) ;
+    if(v_type == 1){
+        $('#validation_error').attr('class', "alert alert-success");
+    } else if (v_type == 2){
+        $('#validation_error').attr('class', "alert alert-danger");
+    } else if (v_type == 3){
+        $('#validation_error').attr('class', "alert alert-warning");
+    }
+};
 function validate(){
-    $('#time_status').text( "..." );
+    clear_validation();
     if( select_type  == "omf" ){         /*OMF Selection Validation*/
         if(n_nodes==0){
-            $('#validation_error').text( "Please select at least one node." );
+            set_validation(2, "Please select at least one node." );
             return false;
         }
     }
     else if (select_type  == "sim"){     /*SIM Selection Validation*/
         //return true;
     }
+
     if(v_range==0){
-        $('#validation_error').text( "Please check availability first before submit" );
+        set_validation(3, "Please check availability first before submit" );
         return false;
     }
     return(true);
 };
 /*******************************************check availability*********/
 $("#check_time_btn").on('click', function(event){
-    $('#time_status').text( "..." );
+    set_validation(0, "..." );
 
     d1 = $('input[name="req_time_date1"]').val();
     d2 = $('input[name="req_time_date2"]').val();
     t1 = $('input[name="req_time_time1"]').val();
     t2 = $('input[name="req_time_time2"]').val();
     if( d1=="" ||  d2=="" ||  t1=="" ||  t2=="" ){
-        $('#time_status').text( "Please select date and time range" );
+        set_validation(2, "Please select date and time range" );
         return false;
     }
 
@@ -343,7 +350,7 @@ $("#check_time_btn").on('click', function(event){
         });
         if( select_node.length ==0 )
         {
-            $('#time_status').text( "Please select at least one node" );
+            set_validation(2, "Please select at least one node" );
             return false;
         }
         checking_availability(select_node,d1,d2,t1,t2,"omf",1);
@@ -363,16 +370,16 @@ function checking_availability(selected_node,d1,d2,t1,t2,type,duration) {
         data : {the_nodes: selected_node, date1:d1, date2:d2, time1:t1, time2:t2, the_type:type, the_dur:duration},
         success : function(result) {
             if(result['free']=="1") {
-                $('#time_status').html( "Congratulation, its a Free Slot/Resources" );
+                set_validation(1 ,  "<strong>Congratulation</strong>, its a Free Slot/Resources" );
                 v_range=1;
             } else {
-                $('#time_status').html( "A Busy slot(s)" +result['msg'] +"for more details see <a href='/portal/testbeds/scheduler/'>Timeline</a>");
+                set_validation(3, "A <strong>Busy</strong> slot(s)" +result['msg'] +"for more details see <a href='/portal/testbeds/scheduler/'>Timeline</a>");
                 v_range=0;
             }
         },
         error : function(xhr,errmsg,err) {
            console.log(err);
-           $('#time_status').text("Server Error, try again later");
+           set_validation(2 ,"Server Error, try again later");
         }
     });
 };
@@ -399,17 +406,19 @@ $('#request_type').change(function(){
          $('#lazy_group').hide();
          $( "#active_time .date" ).datepicker('option', 'maxDate' ,'4m');
          $( "#active_time .date" ).datepicker('option', 'minDate' ,'1d');
-         $( "#active_time .time" ).timepicker('option', 'minTime' , -3600 );
+         //$( "#active_time .time .end" ).timepicker('option', 'maxTime' , (3600*23) );
+         //$( "#active_time .time" ).timepicker('option', 'durationTime' , 3600 );
          $( "#active_time .date" ).removeAttr("disabled");
+         $( "#active_time .time" ).val('');
     }else{
-         var d = new Date();
+         var d = curr_datetime;
          var n = d.getHours();
          var t = (n-1)*60*60; // to reserve the current hour ??
          $('#lazy_group').show();
          $('#active_group').hide();
          $( "#active_time .date" ).datepicker('option', 'maxDate' ,'0d');
          $( "#active_time .time" ).timepicker('option', 'minTime' , t );
-         $( "#active_time .time" ).timepicker('option', 'maxTime' , (23*60*60) );
+         //$( "#active_time .time" ).timepicker('option', 'maxTime' , (23*60*60) );
          $( "#active_time .time" ).val('');
          $( "#active_time .date" ).val(moment().format('DD-MMMM-YYYY'));
          $( "#active_time .date" ).attr("disabled","disabled");
@@ -419,13 +428,13 @@ $('#request_type').change(function(){
 /*******************************************Slider*********/
 $(function() {
     $( "#slider-range-min" ).slider({
-      range: "min",
-      value: 1,
-      min: 1,
-      max: max_duration,
-      slide: function( event, ui ) {
-        $( "#slice_duration" ).val(ui.value);
-      }
+        range: "min",
+        value: 1,
+        min: 1,
+        max: max_duration,
+        slide: function( event, ui ) {
+            $( "#slice_duration" ).val(ui.value);
+        }
     });
     $( "#slice_duration" ).val( $( "#slider-range-min" ).slider( "value" ) );
 });
@@ -455,7 +464,6 @@ $('#active_time').datepair({
         return $(input).datepicker('setDate', dateObj);
     }
 });
-
 function updateRanger(){
     var milliseconds = $('#active_time').datepair('getTimeDiff');
     var hrs=milliseconds/1000/60/60;
@@ -468,9 +476,8 @@ function updateRanger(){
         $( "#slider-range-min" ).slider("option", "max" ,max_duration);
     $( "#slice_duration" ).val( $( "#slider-range-min" ).slider( "value" ) );
     v_range = 0;
-    $('#time_status').text( "..." );
+    set_validation(0 , "..." );
 };
-
 /*******************************************ALL*********/
 $(":checkbox").on("change", function() {
     $(this).parent().toggleClass("checked", this.checked);
@@ -479,7 +486,7 @@ $(":checkbox").on("change", function() {
     else
         n_nodes-=1;
     $('#n_nodes').val(n_nodes);
-    $('#time_status').text( "..." );
+    set_validation(0 , "..." );
     v_range = 0;
 });
 

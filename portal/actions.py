@@ -1,21 +1,23 @@
-from datetime import datetime, timedelta
-from django.utils import timezone
-import pytz
 import json
-from django.http                import HttpResponse
-from dateutil               import parser
-from portal.models              import Authority, MyUser, PendingSlice,\
-                                        PendingAuthority, VirtualNode, \
-                                Reservation, ReservationDetail, SimReservation, SimulationVM
-from portal.backend_actions import create_backend_user
+from datetime import datetime, timedelta
+
+import pytz
 from django.contrib.auth.models import User
+from django.http import HttpResponse
+from django.utils import timezone
+
+from portal.backend_actions import create_backend_user
+from portal.models import Authority, MyUser, PendingSlice, \
+    PendingAuthority, VirtualNode, \
+    Reservation, ReservationDetail, SimReservation, SimulationVM
+
 
 # Thierry: moving this right into the code so
 # most people can use myslice without having to install sfa
 # XXX tmp sfa dependency, should be moved to SFA gateway
-#from sfa.util.xrn                import Xrn
-#from manifold.core.query         import Query
-#from manifold.manifoldapi        import execute_query,execute_admin_query
+# from sfa.util.xrn                import Xrn
+# from manifold.core.query         import Query
+# from manifold.manifoldapi        import execute_query,execute_admin_query
 
 
 # ************* Default Scheduling Slice ************** #
@@ -112,7 +114,7 @@ def checking_omf_time(nodelist, start_datetime, end_datetime):
                 message += "<li>Node: " + d.node_ref.vm_name + " Busy [" + d1 + " : " + d2 + "]</li>"
         curr_time = curr_time + timedelta(hours=1)
     if message:
-        message = "<ul>"+message+"</ul>"
+        message = "<ul>" + message + "</ul>"
     return message
 
 
@@ -132,12 +134,12 @@ def checking_sim_time(nodelist, start_datetime, end_datetime, slice_duration):
             message += "<li>VM Node: " + r.vm_ref.vm_name + " Busy [" + d1 + " : " + d2 + "]</li>"
         curr_time = curr_time + timedelta(hours=1)
     if message:
-        message = "<ul>"+message+"</ul>"
+        message = "<ul>" + message + "</ul>"
     return message
 
 
 def utc_to_time(naive):
-    current_tz = str(timezone.get_current_timezone()) # ="Africa/Cairo"
+    current_tz = str(timezone.get_current_timezone())  # ="Africa/Cairo"
     return naive.replace(tzinfo=pytz.utc).astimezone(pytz.timezone(current_tz))
 
 
@@ -167,7 +169,7 @@ def get_username_by_email(u_email):
 def get_task_id(slice_id, node_name, stype):
     if stype == "omf":
         curr_slice = Reservation.objects.get(id=slice_id)
-        node  = VirtualNode.objects.get(vm_name=node_name)
+        node = VirtualNode.objects.get(vm_name=node_name)
         res_detail = ReservationDetail.objects.filter(reservation_ref=curr_slice, node_ref=node)
         if res_detail:
             return res_detail[0].id
@@ -263,54 +265,54 @@ def update_node_status(node_id, new_status):
 # ******** Generate user request from user Object ***** #
 def make_request_user(user):
     request = {}
-    request['type']          = 'user'
-    request['id']            = user.id
-    request['timestamp']     = user.created # XXX in DB ?
+    request['type'] = 'user'
+    request['id'] = user.id
+    request['timestamp'] = user.created  # XXX in DB ?
     request['authority_hrn'] = user.authority_hrn
-    request['first_name']    = user.first_name
-    request['last_name']     = user.last_name
-    request['email']         = user.email
-    request['login']         = user.username   # login
-    request['keypair']       = user.keypair
+    request['first_name'] = user.first_name
+    request['last_name'] = user.last_name
+    request['email'] = user.email
+    request['login'] = user.username  # login
+    request['keypair'] = user.keypair
     return request
 
 
 # ******** Generate slice request from slice Object *** #
-def make_request_slice(slice):
+def make_request_slice(c_slice):
     request = {}
     request['type'] = 'slice'
-    request['id'] = slice.id
-    request['user_hrn'] = slice.user_hrn
-    request['timestamp'] = slice.created
-    request['request_date'] = slice.request_date
-    request['authority_hrn'] = slice.authority_hrn
-    request['slice_name'] = slice.slice_name
-    request['number_of_nodes'] = slice.number_of_nodes
-    #request['type_of_nodes'] = slice.type_of_nodes
-    request['purpose'] = slice.purpose
+    request['id'] = c_slice.id
+    request['user_hrn'] = c_slice.user_hrn
+    request['timestamp'] = c_slice.created
+    request['request_date'] = c_slice.request_date
+    request['authority_hrn'] = c_slice.authority_hrn
+    request['slice_name'] = c_slice.slice_name
+    request['number_of_nodes'] = c_slice.number_of_nodes
+    # request['type_of_nodes'] = slice.type_of_nodes
+    request['purpose'] = c_slice.purpose
     return request
 
 
 # ******** Generate auth request from auth Object ***** #
 def make_request_authority(authority):
     request = {}
-    request['type']                  = 'authority'
-    request['id']                    = authority.id
-    request['site_name']             = authority.site_name
-    request['site_latitude']         = authority.site_latitude
-    request['site_longitude']        = authority.site_longitude
-    request['site_url']              = authority.site_url
-    request['site_authority']        = authority.site_authority
+    request['type'] = 'authority'
+    request['id'] = authority.id
+    request['site_name'] = authority.site_name
+    request['site_latitude'] = authority.site_latitude
+    request['site_longitude'] = authority.site_longitude
+    request['site_url'] = authority.site_url
+    request['site_authority'] = authority.site_authority
     request['site_abbreviated_name'] = authority.site_abbreviated_name
-    #request['address_line1']         = authority.address_line1
-    #request['address_line2']         = authority.address_line2
-    #request['address_line3']         = authority.address_line3
-    request['address_city']          = authority.address_city
-    request['address_postalcode']    = authority.address_postalcode
-    request['address_state']         = authority.address_state
-    request['address_country']       = authority.address_country
-    request['authority_hrn']         = authority.authority_hrn
-    request['timestamp']             = authority.created
+    # request['address_line1']         = authority.address_line1
+    # request['address_line2']         = authority.address_line2
+    # request['address_line3']         = authority.address_line3
+    request['address_city'] = authority.address_city
+    request['address_postalcode'] = authority.address_postalcode
+    request['address_state'] = authority.address_state
+    request['address_country'] = authority.address_country
+    request['authority_hrn'] = authority.authority_hrn
+    request['timestamp'] = authority.created
     return request
 
 
@@ -334,11 +336,11 @@ def get_request_by_id(ids):
         sorted_ids[type].append(id)
 
     if not ids:
-        pending_users  = MyUser.objects.filter(status=1).all()
+        pending_users = MyUser.objects.filter(status=1).all()
         pending_slices = PendingSlice.filter(status=1).objects.all()
         pending_authorities = PendingAuthority.objects.all()
     else:
-        pending_users  = MyUser.objects.filter(id__in=sorted_ids['user'],status=1).all()
+        pending_users = MyUser.objects.filter(id__in=sorted_ids['user'], status=1).all()
         pending_slices = PendingSlice.objects.filter(id__in=sorted_ids['slice'], status=1).all()
         pending_authorities = PendingAuthority.objects.filter(id__in=sorted_ids['authority']).all()
 
@@ -349,11 +351,11 @@ def get_request_by_id(ids):
 def get_requests(authority_hrns=None):
     print "get_request_by_authority auth_hrns = ", authority_hrns
     if not authority_hrns:
-        pending_users  = MyUser.objects.filter(status=1).all()
+        pending_users = MyUser.objects.filter(status=1).all()
         pending_slices = PendingSlice.objects.filter(status=1).all()
         pending_authorities = PendingAuthority.objects.all()
     else:
-        pending_users  = MyUser.objects.filter(authority_hrn__in=authority_hrns, status=1).all()
+        pending_users = MyUser.objects.filter(authority_hrn__in=authority_hrns, status=1).all()
         pending_slices = PendingSlice.objects.filter(authority_hrn__in=authority_hrns, status=1).all()
         pending_authorities = PendingAuthority.objects.filter(authority_hrn__in=authority_hrns).all()
 
@@ -506,69 +508,69 @@ def portal_validate_request(wsgi_request, request_ids):
 
             try:
                 # XXX tmp user_hrn inside the keypair column of pendiguser table
-##                hrn = json.loads(request['keypair'])['user_hrn']
-                #hrn = "%s.%s" % (request['authority_hrn'], request['login'])
+                ##                hrn = json.loads(request['keypair'])['user_hrn']
+                # hrn = "%s.%s" % (request['authority_hrn'], request['login'])
                 # XXX tmp sfa dependency
-                #from sfa.util.xrn import Xrn
-##                urn = Xrn(hrn, request['type']).get_urn()
-##                if 'pi' in request:
-##                    auth_pi = request['pi']
-##                else:
-##                    auth_pi = ''
-##                sfa_user_params = {
-##                    'hrn'        : hrn,
-##                    'urn'        : urn,
-##                    'type'       : request['type'],
-##                    'keys'       : [json.loads(request['keypair'])['user_public_key']],
-##                    'first_name' : request['first_name'],
-##                    'last_name'  : request['last_name'],
-##                    'email'      : request['email'],
-##                    #'slices'    : None,
-##                    #'researcher': None,
-##                    'pi'         : [auth_pi],
-##                    'enabled'    : True
-##                }
+                # from sfa.util.xrn import Xrn
+                ##                urn = Xrn(hrn, request['type']).get_urn()
+                ##                if 'pi' in request:
+                ##                    auth_pi = request['pi']
+                ##                else:
+                ##                    auth_pi = ''
+                ##                sfa_user_params = {
+                ##                    'hrn'        : hrn,
+                ##                    'urn'        : urn,
+                ##                    'type'       : request['type'],
+                ##                    'keys'       : [json.loads(request['keypair'])['user_public_key']],
+                ##                    'first_name' : request['first_name'],
+                ##                    'last_name'  : request['last_name'],
+                ##                    'email'      : request['email'],
+                ##                    #'slices'    : None,
+                ##                    #'researcher': None,
+                ##                    'pi'         : [auth_pi],
+                ##                    'enabled'    : True
+                ##                }
                 # ignored in request: id, timestamp, password
 
                 # ADD USER TO SFA Registry
-##                sfa_add_user(wsgi_request, sfa_user_params)
+                ##                sfa_add_user(wsgi_request, sfa_user_params)
 
                 # USER INFO
-##                user_query  = Query().get('local:user').select('user_id','config','email','status').filter_by('email', '==', request['email'])
-##                user_details = execute_admin_query(request, user_query)
-                #print user_details[0]
+                ##                user_query  = Query().get('local:user').select('user_id','config','email','status').filter_by('email', '==', request['email'])
+                ##                user_details = execute_admin_query(request, user_query)
+                # print user_details[0]
 
                 # UPDATE USER STATUS = 2
-##                manifold_user_params = {
-##                    'status': 2
-##                }
-##                manifold_update_user(request, request['email'], manifold_user_params)
+                ##                manifold_user_params = {
+                ##                    'status': 2
+                ##                }
+                ##                manifold_update_user(request, request['email'], manifold_user_params)
 
                 # USER MAIN ACCOUNT != reference
-                #print 'USER MAIN ACCOUNT != reference'
-##                list_accounts_query  = Query().get('local:account').select('user_id','platform_id','auth_type','config')\
-##                    .filter_by('user_id','==',user_details[0]['user_id'])\
-##                    .filter_by('auth_type','!=','reference')
-##                list_accounts = execute_admin_query(request, list_accounts_query)
-##                #print "List accounts = ",list_accounts
-##                for account in list_accounts:
-##                    main_platform_query  = Query().get('local:platform').select('platform_id','platform').filter_by('platform_id','==',account['platform_id'])
-##                    main_platform = execute_admin_query(request, main_platform_query)
+                # print 'USER MAIN ACCOUNT != reference'
+                ##                list_accounts_query  = Query().get('local:account').select('user_id','platform_id','auth_type','config')\
+                ##                    .filter_by('user_id','==',user_details[0]['user_id'])\
+                ##                    .filter_by('auth_type','!=','reference')
+                ##                list_accounts = execute_admin_query(request, list_accounts_query)
+                ##                #print "List accounts = ",list_accounts
+                ##                for account in list_accounts:
+                ##                    main_platform_query  = Query().get('local:platform').select('platform_id','platform').filter_by('platform_id','==',account['platform_id'])
+                ##                    main_platform = execute_admin_query(request, main_platform_query)
 
                 # ADD REFERENCE ACCOUNTS ON SFA ENABLED PLATFORMS
-                #print 'ADD REFERENCE ACCOUNTS ON SFA ENABLED PLATFORMS'
-##                platforms_query  = Query().get('local:platform').filter_by('disabled', '==', '0').filter_by('gateway_type','==','sfa').select('platform_id','gateway_type')
-##                platforms = execute_admin_query(request, platforms_query)
-##                #print "platforms SFA ENABLED = ",platforms
-##                for platform in platforms:
-##                    #print "add reference to platform ",platform
-##                    manifold_account_params = {
-##                        'user_id': user_details[0]['user_id'],
-##                        'platform_id': platform['platform_id'],
-##                        'auth_type': 'reference',
-##                        'config': '{"reference_platform": "' + main_platform[0]['platform'] + '"}',
-##                    }
-##                    manifold_add_account(request, manifold_account_params)
+                # print 'ADD REFERENCE ACCOUNTS ON SFA ENABLED PLATFORMS'
+                ##                platforms_query  = Query().get('local:platform').filter_by('disabled', '==', '0').filter_by('gateway_type','==','sfa').select('platform_id','gateway_type')
+                ##                platforms = execute_admin_query(request, platforms_query)
+                ##                #print "platforms SFA ENABLED = ",platforms
+                ##                for platform in platforms:
+                ##                    #print "add reference to platform ",platform
+                ##                    manifold_account_params = {
+                ##                        'user_id': user_details[0]['user_id'],
+                ##                        'platform_id': platform['platform_id'],
+                ##                        'auth_type': 'reference',
+                ##                        'config': '{"reference_platform": "' + main_platform[0]['platform'] + '"}',
+                ##                    }
+                ##                    manifold_add_account(request, manifold_account_params)
                 up_user = MyUser.objects.get(id=request['id'])
                 web_user = User.objects.get(id=up_user.id)
                 # TODO: Create user file here
@@ -584,7 +586,7 @@ def portal_validate_request(wsgi_request, request_ids):
                     request_status['CRC user'] = {'status': False, 'description': 'Server Error'}
 
             except Exception, e:
-                 request_status['CRC user'] = {'status': False, 'description': str(e)}
+                request_status['CRC user'] = {'status': False, 'description': str(e)}
 
         elif request['type'] == 'slice':
             try:
@@ -613,10 +615,10 @@ def portal_validate_request(wsgi_request, request_ids):
 
                 sfa_add_slice(wsgi_request, sfa_slice_params)
                 #sfa_add_user_to_slice(wsgi_request, user_hrn, sfa_slice_params)"""
-                #up_slice = PendingSlice.objects.get()
+                # up_slice = PendingSlice.objects.get()
 
                 result = schedule_slice(request['id'])
-                request_status['CRC slice'] = {'status': result }
+                request_status['CRC slice'] = {'status': result}
 
             except Exception, e:
                 request_status['CRC slice'] = {'status': False, 'description': str(e)}
@@ -654,7 +656,7 @@ def validate_action(request, **kwargs):
     ids = filter(None, kwargs['id'].split('/'))
     status = portal_validate_request(request, ids)
     json_answer = json.dumps(status)
-    return HttpResponse (json_answer)#, mimetype="application/json")
+    return HttpResponse(json_answer)  # , mimetype="application/json")
 
 # Django and ajax
 # http://djangosnippets.org/snippets/942/

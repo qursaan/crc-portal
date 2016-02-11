@@ -77,6 +77,13 @@ MAX_SIM_DURATION = 24*7
 
 ALLOWED_HOSTS = []
 
+
+# File Browser Default Directory
+# FILEBROWSER_DIRECTORY = "uploads/"
+THUMBNAIL_HIGH_RESOLUTION = True
+FILER_CANONICAL_URL = 'uploads/'
+
+
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
@@ -111,6 +118,7 @@ INSTALLED_APPS = (
 
     # filer
     'filer',
+    'mptt',
     'easy_thumbnails',
     # captcha
     'captcha',
@@ -222,10 +230,6 @@ STATICFILES_FINDERS = (
     #'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
-# File Browser Default Directory
-# FILEBROWSER_DIRECTORY = "uploads/"
-THUMBNAIL_HIGH_RESOLUTION = True
-FILER_CANONICAL_URL = 'uploads/'
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to

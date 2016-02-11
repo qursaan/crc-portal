@@ -1,8 +1,8 @@
 __author__ = 'pirate'
 
-import urllib2
-import json
 import base64
+import json
+import urllib2
 
 USER_HOME = "/home/crc-users/"
 
@@ -117,6 +117,16 @@ def exe_check(exp_id):
     result = urllib2.urlopen('http://193.227.16.154:7777/api/v1/experiment/' + str(exp_id))
     if result.getcode() == 200:
         return result.read()
+    else:
+        return 0
+
+
+def exe_abort(exp_id):
+    request = urllib2.Request('http://193.227.16.154:7777/api/v1/experiment/' + str(exp_id))
+    request.get_method = lambda: 'DELETE'  # or 'DELETE'
+    result = urllib2.urlopen(request)
+    if result.getcode() == 200:
+        return 1
     else:
         return 0
 

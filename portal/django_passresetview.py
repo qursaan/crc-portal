@@ -21,9 +21,6 @@
 # Foundation, 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
 
-
-
-
 """
 View Description:
 
@@ -40,54 +37,41 @@ authentication source like LDAP. Note that they won't receive any error message 
 More Detail: https://docs.djangoproject.com/en/dev/topics/auth/default/#topics-auth-creating-users
 """
 
-
-
 try:
     from urllib.parse import urlparse, urlunparse
-except ImportError:     # Python 2
+except ImportError:  # Python 2
     from urlparse import urlparse, urlunparse
 
 from django.conf import settings
+from django.contrib import messages
+from django.contrib.auth import get_user_model
+from django.contrib.auth.models import User
+from django.contrib.auth.tokens import default_token_generator
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect, QueryDict
+from django.http import HttpResponseRedirect
+from django.shortcuts import render, resolve_url
 from django.template.response import TemplateResponse
-from django.utils.http import base36_to_int, is_safe_url
-from django.utils.translation import ugettext as _
-from django.shortcuts import resolve_url
-from django.views.decorators.debug import sensitive_post_parameters
+from django.utils.http import base36_to_int
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
+from django.views.decorators.debug import sensitive_post_parameters
 
-# Avoid shadowing the login() and logout() views below.
-from django.contrib.auth import REDIRECT_FIELD_NAME, login as auth_login, logout as auth_logout, get_user_model
-from django.contrib.auth.decorators import login_required
 from portal.forms import PasswordResetForm, SetPasswordForm
-from django.contrib.auth.tokens import default_token_generator
-from django.contrib.sites.models import get_current_site
-from django.contrib.auth.hashers import identify_hasher
+
 
 ##
-#import os.path, re
-#import json
-
-#from random                     import choice
-
-from django.core.mail           import send_mail
-from django.contrib             import messages
-#from django.views.generic       import View
-from django.shortcuts           import render
-from django.http                import HttpResponse, HttpResponseRedirect
-
-#from unfold.loginrequired       import FreeAccessView
-#from ui.topmenu                 import topmenu_items_live
-
-#from manifold.manifoldapi       import execute_admin_query
-#from manifold.core.query        import Query
-#from portal.actions             import manifold_update_user
-
-#from portal.forms               import PassResetForm
-#from portal.actions             import manifold_update_user
-from django.contrib.auth.models import User
+# import os.path, re
+# import json
+# from random                     import choice
+# Avoid shadowing the login() and logout() views below.
+# from django.views.generic       import View
+# from unfold.loginrequired       import FreeAccessView
+# from ui.topmenu                 import topmenu_items_live
+# from manifold.manifoldapi       import execute_admin_query
+# from manifold.core.query        import Query
+# from portal.actions             import manifold_update_user
+# from portal.forms               import PassResetForm
+# from portal.actions             import manifold_update_user
 
 
 # 4 views for password reset:
@@ -114,8 +98,8 @@ def password_reset(request, is_admin_site=False,
         form = password_reset_form(request.POST)
         if form.is_valid():
 
-            ### email check in manifold DB ###
-            email = form.cleaned_data['email'].lower() # email inserted on the form
+            # email check in manifold DB ###
+            email = form.cleaned_data['email'].lower()  # email inserted on the form
             # @qursaan comment
             # user_query  = Query().get('local:user').select('user_id','email')
             # user_details = execute_admin_query(request, user_query)
@@ -124,16 +108,16 @@ def password_reset(request, is_admin_site=False,
             flag = 0
             for user_detail in user_details:
                 # @qursaan: replace '' -> .
-                if user_detail.email ==email:
+                if user_detail.email == email:
                     flag = 1  # @qursaan: mean user have email and registered
                     break
-                    
+
             if flag == 0:
                 messages.error(request, 'Sorry, this email is not registered.')
                 return render(request, 'password_reset_form.html', {
                     'form': form,
-                    })
-            ### end of email check in manifold  ### 
+                })
+            # end of email check in manifold  ###
 
 
             opts = {
@@ -197,11 +181,11 @@ def password_reset_confirm(request, uidb36=None, token=None,
             form = set_password_form(user, request.POST)
             if form.is_valid():
 
-                ### manifold pass update ###
-                #password = form.cleaned_data('password1')
-                password=request.POST['new_password1']
-                #user_query  = Query().get('local:user').select('user_id','email','password')
-                #user_details = execute_admin_query(request, user_query)
+                # manifold pass update ###
+                # password = form.cleaned_data('password1')
+                password = request.POST['new_password1']
+                # user_query  = Query().get('local:user').select('user_id','email','password')
+                # user_details = execute_admin_query(request, user_query)
                 # @qursaan: Add this line for user table
                 user_details = User.objects.all()
                 # @qursaan: uncomment this for
@@ -210,13 +194,12 @@ def password_reset_confirm(request, uidb36=None, token=None,
                         user_detail.password = password
                         break
 
-                #updating password in local:user
+                # updating password in local:user
                 # @qursaan comment
                 # user_params = { 'password': password}
                 # manifold_update_user(request,user.email,user_params)
-                ### end of manifold pass update ###            
-    
-    
+                # end of manifold pass update ###
+
                 form.save()
                 return HttpResponseRedirect(post_reset_redirect)
         else:
@@ -244,5 +227,3 @@ def password_reset_complete(request,
         context.update(extra_context)
     return TemplateResponse(request, template_name, context,
                             current_app=current_app)
-
-

@@ -7,7 +7,8 @@ from ui.topmenu import topmenu_items, the_user
 from portal.models import Reservation, ReservationDetail, SimReservation, \
     TestbedImage, UserImage, SimulationImage
 from portal.navigation import action_load_save_image, omf_exe, remote_node, \
-    check_task_progress, check_exe_progress, slice_on_time
+    check_task_progress, check_exe_progress, slice_on_time, abort_exe_progress
+
 from portal.actions import get_user_by_email
 #
 from django.shortcuts import render
@@ -121,6 +122,13 @@ def control_exe_script(request):
     if request.method != 'POST':
         return HttpResponseRedirect("/")
     return omf_exe(request)
+
+
+@login_required
+def control_exe_abort(request):
+    if request.method != 'POST':
+        return HttpResponseRedirect("/")
+    return abort_exe_progress(request)
 
 
 @login_required

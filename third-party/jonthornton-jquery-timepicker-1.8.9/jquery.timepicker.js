@@ -464,13 +464,18 @@
 		}
 
 		var durStart = settings.minTime;
+		/*if( durStart !== null || durStart != 0 )
+		{
+		    durStart = settings.minTime + 3600;
+		}*/
 		if (typeof settings.durationTime === 'function') {
 			durStart = _time2int(settings.durationTime());
 		} else if (settings.durationTime !== null) {
 			durStart = settings.durationTime;
 		}
-		var start = (settings.minTime !== null) ? settings.minTime : 0;
-		var end = (settings.maxTime !== null) ? settings.maxTime : (start + _ONE_DAY - 1);
+		// @qursaan +3600 -3600
+		var start = (settings.minTime !== null) ? settings.minTime+3600 : 0;
+		var end = (settings.maxTime !== null) ? settings.maxTime : (start +_ONE_DAY - 1);
 
 		if (end < start) {
 			// make sure the end time is greater than start time, otherwise there will be no list to show
@@ -492,8 +497,8 @@
 				return settings.step;
 			}
 		}
-
-		for (var i=start+3600, j=0; i <= end; j++, i += stepFunc(j)*60) {
+        // qursaan remove i<=end
+		for (var i=start, j=0; i <= end; j++, i += stepFunc(j)*60) {
 			var timeInt = i;
 			var timeString = _int2time(timeInt, settings);
 
@@ -508,14 +513,14 @@
 			}
 
 			if ((settings.minTime !== null || settings.durationTime !== null) && settings.showDuration) {
-				var durationString = _int2duration(i - durStart, settings.step);
-				if (settings.useSelect) {
-					row.text(row.text()+' ('+durationString+')');
-				} else {
-					var duration = $('<span />', { 'class': 'ui-timepicker-duration' });
-					duration.text(' ('+durationString+')');
-					row.append(duration);
-				}
+			    var durationString = _int2duration(i - durStart, settings.step);
+                if (settings.useSelect) {
+                    row.text(row.text()+' ('+durationString+')');
+                } else {
+                    var duration = $('<span />', { 'class': 'ui-timepicker-duration' });
+                    duration.text(' ('+durationString+')');
+                    row.append(duration);
+                }
 			}
 
 			if (drCur < drLen) {
@@ -531,7 +536,6 @@
 					}
 				}
 			}
-
 			list.append(row);
 		}
 

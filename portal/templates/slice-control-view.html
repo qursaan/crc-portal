@@ -401,6 +401,9 @@
                                             <button id="execute_script" class="submit btn btn-danger" type="button" name="execute_script">
                                                 Execute/Run
                                             </button>
+                                            <button id="abort_script" class="submit btn btn-danger" type="button" name="abort_script" disabled>
+                                                Abort
+                                            </button>
                                         </div>
                                     </div>
                                     <div class="ui-widget" style="height: 10px;"></div>
@@ -476,7 +479,7 @@ var exe_List=[];
 var activityTable;
 var change_flag = false;
 var deadline = new Date("{{ deadline.isoformat }}");
-
+var show_warning = false;
 $(document).ready(function(){
     activityTable = document.getElementById("activity_tbl").getElementsByTagName('tbody')[0];
     {% if stype == "omf" %}
@@ -548,8 +551,9 @@ function initializeClock(id, endtime) {
           document.location.href = '/portal/dashboard/';
         }
 
-        if((t.total/1000/60) <= 5)
+        if( ! (show_warning) && (t.total/1000/60)<=5 )
         {
+            show_warning = true;
             alert("Remaining time is less than 5 minutes, Save your image(s) if you want to keep your data.");
         }
     }
@@ -630,10 +634,36 @@ $('#sample-2').on('click', function(event){
 });
 
 $('#execute_script').on('click', function(event){
+    if(editor.getValue() == "")
+    {
+        alert("No code to execute");
+        return;
+    }
     event.preventDefault();
     aid = add_activity("Running Script");
     create_exe_post(aid);
+    exe_button(0);
 });
+
+$('#abort_script').on('click', function(event){
+    event.preventDefault();
+    //aid = add_activity("Cancel Script");
+    abort_script_exe(exe_List[0][0],exe_List[0][1],0,exe_List);
+    exe_button(1);
+});
+
+function exe_button(state)
+{
+    if( state == 0){  //Disable exe
+        $('#execute_script').attr("disabled","disabled");
+        $('#abort_script').removeAttr("disabled");
+    }
+    else if( state == 1)
+    {
+        $('#abort_script').attr("disabled","disabled");
+        $('#execute_script').removeAttr("disabled");
+    }
+};
 
 function load_samples(sample_no,aid) {
     $("#"+aid).text("Download ...");
@@ -661,6 +691,7 @@ function create_exe_post(aid) {
         type : "POST",
         data : { script_text : editor.getValue() },
         success : function(json) {
+            $('#output').val("");
             print_recolor(aid,2,"In progress");
             exe_List.push([json['exp_id'],aid]);
             closeModal();
@@ -672,13 +703,39 @@ function create_exe_post(aid) {
     });
 };
 
+function abort_script_exe(eid, aid, idx, a_list) {
+    $.ajax({
+        url  : "control_exe_abort",
+        type : "POST",
+        data : {the_eid: eid,},
+        success : function(result) {
+            if(result == "eof"){
+                document.location.href = '/portal/lab/current/';
+            } else {
+                if( result.startsWith("success")){
+                    print_recolor(aid, 1, result);
+                } else if ( result.startsWith("warning")){
+                    print_recolor(aid, 2, result);
+                } else {
+                    print_recolor(aid, 3, result);
+                }
+            }
+            a_list.splice(idx,1);
+        },
+        error : function(xhr,errmsg,err) {
+           console.log(err);
+           print_recolor(aid,3,"Unexpected Error, try again later");
+        }
+    });
+};
+
 function checking_status_exe(eid, aid, idx, a_list) {
     $.ajax({
         url  : "control_check_exe",
         type : "POST",
         data : {the_eid: eid,},
         success : function(result) {
-            console.log(result);
+            //console.log(result);
             var is_done = result['done'];
             if(is_done==false){
                 var log = result['log']
@@ -692,6 +749,7 @@ function checking_status_exe(eid, aid, idx, a_list) {
             } else {
                 print_recolor(aid,1,"Complete");
                 a_list.splice(idx,1);
+                exe_button(1);
             }
         },
         error : function(xhr,errmsg,err) {

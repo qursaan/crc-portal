@@ -8,7 +8,7 @@ from django.utils import timezone
 from ui.topmenu import topmenu_items, the_user
 from portal.models import UserImage, TestbedImage,Reservation, SimReservation, SimulationImage
 from portal.actions import get_user_by_email, get_task_id, update_task_testbed, check_next_task_duration, get_username_by_email
-from portal.backend_actions import load_images, save_images, vm_restart, vm_shutdown, vm_start, exe_script,exe_check,check_load_images,check_save_images
+from portal.backend_actions import load_images, save_images, vm_restart, vm_shutdown, vm_start, exe_script,exe_check,check_load_images,check_save_images, exe_abort
 
 
 #  ********** Non Completed Page ************* #
@@ -176,6 +176,18 @@ def check_exe_progress(request):
     return HttpResponse('{"error": "Error, Invalid File"}', content_type="application/json")
 
 
+def abort_exe_progress(request):
+    if not slice_on_time(request, "omf"):
+        return HttpResponse('eof', content_type="text/plain")
+    else:
+        exe_id = request.POST.get('the_eid', None)
+        if exe_id:
+            ol = exe_abort(exe_id)
+            if ol != 0:
+                return HttpResponse("success: Execution Aborted", content_type="text/plain")
+        return HttpResponse("error, Failed to cancel experiment", content_type="text/plain")
+
+
 def omf_exe(request):
     if not slice_on_time(request, "omf"):
         return HttpResponse('eof', content_type="text/plain")
@@ -189,5 +201,7 @@ def omf_exe(request):
         if t != 0:
             return HttpResponse(t, content_type="application/json")
         return HttpResponse({"error": "Error, Invalid Script"}, content_type="text/plain")
+
+
 
 

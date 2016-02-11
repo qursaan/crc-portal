@@ -1,20 +1,22 @@
 from django.contrib import admin
+
 from portal.models import MyUser, Platform, Account, \
-                            PhysicalNode, ResourcesInfo, VirtualNode, NodeConnection, SimulationVM,\
-                            UserImage, TestbedImage, SimulationImage,\
-                            Authority, PendingSlice, \
-                            Reservation, ReservationDetail, SimReservation
+    PhysicalNode, ResourcesInfo, VirtualNode, NodeConnection, SimulationVM, \
+    UserImage, TestbedImage, SimulationImage, \
+    Authority, PendingSlice, \
+    Reservation, ReservationDetail, SimReservation
+
 
 @admin.register(Platform)
 class PlatformAdmin(admin.ModelAdmin):
-    #fieldsets = [
-        #(None,               {'fields': ['login']}),
-        #('User information', {'fields': ['first_name','last_name','email',
-					#'password','authority_hrn','status'],}),
-    #]
+    # fieldsets = [
+    # (None,               {'fields': ['login']}),
+    # ('User information', {'fields': ['first_name','last_name','email',
+    # 'password','authority_hrn','status'],}),
+    # ]
     list_display = ('id', 'name', 'longname')
-    #list_filter = ['created']
-    #search_fields = ['first_name','last_name','authority_hrn']
+    # list_filter = ['created']
+    # search_fields = ['first_name','last_name','authority_hrn']
 
 
 @admin.register(MyUser)
@@ -45,7 +47,7 @@ class PhysicalNodeAdmin(admin.ModelAdmin):
 
 @admin.register(VirtualNode)
 class VirtualNodeAdmin(admin.ModelAdmin):
-    list_display = ('id', 'node_ref', 'device_ref', 'vm_name','hv_name')
+    list_display = ('id', 'node_ref', 'device_ref', 'vm_name', 'hv_name')
 
 
 @admin.register(NodeConnection)
@@ -97,4 +99,6 @@ class SimReservationAdmin(admin.ModelAdmin):
 # Old *******************************************************
 @admin.register(PendingSlice)
 class PendingSliceAdmin(admin.ModelAdmin):
-    list_display = ('id', 'slice_name', 'user_hrn', 'authority_hrn', 'server_type', 'request_type', 'start_time', 'end_time', 'status',)
+    list_display = (
+        'id', 'slice_name', 'user_hrn', 'authority_hrn', 'server_type', 'request_type', 'start_time', 'end_time',
+        'status',)

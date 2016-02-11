@@ -1,12 +1,15 @@
+from portal.actions import get_count_active_slice, get_user_by_email
+from ui.topmenu import topmenu_items, the_user
+from unfold.loginrequired import LoginRequiredAutoLogoutView
+from unfold.page import Page
+
+# from django.contrib import messages
 # import json
 # from manifold.core.query         import Query
 # from manifold.manifoldapi        import execute_query
 # from plugins.lists.testbedlist   import TestbedList
 # from plugins.lists.slicelist     import SliceList
-from unfold.page import Page
-from unfold.loginrequired import LoginRequiredAutoLogoutView
-from ui.topmenu import topmenu_items, the_user
-from portal.actions import get_count_active_slice, get_user_by_email
+
 
 # This view requires login
 class DashboardView(LoginRequiredAutoLogoutView):
@@ -59,24 +62,21 @@ class DashboardView(LoginRequiredAutoLogoutView):
         #    title = "testbeds",
         #    query = testbed_query,
         # )
-        c_user = the_user(self.request)
-        context = super(DashboardView, self).get_context_data(**kwargs)
+
+
         # context['person']   = self.request.user
         # context['testbeds'] = testbedlist.render(self.request)
         # context['slices']   = slicelist.render(self.request)
 
-        # XXX This is repeated in all pages
-        # more general variables expected in the template
-        context['title'] = 'Dashboard'
-        # the menu items on the top
-        # @qursaan: remove __live
-        context['topmenu_items'] = topmenu_items('Dashboard', page.request)
         # so we can sho who is logged
-        context['username'] = the_user(self.request)
-        context['active_count'] = get_count_active_slice(get_user_by_email(c_user))
         # page.expose_js_metadata()
-
         # the page header and other stuff
-        context.update(page.prelude_env())
 
+        c_user = the_user(self.request)
+        context = super(DashboardView, self).get_context_data(**kwargs)
+        context['title'] = 'Dashboard'
+        context['username'] = the_user(self.request)
+        context['topmenu_items'] = topmenu_items('Dashboard', page.request)
+        context['active_count'] = get_count_active_slice(get_user_by_email(c_user))
+        context.update(page.prelude_env())
         return context
