@@ -219,7 +219,7 @@ class SimulationVM(models.Model):
     specification = models.TextField(default='NA')
 
     def __str__(self):  # __unicode__ on Python 2
-        return self.vm_name
+        return "Simulation @ " + self.hv_name
 
 
 # Images *******************************************************

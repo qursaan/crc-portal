@@ -127,7 +127,7 @@ def slice_on_time(request, stype):
         messages.success(request, 'Error: You have not permission to access this page.')
         del request.session['slice_id']
         return False
-    if current_slice.end_time < timezone.now():
+    if current_slice.end_time < timezone.now() :
         del request.session['slice_id']
         current_slice.status = 4
         current_slice.save()

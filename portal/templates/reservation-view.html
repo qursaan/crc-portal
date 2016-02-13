@@ -289,7 +289,19 @@ var curr_datetime = new Date("{{ time_now.isoformat }}");
 var select_type  = "omf";
 var n_nodes = 0;
 var v_range = 0;
+
 $(document).ready(function(){
+    $( "#slider-range-min" ).slider({
+        range: "min",
+        value: 1,
+        min: 1,
+        max: max_duration,
+        slide: function( event, ui ) {
+            $( "#slice_duration" ).val(ui.value);
+        }
+    });
+    $( "#slice_duration" ).val( $( "#slider-range-min" ).slider( "value" ) );
+
     $('#active_time').datepair();
     $(":checkbox").each(function() {
         if(this.checked)
@@ -308,9 +320,10 @@ function set_validation(v_type, msg){
     } else if (v_type == 2){
         $('#validation_error').attr('class', "alert alert-danger");
     } else if (v_type == 3){
-        $('#validation_error').attr('class', "alert alert-warning");
+        $('#validation_error').attr('class', "alert alert-danger");
     }
 };
+
 function validate(){
     clear_validation();
     if( select_type  == "omf" ){         /*OMF Selection Validation*/
@@ -427,16 +440,7 @@ $('#request_type').change(function(){
 });
 /*******************************************Slider*********/
 $(function() {
-    $( "#slider-range-min" ).slider({
-        range: "min",
-        value: 1,
-        min: 1,
-        max: max_duration,
-        slide: function( event, ui ) {
-            $( "#slice_duration" ).val(ui.value);
-        }
-    });
-    $( "#slice_duration" ).val( $( "#slider-range-min" ).slider( "value" ) );
+
 });
 /*******************************************change time action*********/
 $('#active_time .time').timepicker({

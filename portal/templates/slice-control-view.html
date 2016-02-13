@@ -5,39 +5,14 @@
 <link rel="stylesheet" href="{{STATIC_URL}}css/codemirror.css"/>
 <link rel="stylesheet" href="{{STATIC_URL}}css/rubyblue.css"/>
 <link rel="stylesheet" href="{{STATIC_URL}}css/fullscreen.css"/>
+<link rel="stylesheet" href="{{STATIC_URL}}css/fade.css"/>
 <script type="text/javascript" src="{{STATIC_URL}}js/codemirror.js"></script>
 <script type="text/javascript" src="{{STATIC_URL}}js/placeholder.js"></script>
 <script type="text/javascript" src="{{STATIC_URL}}js/ruby.js"></script>
 <script type="text/javascript" src="{{STATIC_URL}}js/fullscreen.js"></script>
 
 <style type="text/css">
-    #fade {
-        display: none;
-        position:absolute;
-        top: 0%;
-        left: 0%;
-        width: 100%;
-        height: 100%;
-        background-color: #ababab;
-        z-index: 1001;
-        -moz-opacity: 0.8;
-        opacity: .70;
-        filter: alpha(opacity=80);
-    }
 
-    #modal {
-        display: none;
-        position: absolute;
-        top: 45%;
-        left: 45%;
-        border: 3px solid #ababab;
-        box-shadow:1px 1px 10px #ababab;
-        border-radius:20px;
-        background-color: white;
-        z-index: 1002;
-        text-align:center;
-        overflow: auto;
-    }
     .table>tbody>tr>td{
         padding: 1px !important;
         font-size: 12px;
@@ -142,21 +117,23 @@
     <div id="tabs_list" class="col-xs-9">
         <ul class="nav nav-tabs" role="tablist">
             <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">
-                <span class="glyphicon glyphicon-info-sign"></span> Instructions </a>
+                <span class="glyphicon glyphicon-info-sign"></span> Instructions</a>
             </li>
             <li role="presentation"><a href="#loadimage" aria-controls="loadimage" role="tab" data-toggle="tab">
-                <span class="glyphicon glyphicon-circle-arrow-down"></span> Load Images </a>
+                <span class="glyphicon glyphicon-circle-arrow-down"></span> Load Images</a>
             </li>
             {% if stype == "omf" %}
             <li role="presentation"><a href="#manager" aria-controls="manager" role="tab" data-toggle="tab">
-                <span class="glyphicon glyphicon-play"></span> Execute Manager </a>
-            </li>
+                <span class="glyphicon glyphicon-play"></span> Script Manager</a>
             {% endif %}
+            <li role="presentation"><a href="#terminal" aria-controls="terminal" role="tab" data-toggle="tab">
+                <span class="glyphicon glyphicon-expand"></span> Terminal</a>
+            </li>
             <li role="presentation"><a href="#saveimage" aria-controls="saveimage" role="tab" data-toggle="tab">
-                <span class="glyphicon glyphicon-cloud-download"></span> Save Images </a>
+                <span class="glyphicon glyphicon-cloud-download"></span> Save Images</a>
             </li>
             <li role="presentation"><a href="#remote" aria-controls="remote" role="tab" data-toggle="tab">
-                <span class="glyphicon glyphicon-flash"></span> Remote Control </a>
+                <span class="glyphicon glyphicon-flash"></span> Remote Control</a>
             </li>
         </ul>
         <div class="tab-content">
@@ -401,7 +378,7 @@
                                             <button id="execute_script" class="submit btn btn-danger" type="button" name="execute_script">
                                                 Execute/Run
                                             </button>
-                                            <button id="abort_script" class="submit btn btn-danger" type="button" name="abort_script" disabled>
+                                            <button id="abort_script" class="submit btn btn-danger" type="button" name="abort_script" style="display: none;" disabled>
                                                 Abort
                                             </button>
                                         </div>
@@ -427,6 +404,34 @@
             </div>
             {% endif %}
 
+            <div role="tabpanel" class="tab-pane" id="terminal">
+                <h4>Remote Control Machine</h4>
+                <div class="well"> <!--control_save_image-->
+                    <form class="cmxform form-horizontal" id="terminal-form" method="post"
+                          action="control_remote_node" enctype="multipart/form-data" role="form">
+                        <fieldset>
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <div class="col-xs-12">
+                                    <div class="ui-widget btn-toolbar" role="group">
+                                        <div class="btn-group" role="group">
+                                            <button id="terminal_con" class="btn btn-info" type="button">Connect</button>
+                                        </div>
+                                    </div>
+                                    <iframe id="terminal_window" src="#"
+                                            sandbox="allow-same-origin allow-scripts"
+                                            height="400px" scrolling="no" width="100%"
+                                            enabled="false" align="middle"
+                                            frameborder="1" marginwidth="100" class="console">
+                                        <p>Terminal cannot be shown because this browser doesnt support iframes.</p>
+                                    </iframe>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+
+                </div>
+            </div>
         </div>
         <div id="fade"></div>
         <div id="modal">
@@ -479,7 +484,8 @@ var exe_List=[];
 var activityTable;
 var change_flag = false;
 var deadline = new Date("{{ deadline.isoformat }}");
-var show_warning = false;
+var show_warning = true;
+
 $(document).ready(function(){
     activityTable = document.getElementById("activity_tbl").getElementsByTagName('tbody')[0];
     {% if stype == "omf" %}
@@ -488,7 +494,6 @@ $(document).ready(function(){
     update_testbeds();
     initializeClock('clockdiv', deadline);
 });
-
 /***************************************** Editor ************/
 {% if stype == "omf" %}
     var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
@@ -501,8 +506,6 @@ $(document).ready(function(){
         }});
 {% endif %}
 /*********************************************** Timer **/
-
-
 function myTimer() {
     for (var a in loading_List) {
         checking_status_image(loading_List[a][0], loading_List[a][1], a,loading_List, "control_check_load");
@@ -551,15 +554,15 @@ function initializeClock(id, endtime) {
           document.location.href = '/portal/dashboard/';
         }
 
-        if( ! (show_warning) && (t.total/1000/60)<=5 )
+        if( (show_warning) && (t.total/1000/60)<=5 )
         {
-            show_warning = true;
+            show_warning = false;
             alert("Remaining time is less than 5 minutes, Save your image(s) if you want to keep your data.");
         }
     }
     updateClock();
     var timeinterval = setInterval(updateClock, 1000);
-    var timecheck = setInterval(myTimer, 10000);
+    var timecheck = setInterval(myTimer, 5000);
 };
 
 /*********************************************** Remote Actions */
@@ -594,8 +597,7 @@ function remote(action,node_name,aid) {
             if(result=="eof")
             {
                 document.location.href = '/portal/lab/current/';
-            }
-            else{
+            }else{
                 print_recolor(aid,1,result);
             }
             change_flag = true;
@@ -623,13 +625,13 @@ $('#code_clear').on('click', function(event){
 
 $('#sample-1').on('click', function(event){
     event.preventDefault();
-    aid = add_activity("Get PING Sample");
+    aid = add_activity("Load PING Sample");
     load_samples("sample-1",aid);
 });
 
 $('#sample-2').on('click', function(event){
     event.preventDefault();
-    aid = add_activity("Get USRP Sample");
+    aid = add_activity("Load USRP Sample");
     load_samples("sample-2",aid);
 });
 
@@ -642,25 +644,27 @@ $('#execute_script').on('click', function(event){
     event.preventDefault();
     aid = add_activity("Running Script");
     create_exe_post(aid);
-    exe_button(0);
 });
 
 $('#abort_script').on('click', function(event){
     event.preventDefault();
     //aid = add_activity("Cancel Script");
     abort_script_exe(exe_List[0][0],exe_List[0][1],0,exe_List);
-    exe_button(1);
 });
 
 function exe_button(state)
 {
     if( state == 0){  //Disable exe
+        $('#execute_script').attr("style","display: none;");
         $('#execute_script').attr("disabled","disabled");
+        $('#abort_script').removeAttr("style");
         $('#abort_script').removeAttr("disabled");
     }
     else if( state == 1)
     {
         $('#abort_script').attr("disabled","disabled");
+        $('#abort_script').attr("style","display: none;");
+        $('#execute_script').removeAttr("style");
         $('#execute_script').removeAttr("disabled");
     }
 };
@@ -678,7 +682,7 @@ function load_samples(sample_no,aid) {
             closeModal();
         },
         error : function(xhr,errmsg,err) {
-            print_recolor(aid,3,"Unexpected Error, try again later");
+            print_recolor(aid,3,"Server not connected, try again later");
             closeModal();
         }
     });
@@ -695,10 +699,12 @@ function create_exe_post(aid) {
             print_recolor(aid,2,"In progress");
             exe_List.push([json['exp_id'],aid]);
             closeModal();
+            exe_button(0);
         },
         error : function(xhr,errmsg,err) {
-            print_recolor(aid,3,"Unexpected Error, try again later");
+            print_recolor(aid,3,"Server not connected, try again later");
             closeModal();
+            exe_button(1);
         }
     });
 };
@@ -721,10 +727,12 @@ function abort_script_exe(eid, aid, idx, a_list) {
                 }
             }
             a_list.splice(idx,1);
+            exe_button(1);
         },
         error : function(xhr,errmsg,err) {
            console.log(err);
-           print_recolor(aid,3,"Unexpected Error, try again later");
+           print_recolor(aid,3,"Server not connected, try again later");
+           exe_button(0);
         }
     });
 };
@@ -754,7 +762,7 @@ function checking_status_exe(eid, aid, idx, a_list) {
         },
         error : function(xhr,errmsg,err) {
            console.log(err);
-           print_recolor(aid,3,"Unexpected Error, try again later");
+           print_recolor(aid,3,"Server not connected, try again later");
            a_list.splice(idx,1);
         }
     });
@@ -834,7 +842,7 @@ function saving_image(node_name,image_name, aid) {
             closeModal();
         },
         error : function(xhr,errmsg,err) {
-            print_recolor(aid,3,"Unexpected Error, try again later");
+            print_recolor(aid,3,"Server Error, try again later");
             closeModal();
         }
     });
@@ -869,12 +877,23 @@ function checking_status_image(node_name, aid, idx, a_list, a_url) {
         },
         error : function(xhr,errmsg,err) {
            console.log(err);
-           print_recolor(aid,3,"Unexpected Error, try again later");
+           print_recolor(aid,3,"Server not connected, try again later");
            a_list.splice(idx,1);
         }
     });
 };
+/********************************************* Terminal **/
 
+$("#terminal_con").on('click', function(event){
+    connect_terminal();
+});
+
+function connect_terminal(){
+    var address  = ("https://193.227.16.154:4200/");
+    var element  = document.getElementById("terminal_window");
+    //var url =  element.src;
+    element.src  = address;
+};
 /*********************************************** ALL ***/
 function add_activity(a_name) {
     count++;

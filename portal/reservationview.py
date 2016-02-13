@@ -3,13 +3,14 @@ __author__ = 'qursaan'
 from dateutil import parser
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.utils import timezone
 
 from portal.actions import get_authority_by_user, get_authority_emails, \
-    get_user_by_email, schedule_omf_online, schedule_sim_online, \
-    checking_omf_time, checking_sim_time
+    get_user_by_email, schedule_auto_online, \
+    checking_omf_time, checking_sim_time # schedule_sim_online, \
 from portal.models import SimReservation, Reservation, ReservationDetail, \
     SimulationImage, TestbedImage, ResourcesInfo, VirtualNode, PhysicalNode, SimulationVM
 from ui.topmenu import topmenu_items, the_user
@@ -19,7 +20,7 @@ from unfold.page import Page
 # TODO: @qursaan
 from crc.settings import SUPPORT_EMAIL, MAX_OMF_DURATION, MAX_SIM_DURATION
 from datetime import timedelta
-from django.http import HttpResponse, HttpResponseRedirect
+
 
 
 class ReservationView(LoginRequiredAutoLogoutView):
@@ -134,8 +135,8 @@ class ReservationView(LoginRequiredAutoLogoutView):
                         p.save()
 
                     # TODO: @qursaan
-                    if not schedule_omf_online(s.id):
-                        self.errors.append('Sorry, Time slot are not free')
+                    if not schedule_auto_online(s.id, "omf"):
+                        self.errors.append('Sorry, Time slot is not free')
                         s.delete()
 
                 elif server_type == "sim":
@@ -155,8 +156,8 @@ class ReservationView(LoginRequiredAutoLogoutView):
                     )
                     s.save()
                     # TODO: @qursaan
-                    if not schedule_sim_online(s.id):
-                        self.errors.append('Sorry, Time slot are not free')
+                    if not schedule_auto_online(s.id, "sim"):
+                        self.errors.append('Sorry, Time slot is not free')
                         s.delete()
 
             if not self.errors:
@@ -232,8 +233,8 @@ def check_availability(request):
     m1 = int((parser.parse(start_time).strftime('%M')))
     m2 = int((parser.parse(end_time).strftime('%M')))
 
-    start_datetime = start_date + timedelta(hours=h1, minutes=m1)
-    end_datetime = end_date + timedelta(hours=h2, minutes=m2)
+    start_datetime = timezone.make_aware(start_date + timedelta(hours=h1, minutes=m1))
+    end_datetime = timezone.make_aware(end_date + timedelta(hours=h2, minutes=m2))
 
     if the_type == "omf":
         the_nodes = request.POST.getlist('the_nodes[]', None)

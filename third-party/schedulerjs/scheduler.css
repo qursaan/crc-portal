@@ -188,6 +188,9 @@ NB:
 .legend ol li.free{
 
 }
+.legend ol li.expired{
+    background: #B1A583;
+}
 .legend ol li.closed{
     background: url("../img/closed-lock-15.png") no-repeat scroll 8px 50% #DD4444;
 }
@@ -197,4 +200,17 @@ NB:
 }
 .legend ol li.selected {
     background: #25BA25;
+}
+
+#scheduler{
+    border: 1px solid #e0e0e0;
+}
+#scheduler .reserved{
+    background-color: #FF9999 ;
+}
+#scheduler .expired{
+    background-color: #B1A583;
+}
+#scheduler .pending{
+    background-color: #63D463;
 }

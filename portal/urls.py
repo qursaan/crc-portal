@@ -1,7 +1,7 @@
 from django.views.generic.base import TemplateView
 # from django.views.generic      import TemplateView
 # from django.views              import generic
-from django.conf.urls import url, include  # patterns
+from django.conf.urls import url  # patterns
 
 from portal.homeview import HomeView
 from portal.registrationview import RegistrationView
@@ -10,18 +10,20 @@ from portal.supportview import SupportView
 from portal.contactview import ContactView
 from portal.dashboardview import DashboardView
 from portal.validationview import ValidatePendingView
-# from portal.slicerequestview import SliceRequestView
+
 from portal.slicependingview import SliceCurrentView, SliceHistoryView,\
     slice_o_pending_process, slice_s_pending_process, \
     slice_o_pending_cancel, slice_s_pending_cancel
+
 from portal.slicecontrolview import SliceControlView, \
     control_load_image, control_save_image, \
     control_check_load, control_check_save, \
     control_load_sample, control_remote_node, \
     control_exe_script, control_check_exe, control_exe_abort
+
 from portal.sliceview import SliceView
 from portal.testbedview import TestbedView, check_status
-from portal.schedulerview import SchedulerView
+from portal.schedulerview import SchedulerView, check_scheduler
 from portal.documentationview import DocumentationView
 from portal.experimentview import ExperimentView
 from portal.navigation import *
@@ -31,9 +33,6 @@ from portal.reservationview import ReservationView, check_availability
 
 #
 #
-from portal.django_passresetview import password_reset, password_reset_done, password_reset_confirm, \
-    password_reset_complete
-from portal.navigation import action_load_save_image
 
 urlpatterns = [
     url(r'^access/?$', HomeView.as_view(), name='access'),
@@ -78,6 +77,7 @@ urlpatterns = [
     url(r'^testbeds/map/check_status?$', check_status),
     # url(r'^testbeds/timeline/?$', TimelineView.as_view(), name='Timeline'),
     url(r'^testbeds/scheduler/?$', SchedulerView.as_view(), name='Scheduler'),
+    url(r'^testbeds/scheduler/check_scheduler?$', check_scheduler),
     url(r'^testbeds/slice/?$', SliceView.as_view(), name='slice'),
 
     # Tools
@@ -104,6 +104,7 @@ urlpatterns = [
     # url(r'^lab/slice_request/?$', SliceRequestView.as_view(), name='slice_request'),
     url(r'^lab/reservation/?$', ReservationView.as_view(), name='Reservation'),
     url(r'^lab/reservation/check_availability?$', check_availability),
+
 
     # Others
     url(r'/?$', un_complete_page),

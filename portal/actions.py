@@ -39,41 +39,68 @@ def schedule_slice(slice_id):
     return True
 
 
-def schedule_omf_online(reserve_id):
-    curr_slice = Reservation.objects.get(id=reserve_id)
-    curr_detail = ReservationDetail.objects.filter(reservation_ref=curr_slice)
+def schedule_auto_online(reserve_id, stype="omf"):
+    curr_slice = None
     new_list = []
-    for n in curr_detail:
-        new_list.append(n.node_ref)
 
-    curr_time = curr_slice.f_start_time
-    while curr_time < curr_slice.f_end_time:
-        overlap = Reservation.objects.filter(status=3, start_time=curr_time)
-        # check nodes
-        for r in overlap:
-            details = ReservationDetail.objects.filter(reservation_ref=r, node_ref__in=new_list)
+    if stype == "omf":
+        curr_slice = Reservation.objects.get(id=reserve_id)
+        curr_detail = ReservationDetail.objects.filter(reservation_ref=curr_slice)
+        for n in curr_detail:
+            new_list.append(n.node_ref)
 
-            if details.exists():
-                break
-        if not overlap:
+    elif stype == "sim":
+        curr_slice = SimReservation.objects.get(id=reserve_id)
+        new_list = [curr_slice.node_ref]
+
+    dur = int(curr_slice.slice_duration)
+    curr_start = curr_slice.f_start_time
+    last_end = curr_slice.f_end_time - timedelta(hours=dur)
+    overlap_flag = False
+
+    if last_end <= curr_start:
+        last_end = curr_slice.f_end_time
+
+    while curr_start <= last_end:
+        curr_end = curr_start + timedelta(hours=dur)
+        overlap = None
+        overlap_flag = False
+        if stype == "omf":
+            overlap = Reservation.objects.filter(status=3, start_time__lte=curr_start, end_time__gte=curr_end)
+            # check nodes
+            for r in overlap:
+                details = ReservationDetail.objects.filter(reservation_ref=r, node_ref__in=new_list)
+                if details.exists():
+                    overlap_flag = True
+                    break
+
+        elif stype == "sim":
+            overlap = SimReservation.objects.filter(status=3, start_time__lte=curr_start, end_time__gte=curr_end, node_ref__in=new_list)
+
+            if overlap.exists():
+                overlap_flag = True
+
+        if not overlap_flag:
             break
-        curr_time = curr_time + timedelta(hours=1)
+        else:
+            curr_start = curr_start + timedelta(hours=1)
 
     # end search with time slot
-    if curr_time < curr_slice.f_end_time:
-        curr_slice.start_time = curr_time
-        curr_slice.end_time = curr_time + timedelta(hours=1)
-        curr_slice.approve_date = datetime.now()
-        curr_slice.status = 3
+    if curr_start < curr_slice.f_end_time:
+        curr_slice.start_time   = curr_start
+        curr_slice.end_time     = curr_end  # curr_start + timedelta(hours=dur)
+        curr_slice.approve_date = timezone.now()
+        curr_slice.status       = 3
         curr_slice.save()
         return True
     else:
         return False
 
-
+""" 24801787
 def schedule_sim_online(reserve_id):
     curr_slice = SimReservation.objects.get(id=reserve_id)
     dur = int(curr_slice.slice_duration)
+
     curr_time = curr_slice.f_start_time
     lst_end = curr_slice.f_end_time - timedelta(hours=dur)
     while curr_time <= lst_end:
@@ -94,6 +121,7 @@ def schedule_sim_online(reserve_id):
         return True
     else:
         return False
+"""
 
 
 # to check time slot for omf testbeds
@@ -104,13 +132,13 @@ def checking_omf_time(nodelist, start_datetime, end_datetime):
         new_list.append(int(n))
     curr_time = start_datetime
     while curr_time < end_datetime:
-        overlap = Reservation.objects.filter(status=3, start_time=curr_time)
+        overlap = Reservation.objects.filter(status=3, start_time__lte=curr_time, end_time__gte=curr_time)
         for r in overlap:
             nodes = VirtualNode.objects.filter(pk__in=new_list)
             details = ReservationDetail.objects.filter(reservation_ref=r).filter(node_ref__in=nodes)
             for d in details:
-                d1 = utc_to_time(r.start_time).strftime("%Y-%m-%d %H:%M")
-                d2 = utc_to_time(r.end_time).strftime("%Y-%m-%d %H:%M")
+                d1 = utc_to_timezone(r.start_time).strftime("%Y-%m-%d %H:%M")
+                d2 = utc_to_timezone(r.end_time).strftime("%Y-%m-%d %H:%M")
                 message += "<li>Node: " + d.node_ref.vm_name + " Busy [" + d1 + " : " + d2 + "]</li>"
         curr_time = curr_time + timedelta(hours=1)
     if message:
@@ -126,11 +154,11 @@ def checking_sim_time(nodelist, start_datetime, end_datetime, slice_duration):
     while curr_time < lst_end:
         curr_end = curr_time + timedelta(hours=int(slice_duration))
         nodes = SimulationVM.objects.filter(pk__in=nodelist)
-        overlap = SimReservation.objects.filter(status=3, start_time=curr_time, end_time=curr_end, node_ref=nodes)
+        overlap = SimReservation.objects.filter(status=3, start_time__lte=curr_time, end_time__gte=curr_end, node_ref=nodes)
 
         for r in overlap:
-            d1 = utc_to_time(r.start_time).strftime("%Y-%m-%d %H:%M")
-            d2 = utc_to_time(r.end_time).strftime("%Y-%m-%d %H:%M")
+            d1 = utc_to_timezone(r.start_time).strftime("%Y-%m-%d %H:%M")
+            d2 = utc_to_timezone(r.end_time).strftime("%Y-%m-%d %H:%M")
             message += "<li>VM Node: " + r.vm_ref.vm_name + " Busy [" + d1 + " : " + d2 + "]</li>"
         curr_time = curr_time + timedelta(hours=1)
     if message:
@@ -138,9 +166,9 @@ def checking_sim_time(nodelist, start_datetime, end_datetime, slice_duration):
     return message
 
 
-def utc_to_time(naive):
+def utc_to_timezone(utc):
     current_tz = str(timezone.get_current_timezone())  # ="Africa/Cairo"
-    return naive.replace(tzinfo=pytz.utc).astimezone(pytz.timezone(current_tz))
+    return utc.replace(tzinfo=pytz.utc).astimezone(pytz.timezone(current_tz))
 
 
 # ************* Get Next Free Hour/Day **************** #

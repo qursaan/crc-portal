@@ -1,6 +1,6 @@
 {% extends "layout-unfold1.html" %}
 {% block unfold_main %}
-
+<link rel="stylesheet" href="{{STATIC_URL}}css/fade.css"/>
 <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/jquery.timepicker.css" />
 <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/bootstrap-datetimepicker.min.css" />
 <!--link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/bootstrap-datepicker.css" /-->
@@ -15,6 +15,7 @@
 
 <style>
     .center{float:none;margin-left:auto;margin-right:auto;}
+
 </style>
 
 <div style="text-align:center" class="well-sm">
@@ -31,7 +32,8 @@
 
 
 <div class='well'>
-    <form name ="omf-form" id="omf-form" role="form" class="form-horizontal" method="post"> <!--class="cmxform form-horizontal" id="exe-image-form"
+    <form name ="omf-form" id="omf-form" role="form" class="form-horizontal" method="post">
+        <!--class="cmxform form-horizontal" id="exe-image-form"
      action="create_post"  enctype="multipart/form-data" -->
         <fieldset>
             {% csrf_token %}
@@ -41,14 +43,14 @@
                     <div class="ui-widget">
                         <select id="server_type" name="server_type" class="form-control"
                         value="{{ server_type }}" >
-                            <option value="omf" label="Testbed Nodes" ></option>
-                            <option value="sim" label="Simulation Server" ></option>
+                            <option value="omf" label="Testbed Nodes" >Testbed Nodes</option>
+                            <option value="sim" label="Simulation Server" >Simulation Server</option>
                         </select>
                     </div>
                 </div>
             </div>
             <div class="form-group">
-                <label for="request_date" class="col-xs-4 control-label">Start Date & Time</label>
+                <label for="request_date" class="col-xs-4 control-label">Date</label>
                 <div class="col-xs-4">
                     <div  class="ui-widget">
                         <div id='active_time' data-provide="datepicker">
@@ -57,22 +59,24 @@
                       </div>
                     </div>
                 </div>
-                <div class="col-xs-1">
-                    <button class="input-group submit btn btn-info" type="submit" name="g_reserve">GET</button>
+                <div class="col-xs-4">
+                    <button id="g_reserve" class="btn btn-info" type="button" name="g_reserve">View</button>
                 </div>
-                <!--div class="col-xs-1">
-                    <button id="toggle-selector-button" class="btn btn-default" type="button">Toggle Selector</button>
-                </div-->
             </div>
             <div class="form-group">
                 <div id="scheduler"></div>
+                <!--div id="fade"></div-->
+                <div id="modal">
+                    <img id="loader" src="{{STATIC_URL}}/img/loading1.gif"/>
+                </div>
             </div>
             <div class="form-group">
                 <div class="col-xs-1"></div>
-                <div class="col-xs-6">
+                <div class="col-xs-8">
                     <div class="legend">
                         <ol>
                             <li class="free">free</li>
+                            <li class="expired">expired</li>
                             <li class="selected">selected</li>
                             <li class="closed">reserved</li>
                             <li class="maintenance">maintenance</li>
@@ -80,18 +84,20 @@
                     </div>
                 </div>
             </div>
+            <div class="form-group">
+                <div class="col-xs-8">
+                    <button id="toggle-selector-button" class="btn btn-default" type="button">Toggle Selector</button>
+                    <!--button id="gettime" class="btn btn-danger">Reserve selected times</button-->
+                </div>
+            </div>
         </fieldset>
         <!--div id="times"></div-->
     </form>
-    <div class="form-group">
-        <!--div class="col-xs-2">
-            <button id="gettime" class="btn btn-danger">Get selected times</button>
-        </div-->
 
-    </div>
 </div>
 
 <script type="text/javascript">
+var $scheduler ;
 
 $('#server_type').change(function(){
     if($(this).val()=="omf"){
@@ -114,35 +120,44 @@ $('#request_date').datepicker({
     autoclose: true,
 });
 
+$("#g_reserve").on('click', function(event){
+    stype  = $('#server_type').val();
+    d1     = $('input[name="request_date"]').val();
+    update_timeline(stype,d1);
+});
+
+function update_timeline(stype, sdate) {
+    openModal();
+    $.ajax({
+        url  : "check_scheduler",
+        type : "POST",
+        data : {the_date: sdate, the_type: stype, },
+        success : function(result) {
+            $scheduler.schedulerjs('update', result);
+            closeModal();},
+        error : function(xhr,errmsg,err) {
+            $scheduler.schedulerjs('update' ,[]);
+            closeModal();
+        }});
+};
 
 $(document).ready(function(){
-    {% if server_type == 'sim' %}
-        $('#server_type').prop("selectedIndex", 1);
-    {% endif %}
     $('#request_date').val('{{request_date|date:"d-F-Y"}}'); //moment().format('DD-MMMM-YYYY')); //
     $('#request_date').datepicker({'format':'dd-mm-yyyy'});
 
-    //var server = document.getElementById("server_type");
-    //var type = server.options[server.selectedIndex].value;
-    var list = [];
-    {% for n in node_list %}
-        y = {'name': '{{n}}',
-            'appointments': [
-            {% for rr in reserve_list %}
-                {% if server_type == "omf" %}
-                    {% if rr.node_ref.id = n.id %}
-                        {'start': '{{ rr.reservation_ref.start_time|date:"H:i" }}', 'end'  : '{{ rr.reservation_ref.end_time|date:"H:i" }}', 'title': '{{ rr.reservation_ref.user_ref }}'},
-                    {% endif %}
-                {% elif server_type == "sim" %}
-                    {% if rr.vm_ref.id = n.id %}
-                        {'start': '{{ rr.start_time|date:"H:i" }}', 'end'  : '{{ rr.end_time|date:"H:i" }}', 'title': '{{ rr.user_ref }}'},
-                    {% endif %}
-                {% endif %}
-            {% endfor %}
-        ]};
-        list.push(y);
-    {% endfor %}
+    scheduler_prepare();
 
+    $("#gettime").click(function(){
+        var times = $scheduler.schedulerjs('selected');
+        $("#times").html(times.start + ' - ' + times.end);
+    });
+    $("#toggle-selector-button").click(function(){
+        $scheduler.schedulerjs('toggleSelector');
+    });
+});
+
+function scheduler_prepare(){
+    var list = {{ reserve_list|safe }};
     var steps = [];
     for(i=0; i<10;i++)
         steps.push('0'+i+':00');
@@ -156,7 +171,7 @@ $(document).ready(function(){
     var defaultStartTime = '09:00';
     var defaultEndTime = '10:00';
     var onClickAppointment = function(payload){};
-    var $scheduler = $("#scheduler").schedulerjs({
+    $scheduler = $("#scheduler").schedulerjs({
         'list': list,
         'steps': steps,
         'snapTo': snapTo,
@@ -167,14 +182,14 @@ $(document).ready(function(){
         'onClickAppointment': onClickAppointment
     });
     $scheduler.schedulerjs('toggleSelector');
-    $("#gettime").click(function(){
-        var times = $scheduler.schedulerjs('selected');
-        $("#times").html(times.start + ' - ' + times.end);
-    });
-    $("#toggle-selector-button").click(function(){
-        $scheduler.schedulerjs('toggleSelector');
-    });
-});
+};
 
+function openModal() {
+    document.getElementById('modal').style.display = 'block';
+};
+
+function closeModal() {
+    document.getElementById('modal').style.display = 'none';
+};
 </script>
 {% endblock %}
