@@ -9,8 +9,7 @@ from django.template.loader import render_to_string
 from django.utils import timezone
 
 from portal.actions import get_authority_by_user, get_authority_emails, \
-    get_user_by_email, schedule_auto_online, \
-    checking_omf_time, checking_sim_time # schedule_sim_online, \
+    get_user_by_email, schedule_auto_online, schedule_checking # schedule_sim_online, \
 from portal.models import SimReservation, Reservation, ReservationDetail, \
     SimulationImage, TestbedImage, ResourcesInfo, VirtualNode, PhysicalNode, SimulationVM
 from ui.topmenu import topmenu_items, the_user
@@ -238,11 +237,13 @@ def check_availability(request):
 
     if the_type == "omf":
         the_nodes = request.POST.getlist('the_nodes[]', None)
-        msg = checking_omf_time(the_nodes, start_datetime, end_datetime)
+        # msg = checking_omf_time(the_nodes, start_datetime, end_datetime)
+        msg  = schedule_checking(the_nodes, start_datetime, end_datetime, "omf")
     elif the_type == "sim":
         the_nodes = request.POST.get('the_nodes', None)
         the_dur = request.POST.get('the_dur', None)
-        msg = checking_sim_time(the_nodes, start_datetime, end_datetime, the_dur)
+        msg  = schedule_checking(the_nodes, start_datetime, end_datetime, "sim")
+        # msg = checking_sim_time(the_nodes, start_datetime, end_datetime, the_dur)
 
     if not msg:
         return HttpResponse('{"free":"1","msg":"Free"}', content_type="application/json")

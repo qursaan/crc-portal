@@ -12,14 +12,6 @@ from portal.models import Authority, MyUser, PendingSlice, \
     Reservation, ReservationDetail, SimReservation, SimulationVM
 
 
-# Thierry: moving this right into the code so
-# most people can use myslice without having to install sfa
-# XXX tmp sfa dependency, should be moved to SFA gateway
-# from sfa.util.xrn                import Xrn
-# from manifold.core.query         import Query
-# from manifold.manifoldapi        import execute_query,execute_admin_query
-
-
 # ************* Default Scheduling Slice ************** #
 def schedule_slice(slice_id):
     curr_slice = PendingSlice.objects.get(id=slice_id)
@@ -56,14 +48,16 @@ def schedule_auto_online(reserve_id, stype="omf"):
     dur = int(curr_slice.slice_duration)
     curr_start = curr_slice.f_start_time
     last_end = curr_slice.f_end_time - timedelta(hours=dur)
-    overlap_flag = False
+    # overlap_flag = False
 
     if last_end <= curr_start:
         last_end = curr_slice.f_end_time
 
+    curr_end = None
+
     while curr_start <= last_end:
         curr_end = curr_start + timedelta(hours=dur)
-        overlap = None
+        # overlap = None
         overlap_flag = False
         if stype == "omf":
             overlap = Reservation.objects.filter(status=3, start_time__lte=curr_start, end_time__gte=curr_end)
@@ -75,7 +69,8 @@ def schedule_auto_online(reserve_id, stype="omf"):
                     break
 
         elif stype == "sim":
-            overlap = SimReservation.objects.filter(status=3, start_time__lte=curr_start, end_time__gte=curr_end, node_ref__in=new_list)
+            overlap = SimReservation.objects.filter(status=3, start_time__lte=curr_start, end_time__gte=curr_end,
+                                                    node_ref__in=new_list)
 
             if overlap.exists():
                 overlap_flag = True
@@ -87,83 +82,65 @@ def schedule_auto_online(reserve_id, stype="omf"):
 
     # end search with time slot
     if curr_start < curr_slice.f_end_time:
-        curr_slice.start_time   = curr_start
-        curr_slice.end_time     = curr_end  # curr_start + timedelta(hours=dur)
+        curr_slice.start_time = curr_start
+        curr_slice.end_time = curr_end  # curr_start + timedelta(hours=dur)
         curr_slice.approve_date = timezone.now()
-        curr_slice.status       = 3
-        curr_slice.save()
-        return True
-    else:
-        return False
-
-""" 24801787
-def schedule_sim_online(reserve_id):
-    curr_slice = SimReservation.objects.get(id=reserve_id)
-    dur = int(curr_slice.slice_duration)
-
-    curr_time = curr_slice.f_start_time
-    lst_end = curr_slice.f_end_time - timedelta(hours=dur)
-    while curr_time <= lst_end:
-        curr_end = curr_time + timedelta(hours=dur)
-        overlap = SimReservation.objects.filter(status=3, start_time=curr_time, end_time=curr_end)
-        # check nodes
-        if not overlap.exists():
-            break
-        curr_time = curr_time + timedelta(hours=1)
-
-    # end search with time slot
-    if curr_time <= lst_end:
-        curr_slice.start_time = curr_time
-        curr_slice.end_time = curr_time + timedelta(hours=dur)
-        curr_slice.approve_date = datetime.now()
         curr_slice.status = 3
         curr_slice.save()
         return True
     else:
         return False
-"""
 
 
-# to check time slot for omf testbeds
-def checking_omf_time(nodelist, start_datetime, end_datetime):
-    message = ""
+def schedule_checking(nodelist, start_datetime, end_datetime, stype="omf"):
     new_list = []
     for n in nodelist:
         new_list.append(int(n))
-    curr_time = start_datetime
-    while curr_time < end_datetime:
-        overlap = Reservation.objects.filter(status=3, start_time__lte=curr_time, end_time__gte=curr_time)
+
+    curr_start = start_datetime
+    curr_end = end_datetime
+
+    status_list = [2, 3]
+    overlap = None
+    node_list = []
+    output_list = ""
+
+    if stype == "omf":
+        node_list = VirtualNode.objects.filter(pk__in=new_list)
+        overlap = ReservationDetail.objects.filter(
+            reservation_ref__status__in=status_list, node_ref__in=node_list)  # .filter(
+        # Q(reservation_ref__start_time__gte=curr_start) | Q(reservation_ref__end_time__lt=curr_end))
+    elif stype == "sim":
+        node_list = SimulationVM.objects.filter(pk__in=nodelist)
+        overlap = SimReservation.objects.filter(status__in=status_list, node_ref__in=node_list)  # .filter(
+        # Q(start_time__gte=curr_start) | Q(end_time__lt=curr_end))
+
+    for n in node_list:
         for r in overlap:
-            nodes = VirtualNode.objects.filter(pk__in=new_list)
-            details = ReservationDetail.objects.filter(reservation_ref=r).filter(node_ref__in=nodes)
-            for d in details:
+            if r.node_ref.id == n.id:
+                t1 = t2 = None
+
+                # correct ref
+                if stype == "omf":
+                    r = r.reservation_ref
+
+                # case 0: assume  start & end between s and e
+                t1 = r.start_time
+                t2 = r.end_time
+
+                # case 1: if end & start out  s and e then discard
+                if t1 < t2 < curr_start or curr_end < t1 < t2:
+                    continue
+
                 d1 = utc_to_timezone(r.start_time).strftime("%Y-%m-%d %H:%M")
                 d2 = utc_to_timezone(r.end_time).strftime("%Y-%m-%d %H:%M")
-                message += "<li>Node: " + d.node_ref.vm_name + " Busy [" + d1 + " : " + d2 + "]</li>"
-        curr_time = curr_time + timedelta(hours=1)
-    if message:
-        message = "<ul>" + message + "</ul>"
-    return message
+                z = "<li>Node: " + str(n) + " Busy [" + d1 + " : " + d2 + "]</li>"
 
-
-# to check time slot for simulation
-def checking_sim_time(nodelist, start_datetime, end_datetime, slice_duration):
-    message = ""
-    curr_time = start_datetime
-    lst_end = end_datetime - timedelta(hours=int(slice_duration))
-    while curr_time < lst_end:
-        curr_end = curr_time + timedelta(hours=int(slice_duration))
-        nodes = SimulationVM.objects.filter(pk__in=nodelist)
-        overlap = SimReservation.objects.filter(status=3, start_time__lte=curr_time, end_time__gte=curr_end, node_ref=nodes)
-
-        for r in overlap:
-            d1 = utc_to_timezone(r.start_time).strftime("%Y-%m-%d %H:%M")
-            d2 = utc_to_timezone(r.end_time).strftime("%Y-%m-%d %H:%M")
-            message += "<li>VM Node: " + r.vm_ref.vm_name + " Busy [" + d1 + " : " + d2 + "]</li>"
-        curr_time = curr_time + timedelta(hours=1)
-    if message:
-        message = "<ul>" + message + "</ul>"
-    return message
+                # output_list.append(z)
+                output_list += z
+    if output_list:
+        output_list = "<ul>" + output_list + "</ul>"
+    return output_list
 
 
 def utc_to_timezone(utc):
@@ -390,131 +367,6 @@ def get_requests(authority_hrns=None):
     return make_requests(pending_users, pending_slices, pending_authorities)
 
 
-# Get the list of authorities
-"""
-def authority_get_pis(request, authority_hrn):
-
-    query = Query.get('authority').filter_by('authority_hrn', '==', authority_hrn).select('pi_users')
-    results = execute_query(request, query)
-    # NOTE: temporarily commented. Because results is giving empty list.
-    # Needs more debugging
-    #if not results:
-    #    raise Exception, "Authority not found: %s" % authority_hrn
-    #result, = results
-    #return result['pi_users']
-    return results
-
-def authority_get_pi_emails(request, authority_hrn):
-    #return ['jordan.auge@lip6.fr', 'loic.baron@lip6.fr']
-
-    pi_users = authority_get_pis(request,authority_hrn)
-    pi_user_hrns = [ hrn for x in pi_users for hrn in x['pi_users'] ]
-    query = Query.get('user').filter_by('user_hrn', 'included', pi_user_hrns).select('email')
-    results = execute_query(request, query)
-    print "mails",  [result['email'] for result in results]
-    return [result['email'] for result in results]
-
-# SFA add record (user, slice)
-
-def sfa_add_user(request, user_params):
-    if 'email' in user_params:
-        user_params['user_email'] = user_params['email']
-    query = Query.create('user').set(user_params).select('user_hrn')
-    results = execute_query(request, query)
-    if not results:
-        raise Exception, "Could not create %s. Already exists ?" % user_params['hrn']
-    return results
-
-def sfa_update_user(request, user_hrn, user_params):
-    # user_params: keys [public_key]
-    if 'email' in user_params:
-        user_params['user_email'] = user_params['email']
-    query = Query.update('user').filter_by('user_hrn', '==', user_hrn).set(user_params).select('user_hrn')
-    results = execute_query(request,query)
-    return results
-
-def sfa_add_slice(request, slice_params):
-    query = Query.create('slice').set(slice_params).select('slice_hrn')
-    results = execute_query(request, query)
-    if not results:
-        raise Exception, "Could not create %s. Already exists ?" % slice_params['hrn']
-    return results
-
-def sfa_add_authority(request, authority_params):
-    query = Query.create('authority').set(authority_params).select('authority_hrn')
-    results = execute_query(request, query)
-    print "sfa_add_auth results=",results
-    if not results:
-        raise Exception, "Could not create %s. Already exists ?" % authority_params['hrn']
-    return results
-
-def sfa_add_user_to_slice(request, user_hrn, slice_params):
-# UPDATE myslice:slice SET researcher=['ple.upmc.jordan_auge','ple.inria.thierry_parmentelat','ple.upmc.loic_baron','ple.upmc.ciro_scognamiglio','ple.upmc.mohammed-yasin_rahman','ple.upmc.azerty'] where slice_hrn=='ple.upmc.myslicedemo'
-    query_current_users = Query.get('slice').select('user').filter_by('slice_hrn','==',slice_params['hrn'])
-    results_current_users = execute_query(request, query_current_users)
-    slice_params['researcher'] = slice_params['researcher'] | results_current_users
-    query = Query.update('slice').filter_by('user_hrn', '==', user_hrn).set(slice_params).select('slice_hrn')
-    results = execute_query(request, query)
-# Also possible but not supported yet
-# UPDATE myslice:user SET slice=['ple.upmc.agent','ple.upmc.myslicedemo','ple.upmc.tophat'] where user_hrn=='ple.upmc.azerty'
-    if not results:
-        raise Exception, "Could not create %s. Already exists ?" % slice_params['hrn']
-    return results
-
-# Propose hrn
-
-def manifold_add_user(request, user_params):
-    # user_params: email, password e.g., user_params = {'email':'aa@aa.com','password':'demo'}
-    query = Query.create('local:user').set(user_params).select('email')
-    results = execute_admin_query(request, query)
-    if not results:
-        raise Exception, "Failed creating manifold user: %s" % user_params['email']
-    result, = results
-    return result['email']
-
-def manifold_update_user(request, email, user_params):
-    # user_params: password, config e.g.,
-    query = Query.update('local:user').filter_by('email', '==', email).set(user_params).select('email')
-    results = execute_admin_query(request,query)
-    # NOTE: results remains empty and goes to Exception. However, it updates the manifold DB.
-    # That's why I commented the exception part. -- Yasin
-    #if not results:
-    #    raise Exception, "Failed updating manifold user: %s" % user_params['email']
-    #result, = results
-    return results
-
-def manifold_add_account(request, account_params):
-    query = Query.create('local:account').set(account_params).select(['user', 'platform'])
-    results = execute_admin_query(request,query)
-    if not results:
-        raise Exception, "Failed creating manifold account on platform %s for user: %s" % (account_params['platform'], account_params['user'])
-    result, = results
-    return result['user_id']
-
-def manifold_update_account(request,user_id,account_params):
-    # account_params: config
-    query = Query.update('local:account').filter_by('platform', '==', 'myslice').filter_by('user_id', '==', user_id).set(account_params).select('user_id')
-    results = execute_admin_query(request,query)
-    return results
-
-#explicitly mention the platform_id
-def manifold_delete_account(request, platform_id, user_id, account_params):
-    query = Query.delete('local:account').filter_by('platform_id', '==', platform_id).filter_by('user_id', '==', user_id).set(account_params).select('user_id')
-    results = execute_admin_query(request,query)
-    return results
-
-
-#not tested
-def manifold_add_platform(request, platform_params):
-    query = Query.create('local:platform').set(platform_params).select(['user', 'platform'])
-    results = execute_admin_query(request,query)
-    if not results:
-        raise Exception, "Failed creating manifold  platform %s for user: %s" % (platform_params['platform'], platform_params['user'])
-    result, = results
-    return result['platform_id']
-"""
-
-
 # XXX Is it in sync with the form fields ?
 def portal_validate_request(wsgi_request, request_ids):
     status = {}
@@ -535,70 +387,6 @@ def portal_validate_request(wsgi_request, request_ids):
         if request['type'] == 'user':
 
             try:
-                # XXX tmp user_hrn inside the keypair column of pendiguser table
-                ##                hrn = json.loads(request['keypair'])['user_hrn']
-                # hrn = "%s.%s" % (request['authority_hrn'], request['login'])
-                # XXX tmp sfa dependency
-                # from sfa.util.xrn import Xrn
-                ##                urn = Xrn(hrn, request['type']).get_urn()
-                ##                if 'pi' in request:
-                ##                    auth_pi = request['pi']
-                ##                else:
-                ##                    auth_pi = ''
-                ##                sfa_user_params = {
-                ##                    'hrn'        : hrn,
-                ##                    'urn'        : urn,
-                ##                    'type'       : request['type'],
-                ##                    'keys'       : [json.loads(request['keypair'])['user_public_key']],
-                ##                    'first_name' : request['first_name'],
-                ##                    'last_name'  : request['last_name'],
-                ##                    'email'      : request['email'],
-                ##                    #'slices'    : None,
-                ##                    #'researcher': None,
-                ##                    'pi'         : [auth_pi],
-                ##                    'enabled'    : True
-                ##                }
-                # ignored in request: id, timestamp, password
-
-                # ADD USER TO SFA Registry
-                ##                sfa_add_user(wsgi_request, sfa_user_params)
-
-                # USER INFO
-                ##                user_query  = Query().get('local:user').select('user_id','config','email','status').filter_by('email', '==', request['email'])
-                ##                user_details = execute_admin_query(request, user_query)
-                # print user_details[0]
-
-                # UPDATE USER STATUS = 2
-                ##                manifold_user_params = {
-                ##                    'status': 2
-                ##                }
-                ##                manifold_update_user(request, request['email'], manifold_user_params)
-
-                # USER MAIN ACCOUNT != reference
-                # print 'USER MAIN ACCOUNT != reference'
-                ##                list_accounts_query  = Query().get('local:account').select('user_id','platform_id','auth_type','config')\
-                ##                    .filter_by('user_id','==',user_details[0]['user_id'])\
-                ##                    .filter_by('auth_type','!=','reference')
-                ##                list_accounts = execute_admin_query(request, list_accounts_query)
-                ##                #print "List accounts = ",list_accounts
-                ##                for account in list_accounts:
-                ##                    main_platform_query  = Query().get('local:platform').select('platform_id','platform').filter_by('platform_id','==',account['platform_id'])
-                ##                    main_platform = execute_admin_query(request, main_platform_query)
-
-                # ADD REFERENCE ACCOUNTS ON SFA ENABLED PLATFORMS
-                # print 'ADD REFERENCE ACCOUNTS ON SFA ENABLED PLATFORMS'
-                ##                platforms_query  = Query().get('local:platform').filter_by('disabled', '==', '0').filter_by('gateway_type','==','sfa').select('platform_id','gateway_type')
-                ##                platforms = execute_admin_query(request, platforms_query)
-                ##                #print "platforms SFA ENABLED = ",platforms
-                ##                for platform in platforms:
-                ##                    #print "add reference to platform ",platform
-                ##                    manifold_account_params = {
-                ##                        'user_id': user_details[0]['user_id'],
-                ##                        'platform_id': platform['platform_id'],
-                ##                        'auth_type': 'reference',
-                ##                        'config': '{"reference_platform": "' + main_platform[0]['platform'] + '"}',
-                ##                    }
-                ##                    manifold_add_account(request, manifold_account_params)
                 up_user = MyUser.objects.get(id=request['id'])
                 web_user = User.objects.get(id=up_user.id)
                 # TODO: Create user file here
@@ -618,62 +406,11 @@ def portal_validate_request(wsgi_request, request_ids):
 
         elif request['type'] == 'slice':
             try:
-                """hrn = "%s.%s" % (request['authority_hrn'], request['slice_name'])
-                # XXX tmp sfa dependency
-                from sfa.util.xrn import Xrn
-                urn = Xrn(hrn, request['type']).get_urn()
-
-                # Add User to Slice if we have the user_hrn in pendingslice table
-                if 'user_hrn' in request:
-                    user_hrn = request['user_hrn']
-                    print "Slice %s will be created for %s" % (hrn,request['user_hrn'])
-                else:
-                    user_hrn=''
-                    print "Slice %s will be created without users %s" % (hrn)
-                sfa_slice_params = {
-                    'hrn'        : hrn,
-                    'urn'        : urn,
-                    'type'       : request['type'],
-                    #'slices'    : None,
-                    'researcher' : [user_hrn],
-                    #'pi'        : None,
-                    'enabled'    : True
-                }
-                # ignored in request: id, timestamp,  number_of_nodes, type_of_nodes, purpose
-
-                sfa_add_slice(wsgi_request, sfa_slice_params)
-                #sfa_add_user_to_slice(wsgi_request, user_hrn, sfa_slice_params)"""
-                # up_slice = PendingSlice.objects.get()
-
                 result = schedule_slice(request['id'])
                 request_status['CRC slice'] = {'status': result}
 
             except Exception, e:
                 request_status['CRC slice'] = {'status': False, 'description': str(e)}
-
-        """elif request['type'] == 'authority':
-            try:
-                #hrn = "%s.%s" % (request['authority_hrn'], request['site_authority'])
-                hrn = request['site_authority']
-                # XXX tmp sfa dependency
-                from sfa.util.xrn import Xrn
-                urn = Xrn(hrn, request['type']).get_urn()
-
-                sfa_authority_params = {
-                    'hrn'        : hrn,
-                    'urn'        : urn,
-                    'type'       : request['type'],
-                    #'pi'        : None,
-                    'enabled'    : True
-                }
-                print "ADD Authority"
-                sfa_add_authority(wsgi_request, sfa_authority_params)
-                request_status['CRC authority'] = {'status': True }
-
-            except Exception, e:
-                request_status['CRC authority'] = {'status': False, 'description': str(e)}
-        """
-        # XXX Remove from Pendings in database
 
         status['%s__%s' % (request['type'], request['id'])] = request_status
 

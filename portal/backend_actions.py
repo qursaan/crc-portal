@@ -55,10 +55,10 @@ def vm_shutdown(vm_name):
 # Imaging ############################################################
 def load_images(task_id, img_name, img_path, node_list):
     post_data = {
-        "task_id": str(task_id),
+        "task_id": task_id,
         "name": img_name,
         "path": img_path,
-        "nodes_list": [node_list]
+        "nodes_list": node_list
     }
     post_data = json.dumps(post_data)
     result = urllib2.urlopen('http://193.227.16.154:7777/api/v1/image/load', data=post_data)

@@ -53,8 +53,14 @@ def action_load_save_image(request, action):
 
     if not slice_on_time(request,stype):
         return HttpResponse('eof', content_type="text/plain")
-    # for any action  ##########
-    node_name = request.POST.get('the_node', None)
+    # for any action  ############# TODO: @qursaan
+
+    node_name = None
+    if action == 'load':
+        node_name = request.POST.getlist('the_node[]', None)
+    else:  # Save
+        node_name = request.POST.get('the_node', None)
+
     if not node_name:
         return HttpResponse("error: Please select at least one node", content_type="text/plain")
 
@@ -63,7 +69,16 @@ def action_load_save_image(request, action):
         return HttpResponse("error: Please go back and try again")
 
     slice_id = int(slice_id)
-    task_id = get_task_id(slice_id, node_name, stype)
+    task_id = None
+    task_id_list = None
+    if action == 'load':
+        task_id_list = []
+        for n in node_name:
+            task_id = str(get_task_id(slice_id, n, stype))
+            task_id_list.append(task_id)
+    else:  # Save
+        task_id = get_task_id(slice_id, node_name, stype)
+
     if task_id:
         if not check_next_task_duration(task_id, stype):
             return HttpResponse('warning: wait 5 min before next try', content_type="text/plain")
@@ -89,9 +104,10 @@ def action_load_save_image(request, action):
                 elif os_type == 'user_image':
                     os_obj = UserImage.objects.get(id=os_id)
                     os_location = os_obj.location
-                r = load_images(task_id, os_location, ".", node_name)
+                r = load_images(task_id_list, os_location, ".", node_name)
                 if r == 1:
-                    update_task_testbed(task_id, action, stype)
+                    for t in task_id_list:
+                        update_task_testbed(t, action, stype)
             # for save action ###########
             elif action == 'save':
                 user_image_name = request.POST.get('the_image', 'untitled').replace(" ", "_")

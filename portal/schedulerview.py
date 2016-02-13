@@ -94,9 +94,6 @@ def get_reservation_status_list(server_type, request_date, status):
                 # correct ref
                 if server_type == "omf":
                     r = r.reservation_ref
-                # t1 = utc_to_timezone(r.reservation_ref.start_time)
-                #    t2 = utc_to_timezone(r.reservation_ref.end_time)
-                # else:
 
                 # case 0: assume  start & end between s and e
                 t1 = utc_to_timezone(r.start_time)
@@ -114,21 +111,12 @@ def get_reservation_status_list(server_type, request_date, status):
                 if day_start <= t1 <= day_end < t2:
                     t2 = day_end
 
-                # if server_type == "omf":
-                #    z = {
-                #       'id': str(r.reservation_ref.id),
-                #       'title': str(r.reservation_ref.user_ref),}
-                # else:
-
                 z = {
                     'id': str(r.id),
                     'title': str(r.user_ref),
                     'start': t1.strftime('%H:%M'),
                     'end': t2.strftime('%H:%M')
                 }
-
-                # z['start'] = t1.strftime('%H:%M')
-                # z['end'] = t2.strftime('%H:%M')
 
                 if r.status == 3:
                     z['class'] = 'reserved'

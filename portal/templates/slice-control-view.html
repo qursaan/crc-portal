@@ -127,7 +127,7 @@
                 <span class="glyphicon glyphicon-play"></span> Script Manager</a>
             {% endif %}
             <li role="presentation"><a href="#terminal" aria-controls="terminal" role="tab" data-toggle="tab">
-                <span class="glyphicon glyphicon-expand"></span> Terminal</a>
+                <span class="glyphicon glyphicon-expand"></span> Console</a>
             </li>
             <li role="presentation"><a href="#saveimage" aria-controls="saveimage" role="tab" data-toggle="tab">
                 <span class="glyphicon glyphicon-cloud-download"></span> Save Images</a>
@@ -142,8 +142,17 @@
                 <ol>
                     <li>Open <b><i>Load Image</i></b> tab and load image</li>
                     <li>Wait <b>Loading</b> process finish</li>
+                    {% if stype == "omf" %}
                     <li>In <b><i>Execute Manager</i></b> tab and past your script <b>or</b> edit from existing template
                     </li>
+                    {% else %}
+                    <li> To access the controller server use
+                        ssh <b>crc-am@193.227.16.154</b> with password <b>CRC123</b>
+                    </li>
+                    <li> To access the any virtual node use
+                        ssh <b>node5@nodename</b> with password <b>crc123</b>
+                    </li>
+                    {% endif %}
                     <li>Execute script remotely using <b>or</b> use <a href="/portal/experiment">external tools</a></li>
                     <li>Open <b><i>Save Image</i></b> tab to save your image if you want to save your work</li>
                 </ol>
@@ -405,7 +414,7 @@
             {% endif %}
 
             <div role="tabpanel" class="tab-pane" id="terminal">
-                <h4>Remote Control Machine</h4>
+                <h4>Web Terminal</h4>
                 <div class="well"> <!--control_save_image-->
                     <form class="cmxform form-horizontal" id="terminal-form" method="post"
                           action="control_remote_node" enctype="multipart/form-data" role="form">
@@ -418,7 +427,7 @@
                                             <button id="terminal_con" class="btn btn-info" type="button">Connect</button>
                                         </div>
                                     </div>
-                                    <iframe id="terminal_window" src="#"
+                                    <iframe id="terminal_window" src=""
                                             sandbox="allow-same-origin allow-scripts"
                                             height="400px" scrolling="no" width="100%"
                                             enabled="false" align="middle"
@@ -473,7 +482,6 @@
             </div>
         </div>
     </div>
-
 </div>
 <script type="text/javascript" src="{{STATIC_URL}}js/slice-control.js"></script>
 <script type="text/javascript">
@@ -775,11 +783,17 @@ $('#load_image_btn').on('click', function(event){
     os_type = $('input[name="image_type"]:checked').val();
     os_id   = $('#osimage option:selected').val();
 
+    var select_node_list = [];                      //
+    var aid_list         = [];                      //
+
     $('input[name="node_group1"]:checked').each(function() {
         select_node = $(this).val();
+        select_node_list.push(select_node);          //
         aid     = add_activity("Loading Image on Node: " +select_node);
-        loading_image(select_node,os_id,os_type, aid);
+        aid_list.push(aid);                          //
+        //loading_image(select_node,os_id,os_type, aid);
     });
+    loading_image(select_node_list,os_id,os_type, aid_list);
 });
 
 $('#save-image-btn').on('click', function(event){
@@ -791,7 +805,9 @@ $('#save-image-btn').on('click', function(event){
 });
 
 function loading_image(node_name, os_id, os_type, aid) {
-    $("#"+aid).text("loading ...");
+    for( x in aid){
+        $("#"+aid[x]).text("loading ...");
+    }
     openModal();
     $.ajax({
         url  : "control_load_image",
@@ -802,8 +818,11 @@ function loading_image(node_name, os_id, os_type, aid) {
                 document.location.href = '/portal/lab/current/';
             } else {
                 if( result.startsWith("success")){
-                    print_recolor(aid, 1, result);
-                    loading_List.push([node_name,aid]);
+                    for(var x in aid)
+                    {
+                        print_recolor(aid[x], 1, result);
+                        loading_List.push([node_name[x],aid[x]]);
+                    }
                 } else if ( result.startsWith("warning")){
                     print_recolor(aid, 2, result);
                 } else {
@@ -813,7 +832,10 @@ function loading_image(node_name, os_id, os_type, aid) {
             closeModal();
         },
         error : function(xhr,errmsg,err) {
-            print_recolor(aid,3,"Server Error, try again later");
+            for(x in aid)
+            {
+                print_recolor(aid[x],3,"Server Error, try again later");
+            }
             closeModal();
         }
     });
@@ -1002,6 +1024,7 @@ function update_testbeds(){
     {% endfor %}
     enableRefresh();
 };
+
 function update_node(node_id, status){
     if(status == "on"){
         $("span[name=node_"+node_id+"]").removeAttr('class').attr('class', "glyphicon glyphicon-play-circle text-success");
