@@ -325,7 +325,21 @@ function set_validation(v_type, msg){
 };
 
 function validate(){
-    clear_validation();
+    set_validation(0,"");
+    var milliseconds = $('#active_time').datepair('getTimeDiff');
+    var hrs=milliseconds/1000/60/60;
+    if (isNaN(hrs) || hrs <=0)
+    {
+        set_validation(2, "Time interval is not valid");
+        return false;
+    }
+    var slice_dur= $('input[name="slice_duration"]').val();
+    if(slice_dur>hrs)
+    {
+        set_validation(2, "Duration is large than time interval");
+        return false;
+    }
+
     if( select_type  == "omf" ){         /*OMF Selection Validation*/
         if(n_nodes==0){
             set_validation(2, "Please select at least one node." );
@@ -421,7 +435,7 @@ $('#request_type').change(function(){
          $( "#active_time .date" ).datepicker('option', 'minDate' ,'1d');
          //$( "#active_time .time .end" ).timepicker('option', 'maxTime' , (3600*23) );
          //$( "#active_time .time" ).timepicker('option', 'durationTime' , 3600 );
-         $( "#active_time .date" ).removeAttr("disabled");
+         $( "#active_time .date.start" ).removeAttr("disabled");
          $( "#active_time .time" ).val('');
     }else{
          var d = curr_datetime;
@@ -429,12 +443,14 @@ $('#request_type').change(function(){
          var t = (n-1)*60*60; // to reserve the current hour ??
          $('#lazy_group').show();
          $('#active_group').hide();
-         $( "#active_time .date" ).datepicker('option', 'maxDate' ,'0d');
+         $( "#active_time .date" ).datepicker('option', 'maxDate' ,'1w');
+         $( "#active_time .date" ).datepicker('option', 'minDate' ,'0d');
          $( "#active_time .time" ).timepicker('option', 'minTime' , t );
          //$( "#active_time .time" ).timepicker('option', 'maxTime' , (23*60*60) );
          $( "#active_time .time" ).val('');
-         $( "#active_time .date" ).val(moment().format('DD-MMMM-YYYY'));
-         $( "#active_time .date" ).attr("disabled","disabled");
+         //$( "#active_time .date" ).val(moment.format('DD-MMMM-YYYY'));
+         $( "#active_time .date" ).datepicker('setDate', d);
+         $( "#active_time .date.start" ).attr("disabled","disabled");
     }
     v_range = 0;
 });

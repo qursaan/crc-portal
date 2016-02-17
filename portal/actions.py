@@ -46,6 +46,15 @@ def schedule_auto_online(reserve_id, stype="omf"):
         new_list = [curr_slice.node_ref]
 
     dur = int(curr_slice.slice_duration)
+
+    diff_time = curr_slice.f_end_time - curr_slice.f_start_time
+
+    # if timedifference is less than duration set duration with difference time
+    if timedelta(hours=dur) > diff_time > timedelta(hours=0):
+        dur = diff_time
+    elif diff_time <= timedelta(hours=0):
+        dur = 1
+
     curr_start = curr_slice.f_start_time
     last_end = curr_slice.f_end_time - timedelta(hours=dur)
     # overlap_flag = False
@@ -129,7 +138,7 @@ def schedule_checking(nodelist, start_datetime, end_datetime, stype="omf"):
                 t2 = r.end_time
 
                 # case 1: if end & start out  s and e then discard
-                if t1 < t2 < curr_start or curr_end < t1 < t2:
+                if t1 < t2 <= curr_start or curr_end <= t1 < t2:
                     continue
 
                 d1 = utc_to_timezone(r.start_time).strftime("%Y-%m-%d %H:%M")
