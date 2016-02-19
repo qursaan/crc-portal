@@ -68,6 +68,7 @@ EMAIL_HOST = "localhost"
 EMAIL_PORT = 25
 EMAIL_USE_TLS = False
 SUPPORT_EMAIL = "qursaan@gmail.com"
+BASE_IMAGE_DIR = "/home/crc-am/Desktop/Storage/"
 
 ACCOUNT_ACTIVATION_DAYS = 7  # One-week activation window; you may, of course, use a different value.
 
