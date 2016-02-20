@@ -5,6 +5,7 @@ from django.shortcuts import render
 from django.contrib import messages
 from django.utils import timezone
 #
+from crc.settings import BASE_IMAGE_DIR
 from ui.topmenu import topmenu_items, the_user
 from portal.models import UserImage, TestbedImage,Reservation, SimReservation, SimulationImage
 from portal.actions import get_user_by_email, get_task_id, update_task_testbed, check_next_task_duration, get_username_by_email
@@ -158,7 +159,7 @@ def update_user_images(image_name, user):
         new_image = UserImage(
             user_ref=user,
             image_name=image_name,
-            location=image_name + ".ndz",
+            location= BASE_IMAGE_DIR + image_name + ".ndz",
         )
         new_image.save()
     except:
