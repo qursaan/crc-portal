@@ -133,24 +133,27 @@
                   </div>
               </div>
           </div>
-          <div class="form-group">
-                <label for="slice_duration" class="col-xs-2 control-label">Slice duration (hr)</label>
-                <div class="col-xs-5">
-                    <div class="ui-widget">
-                        <div class="input-group">
-                            <input type="text" class="form-control user-input" name="slice_duration" id="slice_duration" readonly />
-                            <div class="input-group-addon">hr</div>
-                        </div>
-                        <div id="slider-range-min"></div>
-                    </div>
-                </div>
-                <div class="col-xs-5"><p class="form-hint">The expected duration of request slice</p></div>
-           </div>
+          <!-- Duration @qursaan
 
+           -->
           <div id="active_group">
+              <div class="form-group">
+                  <label for="slice_duration" class="col-xs-2 control-label">Slice duration (hr)</label>
+                  <div class="col-xs-5">
+                      <div class="ui-widget">
+                          <div class="input-group">
+                              <input type="text" class="form-control user-input" name="slice_duration" id="slice_duration" readonly />
+                              <div class="input-group-addon">hr</div>
+                          </div>
+                          <div id="slider-range-min"></div>
+                      </div>
+                  </div>
+                  <div class="col-xs-5"><p class="form-hint">The expected duration of request slice</p></div>
+              </div>
           </div>
 
           <div id="lazy_group" hidden="hidden">
+
           </div>
 
           <div id="sim_group" hidden="hidden">
@@ -291,6 +294,7 @@ var n_nodes = 0;
 var v_range = 0;
 
 $(document).ready(function(){
+
     $( "#slider-range-min" ).slider({
         range: "min",
         value: 1,
@@ -301,6 +305,7 @@ $(document).ready(function(){
         }
     });
     $( "#slice_duration" ).val( $( "#slider-range-min" ).slider( "value" ) );
+
 
     $('#active_time').datepair();
     $(":checkbox").each(function() {
@@ -333,6 +338,7 @@ function validate(){
         set_validation(2, "Time interval is not valid");
         return false;
     }
+
     var slice_dur= $('input[name="slice_duration"]').val();
     if(slice_dur>hrs)
     {
@@ -340,7 +346,7 @@ function validate(){
         return false;
     }
 
-    if( select_type  == "omf" ){         /*OMF Selection Validation*/
+    if( select_type  == "omf" ){          /*OMF Selection Validation*/
         if(n_nodes==0){
             set_validation(2, "Please select at least one node." );
             return false;
@@ -485,16 +491,24 @@ $('#active_time').datepair({
     }
 });
 function updateRanger(){
+
     var milliseconds = $('#active_time').datepair('getTimeDiff');
     var hrs=milliseconds/1000/60/60;
+
     console.log(hrs);
     if (isNaN(hrs))
+    {
         $( "#slider-range-min" ).slider("option", "max" ,max_duration);
+    }
     else if (hrs<max_duration)
+    {
         $( "#slider-range-min" ).slider("option", "max" ,hrs);
+    }
     else
         $( "#slider-range-min" ).slider("option", "max" ,max_duration);
-    $( "#slice_duration" ).val( $( "#slider-range-min" ).slider( "value" ) );
+
+    $("#slice_duration" ).val( $( "#slider-range-min" ).slider( "value" ) );
+
     v_range = 0;
     set_validation(0 , "..." );
 };

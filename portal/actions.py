@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.utils import timezone
 
-from portal.backend_actions import create_backend_user
+from portal.backend_actions import create_backend_user, create_slice
 from portal.models import Authority, MyUser, PendingSlice, \
     PendingAuthority, VirtualNode, \
     Reservation, ReservationDetail, SimReservation, SimulationVM
@@ -49,7 +49,7 @@ def schedule_auto_online(reserve_id, stype="omf"):
 
     diff_time = curr_slice.f_end_time - curr_slice.f_start_time
 
-    # if timedifference is less than duration set duration with difference time
+    # if time-difference is less than duration set duration with difference time
     if timedelta(hours=dur) > diff_time > timedelta(hours=0):
         dur = diff_time
     elif diff_time <= timedelta(hours=0):
@@ -96,6 +96,7 @@ def schedule_auto_online(reserve_id, stype="omf"):
         curr_slice.approve_date = timezone.now()
         curr_slice.status = 3
         curr_slice.save()
+        output = create_slice(curr_slice.user_ref.username,curr_start,curr_end)
         return True
     else:
         return False

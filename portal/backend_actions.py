@@ -52,6 +52,21 @@ def vm_shutdown(vm_name):
         return 0
 
 
+# Slicing ############################################################
+def create_slice(username, start_time, end_time):
+    post_data = {
+        'user_name': username,
+        'start_time': str(start_time),
+        'end_time': str(end_time),
+    }
+    post_data = json.dumps(post_data)
+    result = urllib2.urlopen('http://193.227.16.154:7777/api/v1/slice/', data=post_data)
+    if result.getcode() == 200:
+        return 1
+    else:
+        return 0
+
+
 # Imaging ############################################################
 def load_images(task_id, img_name, img_path, node_list):
     post_data = {

@@ -7,6 +7,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.utils import timezone
+from datetime import datetime
 
 from portal.actions import get_authority_by_user, get_authority_emails, \
     get_user_by_email, schedule_auto_online, schedule_checking # schedule_sim_online, \
@@ -69,7 +70,6 @@ class ReservationView(LoginRequiredAutoLogoutView):
             sim_vm = request.POST.get('sim_vm', '1')
 
             purpose = request.POST.get('purpose', '')
-            slice_duration = request.POST.get('slice_duration', '1')
 
             # date
             start_date = request.POST.get('req_time_date1', '')
@@ -80,13 +80,22 @@ class ReservationView(LoginRequiredAutoLogoutView):
             start_time = request.POST.get('req_time_time1', '')
             end_time = request.POST.get('req_time_time2', '')
 
-            h1 = int((parser.parse(start_time).strftime('%H')))
-            h2 = int((parser.parse(end_time).strftime('%H')))
-            m1 = int((parser.parse(start_time).strftime('%M')))
-            m2 = int((parser.parse(end_time).strftime('%M')))
+            h1 = int(parser.parse(start_time).strftime('%H'))
+            h2 = int(parser.parse(end_time).strftime('%H'))
+            m1 = int(parser.parse(start_time).strftime('%M'))
+            m2 = int(parser.parse(end_time).strftime('%M'))
 
             start_datetime = start_date + timedelta(hours=h1, minutes=m1)
             end_datetime = end_date + timedelta(hours=h2, minutes=m2)
+
+            diff = end_datetime-start_datetime
+            dur = diff.seconds/60/60
+            slice_duration = request.POST.get('slice_duration', dur)
+
+            # in case of urgent reservation set duration with time range
+            if request_type == 'lazy_t':
+                slice_duration = dur
+
 
             email = self.user_email
             cc_myself = True
