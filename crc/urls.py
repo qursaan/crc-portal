@@ -24,8 +24,25 @@ import portal.homeview
 # from filebrowser.sites import site
 
 # to enable insert_above stuff
-from django.template.base import add_to_builtins
-add_to_builtins('insert_above.templatetags.insert_tags')
+#from django.template.base import add_to_builtins
+#add_to_builtins('insert_above.templatetags.insert_tags')
+
+try:
+    from django.template.base import add_to_builtins
+    add_to_builtins("insert_above.templatetags.insert_tags")
+except ImportError:
+    """
+    Django 1.9
+    """
+    for engine in settings.TEMPLATES:
+        if engine['BACKEND'] == 'django.template.backends.django.DjangoTemplates':
+            if 'OPTIONS' not in engine:
+                engine['OPTIONS'] = {}
+            if 'builtins' not in engine['OPTIONS']:
+                engine['OPTIONS']['builtins'] = []
+            if "insert_above.templatetags.insert_tags" not in engine['OPTIONS']['builtins']:
+                engine['OPTIONS']['builtins'].append("insert_above.templatetags.insert_tags")
+
 
 #import portal.platformsview
 home_view       = portal.homeview.HomeView.as_view()
