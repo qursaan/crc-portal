@@ -152,7 +152,7 @@
                     </li>
                     {% else %}
                     <li> To access the controller server use console
-                        ssh <b>crc-am@193.227.16.154</b> with password <b>CRC123</b>
+                        ssh <b>crc-am@193.227.16.199</b> with password <b>CRC123</b>
                     </li>
                     <li> To access the any virtual node use
                         ssh <b>crc</b> with no password <!--b>crc123</b-->
@@ -916,7 +916,7 @@ $("#terminal_con").on('click', function(event){
 });
 
 function connect_terminal(){
-    var address  = ("https://193.227.16.154:4200/");
+    var address  = ("https://193.227.16.199:4200/");
     var element  = document.getElementById("terminal_window");
     //var url =  element.src;
     element.src  = address;
