@@ -96,8 +96,14 @@ def schedule_auto_online(reserve_id, stype="omf"):
         curr_slice.approve_date = timezone.now()
         curr_slice.status = 3
         curr_slice.save()
-        output = create_slice(curr_slice.user_ref.username,curr_start,curr_end)
-        return True
+
+        output = create_slice(curr_slice.user_ref.username,utc_to_timezone(curr_start),utc_to_timezone(curr_end))
+        if output == 1:
+            return True
+        else:
+            curr_slice.status = 1
+            curr_slice.save()
+            return False
     else:
         return False
 
