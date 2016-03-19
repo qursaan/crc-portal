@@ -25,7 +25,7 @@ python2.7 manage.py migration
 
 
 # Django's auth system
-# username:admin, admin@qursaan.com, password:admin
+# username:admin, admin@qursaan.com, password:admin //on server admin@crc!
 
 
 # db setup
