@@ -1,3 +1,10 @@
+[client]
+database = PORTAL
+host = localhost
+user = portaluser
+password = portal123portal!
+default-character-set = utf8
+
 [manifold]
 url = http://193.227.16.199:8000/
 admin_user = pirate

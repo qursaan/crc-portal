@@ -1,0 +1,42 @@
+
+yum install python27
+yum install python-devel
+yum install libjpeg-devel
+python2.7 -m pip install Django==1.8.4
+python2.7 -m pip install django-filer
+python2.7 -m pip install Pillow
+python2.7 -m pip install django-mptt
+python2.7 -m pip install django-polymorphic
+python2.7 -m pip install easy_thumbnails
+python2.7 -m pip install python-django-south
+python2.7 -m pip install django-south
+python2.7 -m pip install django-simple-captcha
+python2.7 -m pip install urllib2
+python2.7 -m pip install MySQL-python
+easy_install pyparsing
+easy_install python-dateutil
+easy_install --upgrade pytz
+
+
+
+python2.7 manage.py makemigrations
+python2.7 manage.py migration
+/usr/bin/python2.7 manage.py runserver 193.227.16.199:8000
+
+
+# Django's auth system
+# username:admin, admin@qursaan.com, password:admin
+
+
+# db setup
+CREATE DATABASE PORTAL;
+CREATE USER 'portaluser'@'localhost' IDENTIFIED BY 'portal123portal!';
+GRANT ALL PRIVILEGES ON PORTAL.* TO 'portaluser'@'localhost';
+FLUSH PRIVILEGES;
+
+# Migration and intial setup
+python manage.py migrate
+python manage.py makemigrations
+python manage.py syncdb
+
+
