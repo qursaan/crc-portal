@@ -55,7 +55,9 @@ def vm_shutdown(vm_name):
 
 # Slicing ############################################################
 def create_slice(username, start_time, end_time):
-    post_data = {
+    return 1
+    
+    """post_data = {
         'user_name': username,
         'start_time': str(start_time),
         'end_time': str(end_time),
@@ -65,7 +67,7 @@ def create_slice(username, start_time, end_time):
     if result.getcode() == 200:
         return 1
     else:
-        return 0
+        return 0"""
 
 
 # Imaging ############################################################

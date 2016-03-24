@@ -86,42 +86,42 @@ def action_load_save_image(request, action):
 
     # end for any action ###########
         r = 0
-        if stype == 'omf':
-            # for load action ###########
-            if action == 'load':
-                os_id = request.POST.get('the_os', '')
-                os_type = request.POST.get('the_type', '')
-                os_location = ''
-                os_obj = None
+        #if stype == 'omf':
+        # for load action ###########
+        if action == 'load':
+            os_id = request.POST.get('the_os', '')
+            os_type = request.POST.get('the_type', '')
+            os_location = ''
+            os_obj = None
 
-                if os_type == 'base_image':
-                    if stype == 'omf':
-                        os_obj = TestbedImage.objects.get(id=os_id)
-                    elif stype == 'sim':
-                        os_obj = SimulationImage.objects.get(id=os_id)
+            if os_type == 'base_image':
+                if stype == 'omf':
+                    os_obj = TestbedImage.objects.get(id=os_id)
+                elif stype == 'sim':
+                    os_obj = SimulationImage.objects.get(id=os_id)
 
-                elif os_type == 'user_image':
-                    os_obj = UserImage.objects.get(id=os_id)
+            elif os_type == 'user_image':
+                os_obj = UserImage.objects.get(id=os_id)
 
-                if os_obj:
-                        os_location = os_obj.location
+            if os_obj:
+                os_location = os_obj.location
 
-                r = load_images(task_id_list, os_location, ".", node_name)
-                if r == 1:
-                    for t in task_id_list:
-                        update_task_testbed(t, action, stype)
-            # for save action ###########
-            elif action == 'save':
-                user_image_name = request.POST.get('the_image', 'untitled').replace(" ", "_")
-                if user_image_name == '':
-                    user_image_name = "untitled"
-                user_name = the_user(request)
-                user = get_user_by_email(user_name)
-                r = save_images(task_id, user_image_name, ".", node_name)
-                if r == 1:
-                    image_name = user_image_name + "_" + node_name
-                    update_user_images(image_name, user)
-                    update_task_testbed(task_id, action, stype)
+            r = load_images(task_id_list, os_location, ".", node_name)
+            if r == 1:
+                for t in task_id_list:
+                    update_task_testbed(t, action, stype)
+        # for save action ###########
+        elif action == 'save':
+            user_image_name = request.POST.get('the_image', 'untitled').replace(" ", "_")
+            if user_image_name == '':
+                user_image_name = "untitled"
+            user_name = the_user(request)
+            user = get_user_by_email(user_name)
+            r = save_images(task_id, user_image_name, ".", node_name)
+            if r == 1:
+                image_name = user_image_name + "_" + node_name
+                update_user_images(image_name, user)
+                update_task_testbed(task_id, action, stype)
 
         # for any action  ##########
         if r == 1:

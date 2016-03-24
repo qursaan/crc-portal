@@ -222,6 +222,7 @@
                                             {% endfor %}
                                         </select>
                                     </div>
+                                    {% if user_image_list %}
                                     <div class="ui-widget radio">
                                         <label>
                                             <input type="radio" name="image_type" value="user_image">User Image</input>
@@ -234,6 +235,7 @@
                                             {% endfor %}
                                         </select>
                                     </div>
+                                    {% endif %}
                                 </div>
                                 <div class="col-xs-4">
                                     <p class="form-hint">Select the Image</p>
