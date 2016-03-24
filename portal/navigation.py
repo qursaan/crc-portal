@@ -48,7 +48,7 @@ def remote_node(request):
 
 # OK OK OK OK
 def action_load_save_image(request, action):
-    stype = request.POST.get('stype', None);
+    stype = request.POST.get('stype', None)
     if stype is None:
         return HttpResponse("error: Please go back and try again", content_type="text/plain")
 
@@ -84,7 +84,7 @@ def action_load_save_image(request, action):
         if not check_next_task_duration(task_id, stype):
             return HttpResponse('warning: wait 5 min before next try', content_type="text/plain")
 
-    # end for any action ###########
+        # end for any action ###########
         r = 0
         #if stype == 'omf':
         # for load action ###########
