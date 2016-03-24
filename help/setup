@@ -18,6 +18,12 @@ easy_install python-dateutil
 easy_install --upgrade pytz
 
 
+sudo python2.7 -m pip uninstall Pillow
+sudo yum install freetype-devel
+sudo python2.7 -m pip install Pillow
+
+sudo python2.7 -m pip install pycrypto
+
 
 python2.7 manage.py makemigrations
 python2.7 manage.py migration

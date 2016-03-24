@@ -92,19 +92,20 @@ def action_load_save_image(request, action):
                 os_id = request.POST.get('the_os', '')
                 os_type = request.POST.get('the_type', '')
                 os_location = ''
+                os_obj = None
+
                 if os_type == 'base_image':
-                    os_obj = None
                     if stype == 'omf':
                         os_obj = TestbedImage.objects.get(id=os_id)
                     elif stype == 'sim':
                         os_obj = SimulationImage.objects.get(id=os_id)
 
-                    if os_obj:
-                        os_location = os_obj.location
-
                 elif os_type == 'user_image':
                     os_obj = UserImage.objects.get(id=os_id)
-                    os_location = os_obj.location
+
+                if os_obj:
+                        os_location = os_obj.location
+
                 r = load_images(task_id_list, os_location, ".", node_name)
                 if r == 1:
                     for t in task_id_list:
