@@ -86,7 +86,7 @@ def action_load_save_image(request, action):
 
         # end for any action ###########
         r = 0
-        #if stype == 'omf':
+        # if stype == 'omf':
         # for load action ###########
         if action == 'load':
             os_id = request.POST.get('the_os', '')

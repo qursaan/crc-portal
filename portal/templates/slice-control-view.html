@@ -233,7 +233,7 @@
                                         <select id="osimage_user" name="osimage_user" class="form-control"
                                                 value="{{ user_image_id }}">
                                             {% for row in user_image_list %}
-                                            <option value="{{ row.location }}"
+                                            <option value="{{ row.id }}"
                                                     label="{{ row.image_name }} :: Modified">{{ row.image_name }} :: Modified</option>
                                             {% endfor %}
                                         </select>
@@ -792,7 +792,9 @@ $('#load_image_btn').on('click', function(event){
     event.preventDefault();
     os_type = $('input[name="image_type"]:checked').val();
     os_id   = $('#osimage option:selected').val();
-
+    if(os_type=="user_image"){
+        os_id   = $('#osimage_user option:selected').val();
+    }
     var select_node_list = [];                      //
     var aid_list         = [];                      //
 
