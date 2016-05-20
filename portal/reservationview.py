@@ -1,5 +1,6 @@
 __author__ = 'qursaan'
 
+import json
 from dateutil import parser
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
@@ -10,9 +11,11 @@ from django.utils import timezone
 from datetime import datetime
 
 from portal.actions import get_authority_by_user, get_authority_emails, \
-    get_user_by_email, schedule_auto_online, schedule_checking # schedule_sim_online, \
+    get_user_by_email, \
+    schedule_auto_online, schedule_checking, schedule_checking_freq # schedule_sim_online, \
 from portal.models import SimReservation, Reservation, ReservationDetail, \
-    SimulationImage, TestbedImage, ResourcesInfo, VirtualNode, PhysicalNode, SimulationVM
+    SimulationImage, TestbedImage, ResourcesInfo, VirtualNode, PhysicalNode, SimulationVM, \
+    FrequencyRanges, ReservationFrequency
 from ui.topmenu import topmenu_items, the_user
 from unfold.loginrequired import LoginRequiredAutoLogoutView
 from unfold.page import Page
@@ -50,6 +53,7 @@ class ReservationView(LoginRequiredAutoLogoutView):
         resources_info = ResourcesInfo.objects.all()
         node_list = PhysicalNode.objects.all()
         sim_vm_list = SimulationVM.objects.all()
+        freq_list = FrequencyRanges.objects.all()
 
         # Images
         sim_img_list = SimulationImage.objects.all()
@@ -65,6 +69,7 @@ class ReservationView(LoginRequiredAutoLogoutView):
             request_date = timezone.now()  # request.POST.get('request_date', '')
 
             resource_group = request.POST.getlist('resource_group', [])
+            freq_group = request.POST.getlist('freq_group', [])
             sim_img = request.POST.get('sim_img', '1')
             omf_img = request.POST.get('sim_img', '1')
             sim_vm = request.POST.get('sim_vm', '1')
@@ -142,6 +147,13 @@ class ReservationView(LoginRequiredAutoLogoutView):
                         )
                         p.save()
 
+                    for i in freq_group:
+                        p = ReservationFrequency(
+                            reservation_ref=s,
+                            frequency_ref=FrequencyRanges.objects.get(id=i),
+                        )
+                        p.save()
+
                     # TODO: @qursaan
                     if not schedule_auto_online(s.id, "omf"):
                         self.errors.append('Sorry, Time slot is not free')
@@ -194,10 +206,15 @@ class ReservationView(LoginRequiredAutoLogoutView):
             'server_type': request.POST.get('server_type', ''),
             'request_type': request.POST.get('request_type', ''),
 
+            'freq_list': freq_list,
+            'freq_group': request.POST.getlist('freq_group', []),
+
             'node_list': node_list,
+
             'resource_list': resources_list,
             'resource_info': resources_info,
             'resource_group': request.POST.getlist('resource_group', []),
+
             'sim_vm_list': sim_vm_list,
             'sim_vm': request.POST.get('sim_vm', ''),
 
@@ -246,14 +263,31 @@ def check_availability(request):
 
     if the_type == "omf":
         the_nodes = request.POST.getlist('the_nodes[]', None)
+        the_freq = request.POST.getlist('the_freq[]', None)
         # msg = checking_omf_time(the_nodes, start_datetime, end_datetime)
-        msg  = schedule_checking(the_nodes, start_datetime, end_datetime, "omf")
+        msg = schedule_checking(the_nodes, start_datetime, end_datetime, "omf")
+        if the_freq:
+            msg += schedule_checking_freq(the_freq, start_datetime, end_datetime)
+
+        #busy_list = schedule_checking_all(start_datetime, end_datetime, "omf")
     elif the_type == "sim":
         the_nodes = request.POST.get('the_nodes', None)
-        the_dur = request.POST.get('the_dur', None)
-        msg  = schedule_checking(the_nodes, start_datetime, end_datetime, "sim")
+        #the_dur = request.POST.get('the_dur', None)
+        msg = schedule_checking(the_nodes, start_datetime, end_datetime, "sim")
+        # busy_list = schedule_checking_all(start_datetime, end_datetime, "sim")
         # msg = checking_sim_time(the_nodes, start_datetime, end_datetime, the_dur)
 
+    free = "0"
     if not msg:
-        return HttpResponse('{"free":"1","msg":"Free"}', content_type="application/json")
-    return HttpResponse('{"free":"0","msg":"' + msg + '"}', content_type="application/json")
+        msg = "Free"
+        free = "1"
+
+
+    output = {
+        "free": free,
+        "msg": msg,
+        #"busy": busy_list
+    }
+
+    post_data = json.dumps(output)
+    return HttpResponse(post_data, content_type="application/json")

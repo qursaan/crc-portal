@@ -8,8 +8,8 @@ from django.utils import timezone
 
 from portal.backend_actions import create_backend_user, create_slice
 from portal.models import Authority, MyUser, PendingSlice, \
-    PendingAuthority, VirtualNode, \
-    Reservation, ReservationDetail, SimReservation, SimulationVM
+    PendingAuthority, VirtualNode,  FrequencyRanges, \
+    Reservation, ReservationDetail, SimReservation, SimulationVM, ReservationFrequency
 
 
 # ************* Default Scheduling Slice ************** #
@@ -156,6 +156,86 @@ def schedule_checking(nodelist, start_datetime, end_datetime, stype="omf"):
                 output_list += z
     if output_list:
         output_list = "<ul>" + output_list + "</ul>"
+    return output_list
+
+
+def schedule_checking_all(start_datetime, end_datetime, stype="omf"):
+    curr_start = start_datetime
+    curr_end = end_datetime
+
+    status_list = [2, 3]
+    overlap = None
+    node_list = []
+    busy_list = []
+
+    if stype == "omf":
+        node_list = VirtualNode.objects.all()
+        overlap = ReservationDetail.objects.filter(
+            reservation_ref__status__in=status_list, node_ref__in=node_list)
+    elif stype == "sim":
+        node_list = SimulationVM.objects.all()
+        overlap = SimReservation.objects.filter(status__in=status_list, node_ref__in=node_list)
+
+    for n in node_list:
+        for r in overlap:
+            if r.node_ref.id == n.id:
+                t1 = t2 = None
+
+                # correct ref
+                if stype == "omf":
+                    r = r.reservation_ref
+
+                # case 0: assume  start & end between s and e
+                t1 = r.start_time
+                t2 = r.end_time
+
+                # case 1: if end & start out  s and e then discard
+                if t1 < t2 <= curr_start or curr_end <= t1 < t2:
+                    continue
+
+                busy_list += n.id
+
+    return busy_list
+
+
+def schedule_checking_freq(freq_list, start_datetime, end_datetime):
+
+    new_list = []
+    for n in freq_list:
+        new_list.append(int(n))
+
+    curr_start = start_datetime
+    curr_end = end_datetime
+
+    status_list = [2, 3]
+    output_list = ""
+    freq_list = FrequencyRanges.objects.filter(pk__in=new_list)
+
+    overlap = ReservationFrequency.objects.filter(
+        reservation_ref__status__in=status_list,
+        frequency_ref__in=freq_list)
+
+    for r in overlap:
+        t1 = t2 = None
+
+        # case 0: assume  start & end between s and e
+        t1 = r.reservation_ref.start_time
+        t2 = r.reservation_ref.end_time
+
+        # case 1: if end & start out  s and e then discard
+        if t1 < t2 <= curr_start or curr_end <= t1 < t2:
+            continue
+
+        d1 = utc_to_timezone(r.reservation_ref.start_time).strftime("%Y-%m-%d %H:%M")
+        d2 = utc_to_timezone(r.reservation_ref.end_time).strftime("%Y-%m-%d %H:%M")
+        z = "<li>Frequency: " + str(r.frequency_ref) + " Busy [" + d1 + " : " + d2 + "]</li>"
+
+        # output_list.append(z)
+        output_list += z
+
+    if output_list:
+        output_list = "<ul>" + output_list + "</ul>"
+
     return output_list
 
 

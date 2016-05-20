@@ -1,3 +1,11 @@
+
+# db setup
+CREATE DATABASE PORTAL;
+CREATE USER 'portaluser'@'localhost' IDENTIFIED BY 'portal123portal!';
+GRANT ALL PRIVILEGES ON PORTAL.* TO 'portaluser'@'localhost';
+GRANT ALL PRIVILEGES ON *.* TO 'portaluser'@'localhost';
+FLUSH PRIVILEGES;
+
 BEGIN TRANSACTION;
 ;
 INSERT INTO PORTAL.portal_authority VALUES(1,'CRC VT','VT','crc','www.crclab.org','Alex','state','Egypt','crc','2015-09-14 23:41:26','qursaan@gmail.com',NULL,NULL);
@@ -14,6 +22,31 @@ INSERT INTO PORTAL.portal_physicalnode VALUES(4,'Node 4','crc',0,3,3,0,'node4');
 INSERT INTO PORTAL.portal_resourcesinfo VALUES(1,'Wi-Fi','NA');
 INSERT INTO PORTAL.portal_resourcesinfo VALUES(2,'USRP','NA');
 INSERT INTO PORTAL.portal_resourcesinfo VALUES(3,'RTL','NA');
+;
+INSERT INTO PORTAL.portal_frequencyranges VALUES(1,'1','2400','2410');
+INSERT INTO PORTAL.portal_frequencyranges VALUES(2,'1','2410','2420');
+INSERT INTO PORTAL.portal_frequencyranges VALUES(3,'1','2420','2430');
+INSERT INTO PORTAL.portal_frequencyranges VALUES(4,'1','2430','2440');
+INSERT INTO PORTAL.portal_frequencyranges VALUES(5,'1','2440','2450');
+INSERT INTO PORTAL.portal_frequencyranges VALUES(6,'1','2450','2460');
+INSERT INTO PORTAL.portal_frequencyranges VALUES(7,'1','2460','2470');
+INSERT INTO PORTAL.portal_frequencyranges VALUES(8,'1','2470','2480');
+INSERT INTO PORTAL.portal_frequencyranges VALUES(9,'1','2480','2490');
+INSERT INTO PORTAL.portal_frequencyranges VALUES(10,'1','2490','2500');
+;
+INSERT INTO PORTAL.portal_frequencyranges VALUES(11,'2','5725','5735');
+INSERT INTO PORTAL.portal_frequencyranges VALUES(12,'2','5735','5745');
+INSERT INTO PORTAL.portal_frequencyranges VALUES(13,'2','5745','5755');
+INSERT INTO PORTAL.portal_frequencyranges VALUES(14,'2','5755','5765');
+INSERT INTO PORTAL.portal_frequencyranges VALUES(15,'2','5765','5775');
+INSERT INTO PORTAL.portal_frequencyranges VALUES(16,'2','5775','5785');
+INSERT INTO PORTAL.portal_frequencyranges VALUES(17,'2','5785','5795');
+INSERT INTO PORTAL.portal_frequencyranges VALUES(18,'2','5795','5805');
+INSERT INTO PORTAL.portal_frequencyranges VALUES(19,'2','5805','5815');
+INSERT INTO PORTAL.portal_frequencyranges VALUES(20,'2','5815','5825');
+INSERT INTO PORTAL.portal_frequencyranges VALUES(21,'2','5825','5835');
+INSERT INTO PORTAL.portal_frequencyranges VALUES(22,'2','5835','5845');
+INSERT INTO PORTAL.portal_frequencyranges VALUES(23,'2','5845','5855');
 ;
 INSERT INTO PORTAL.portal_simulationimage VALUES(1,'NS2 Image','/usr/local/share/storage/ns2_stable.ndz','Ubuntu 64bit');
 INSERT INTO PORTAL.portal_simulationimage VALUES(2,'NS3 Image','/usr/local/share/storage/ns3_stable.ndz','Ubuntu 64 bit');

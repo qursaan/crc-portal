@@ -197,6 +197,15 @@ class PhysicalNode(models.Model):
         return self.node_name
 
 
+class FrequencyRanges(models.Model):
+    group_name = models.TextField(null=True)
+    freq_start = models.TextField(null=True)
+    freq_end = models.TextField(null=True)
+
+    def __unicode__(self):
+        return self.freq_start + ":" + self.freq_end
+
+
 class VirtualNode(models.Model):
     node_ref = models.ForeignKey(PhysicalNode, null=True)
     device_ref = models.ForeignKey(ResourcesInfo, null=True)
@@ -204,7 +213,7 @@ class VirtualNode(models.Model):
     hv_name = models.TextField('Hypervisor Name', default='NA')
 
     def __unicode__(self):
-        return self.node_ref.node_name +" @ " +self.hv_name + " { " + self.device_ref.type + " } "
+        return self.node_ref.node_name + " @ " + self.hv_name + " { " + self.device_ref.type + " } "
 
 
 class NodeConnection(models.Model):
@@ -282,6 +291,11 @@ class ReservationDetail(models.Model):
     image_ref = models.ForeignKey(TestbedImage, null=True)
     last_action = models.DateTimeField(null=True)
     details = models.TextField(default='NA')
+
+
+class ReservationFrequency(models.Model):
+    reservation_ref = models.ForeignKey(Reservation, null=True)
+    frequency_ref = models.ForeignKey(FrequencyRanges, null=True)
 
 
 class SimReservation(models.Model):
