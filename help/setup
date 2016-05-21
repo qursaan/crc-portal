@@ -33,13 +33,6 @@ python2.7 manage.py migration
 # username:admin, admin@qursaan.com, password:admin //on server admin@crc!
 
 
-# db setup
-CREATE DATABASE PORTAL;
-CREATE USER 'portaluser'@'localhost' IDENTIFIED BY 'portal123portal!';
-GRANT ALL PRIVILEGES ON PORTAL.* TO 'portaluser'@'localhost';
-GRANT ALL PRIVILEGES ON *.* TO 'portaluser'@'localhost';
-FLUSH PRIVILEGES;
-
 # Migration and intial setup
 python manage.py migrate
 python manage.py makemigrations

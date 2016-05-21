@@ -1,10 +1,10 @@
 from django.contrib import admin
 
 from portal.models import MyUser, Platform, Account, \
-    PhysicalNode, ResourcesInfo, VirtualNode, NodeConnection, SimulationVM, \
+    PhysicalNode, ResourcesInfo, VirtualNode, NodeConnection, SimulationVM, FrequencyRanges, \
     UserImage, TestbedImage, SimulationImage, \
     Authority, PendingSlice, \
-    Reservation, ReservationDetail, SimReservation
+    Reservation, ReservationDetail, SimReservation, ReservationFrequency
 
 
 @admin.register(Platform)
@@ -60,6 +60,11 @@ class SimulationVMAdmin(admin.ModelAdmin):
     list_display = ('id', 'vm_name', 'specification')
 
 
+@admin.register(FrequencyRanges)
+class FrequencyRangesAdmin(admin.ModelAdmin):
+    list_display = ('id', 'group_name', 'freq_start', 'freq_end',)
+
+
 # Images *******************************************************
 @admin.register(TestbedImage)
 class TestbedImageAdmin(admin.ModelAdmin):
@@ -87,6 +92,11 @@ class ReservationAdmin(admin.ModelAdmin):
 @admin.register(ReservationDetail)
 class ReservationDetailAdmin(admin.ModelAdmin):
     list_display = ('id', 'reservation_ref', 'node_ref', 'image_ref',)
+
+
+@admin.register(ReservationFrequency)
+class ReservationFrequencyAdmin(admin.ModelAdmin):
+    list_display = ('id', 'reservation_ref', 'frequency_ref')
 
 
 @admin.register(SimReservation)
