@@ -271,16 +271,17 @@
                                         {% for gf in gfreq_list %}
                                             <tr>
                                                 <th>{{ gf.grouper }}</th>
-                                                <td>
-                                                    {% for n in gf.list %}
+                                                    <td>
+                                                        <table><tbody><tr>
+                                                        {% for n in gf.list %}
+                                                        <td>
                                                             <label class="checkbox-inline">
-                                                                <input type="checkbox" name="freq_group" value="{{n.id}}">[{{ n.freq_start }}<br/>:{{ n.freq_end }}]</input>
+                                                                <input style="margin-left: 10px;" type="checkbox" name="freq_group" value="{{n.id}}"><br/>{{ n.freq_start }}<br/>{{ n.freq_end }}</input>
                                                             </label>
-                                                        {% if forloop.counter|divisibleby:10 %}
-                                                            <br/>
-                                                        {% endif %}
-                                                    {% endfor %}
-                                                </td>
+                                                        </td>
+                                                        {% endfor %}
+                                                        </tr></tbody></table>
+                                                    </td>
                                             </tr>
                                         {% endfor %}
                                     </tbody>
