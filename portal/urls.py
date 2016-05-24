@@ -6,7 +6,7 @@ from django.conf.urls import url  # patterns
 from portal.homeview import HomeView
 from portal.registrationview import RegistrationView
 from portal.accountview import AccountView, account_process
-from portal.supportview import SupportView
+from portal.supportview import SupportView, GuideView
 from portal.contactview import ContactView
 from portal.dashboardview import DashboardView
 from portal.validationview import ValidatePendingView
@@ -59,6 +59,7 @@ urlpatterns = [
     # Support and Contacts
     url(r'^contact/?$', ContactView.as_view(), name='contact'),
     url(r'^support/?$', SupportView.as_view(), name='support'),
+    url(r'^guide/?$', GuideView.as_view(), name='guide'),
     url(r'^support/documentation/?$', DocumentationView.as_view(), name='FAQ'),
     url(r'^experiment?$', ExperimentView.as_view(), name='experiment'),
 
