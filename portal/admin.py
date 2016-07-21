@@ -21,7 +21,7 @@ class PlatformAdmin(admin.ModelAdmin):
 
 @admin.register(MyUser)
 class MyUserAdmin(admin.ModelAdmin):
-    list_display = ('id', 'first_name', 'last_name', 'username', 'email', 'authority_hrn', 'active_email', 'status', 'created')
+    list_display = ('id', 'first_name', 'last_name', 'username', 'email', 'authority_hrn', 'supervisor_id', 'active_email', 'status', 'user_type', 'created')
 
 
 @admin.register(Account)

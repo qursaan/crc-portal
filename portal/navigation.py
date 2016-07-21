@@ -10,6 +10,7 @@ from ui.topmenu import topmenu_items, the_user
 from portal.models import UserImage, TestbedImage,Reservation, SimReservation, SimulationImage
 from portal.actions import get_user_by_email, get_task_id, update_task_testbed, check_next_task_duration, get_username_by_email
 from portal.backend_actions import load_images, save_images, vm_restart, vm_shutdown, vm_start, exe_script,exe_check,check_load_images,check_save_images, exe_abort
+from reservation_status import ReservationStatus
 
 
 #  ********** Non Completed Page ************* #
@@ -141,13 +142,13 @@ def slice_on_time(request, stype):
     elif stype == "sim":
         current_slice = SimReservation.objects.get(id=slice_id)
 
-    if current_slice is None or current_slice.status != 3:
+    if current_slice is None or current_slice.status != ReservationStatus.get_active():
         messages.success(request, 'Error: You have not permission to access this page.')
         del request.session['slice_id']
         return False
     if current_slice.end_time < timezone.now() :
         del request.session['slice_id']
-        current_slice.status = 4
+        current_slice.status = ReservationStatus.get_expired()
         current_slice.save()
         messages.success(request, 'Error: Slice time has been expired. ')
         return False
@@ -158,9 +159,9 @@ def slice_on_time(request, stype):
 def update_user_images(image_name, user):
     try:
         new_image = UserImage(
-            user_ref=user,
-            image_name=image_name,
-            location= BASE_IMAGE_DIR + image_name + ".ndz",
+            user_ref = user,
+            image_name = image_name,
+            location = BASE_IMAGE_DIR + image_name + ".ndz",
         )
         new_image.save()
     except:

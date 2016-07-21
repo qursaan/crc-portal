@@ -75,7 +75,7 @@ ACCOUNT_ACTIVATION_DAYS = 7  # One-week activation window; you may, of course, u
 # System parameters
 MAX_OMF_DURATION = 8
 MAX_SIM_DURATION = 24*7
-
+MAX_BUK_DURATION = 24*7
 ALLOWED_HOSTS = []
 
 
@@ -111,6 +111,7 @@ INSTALLED_APPS = (
     # views
     'ui',
     'portal',
+    'lab',
     #'djcelery',
 
     # qursaan: file manager

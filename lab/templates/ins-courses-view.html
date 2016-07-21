@@ -1,0 +1,49 @@
+{% extends "layout-unfold1.html" %}
+{% block unfold_main %}
+
+<!--div class="onelab-title well-lg"-->
+<div style="text-align:center" class="well-sm">
+    <h2>Courses List</h2>
+</div>
+{% if errors %}
+<ul>
+    {% for error in errors %}
+    <li>{{ error }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+<h2></h2>
+<h3>Active Courses</h3>
+<div id="middle_1" align="center">
+    <div class="well">
+        <ul class='nav nav-pills nav-stacked'>
+            <li role="presentation">
+                <button id="add_course" onclick="location.href='/lab/courses/add'"
+                        class="btn btn-default">Add New Course
+                </button>
+            </li>
+        </ul>
+        <table class="table table-bordered table-hover mytable">
+            <thead>
+            <th>Title</th>
+            <th>Code</th>
+            <th>Registration Key</th>
+            <th>Max No. Students</th>
+            <th>Current Students</th>
+            <th>Created Date</th>
+            </thead>
+            {% for row in courses_list %}
+            <tr class="border_bottom">
+                <td class="odd"> {{ row.title }}</td>
+                <td class="even"> {{ row.code }}</td>
+                <td class="odd"> {{ row.key }}</td>
+                <td class="even"> {{ row.max_students }}</td>
+                <td class="odd"> {{ row.studentcourses_set.all|length }}</td>
+                <td class="even"> {{ row.created }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+    </div>
+</div>
+{% endblock %}

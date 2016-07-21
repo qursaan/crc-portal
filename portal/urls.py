@@ -85,6 +85,7 @@ urlpatterns = [
     url(r'^lab/tools/builder/?$', GraphicBuilderView.as_view(), name="g_builder"),
     url(r'^lab/tools/file_manager/?$', FileManagerView.as_view(), name="file_manager"),
 
+
     # Reservation
     url(r'^lab/current/?$', SliceCurrentView.as_view(), name="slice_pending"),
     url(r'^lab/current/slice_o_process/(\d{1,10})/?$', slice_o_pending_process),
@@ -103,7 +104,7 @@ urlpatterns = [
     url(r'^lab/control/load_samples?$', control_load_sample),
     url(r'^lab/history/?$', SliceHistoryView.as_view(), name="slice_history"),
     # url(r'^lab/slice_request/?$', SliceRequestView.as_view(), name='slice_request'),
-    url(r'^lab/reservation/?$', ReservationView.as_view(), name='Reservation'),
+    url(r'^lab/(reservation)/?$', ReservationView.as_view(), name='Reservation'),
     url(r'^lab/reservation/check_availability?$', check_availability),
 
 

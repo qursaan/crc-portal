@@ -6,12 +6,12 @@ from unfold.page import Page
 from ui.topmenu import topmenu_items, the_user
 #
 from django.utils import timezone
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from portal.actions import get_user_by_email, get_count_active_slice
-from portal.models import PendingSlice, Reservation, SimReservation
-
+from portal.models import  Reservation, SimReservation
+from portal.reservation_status import ReservationStatus
 
 # status 0-disabled, 1-pending, 3-active, 4-expired, 5-canceled
 class SliceHistoryView(LoginRequiredAutoLogoutView):
@@ -58,10 +58,10 @@ class SliceCurrentView(LoginRequiredAutoLogoutView):
 
         c_user = get_user_by_email(the_user(self.request))
         get_count_active_slice(c_user)
-        pending_list_1 = Reservation.objects.filter(user_ref=c_user, status=1)
-        active_list_1 = Reservation.objects.filter(user_ref=c_user, status=3)
-        pending_list_2 = SimReservation.objects.filter(user_ref=c_user, status=1)
-        active_list_2 = SimReservation.objects.filter(user_ref=c_user, status=3)
+        pending_list_1 = Reservation.objects.filter(user_ref=c_user, status=ReservationStatus.get_pending())
+        active_list_1 = Reservation.objects.filter(user_ref=c_user, status=ReservationStatus.get_active())
+        pending_list_2 = SimReservation.objects.filter(user_ref=c_user, status=ReservationStatus.get_pending())
+        active_list_2 = SimReservation.objects.filter(user_ref=c_user, status=ReservationStatus.get_active())
 
         context = super(SliceCurrentView, self).get_context_data(**kwargs)
         context['current_list_1'] = pending_list_1
@@ -103,11 +103,11 @@ def slice_pending_process(request, slice_id, stype):
     elif stype == "omf":
         current_slice = Reservation.objects.get(id=slice_id)
 
-    if current_slice is None or current_slice.status != 3:
+    if current_slice is None or current_slice.status != ReservationStatus.get_active():
         messages.success(request, 'Error: You have not permission to access this page.')
         return HttpResponseRedirect("/portal/lab/current/")
     if current_slice.end_time < timezone.now():
-        current_slice.status = 4
+        current_slice.status = ReservationStatus.get_expired()
         current_slice.save()
         messages.success(request, 'Error: Slice time has been expired. ')
         return HttpResponseRedirect("/portal/lab/current/")
@@ -121,7 +121,7 @@ def slice_pending_process(request, slice_id, stype):
 def slice_o_pending_cancel(request, slice_id):
     slice_id = int(slice_id)
     current_slice = Reservation.objects.get(id=slice_id)
-    current_slice.status = 5
+    current_slice.status = ReservationStatus.get_canceled()
     current_slice.save()
     messages.success(request, 'Success: Cancel Slice.')
     return HttpResponseRedirect("/portal/lab/current/")
@@ -131,7 +131,7 @@ def slice_o_pending_cancel(request, slice_id):
 def slice_s_pending_cancel(request, slice_id):
     slice_id = int(slice_id)
     current_slice = SimReservation.objects.get(id=slice_id)
-    current_slice.status = 5
+    current_slice.status = ReservationStatus.get_canceled()
     current_slice.save()
     messages.success(request, 'Success: Cancel Slice.')
     return HttpResponseRedirect("/portal/lab/current/")

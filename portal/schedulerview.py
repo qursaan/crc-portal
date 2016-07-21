@@ -14,6 +14,7 @@ from portal.models import SimReservation, VirtualNode, SimulationVM, Reservation
 from ui.topmenu import topmenu_items, the_user
 from unfold.loginrequired import LoginRequiredAutoLogoutView
 from unfold.page import Page
+from reservation_status import ReservationStatus
 
 
 class SchedulerView(LoginRequiredAutoLogoutView):
@@ -58,7 +59,7 @@ class SchedulerView(LoginRequiredAutoLogoutView):
 
 
 def get_reservation_list(server_type, request_date):
-    status = [4, 3, 1]
+    status = ReservationStatus.get_all_list() # [4, 3, 1]
     output_list = get_reservation_status_list(server_type, request_date, status)
     return json.dumps(output_list)
 
@@ -118,12 +119,16 @@ def get_reservation_status_list(server_type, request_date, status):
                     'end': t2.strftime('%H:%M')
                 }
 
-                if r.status == 3:
+                if r.status == ReservationStatus.get_active():
                     z['class'] = 'reserved'
-                elif r.status == 4:
+                elif r.status == ReservationStatus.get_expired():
                     z['class'] = 'expired'
-                elif r.status == 1:
+                elif r.status == ReservationStatus.get_pending():
                     z['class'] = 'pending'
+                elif r.status == ReservationStatus.get_bulk():
+                    z['class'] = 'bulk'
+                elif r.status == ReservationStatus.get_canceled():
+                    z['class'] = 'canceled'
 
                 x.append(z)
         # end for appointments

@@ -59,12 +59,13 @@ class UserModules:
         private = RSA.generate(1024)
         private_key = json.dumps(private.exportKey())
         public = private.publickey()
-        public_key = json.dumps(public.exportKey(format='OpenSSH'))
+        pk = public.exportKey() #format='OpenSSH')
+        public_key = json.dumps(pk)
         return private_key, public_key
 
     @staticmethod
     def save_user_db(reg_email, reg_username, reg_password, reg_fname, reg_lname,
-                     reg_auth, account_config, user_hrn):
+                     reg_auth, account_config, user_hrn, reg_usertype, reg_supervisor):
 
         # saves the user to django auth_user table [needed for password reset]
         web_user = User.objects.create_user(reg_username, reg_email, reg_password)
@@ -86,7 +87,11 @@ class UserModules:
             user_hrn=user_hrn,
             status=1,  # set 1 = Pending
             active_email=0,  # set 0 = not activated
+            user_type=reg_usertype,
         )
+        if reg_supervisor:
+            itf_user.supervisor_id = reg_supervisor
+
         itf_user.id = web_user.id
         itf_user.save()
 
@@ -127,7 +132,7 @@ class UserModules:
 
     @staticmethod
     def create_user_account(errors, reg_email, reg_username, reg_password,
-                            reg_fname, reg_lname, reg_auth):
+                            reg_fname, reg_lname, reg_auth, reg_usertype, reg_supervisor):
         # (1)
         UserModules.is_user_valid(errors, reg_fname, reg_lname)
         UserModules.is_user_unique(errors, reg_email, reg_username)
@@ -155,7 +160,7 @@ class UserModules:
 
             # (4) Saving user in DB
             UserModules.save_user_db(reg_email, reg_username, reg_password, reg_fname, reg_lname,
-                              reg_auth, account_config, user_hrn)
+                              reg_auth, account_config, user_hrn, reg_usertype, reg_supervisor)
 
             # (5) Send email
             UserModules.send_email_create_user(public_key, reg_auth, reg_email, reg_fname,

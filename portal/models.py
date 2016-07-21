@@ -4,6 +4,7 @@
 import re
 from django.db import models
 from django.utils import timezone
+
 # from django.conf              import settings
 # from django.core.mail         import send_mail
 # , transaction
@@ -102,6 +103,10 @@ class MyUser(models.Model):
     # activated email 0=Not Active 1=Active
     active_email = models.IntegerField(null=True, default=0)
     is_admin = models.IntegerField(null=True, default=0)
+    # 0=admin 1=researcher 2=instructor 3=student
+    user_type = models.IntegerField(null=True, default=0)
+    # supervisor
+    supervisor_id = models.IntegerField(null=True)
 
     def __unicode__(self):
         return self.first_name + " " + self.last_name
@@ -119,7 +124,7 @@ class PendingSlice(models.Model):
     purpose = models.TextField(default='NA')
     created = models.DateTimeField(default=timezone.now)
     slice_duration = models.TextField(default='1')
-    # status 0-disabled, 1-pending, 3-active, 4-expired, 5-canceled
+    # status 0-disabled, 1-pending, 2-waiting, 3-active, 4-expired, 5-canceled, 6-bulk
     status = models.IntegerField(default=0)
     start_time = models.DateTimeField(null=True)
     end_time = models.DateTimeField(null=True)
@@ -312,10 +317,11 @@ class SimReservation(models.Model):
     request_type = models.TextField(default='NA')  # 1=schedule 2=onday
     node_ref = models.ForeignKey(SimulationVM, null=True)
     image_ref = models.ForeignKey(SimulationImage, null=True)
+    n_processor = models.IntegerField(default=1)
+    n_ram = models.IntegerField(default=1024)
     purpose = models.TextField(default='NA')
     # status 0-disabled, 1-pending, 3-active, 4-expired, 5-canceled
     status = models.IntegerField(default=0)
     created = models.DateTimeField(default=timezone.now)
     last_action = models.DateTimeField(null=True)
     details = models.TextField(default='NA')
-

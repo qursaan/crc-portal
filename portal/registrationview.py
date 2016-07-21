@@ -39,6 +39,9 @@ class RegistrationView (FreeAccessView):
         if authorities is not None:
             authorities = sorted(authorities)
 
+        # get all supervisors
+        supervisors = MyUser.objects.filter(user_type=2)
+
         # @qursaan: change to user table
         user_details = User.objects.all()  # execute_admin_query(self.request, user_query)
 
@@ -55,13 +58,15 @@ class RegistrationView (FreeAccessView):
             reg_username = request.POST.get('username', '')
             reg_email = request.POST.get('email','').lower()
             reg_password = request.POST.get('password','') # request.POST['password']
+            reg_usertype = request.POST.get('usertype','')
+            reg_supervisor = request.POST.get('supervisor','')
 
             form = CaptchaTestForm(request.POST)
             if not form.is_valid():
                 errors.append('Invalid Captcha')
 
             errors = UserModules.create_user_account(errors, reg_email, reg_username, reg_password,
-                            reg_fname, reg_lname, reg_auth)
+                            reg_fname, reg_lname, reg_auth, reg_usertype, reg_supervisor)
 
             if not errors:
                 return render(request, 'user_register_complete.html')
@@ -77,7 +82,9 @@ class RegistrationView (FreeAccessView):
             'authority_hrn': request.POST.get('authority_hrn', ''),
             'email': request.POST.get('email', ''),
             'password': request.POST.get('password', ''),
+            'usertype':request.POST.get('usertype', ''),
             'authorities': authorities,
+            'supervisors': supervisors,
             'title': 'Registration',
             'form': CaptchaTestForm(),
         }

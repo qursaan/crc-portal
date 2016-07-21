@@ -1,0 +1,218 @@
+{% extends "layout-unfold1.html" %}
+{% block unfold_main %}
+<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/jquery.timepicker.css"/>
+<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/bootstrap-datetimepicker.min.css"/>
+<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/themes/ui-lightness/jquery-ui.min.css"/>
+<script type="text/javascript" src="{{STATIC_URL}}js/moment.min.js"></script>
+<script type="text/javascript" src="{{STATIC_URL}}js/jquery.timepicker.js"></script>
+<script type="text/javascript" src="{{STATIC_URL}}js/bootstrap-datetimepicker.min.js"></script>
+<script type="text/javascript" src="{{STATIC_URL}}js/jquery.datepair.min.js"></script>
+<script type="text/javascript" src="{{STATIC_URL}}js/datepair.min.js"></script>
+
+<h3>New Reservation</h3>
+{% if errors %}
+<ul>
+    {% for error in errors %}
+    <li>{{ error }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+<div class='well'>
+    <form id="commentForm" class="form-horizontal" action="" method="post" role="form" onsubmit="return(validate());">
+        {% csrf_token %}
+        <fieldset>
+            <legend>Experiment Reserve</legend>
+            <div class="form-group">
+                <label for="ex_title" class="col-xs-2 control-label">Experiment Title</label>
+                <div class="col-xs-5">
+                    <input id="ex_title" type="text" name="ex_title" class="form-control" minlength="2"
+                           value="{{ ex_title }}" placeholder="Experiment Title" readonly/>
+                </div>
+                <div class="col-xs-6"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="active_time" class="col-xs-2 control-label">Reserve Date & Time</label>
+                <div class="col-xs-5">
+                    <div class="ui-widget">
+                        <div class="input-group" id="active_time">
+                            <input name="req_time_date1" type="text" class="form-control user-input date start"
+                                   placeholder="Start date" required/>
+                            <input name="req_time_time1" type="text" class="form-control user-input time start"
+                                   placeholder="Start time" required/>
+                            <div class="input-group-addon">to</div>
+                            <input name="req_time_date2" type="text" class="form-control user-input date end"
+                                   placeholder="End date" required/>
+                            <input name="req_time_time2" type="text" class="form-control user-input time end"
+                                   placeholder="End time" required/>
+                        </div>
+                    </div>
+                </div>
+                <script>
+                    $(document).ready(function(){
+                        var curr_s = new Date("{{ start_date.isoformat }}");
+                        var curr_e = new Date("{{ end_date.isoformat }}");
+                        //$('#active_time').datepair();
+                        //$('#active_time .date').datepicker('option', 'maxDate' ,curr_e);
+                        //$('#active_time .date').datepicker('option', 'minDate' ,curr_s);
+
+                        $('#active_time .time').timepicker({
+                            showDuration: true,
+                            timeFormat  : 'g:iA',
+                            step        : 60,
+                            disableTextInput : true,
+                            disableTouchKeyboard : true,
+                        });
+                        $('#active_time .date').datepicker({
+                            dateFormat   : 'dd-MM-yy',
+                            autoclose    : true,
+                            disableTextInput : true,
+                            disableTouchKeyboard : true,
+                            minDate     : curr_s,
+                            maxDate     : curr_e,
+                        });
+                        $('#active_time').datepair({
+                            parseDate: function(input){
+                                return $(input).datepicker('getDate');
+                            },
+                            updateDate: function(input, dateObj){
+                                return $(input).datepicker('setDate', dateObj);
+                            }
+                        });
+                    });
+                </script>
+            </div>
+
+            <div class="form-group">
+                <label for="max_duration" class="col-xs-2 control-label">Duration</label>
+                <div class="col-xs-5">
+                    <div class="ui-widget">
+                        <div class="input-group">
+                            <input type="text" class="form-control user-input" name="max_duration" id="max_duration"
+                                   readonly/>
+                            <div class="input-group-addon">hr</div>
+                        </div>
+                        <div id="max-std-duration"></div>
+                    </div>
+                </div>
+                <script>
+                    $( "#max-std-duration" ).slider({
+                        range: "min",
+                        value: 1,
+                        min: 1,
+                        max: {{max_duration}},
+                        slide: function( event, ui ) {
+                            $( "#max_duration" ).val(ui.value);
+                        }
+                    });
+                    $( "#max_duration" ).val( $( "#max-std-duration" ).slider( "value" ) );
+
+                </script>
+            </div>
+
+            <div class="form-group">
+                <label for="ex_detail" class="col-xs-2 control-label">Note</label>
+                <div class="col-xs-5">
+                    <div class="ui-widget">
+                            <textarea id="ex_detail" name="ex_detail" class="form-control" style="height:110px;"
+                                      placeholder="Description" required>{{ ex_detail }}</textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-xs-2"></div>
+                <div class="col-xs-10">
+                    <div id="validation_error" class="" role="alert"></div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-xs-2"></div>
+                <div class="col-xs-2">
+                    <button id="check_time_btn" class="btn btn-info form-control" type="button">Check</button>
+                </div>
+                <div class="col-xs-2">
+                    <button class="submit btn btn-danger form-control" type="submit">Request Slice</button>
+                </div>
+
+            </div>
+        </fieldset>
+    </form>
+</div>
+<script>
+var exp_id = {{exp_id}};
+
+$("#check_time_btn").on('click', function(event){
+    set_validation(0, "..." );
+
+    d1 = $('input[name="req_time_date1"]').val();
+    d2 = $('input[name="req_time_date2"]').val();
+    t1 = $('input[name="req_time_time1"]').val();
+    t2 = $('input[name="req_time_time2"]').val();
+    if( d1=="" ||  d2=="" ||  t1=="" ||  t2=="" ){
+        set_validation(2, "Please select date and time range" );
+        return false;
+    }
+
+    var slice_dur= $('input[name="max_duration"]').val();
+    checking_availability(exp_id,d1,d2,t1,t2,slice_dur);
+});
+
+function set_validation(v_type, msg){
+    $('#validation_error').removeAttr('class');
+    $('#validation_error').html( msg ) ;
+    if(v_type == 1){
+        $('#validation_error').attr('class', "alert alert-success");
+    } else if (v_type == 2){
+        $('#validation_error').attr('class', "alert alert-danger");
+    } else if (v_type == 3){
+        $('#validation_error').attr('class', "alert alert-danger");
+    }
+};
+function validate(){
+    set_validation(0,"");
+    var milliseconds = $('#active_time').datepair('getTimeDiff');
+    var hrs=milliseconds/1000/60/60;
+    if (isNaN(hrs) || hrs <=0)
+    {
+        set_validation(2, "Time interval is not valid");
+        return false;
+    }
+
+    var slice_dur= $('input[name="max_duration"]').val();
+    if(slice_dur>hrs)
+    {
+        set_validation(2, "Duration is large than time interval");
+        return false;
+    }
+
+    if(v_range==0){
+        set_validation(3, "Please check availability first before submit" );
+        return false;
+    }
+    return(true);
+};
+
+function checking_availability(exp_id,d1,d2,t1,t2,dur) {
+    $.ajax({
+        url  : "../check_availability",
+        type : "POST",
+        data : {exp:exp_id, date1:d1, date2:d2, time1:t1, time2:t2,dur:dur},
+        success : function(result) {
+            if(result['free']=="1") {
+                set_validation(1 ,  "<strong>Congratulation</strong>, its a Free Slot/Resources" );
+                v_range=1;
+            } else {
+                set_validation(3, "A <strong>Busy</strong> slot(s)" +result['msg'] +"for more details see <a href='/portal/testbeds/scheduler/'>Timeline</a>");
+                v_range=0;
+            }
+        },
+        error : function(xhr,errmsg,err) {
+           console.log(err);
+           set_validation(2 ,"Server Error, try again later");
+        }
+    });
+};
+</script>
+{% endblock %}

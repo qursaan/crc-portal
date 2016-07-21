@@ -198,6 +198,14 @@ NB:
 .legend ol li.maintenance {
     background: url("../img/tools-15.png") no-repeat scroll 8px 50% #EDA428;
 }
+
+.legend ol li.bulk {
+    background: #EDA428;
+}
+
+.legend ol li.canceled {
+    background: #D0F0FF;
+}
 .legend ol li.selected {
     background: #25BA25;
 }
@@ -213,4 +221,10 @@ NB:
 }
 #scheduler .pending{
     background-color: #63D463;
+}
+#scheduler .canceled{
+    background-color: #D0F0FF ;
+}
+#scheduler .bulk{
+    background-color: #EDA428;
 }

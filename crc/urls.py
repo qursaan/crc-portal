@@ -28,8 +28,6 @@ from django.template.base import add_to_builtins
 add_to_builtins('insert_above.templatetags.insert_tags')
 
 
-
-
 #import portal.platformsview
 home_view       = portal.homeview.HomeView.as_view()
 dashboard_view  = portal.dashboardview.DashboardView.as_view()
@@ -37,9 +35,9 @@ dashboard_view  = portal.dashboardview.DashboardView.as_view()
 #portal.dashboardview.DashboardView.as_view()
 #platforms_view=portal.platformsview.PlatformsView.as_view()
 
-the_default_view        = dashboard_view
-the_after_login_view    = dashboard_view
-the_login_view          = home_view
+the_default_view     = dashboard_view
+the_after_login_view = dashboard_view
+the_login_view       = home_view
 #admin.autodiscover()
 
 urlpatterns = [
@@ -47,6 +45,8 @@ urlpatterns = [
     url(r'^/?$', the_default_view),
     # Portal
     url(r'^portal/', include('portal.urls')),
+    # Lab
+    url(r'^lab/', include('lab.urls')),
     # filer
     # url(r'^filer/', include('filer.urls')),
 

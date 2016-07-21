@@ -1,0 +1,52 @@
+{% extends "layout-unfold1.html" %}
+{% block unfold_main %}
+
+<!--div class="onelab-title well-lg"-->
+<div style="text-align:center" class="well-sm">
+    <h2>My Courses</h2>
+</div>
+{% if errors %}
+<ul>
+    {% for error in errors %}
+    <li>{{ error }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+<h2></h2>
+<h3>My Active Courses</h3>
+
+<div id="middle_1" align="center">
+
+    <div class="well">
+
+        <form action="/lab/my_courses/add" class="form-inline" method="post" enctype="multipart/form-data"
+              name="addcourse">
+            {% csrf_token %}
+            <div class="form-group form-inline">
+                <input id="course_key" type="text" name="course_key" placeholder="Registration Key" size="25" class="form-control"/>
+            </div>
+            <button type="submit" value="Enroll" class="btn btn-default">Enroll
+            </button>
+        </form>
+        <hr/>
+        <table class="table table-bordered table-hover mytable">
+            <thead>
+            <th>Title</th>
+            <th>Instructor Name</th>
+            <th>Added Date</th>
+            </thead>
+            {% for row in courses_list %}
+            <tr class="border_bottom">
+                <td class="odd"> {{ row.course_ref.title }}</td>
+                <td class="even"> {{ row.course_ref.instructor_ref }}</td>
+                <td class="odd"> {{ row.added }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+    </div>
+</div>
+<script>
+
+</script>
+{% endblock %}

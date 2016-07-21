@@ -1,0 +1,106 @@
+{% extends "layout-unfold1.html" %}
+
+{% block head %}
+<link rel="stylesheet" type="text/css" href='{{ STATIC_URL }}css/validate_pending.css' />
+{% endblock %}
+{% block unfold_main %}
+<div style="text-align:center" class="well-sm">
+    <h2>Pending Requests</h2>
+</div>
+{% if errors %}
+<ul>
+    {% for error in errors %}
+    <li>{{ error }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+<h2></h2>
+
+<div class="container">
+	<hr/>
+	<h3>(1) Pending Student Requests</h3>
+	{% if std_pending_list %}
+			<h3>Registration</h3>
+			<table width=100% border=1 class="table table-bordered table-hover">
+				<thead>
+                    <td></td>
+					<td>Type</td>
+					<td>Details</td>
+					<td>Timestamp</td>
+					<td>Status</td>
+				</thead>
+				{% for request in std_pending_list %}
+				<tr class="{% if forloop.counter|divisibleby:2 %}even{% else %}odd{% endif %}">
+					<td>
+					    <input class='portal__validate__checkbox'
+						   id='portal__validate__checkbox__{{request.type}}__{{request.id}}' type='checkbox'/>
+					</td>
+					<td>
+					    <div class='portal_validate_request {{request.type}}'>
+                        </div>
+                    </td>
+					<td>
+                        {% if request.type == 'user' %}
+                        Login: {{request.login}} -- First name: {{request.first_name}} -- Last name: {{request.last_name}} -- Email: {{request.email}}
+                        {% endif %}
+					</td>
+					<td>{{ request.timestamp }}</td>
+					<td>
+                        <span id='portal__status__{{request.type}}__{{request.id}}'></span>
+                        <div>Pending</div>
+                    </td>
+				</tr>
+				{% endfor %}
+			</table>
+	{% else %}
+		<u><i>There is no pending request waiting for validation.</i></u>
+	{% endif %}
+<hr/>
+	{% if std_pending_list  %}
+        <input type='button' id='portal__validate' value='Validate' onclick='on_click_event();'/>
+    {% endif %}
+</div>
+<!-- End of the container div -->
+
+<script type="text/javascript">
+function on_click_event() {
+	var ids = [];
+	$('.portal__validate__checkbox').each(function(i, el) {
+		if ($(el).prop('checked')) {
+			// portal__validate__checkbox__slice__2
+			var id_array = $(el).attr('id').split('__');
+			// push(slice__2)
+			ids.push(id_array[3] + '__' + id_array[4]);
+		}
+	});
+	if (ids.length > 0) {
+		var id_str = ids.join('/');
+
+		// XXX spinner
+
+		$.getJSON('/portal/validate_action/' + id_str,
+			function(status) {
+				$.each(status, function(request_type__id, request_status) {
+					// request_status: NAME -> dict (status, description)
+					var status_str = '';
+					$.each(request_status, function(name, result) {
+						if (status_str != '')
+							status_str += ' -- ';
+
+						if (result.status) {
+							status_str += '<font color="green">OK</font>';
+							$('#portal__validate__checkbox__' + request_type__id).hide();
+						} else {
+							status_str += '<font color="red">ERROR: ' + result.description + '</font>';
+						}
+					});
+					$('#portal__status__' + request_type__id).html(status_str)
+
+
+				});
+			}
+		);
+	}
+}
+</script>
+{% endblock %}

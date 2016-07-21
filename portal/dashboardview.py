@@ -1,4 +1,6 @@
-from portal.actions import get_count_active_slice, get_user_by_email
+from portal.actions import get_count_active_slice, \
+    get_user_by_email, get_user_type
+from lab.actions import get_count_students_course,  get_count_students_pending, get_count_bulk_experiments, get_count_students_experiments
 from ui.topmenu import topmenu_items, the_user
 from unfold.loginrequired import LoginRequiredAutoLogoutView
 from unfold.page import Page
@@ -72,11 +74,17 @@ class DashboardView(LoginRequiredAutoLogoutView):
         # page.expose_js_metadata()
         # the page header and other stuff
 
-        c_user = the_user(self.request)
+        c_user_email = the_user(self.request)
+        c_user = get_user_by_email(c_user_email)
         context = super(DashboardView, self).get_context_data(**kwargs)
         context['title'] = 'Dashboard'
         context['username'] = the_user(self.request)
         context['topmenu_items'] = topmenu_items('Dashboard', page.request)
-        context['active_count'] = get_count_active_slice(get_user_by_email(c_user))
+        context['active_count'] = get_count_active_slice(c_user)
+        context['course_count'] = get_count_students_course(c_user)
+        context['pending_count'] = get_count_students_pending(c_user)
+        context['std_exp_count'] = get_count_students_experiments(c_user)
+        context['bulk_count'] = get_count_bulk_experiments(c_user)
+        context['user_type'] = get_user_type(c_user)
         context.update(page.prelude_env())
         return context

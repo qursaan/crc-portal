@@ -10,28 +10,31 @@ from portal.backend_actions import create_backend_user, create_slice
 from portal.models import Authority, MyUser, PendingSlice, \
     PendingAuthority, VirtualNode,  FrequencyRanges, \
     Reservation, ReservationDetail, SimReservation, SimulationVM, ReservationFrequency
+from reservation_status import ReservationStatus
 
 
 # ************* Default Scheduling Slice ************** #
-def schedule_slice(slice_id):
+def schedule_slice(slice_id, use_bulk=False):
     curr_slice = PendingSlice.objects.get(id=slice_id)
     request_time = curr_slice.created
+    busy_list = ReservationStatus.get_busy_list(use_bulk)
 
     next_time = get_next_hour(request_time)
-    overlap = PendingSlice.objects.filter(status=3, start_time=next_time)
+    overlap = PendingSlice.objects.filter(status__in=busy_list, start_time=next_time)
     while overlap.exists():
         next_time = get_next_hour(next_time)
-        overlap = PendingSlice.objects.filter(status=3, start_time=next_time)
+        overlap = PendingSlice.objects.filter(status__in=busy_list, start_time=next_time)
 
     curr_slice.start_time = next_time
     curr_slice.end_time = get_next_hour(next_time)
     curr_slice.approve_date = datetime.now()
-    curr_slice.status = 3
+    curr_slice.status = ReservationStatus.get_active()
     curr_slice.save()
     return True
 
 
-def schedule_auto_online(reserve_id, stype="omf"):
+def schedule_auto_online(reserve_id, stype="omf", use_bulk=False, reserve_type="R"):
+    busy_list = ReservationStatus.get_busy_list(use_bulk)
     curr_slice = None
     new_list = []
 
@@ -69,7 +72,7 @@ def schedule_auto_online(reserve_id, stype="omf"):
         # overlap = None
         overlap_flag = False
         if stype == "omf":
-            overlap = Reservation.objects.filter(status=3, start_time__lte=curr_start, end_time__gte=curr_end)
+            overlap = Reservation.objects.filter(status__in=busy_list, start_time__lte=curr_start, end_time__gte=curr_end)
             # check nodes
             for r in overlap:
                 details = ReservationDetail.objects.filter(reservation_ref=r, node_ref__in=new_list)
@@ -78,7 +81,7 @@ def schedule_auto_online(reserve_id, stype="omf"):
                     break
 
         elif stype == "sim":
-            overlap = SimReservation.objects.filter(status=3, start_time__lte=curr_start, end_time__gte=curr_end,
+            overlap = SimReservation.objects.filter(status__in=busy_list, start_time__lte=curr_start, end_time__gte=curr_end,
                                                     node_ref__in=new_list)
 
             if overlap.exists():
@@ -93,22 +96,29 @@ def schedule_auto_online(reserve_id, stype="omf"):
     if curr_start < curr_slice.f_end_time:
         curr_slice.start_time = curr_start
         curr_slice.end_time = curr_end  # curr_start + timedelta(hours=dur)
+        if use_bulk:
+            curr_slice.start_time = curr_slice.f_start_time
+            curr_slice.end_time = curr_slice.f_end_time
+
         curr_slice.approve_date = timezone.now()
-        curr_slice.status = 3
+        if reserve_type == "R":
+            curr_slice.status = ReservationStatus.get_active()
+        elif reserve_type == "I":
+            curr_slice.status = ReservationStatus.get_bulk()
         curr_slice.save()
 
-        output = create_slice(curr_slice.user_ref.username,utc_to_timezone(curr_start),utc_to_timezone(curr_end))
+        output = create_slice(curr_slice.user_ref.username, utc_to_timezone(curr_start), utc_to_timezone(curr_end))
         if output == 1:
             return True
         else:
-            curr_slice.status = 1
+            curr_slice.status = ReservationStatus.get_pending()
             curr_slice.save()
             return False
     else:
         return False
 
 
-def schedule_checking(nodelist, start_datetime, end_datetime, stype="omf"):
+def schedule_checking(nodelist, start_datetime, end_datetime, stype="omf",use_bulk=False):
     new_list = []
     for n in nodelist:
         new_list.append(int(n))
@@ -116,7 +126,7 @@ def schedule_checking(nodelist, start_datetime, end_datetime, stype="omf"):
     curr_start = start_datetime
     curr_end = end_datetime
 
-    status_list = [2, 3]
+    busy_list = ReservationStatus.get_busy_list(use_bulk)
     overlap = None
     node_list = []
     output_list = ""
@@ -124,11 +134,11 @@ def schedule_checking(nodelist, start_datetime, end_datetime, stype="omf"):
     if stype == "omf":
         node_list = VirtualNode.objects.filter(pk__in=new_list)
         overlap = ReservationDetail.objects.filter(
-            reservation_ref__status__in=status_list, node_ref__in=node_list)  # .filter(
+            reservation_ref__status__in=busy_list, node_ref__in=node_list)  # .filter(
         # Q(reservation_ref__start_time__gte=curr_start) | Q(reservation_ref__end_time__lt=curr_end))
     elif stype == "sim":
         node_list = SimulationVM.objects.filter(pk__in=nodelist)
-        overlap = SimReservation.objects.filter(status__in=status_list, node_ref__in=node_list)  # .filter(
+        overlap = SimReservation.objects.filter(status__in=busy_list, node_ref__in=node_list)  # .filter(
         # Q(start_time__gte=curr_start) | Q(end_time__lt=curr_end))
 
     for n in node_list:
@@ -163,7 +173,7 @@ def schedule_checking_all(start_datetime, end_datetime, stype="omf"):
     curr_start = start_datetime
     curr_end = end_datetime
 
-    status_list = [2, 3]
+    busy_list = ReservationStatus.get_busy_list()
     overlap = None
     node_list = []
     busy_list = []
@@ -171,10 +181,10 @@ def schedule_checking_all(start_datetime, end_datetime, stype="omf"):
     if stype == "omf":
         node_list = VirtualNode.objects.all()
         overlap = ReservationDetail.objects.filter(
-            reservation_ref__status__in=status_list, node_ref__in=node_list)
+            reservation_ref__status__in=busy_list, node_ref__in=node_list)
     elif stype == "sim":
         node_list = SimulationVM.objects.all()
-        overlap = SimReservation.objects.filter(status__in=status_list, node_ref__in=node_list)
+        overlap = SimReservation.objects.filter(status__in=busy_list, node_ref__in=node_list)
 
     for n in node_list:
         for r in overlap:
@@ -207,12 +217,12 @@ def schedule_checking_freq(freq_list, start_datetime, end_datetime):
     curr_start = start_datetime
     curr_end = end_datetime
 
-    status_list = [2, 3]
+    busy_list = ReservationStatus.get_busy_list()
     output_list = ""
     freq_list = FrequencyRanges.objects.filter(pk__in=new_list)
 
     overlap = ReservationFrequency.objects.filter(
-        reservation_ref__status__in=status_list,
+        reservation_ref__status__in=busy_list,
         frequency_ref__in=freq_list)
 
     for r in overlap:
@@ -266,6 +276,14 @@ def get_username_by_email(u_email):
     return None
 
 
+def get_user_type(c_user):
+    if c_user:
+        if c_user.user_type:
+            return c_user.user_type
+        return 0
+    return -1
+
+
 # ************* Get Task Id by Slice Id *************** #
 def get_task_id(slice_id, node_name, stype):
     if stype == "omf":
@@ -313,24 +331,26 @@ def check_next_task_duration(task_id, stype):
 
 
 def get_count_active_slice(c_user):
-    active_list_1 = Reservation.objects.filter(user_ref=c_user, status=3)
-    active_list_2 = SimReservation.objects.filter(user_ref=c_user, status=3)
+    busy_list = ReservationStatus.get_busy_list(allow_bulk=True,allow_pending=True)
+    active_list_1 = Reservation.objects.filter(user_ref=c_user, status__in=busy_list)
+    active_list_2 = SimReservation.objects.filter(user_ref=c_user, status__in=busy_list)
     current_time = timezone.now()
     total_count = active_list_1.count() + active_list_2.count()
     # confirm active session
     for al in active_list_1:
         if al.end_time < current_time:
-            al.status = 4
+            al.status = ReservationStatus.get_expired()
             al.save()
             total_count -= 1
 
     for al in active_list_2:
         if al.end_time < current_time:
-            al.status = 4
+            al.status = ReservationStatus.get_expired()
             al.save()
             total_count -= 1
 
     return total_count
+
 
 
 # ************* Get Authority by User email *********** #
@@ -486,7 +506,7 @@ def portal_validate_request(wsgi_request, request_ids):
                 up_user = MyUser.objects.get(id=request['id'])
                 web_user = User.objects.get(id=up_user.id)
                 # TODO: Create user file here
-                result = create_backend_user(up_user.username, up_user.password)
+                result = 1 #create_backend_user(up_user.username, up_user.password)
                 if result == 1:
                     up_user.status = 2
                     up_user.save()
@@ -495,7 +515,7 @@ def portal_validate_request(wsgi_request, request_ids):
 
                     request_status['CRC user'] = {'status': True}
                 else:
-                    request_status['CRC user'] = {'status': False, 'description': 'Server Error'}
+                    request_status['CRC user'] = {'status': False, 'description': 'Back Server Error'}
 
             except Exception, e:
                 request_status['CRC user'] = {'status': False, 'description': str(e)}

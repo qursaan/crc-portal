@@ -204,7 +204,6 @@ function on_click_event() {
 					$.each(request_status, function(name, result) {
 						if (status_str != '')
 							status_str += ' -- ';
-
 						if (result.status) {
 							status_str += '<font color="green">OK</font>';
 							$('#portal__validate__checkbox__' + request_type__id).hide();
@@ -213,8 +212,6 @@ function on_click_event() {
 						}
 					});
 					$('#portal__status__' + request_type__id).html(status_str)
-
-
 				});
 			}
 		);

@@ -4,22 +4,24 @@ from ui.topmenu           import topmenu_items, the_user
 
 from portal.models  import Authority
 from portal.actions import get_requests, get_user_by_email
-#from portal.modules import get_user_by_email
 
-#import json
-#from django.http                import HttpResponseRedirect, HttpResponse
-#from django.shortcuts           import render
-#from django.template.loader     import render_to_string
 
-#from portal.event               import Event
+# from portal.modules import get_user_by_email
+
+# import json
+# from django.http                import HttpResponseRedirect, HttpResponse
+# from django.shortcuts           import render
+# from django.template.loader     import render_to_string
+
+# from portal.event               import Event
 # presview is put in observation for now
-#from plugins.pres_view          import PresView
-#from plugins.raw                import Raw
+# from plugins.pres_view          import PresView
+# from plugins.raw                import Raw
 
 # these seem totally unused for now
-#from portal.util                import RegistrationView, ActivationView
-#from manifold.manifoldapi       import execute_query
-#from manifold.core.query        import Query
+# from portal.util                import RegistrationView, ActivationView
+# from manifold.manifoldapi       import execute_query
+# from manifold.core.query        import Query
 
 
 class ValidatePendingView(LoginRequiredAutoLogoutView): # FreeAccessView):
@@ -131,8 +133,8 @@ class ValidatePendingView(LoginRequiredAutoLogoutView): # FreeAccessView):
             pi_authorities_tmp = Authority.objects.filter(authority_hrn=user.authority_hrn).all()
             pi_authorities = set()
             for pa in pi_authorities_tmp:
-            #    pi_authorities |= set(pa.authority_hrn) #['pi_authorities'])
-                pi_authorities=pi_authorities.union([user.authority_hrn])
+                # pi_authorities |= set(pa.authority_hrn) #['pi_authorities'])
+                pi_authorities = pi_authorities.union([user.authority_hrn])
 
 #            # include all sub-authorities of the PI
 #            # if PI on ple, include all sub-auths ple.upmc, ple.inria and so on...

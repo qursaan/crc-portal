@@ -1,0 +1,115 @@
+{% extends "layout-unfold1.html" %}
+{% block unfold_main %}
+
+<!--div class="onelab-title well-lg"-->
+<div style="text-align:center" class="well-sm">
+    <h2>Experiments List</h2>
+</div>
+{% if errors %}
+<ul>
+    {% for error in errors %}
+    <li>{{ error }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+<h2></h2>
+<h3>Active Experiments</h3>
+<div id="middle_1" align="center">
+    <div class="well">
+        <ul class='nav nav-pills nav-stacked'>
+            <li role="presentation">
+                <button id="add_course" onclick="location.href='/lab/experiments/bulk'"
+                        class="btn btn-default">Add New Experiment
+                </button>
+            </li>
+        </ul>
+        <table class="table table-bordered table-hover mytable">
+            <thead>
+            <th>Title</th>
+            <th>Course Name</th>
+            <th>Due Date</th>
+            <th>Student Duration</th>
+            <th>Server</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Created</th>
+
+            </thead>
+            {% for row in exp_list %}
+                {% if row.status == 0 %}
+                <tr class="border_bottom">
+                    <td class="odd"> {{ row.title }}</td>
+                    <td class="even"> {{ row.course_ref }}</td>
+                    <td class="odd"> {{ row.due_date }}</td>
+                    <td class="even"> {{ row.max_duration }} hr</td>
+                    <td class="even">
+                        {% if row.server_type == "sim" %}
+                            Simulation
+                        {% else %}
+                            Testbed Node
+                        {% endif %}
+                    </td>
+                    {% if row.server_type == "sim" %}
+                        <td class="odd"> {{ row.sim_reservation_ref.start_time }}</td>
+                        <td class="even"> {{ row.sim_reservation_ref.end_time }}</td>
+                    {% else %}
+                        <td class="odd"> {{ row.reservation_ref.start_time }}</td>
+                        <td class="even"> {{ row.reservation_ref.end_time }}</td>
+                    {% endif %}
+                    <td class="odd"> {{ row.created }}</td>
+                    <td>
+                        <button id="cancel_experiment" onclick="location.href='/lab/experiments/cancel/{{ row.id }}'"
+                        class="btn btn-default">Cancel
+                </button>
+                    </td>
+                </tr>
+                {% endif %}
+            {% endfor %}
+        </table>
+    </div>
+</div>
+<h3>Expired Experiments</h3>
+<div id="middle_2" align="center">
+    <div class="well">
+        <table class="table table-bordered table-hover mytable">
+            <thead>
+            <th>Title</th>
+            <th>Course Name</th>
+            <th>Due Date</th>
+            <th>Student Duration</th>
+            <th>Server</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Created</th>
+            <th></th>
+            </thead>
+            {% for row in exp_list %}
+                {% if row.status == 1 %}
+                <tr class="border_bottom">
+                    <td class="odd"> {{ row.title }}</td>
+                    <td class="even"> {{ row.course_ref }}</td>
+                    <td class="odd"> {{ row.due_date }}</td>
+                    <td class="even"> {{ row.max_duration }} hr</td>
+                    <td class="even">
+                        {% if row.server_type == "sim" %}
+                            Simulation
+                        {% else %}
+                            Testbed Node
+                        {% endif %}
+                    </td>
+                    {% if row.server_type == "sim" %}
+                        <td class="odd"> {{ row.sim_reservation_ref.start_time }}</td>
+                        <td class="even"> {{ row.sim_reservation_ref.end_time }}</td>
+                    {% else %}
+                        <td class="odd"> {{ row.reservation_ref.start_time }}</td>
+                        <td class="even"> {{ row.reservation_ref.end_time }}</td>
+                    {% endif %}
+                    <td class="odd"> {{ row.created }}</td>
+
+                </tr>
+                {% endif %}
+            {% endfor %}
+        </table>
+    </div>
+</div>
+{% endblock %}

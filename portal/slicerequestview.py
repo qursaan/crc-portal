@@ -18,6 +18,7 @@ from unfold.loginrequired   import LoginRequiredAutoLogoutView
 from ui.topmenu             import topmenu_items, the_user
 from portal.actions         import get_authority_by_user, get_authority_emails
 from crc.settings           import SUPPORT_EMAIL
+from portal.reservation_status import ReservationStatus
 
 
 class SliceRequestView (LoginRequiredAutoLogoutView):
@@ -141,7 +142,7 @@ class SliceRequestView (LoginRequiredAutoLogoutView):
                     slice_duration  = slice_duration,
                     #number_of_nodes = number_of_nodes,
                     purpose         = purpose,
-                    status          = 1,
+                    status          = ReservationStatus.get_pending(),
                 )
                 s.save()
                 #for i in resource_group:

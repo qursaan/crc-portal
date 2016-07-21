@@ -1,0 +1,101 @@
+{% extends "layout-unfold1.html" %}
+{% block unfold_main %}
+
+<div style="text-align:center" class="well-sm">
+    <h2>Add New Course</h2>
+</div>
+{% if errors %}
+<ul>
+    {% for error in errors %}
+    <li>{{ error }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+<h2></h2>
+<h3>New course</h3>
+<div id="middle_1" align="center">
+
+    <div class="well">
+        <form class="cmxform form-horizontal" id="newcourseform" method="POST" action="" enctype="multipart/form-data"
+              role="form">
+            <fieldset>
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="course_title" class="col-xs-2 control-label">Course Title</label>
+                    <div class="col-xs-4">
+                        <input id="course_title" type="text" name="course_title" class="form-control" minlength="2"
+                               value="{{ course_title }}" placeholder="Course Title" required/>
+                    </div>
+                    <div class="col-xs-6"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="course_code" class="col-xs-2 control-label">Course Code</label>
+                    <div class="col-xs-4">
+                        <input id="course_code" type="text" name="course_code" size="25" class="form-control"
+                               minlength="2" placeholder="AB500"
+                               value="{{ course_code }}"/>
+                    </div>
+
+                </div>
+                <div class="form-group">
+                    <label for="course_key" class="col-xs-2 control-label">Registration Key</label>
+                    <div class="col-xs-4">
+                        <input id="course_key" type="text" name="course_key" size="25" class="form-control"
+                               minlength="2"
+                               value="{{ course_key }}" />
+
+                    </div>
+                    <div class="col-xs-1">
+                        <button id="gen_btn" class="btn btn-alert" type="button">Generate</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="course_max" class="col-xs-2 control-label">Max No. of Student</label>
+                    <div class="col-xs-4">
+                        <div class="ui-widget">
+                            <input id="course_max" name="course_max" value="{{ course_max }}" type="text"
+                                   class="form-control user-input"
+                                   id="course_max" required/>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="form-group">
+                    <label for="course_detail" class="col-xs-2 control-label">Course Description</label>
+                    <div class="col-xs-4">
+                        <div class="ui-widget">
+                            <textarea id="course_detail" name="course_detail" class="form-control" style="height:110px;"
+                                      placeholder="Description" required>{{ course_detail }}</textarea>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="form-group" id="add_course">
+                    <div class="col-xs-2"></div>
+                    <div class="col-xs-4">
+                        <button class="submit btn btn-success" type="submit">Add</button>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>
+<script>
+$("#gen_btn").on('click', function(event){
+    $( "#course_key" ).val(makeid());
+});
+
+function makeid()
+{
+    var text = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    for( var i=0; i < 7; i++ )
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+    return text;
+}
+</script>
+{% endblock %}

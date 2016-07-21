@@ -1,0 +1,99 @@
+{% extends "reservation-view.html" %}
+{% block page_title %}
+<h3>New Bulk Reservation</h3>
+{% endblock %}
+
+{% block instructor_area %}
+<fieldset>
+    <legend>Experiment Details</legend>
+    <div class="form-group">
+        <label for="ex_title" class="col-xs-2 control-label">Experiment Title</label>
+        <div class="col-xs-5">
+            <input id="ex_title" type="text" name="ex_title" class="form-control" minlength="2"
+                   value="{{ ex_title }}" placeholder="Experiment Title" required/>
+        </div>
+        <div class="col-xs-6"></div>
+    </div>
+
+    <div class="form-group">
+        <label for="ex_course" class="col-xs-2 control-label">Course Name</label>
+        <div class="col-xs-5">
+            <div class="ui-widget">
+                <select id="ex_course" name="ex_course" class="form-control" value="{{ ex_course }}"
+                        required>
+                    {% for row in ex_courses_list %}
+                    <option value="{{ row.id }}" label="{{ row }}">{{ row }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="duedate" class="col-xs-2 control-label">Due Date</label>
+        <div class="input-group col-xs-5" id="duedate">
+
+            <input id="due_date" name="due_date" type="text" class="form-control user-input date"
+                   placeholder="due date" required/>
+                <span class="input-group-addon">
+                      <span class="glyphicon glyphicon-calendar"></span>
+                  </span>
+        </div>
+        <script>
+            $(document).ready(function(){
+                $('#duedate input').datepicker({});
+                $('#duedate input').datepicker('option', 'minDate' ,'0d');
+            });
+        </script>
+    </div>
+
+    <div class="form-group">
+        <label for="ex_detail" class="col-xs-2 control-label">Description</label>
+        <div class="col-xs-5">
+            <div class="ui-widget">
+                            <textarea id="ex_detail" name="ex_detail" class="form-control" style="height:110px;"
+                                      placeholder="Description" required>{{ ex_detail }}</textarea>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="reserve_type" class="col-xs-2 control-label">Bulk Reservation Type</label>
+        <div class="col-xs-5">
+            <div class="ui-widget">
+                <select id="reserve_type" name="reserve_type" class="form-control user-input"
+                        value="" autocomplete="off" disabled>
+                    <option value="lock" selected="selected">Lock</option>
+                    <option value="race">Racing</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="max_duration" class="col-xs-2 control-label">Max Student Duration</label>
+        <div class="col-xs-5">
+            <div class="ui-widget">
+                <div class="input-group">
+                    <input type="text" class="form-control user-input" name="max_duration" id="max_duration"
+                           readonly/>
+                    <div class="input-group-addon">hr</div>
+                </div>
+                <div id="max-std-duration"></div>
+            </div>
+        </div>
+        <script>
+            $( "#max-std-duration" ).slider({
+                range: "min",
+                value: 1,
+                min: 1,
+                max: 10,
+                slide: function( event, ui ) {
+                    $( "#max_duration" ).val(ui.value);
+                }
+            });
+            $( "#max_duration" ).val( $( "#max-std-duration" ).slider( "value" ) );
+        </script>
+    </div>
+</fieldset>
+{% endblock %}
