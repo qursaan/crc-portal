@@ -60,7 +60,7 @@ urlpatterns = [
     url(r'^contact/?$', ContactView.as_view(), name='contact'),
     url(r'^support/?$', SupportView.as_view(), name='support'),
     url(r'^guide/?$', GuideView.as_view(), name='guide'),
-    url(r'^support/documentation/?$', DocumentationView.as_view(), name='FAQ'),
+    url(r'^support/documentation/?$', GuideView.as_view(), name='guide'), # DocumentationView.as_view(), name='FAQ'),
     url(r'^experiment?$', ExperimentView.as_view(), name='experiment'),
 
     # Validate pending requests

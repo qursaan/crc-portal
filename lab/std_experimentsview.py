@@ -34,12 +34,10 @@ class StudentExperimentsView(LoginRequiredAutoLogoutView):
         c_ids = []
 
         for c in s_courses_list:
-            c_ids.append(c.id)
+            c_ids.append(c.course_ref.id)
 
         courses_list = Course.objects.filter(id__in=c_ids)
-
         exp_list = Experiments.objects.filter(course_ref__in=courses_list, status=0)
-
 
         res_exp_list = Experiments.objects.filter(course_ref__in=courses_list)
         std_exp_list = StudentsExperiment.objects.filter(students_ref=c_user, experiment_ref__in=res_exp_list)
@@ -49,7 +47,6 @@ class StudentExperimentsView(LoginRequiredAutoLogoutView):
             res_std_list_id.append(s.experiment_ref.id)
 
         exp_list = exp_list.exclude(id__in=res_std_list_id)
-
 
         template_env = {
             'topmenu_items': topmenu_items('My Courses', page.request),

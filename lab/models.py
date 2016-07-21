@@ -35,8 +35,8 @@ class StudentCourses(models.Model):
     course_ref = models.ForeignKey(Course, null=True)
     added = models.DateTimeField(default=timezone.now)
 
-    def __unicode__(self):
-        return self.students_ref + "@" + self.course_ref
+    # def __unicode__(self):
+        # return self.students_ref.first_name + " @ " + self.course_ref
 
 
 class Experiments(models.Model):

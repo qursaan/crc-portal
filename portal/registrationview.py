@@ -65,7 +65,8 @@ class RegistrationView (FreeAccessView):
             if not form.is_valid():
                 errors.append('Invalid Captcha')
 
-            errors = UserModules.create_user_account(errors, reg_email, reg_username, reg_password,
+            if not errors:
+                errors = UserModules.create_user_account(errors, reg_email, reg_username, reg_password,
                             reg_fname, reg_lname, reg_auth, reg_usertype, reg_supervisor)
 
             if not errors:
