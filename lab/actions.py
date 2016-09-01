@@ -1,9 +1,28 @@
 
-from lab.models import StudentCourses, Experiments
+from lab.models import StudentCourses, StudentsExperiment, Experiments, Course
 from portal.models import MyUser  # , PendingSlice
 from portal.reservation_status import ReservationStatus
+from portal.actions import get_user_by_email
 
 from django.utils import timezone
+
+
+def add_course_by_email(course, student_email):
+    std = get_user_by_email(student_email)
+    if std:
+        dup = StudentCourses.objects.filter(students_ref=std, course_ref=course)
+        if not dup:
+            sc = StudentCourses(
+                students_ref=std,
+                course_ref=course,
+            )
+            sc.save()
+
+
+def add_all_courses_by_email(user_emails):
+    courses = Course.objects.filter(email_list__contains=user_emails)
+    for c in courses:
+        add_course_by_email(c, user_emails)
 
 
 def get_std_requests(supervisor_id):
@@ -40,8 +59,30 @@ def get_count_students_course(c_user):
 
 
 def get_count_students_pending(c_user):
-    pending = MyUser.objects.filter(status=1, supervisor_id=c_user.id).all()
+    pending = MyUser.objects.filter(status=1, supervisor_id=c_user.id, user_type=3).all()
     return pending.count()
+
+
+def get_count_students(c_user):
+    status_list = [0, 2]
+    students = MyUser.objects.filter(supervisor_id=c_user.id, status__in=status_list, user_type=3).all()
+    return students.count()
+
+
+def get_control_options(stype, reserve_ref):
+    allow_img = True
+    allow_ssh = True
+    allow_crt = True
+    s_exp = None
+    if stype == "omf":
+        s_exp = StudentsExperiment.objects.filter(reservation_ref=reserve_ref)
+    elif stype == "sim":
+        s_exp = StudentsExperiment.objects.filter(sim_reservation_ref=reserve_ref)
+    if s_exp:
+        allow_crt = s_exp[0].experiment_ref.allow_crt
+        allow_ssh = s_exp[0].experiment_ref.allow_ssh
+        allow_img = s_exp[0].experiment_ref.allow_img
+    return allow_crt, allow_img, allow_ssh
 
 
 def get_count_students_experiments(c_user):

@@ -23,7 +23,7 @@
     <h5>Current time: {{time_now}}</h5>
     <div id="middle3" align="center">
         <div class="well">
-            <table class="table table-bordered table-hover mytable">
+            <table class="table table-bordered table-striped table-hover mytable">
                 <thead>
                 <tr>
                     <th>Slice Name</th>
@@ -39,14 +39,14 @@
                 <tbody>
                 {% for row in active_list_1 %}
                 <tr class="border_bottom">
-                    <td class="odd"> {{ row.slice_name }}</td>
-                    <td class="odd"> {{ row.authority_hrn }}</td>
-                    <td class="odd"> Testbed Server</td>
-                    <td class="odd"> {{ row.created }}</td>
-                    <td class="odd"> {{ row.approve_date }}</td>
-                    <td class="odd"> {{ row.start_time }}</td>
-                    <td class="odd"> {{ row.end_time }}</td>
-                    <td class="even">
+                    <td> {{ row.slice_name }}</td>
+                    <td> {{ row.authority_hrn }}</td>
+                    <td> Testbed Server</td>
+                    <td> {{ row.created }}</td>
+                    <td> {{ row.approve_date }}</td>
+                    <td> {{ row.start_time }}</td>
+                    <td> {{ row.end_time }}</td>
+                    <td>
                         {% if row.end_time < time_now %}
                         *Expired*
                         {% elif row.end_time > time_now and row.start_time > time_now %}
@@ -59,20 +59,23 @@
                 {% endfor %}
                 {% for row in active_list_2 %}
                 <tr class="border_bottom">
-                    <td class="odd"> {{ row.slice_name }}</td>
-                    <td class="odd"> {{ row.authority_hrn }}</td>
-                    <td class="odd"> Simulation Server</td>
-                    <td class="odd"> {{ row.created }}</td>
-                    <td class="odd"> {{ row.approve_date }}</td>
-                    <td class="odd"> {{ row.start_time }}</td>
-                    <td class="odd"> {{ row.end_time }}</td>
-                    <td class="even">
+                    <td> {{ row.slice_name }}</td>
+                    <td> {{ row.authority_hrn }}</td>
+                    <td> Simulation Server</td>
+                    <td> {{ row.created }}</td>
+                    <td> {{ row.approve_date }}</td>
+                    <td> {{ row.start_time }}</td>
+                    <td> {{ row.end_time }}</td>
+                    <td>
                         {% if row.end_time < time_now %}
                         *Expired*
                         {% elif row.end_time > time_now and row.start_time > time_now %}
                         Waiting...
                         {% else %}
-                        <a href='/portal/lab/current/slice_s_process/{{ row.id }}'>Control</a>
+                        <a href='/portal/lab/current/slice_s_process/{{ row.id }}'
+                            class="btn btn-default">Control
+                            <span class="glyphicon glyphicon-modal-window" aria-hidden="true"></span>
+                        </a>
                         {% endif %}
                     </td>
                 </tr>
@@ -88,46 +91,45 @@
     </h3>
     <div id="middle" align="center">
         <div class="well">
-            <table class="table table-bordered table-hover mytable">
+            <table class="table table-bordered table-striped table-hover mytable">
                 <thead><tr>
-                <th>Slice Name</th>
-                <th>Authority</th>
-                <th>Request Time</th>
-                <th>Server Type</th>
-                <th>Est. Start Time</th>
-                <th>Est. End Time</th>
-                <th>Action</th></tr>
-                </thead>
+                    <th>Slice Name</th>
+                    <th>Authority</th>
+                    <th>Request Time</th>
+                    <th>Server Type</th>
+                    <th>Est. Start Time</th>
+                    <th>Est. End Time</th>
+                    <th>Action</th>
+                </tr></thead>
                 <tbody>
                 {% for row in current_list_1 %}
                 <tr class="border_bottom">
-                    <td class="odd"> {{ row.slice_name }}</td>
-                    <td class="odd"> {{ row.authority_hrn }}</td>
-                    <td class="odd"> {{ row.created }}</td>
-                    <td class="odd"> Testbed Server</td>
-                    <td class="odd"> {{ row.f_start_time }}</td>
-                    <td class="odd"> {{ row.f_end_time }}</td>
-                    <td class="even"><a href='/portal/lab/current/slice_o_cancel/{{ row.id }}'>Cancel</a>
-                        <!--button class="btn btn-danger btn-xs" id="cancel"
-                               name="cancel" title="Cancel request"
-                               onclick="return confirm('Are you sure? You will cancel your slice request');location.href='/portal/lab/current/slice_cancel/{{ row.id }}';" >
-                            Cancel</button-->
+                    <td> {{ row.slice_name }}</td>
+                    <td> {{ row.authority_hrn }}</td>
+                    <td> {{ row.created }}</td>
+                    <td> Testbed Server</td>
+                    <td> {{ row.f_start_time }}</td>
+                    <td> {{ row.f_end_time }}</td>
+                    <td><a href='/portal/lab/current/slice_o_cancel/{{ row.id }}' class="btn btn-default">
+                        Cancel
+                            <span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span>
+                        </a>
                     </td>
                 </tr>
                 {% endfor %}
                 {% for row in current_list_2 %}
                 <tr class="border_bottom">
-                    <td class="odd"> {{ row.slice_name }}</td>
-                    <td class="odd"> {{ row.authority_hrn }}</td>
-                    <td class="odd"> {{ row.created }}</td>
-                    <td class="odd"> Simulation Server</td>
-                    <td class="odd"> {{ row.f_start_time }}</td>
-                    <td class="odd"> {{ row.f_end_time }}</td>
-                    <td class="even"><a href='/portal/lab/current/slice_s_cancel/{{ row.id }}'>Cancel</a>
-                        <!--button class="btn btn-danger btn-xs" id="cancel"
-                               name="cancel" title="Cancel request"
-                               onclick="return confirm('Are you sure? You will cancel your slice request');location.href='/portal/lab/current/slice_cancel/{{ row.id }}';" >
-                            Cancel</button-->
+                    <td> {{ row.slice_name }}</td>
+                    <td> {{ row.authority_hrn }}</td>
+                    <td> {{ row.created }}</td>
+                    <td> Simulation Server</td>
+                    <td> {{ row.f_start_time }}</td>
+                    <td> {{ row.f_end_time }}</td>
+                    <td>
+                        <a href='/portal/lab/current/slice_s_cancel/{{ row.id }}' class="btn btn-default">
+                        Cancel
+                            <span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span>
+                        </a>
                     </td>
                 </tr>
                 {% endfor %}

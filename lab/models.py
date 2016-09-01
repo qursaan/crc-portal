@@ -12,14 +12,15 @@ class SupervisorStudents(models.Model):
 
 class Course(models.Model):
     instructor_ref = models.ForeignKey(MyUser, null=True)
-    title = models.CharField(max_length=64)
-    code = models.CharField(max_length=32, null=True)
-    key = models.CharField(max_length=30, null=False)
+    title        = models.CharField(max_length=64)
+    code         = models.CharField(max_length=32, null=True)
+    key          = models.CharField(max_length=30, null=False)
     # key = models.UUIDField(default=uuid.uuid4, editable=False)
-    description = models.TextField(null=True)
-    is_active = models.BooleanField(default=True)
+    description  = models.TextField(null=True)
+    is_active    = models.BooleanField(default=True)
     max_students = models.IntegerField(default=10)
-    created = models.DateTimeField(default=timezone.now)
+    email_list   = models.TextField(null=True)
+    created      = models.DateTimeField(default=timezone.now)
 
     # owner = models.ForeignKey(User)
     # instructors = models.ManyToManyField(User)
@@ -32,9 +33,11 @@ class Course(models.Model):
 
 class StudentCourses(models.Model):
     students_ref = models.ForeignKey(MyUser, null=True)
+    # students_email = models.CharField(null=True, max_length=64)
     course_ref = models.ForeignKey(Course, null=True)
+    # 0-Unbinding, 1-Binding
+    status = models.IntegerField(default=0)
     added = models.DateTimeField(default=timezone.now)
-
     # def __unicode__(self):
         # return self.students_ref.first_name + " @ " + self.course_ref
 
@@ -52,8 +55,12 @@ class Experiments(models.Model):
     server_type = models.CharField(max_length=16, null=True)
     reservation_ref = models.ForeignKey(Reservation, null=True)
     sim_reservation_ref = models.ForeignKey(SimReservation, null=True)
-    # 0-Open, 1-Expired
+    # 0-Open, 1-Expired, 2-Deleted
     status = models.IntegerField(default=0)
+    # controls
+    allow_crt = models.BooleanField(default=False)
+    allow_ssh = models.BooleanField(default=False)
+    allow_img = models.BooleanField(default=False)
 
     def __unicode__(self):
         return self.title
@@ -62,6 +69,8 @@ class Experiments(models.Model):
 class StudentsExperiment(models.Model):
     students_ref = models.ForeignKey(MyUser, null=True)
     experiment_ref = models.ForeignKey(Experiments, null=True)
+    reservation_ref = models.ForeignKey(Reservation, null=True)
+    sim_reservation_ref = models.ForeignKey(SimReservation, null=True)
     start_time = models.DateTimeField('Start Time', null=True)
     end_time = models.DateTimeField('End Time', null=True)
     # 0-Reserved, 1-Finish, 2-Cancel

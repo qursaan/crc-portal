@@ -17,8 +17,8 @@
 <div id="middle_1" align="center">
     <div class="well">
         <hr/>
-        <table class="table table-bordered table-hover mytable">
-            <thead>
+        <table class="table table-bordered table-striped table-hover mytable">
+            <thead><tr>
             <th>Course</th>
             <th>Experiment Title</th>
             <th>Instructor Name</th>
@@ -26,15 +26,15 @@
             <th>Server Type</th>
             <th>Start</th>
             <th>End</th>
-            <th>Status</th>
-            </thead>
+            <th>Status</th></tr>
+            </thead><tbody>
             {% for row in exp_list %}
             <tr class="border_bottom">
-                <td class="odd" > {{ row.course_ref.title }} </td>
-                <td class="odd" > {{ row.title }}</td>
-                <td class="even"> {{ row.course_ref.instructor_ref }} </td>
-                <td class="odd" > {{ row.due_date }} </td>
-                <td class="even">
+                <td > {{ row.course_ref.title }} </td>
+                <td > {{ row.title }}</td>
+                <td > {{ row.course_ref.instructor_ref }} </td>
+                <td > {{ row.due_date }} </td>
+                <td >
                     {% if row.server_type == "sim" %}
                         Simulation
                     {% else %}
@@ -42,11 +42,11 @@
                     {% endif %}
                 </td>
                 {% if row.server_type == "sim" %}
-                    <td class="odd"> {{ row.sim_reservation_ref.start_time }}</td>
-                    <td class="even"> {{ row.sim_reservation_ref.end_time }}</td>
+                    <td > {{ row.sim_reservation_ref.start_time }}</td>
+                    <td > {{ row.sim_reservation_ref.end_time }}</td>
                 {% else %}
-                    <td class="odd"> {{ row.reservation_ref.start_time }}</td>
-                    <td class="even"> {{ row.reservation_ref.end_time }}</td>
+                    <td > {{ row.reservation_ref.start_time }}</td>
+                    <td > {{ row.reservation_ref.end_time }}</td>
                 {% endif %}
                 {% for srow in std_exp_list %}
                     {% if srow.experiment_ref == row %}
@@ -56,6 +56,7 @@
                 <td><button onclick="location.href='/lab/my_courses/reserve/{{ row.id }}'">Reserve</button></td>
             </tr>
             {% endfor %}
+            </tbody>
         </table>
 
     </div>
@@ -65,23 +66,24 @@
 <div id="middle_2" align="center">
     <div class="well">
         <hr/>
-        <table class="table table-bordered table-hover mytable">
-            <thead>
+        <table class="table table-bordered table-hover table-striped mytable">
+            <thead><tr>
             <th>Course</th>
             <th>Experiment</th>
             <th>Instructor</th>
             <th>Due Date</th>
             <th>Server Type</th>
             <th>Experiment Time</th>
-            <th>Reservation Time</th>
+            <th>Reservation Time</th></tr>
             </thead>
+            <tbody>
             {% for row in std_exp_list %}
             <tr class="border_bottom">
-                <td class="odd" > {{ row.experiment_ref.course_ref.title }} </td>
-                <td class="odd" > {{ row.experiment_ref.title }}</td>
-                <td class="even"> {{ row.experiment_ref.course_ref.instructor_ref }} </td>
-                <td class="odd" > {{ row.experiment_ref.due_date }} </td>
-                <td class="even">
+                <td > {{ row.experiment_ref.course_ref.title }} </td>
+                <td > {{ row.experiment_ref.title }}</td>
+                <td > {{ row.experiment_ref.course_ref.instructor_ref }} </td>
+                <td > {{ row.experiment_ref.due_date }} </td>
+                <td >
                     {% if row.server_type == "sim" %}
                         Simulation
                     {% else %}
@@ -89,13 +91,14 @@
                     {% endif %}
                 </td>
                 {% if row.server_type == "sim" %}
-                    <td class="odd"> {{ row.experiment_ref.sim_reservation_ref.start_time }} : {{ row.experiment_ref.sim_reservation_ref.end_time }}</td>
+                    <td > {{ row.experiment_ref.sim_reservation_ref.start_time }} : {{ row.experiment_ref.sim_reservation_ref.end_time }}</td>
                 {% else %}
-                    <td class="odd"> {{ row.experiment_ref.reservation_ref.start_time }} : {{ row.experiment_ref.reservation_ref.end_time }}</td>
+                    <td > {{ row.experiment_ref.reservation_ref.start_time }} : {{ row.experiment_ref.reservation_ref.end_time }}</td>
                 {% endif %}
-                <td class="even"> {{ row.start_time }} : {{ row.end_time }} </td>
+                <td > {{ row.start_time }} : {{ row.end_time }} </td>
             </tr>
             {% endfor %}
+            </tbody>
         </table>
 
     </div>

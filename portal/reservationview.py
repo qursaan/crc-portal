@@ -99,6 +99,9 @@ class ReservationView(LoginRequiredAutoLogoutView):
             ex_detail = None
             ex_reserve_type = None
             ex_max_duration = None
+            ex_allow_shh = None
+            ex_allow_crt = None
+            ex_allow_img = None
 
             if reserve_type == "I":
                 ex_title = request.POST.get('ex_title', '')
@@ -107,6 +110,9 @@ class ReservationView(LoginRequiredAutoLogoutView):
                 ex_detail = request.POST.get('ex_detail', '')
                 ex_reserve_type = request.POST.get('reserve_type', '')
                 ex_max_duration = request.POST.get('max_duration', '')
+                ex_allow_shh = request.POST.get('allow_ssh', False)
+                ex_allow_crt = request.POST.get('allow_crt', False)
+                ex_allow_img = request.POST.get('allow_img', False)
 
                 if ex_title is None or ex_title == '':
                     self.errors.append('Experiment Name is mandatory')
@@ -238,6 +244,9 @@ class ReservationView(LoginRequiredAutoLogoutView):
                         max_duration=ex_max_duration,
                         server_type=server_type,
                         instructor_ref=user,
+                        allow_ssh=ex_allow_shh,
+                        allow_img=ex_allow_img,
+                        allow_crt=ex_allow_crt,
                     )
                     if server_type == "omf":
                         se.reservation_ref = s

@@ -1,6 +1,6 @@
 {% extends "reservation-view.html" %}
 {% block page_title %}
-<h3>New Bulk Reservation</h3>
+<h3><a href="/lab/experiments/">Experiments List</a> > New Bulk Reservation</h3>
 {% endblock %}
 
 {% block instructor_area %}
@@ -94,6 +94,19 @@
             });
             $( "#max_duration" ).val( $( "#max-std-duration" ).slider( "value" ) );
         </script>
+    </div>
+
+    <div class="form-group">
+        <label for="control_options" class="col-xs-2 control-label">Control Options</label>
+        <div class="col-xs-5">
+            <div id="control_options" class="ui-widget checkbox">
+                    <label><input type="checkbox" name="allow_ssh" value="1">Allow SSH </input></label>
+                    <br>
+                    <label><input type="checkbox" name="allow_img" value="1">Load/Save Image </input></label>
+                    <br>
+                    <label><input type="checkbox" name="allow_crt" value="1">Allow Control Nodes </input></label>
+            </div>
+        </div>
     </div>
 </fieldset>
 {% endblock %}

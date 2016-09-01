@@ -10,23 +10,23 @@
 <h3>Testbeds Server Activity</h3>
 <div id="middle_1" align="center">
 	<div class="well">
-		<table class="table table-bordered table-hover mytable">
-			<thead>
+		<table class="table table-bordered table-striped table-hover mytable">
+			<thead><tr>
     			<th>Slice Name</th>
         		<th>Authority</th>
 				<th>Request Time</th>
 				<th>Est. Start Time</th>
 				<th>Est. End Time</th>
-				<th>Status</th>
-    		</thead>
+				<th>Status</th></tr>
+    		</thead><tbody>
 			{% for row in history_list_omf %}
    			<tr class="border_bottom">
-    			<td class="odd"> {{ row.slice_name }} </td>
-        		<td class="odd"> {{ row.authority_hrn }} </td>
-				<td class="odd"> {{ row.created }}  </td>
-				<td class="odd"> {{ row.f_start_time }} </td>
-				<td class="odd"> {{ row.f_end_time }} </td>
-				<td class="even">
+    			<td > {{ row.slice_name }} </td>
+        		<td > {{ row.authority_hrn }} </td>
+				<td > {{ row.created }}  </td>
+				<td > {{ row.f_start_time }} </td>
+				<td > {{ row.f_end_time }} </td>
+				<td >
                     {% if row.status == 0 %}Disabled
                     {% elif row.status == 1 %}Pending
                     {% elif row.status == 2 %}Waiting
@@ -37,32 +37,32 @@
                     {% endif %}
 				</td>
     		</tr>
-			{% endfor %}
+			{% endfor %}</tbody>
 		</table>
 	</div>
 </div>
 <h3>Simulation Server Activity</h3>
 <div id="middle_2" align="center">
 	<div class="well">
-		<table class="table table-bordered table-hover mytable">
-			<thead>
+		<table class="table table-bordered table-striped  table-hover mytable">
+			<thead><tr>
     			<th>Slice Name</th>
         		<th>Authority</th>
         		<th>Request Time</th>
 				<th>Est. Start Time</th>
 				<th>Est. End Time</th>
 				<th>Virtual Machine</th>
-				<th>Status</th>
-    		</thead>
+				<th>Status</th></tr>
+    		</thead><tbody>
 			{% for row in history_list_sim %}
    			<tr class="border_bottom">
-    			<td class="odd"> {{ row.slice_name }} </td>
-        		<td class="odd"> {{ row.authority_hrn }} </td>
-				<td class="odd"> {{ row.created }}  </td>
-				<td class="odd"> {{ row.f_start_time }} </td>
-				<td class="odd"> {{ row.f_end_time }} </td>
-       			<td class="odd"> {{ row.vm_ref }}  </td>
-				<td class="even">
+    			<td > {{ row.slice_name }} </td>
+        		<td > {{ row.authority_hrn }} </td>
+				<td > {{ row.created }}  </td>
+				<td > {{ row.f_start_time }} </td>
+				<td > {{ row.f_end_time }} </td>
+       			<td > {{ row.vm_ref }}  </td>
+				<td >
                     {% if row.status == 0 %}Disabled
                     {% elif row.status == 1 %}Pending
                     {% elif row.status == 2 %}Waiting
@@ -73,7 +73,7 @@
                     {% endif %}
 				</td>
     		</tr>
-			{% endfor %}
+			{% endfor %}</tbody>
 		</table>
 	</div>
 </div>

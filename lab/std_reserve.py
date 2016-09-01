@@ -165,6 +165,10 @@ class StudentReserveView(LoginRequiredAutoLogoutView):
                     end_time=end_datetime,
                     status=0,
                 )
+                if exp.server_type == "omf":
+                    se.reservation_ref = s
+                elif exp.server_type == "sim":
+                    se.sim_reservation_ref = s
                 se.save()
 
                 template_env = {

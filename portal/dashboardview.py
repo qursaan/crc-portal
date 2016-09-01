@@ -1,6 +1,8 @@
 from portal.actions import get_count_active_slice, \
     get_user_by_email, get_user_type
-from lab.actions import get_count_students_course,  get_count_students_pending, get_count_bulk_experiments, get_count_students_experiments
+from lab.actions import get_count_students_course,  get_count_students_pending, \
+    get_count_bulk_experiments, get_count_students_experiments, \
+    get_count_students
 from ui.topmenu import topmenu_items, the_user
 from unfold.loginrequired import LoginRequiredAutoLogoutView
 from unfold.page import Page
@@ -84,6 +86,7 @@ class DashboardView(LoginRequiredAutoLogoutView):
         context['course_count'] = get_count_students_course(c_user)
         context['pending_count'] = get_count_students_pending(c_user)
         context['std_exp_count'] = get_count_students_experiments(c_user)
+        context['student_count'] = get_count_students(c_user)
         context['bulk_count'] = get_count_bulk_experiments(c_user)
         context['user_type'] = get_user_type(c_user)
         context.update(page.prelude_env())

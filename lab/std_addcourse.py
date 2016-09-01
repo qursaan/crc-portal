@@ -51,3 +51,4 @@ class StudentAddCourseView(LoginRequiredAutoLogoutView):
                 messages.error(page.request, 'Error: Course not exist')
 
         return HttpResponseRedirect("/lab/my_courses")
+

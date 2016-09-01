@@ -1,8 +1,8 @@
 __author__ = 'pirate'
 
-from django.contrib import messages
 from django.shortcuts import render
-
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from ui.topmenu import topmenu_items, the_user
 from unfold.loginrequired import LoginRequiredAutoLogoutView
 from unfold.page import Page
@@ -43,3 +43,18 @@ class ExperimentsView(LoginRequiredAutoLogoutView):
         template_env.update(page.prelude_env())
         return render(request, template_name, template_env)
 
+
+@login_required
+def experiments_cancel(request, exp):
+    exp_id = int(exp)
+
+    c_user = get_user_by_email(the_user(request))
+    user_type = get_user_type(c_user)
+    if user_type != 2:
+        # messages.error(page.request, 'Error: You have not permission to access this page.')
+        return HttpResponseRedirect("/")
+    exp_obj = Experiments.objects.get(id=exp_id)
+    exp_obj.status = 2
+    exp_obj.save()
+    messages.success(request, 'Success: Remove Experiments.')
+    return HttpResponseRedirect("/lab/experiments/")

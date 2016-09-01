@@ -59,7 +59,12 @@
                         {% elif user_type == 2 %} <!--instructor-->
                         <li role="presentation">
                             <button id="std_request" onclick="location.href='/lab/validate/'"
-                                    class="btn btn-default badge1" data-badge="{{ pending_count }}">Manage Students
+                                    class="btn btn-default badge1" data-badge="{{ pending_count }}">Pending Students
+                            </button>
+                        </li>
+                        <li role="presentation">
+                             <button id="std_manage" onclick="location.href='/lab/students/'"
+                                    class="btn btn-default badge1" data-badge="{{ student_count }}">Manage Students
                             </button>
                         </li>
                         {% endif %}

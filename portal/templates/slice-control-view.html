@@ -127,29 +127,39 @@
             <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">
                 <span class="glyphicon glyphicon-info-sign"></span> Instructions</a>
             </li>
+            {% if allow_img %}
             <li role="presentation"><a href="#loadimage" aria-controls="loadimage" role="tab" data-toggle="tab">
                 <span class="glyphicon glyphicon-circle-arrow-down"></span> Load Images</a>
             </li>
+            {% endif %}
             {% if stype == "omf" %}
             <li role="presentation"><a href="#manager" aria-controls="manager" role="tab" data-toggle="tab">
                 <span class="glyphicon glyphicon-play"></span> Script Manager</a>
             {% endif %}
+            {% if allow_ssh %}
             <li role="presentation"><a href="#terminal" aria-controls="terminal" role="tab" data-toggle="tab">
                 <span class="glyphicon glyphicon-expand"></span> Console</a>
             </li>
+            {% endif %}
+            {% if allow_img %}
             <li role="presentation"><a href="#saveimage" aria-controls="saveimage" role="tab" data-toggle="tab">
                 <span class="glyphicon glyphicon-cloud-download"></span> Save Images</a>
             </li>
+            {% endif %}
+            {% if allow_crt %}
             <li role="presentation"><a href="#remote" aria-controls="remote" role="tab" data-toggle="tab">
                 <span class="glyphicon glyphicon-flash"></span> Remote Control</a>
             </li>
+            {% endif %}
         </ul>
         <div class="tab-content">
             <div role="tabpanel" class="tab-pane active" id="home">
                 <h4>Instruction:</h4>
                 <ol>
+                    {% if allow_img %}
                     <li>Open <b><i>Load Image</i></b> tab and load image</li>
                     <li>Wait <b>Loading</b> process finish</li>
+                    {% endif %}
                     {% if stype == "omf" %}
                     <li>In <b><i>Execute Manager</i></b> tab and past your script <b>or</b> edit from existing template
                     </li>
@@ -162,13 +172,15 @@
                     </li>
                     {% endif %}
                     <li>Execute script remotely using <b>or</b> use <a href="/portal/experiment">external tools</a></li>
+                    {% if allow_img %}
                     <li>Open <b><i>Save Image</i></b> tab to save your image if you want to save your work</li>
+                    {% endif %}
                 </ol>
                 <ul>
                     <li><a href="/portal/experiment">See how to use external tools</a></li>
                 </ul>
             </div>
-
+{% if allow_img %}
             <div role="tabpanel" class="tab-pane" id="loadimage">
                 <h4>Loading Image</h4>
                 <div class="well">
@@ -307,7 +319,8 @@
                     </form>
                 </div>
             </div>
-
+{% endif %}
+{% if allow_crt %}
             <div role="tabpanel" class="tab-pane" id="remote">
                 <h4>Remote Control Machine</h4>
                 <div class="well"> <!--control_save_image-->
@@ -361,7 +374,7 @@
 
                 </div>
             </div>
-
+{% endif %}
             {% if stype == "omf" %}
             <div role="tabpanel" class="tab-pane" id="manager">
                 <h4>Execute Script</h4>
@@ -422,7 +435,7 @@
                 </div>
             </div>
             {% endif %}
-
+{% if allow_ssh %}
             <div role="tabpanel" class="tab-pane" id="terminal">
                 <h4>Web Terminal</h4>
                 <div class="well"> <!--control_save_image-->
@@ -451,6 +464,7 @@
 
                 </div>
             </div>
+{% endif %}
         </div>
         <div id="fade"></div>
         <div id="modal">

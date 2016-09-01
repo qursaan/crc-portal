@@ -1,5 +1,5 @@
 from django.contrib import admin
-from lab.models import Course, StudentCourses, Experiments
+from lab.models import Course, StudentCourses, Experiments,StudentsExperiment
 # Register your models here.
 
 
@@ -11,6 +11,11 @@ class CoursesAdmin(admin.ModelAdmin):
 @admin.register(StudentCourses)
 class StudentCoursesAdmin(admin.ModelAdmin):
     list_display = ('id', 'students_ref', 'course_ref', 'added')
+
+
+@admin.register(StudentsExperiment)
+class StudentsExperimentAdmin(admin.ModelAdmin):
+    list_display = ('id', 'students_ref', 'experiment_ref', 'reservation_ref','sim_reservation_ref','start_time','end_time','status')
 
 
 @admin.register(Experiments)

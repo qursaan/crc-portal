@@ -6,10 +6,12 @@ from ui.topmenu import topmenu_items, the_user
 #
 from portal.models import Reservation, ReservationDetail, SimReservation, \
     TestbedImage, UserImage, SimulationImage
+from lab.models import Experiments
+from lab.actions import get_control_options
 from portal.navigation import action_load_save_image, omf_exe, remote_node, \
     check_task_progress, check_exe_progress, slice_on_time, abort_exe_progress
 
-from portal.actions import get_user_by_email
+from portal.actions import get_user_by_email, get_user_type
 #
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
@@ -30,14 +32,21 @@ class SliceControlView(LoginRequiredAutoLogoutView):
         page.add_js_files(["js/jquery.validate.js", "js/my_account.register.js", "js/my_account.edit_profile.js"])
         page.add_css_files(["css/plugin.css"])  # "css/onelab.css"
 
-        user = get_user_by_email(the_user(self.request))
+
         image_list = None
         current_slice = None
         user_image_list = []
         node_list = []
+        allow_ssh = True
+        allow_crt = True
+        allow_img = True
 
+
+        user = get_user_by_email(the_user(self.request))
         if user:
             user_image_list = UserImage.objects.filter(user_ref=user).all()
+
+        user_type = get_user_type(user)
 
         slice_id = page.request.session.get('slice_id', None)
         stype = page.request.session.get('stype', None)
@@ -63,6 +72,9 @@ class SliceControlView(LoginRequiredAutoLogoutView):
         if not current_slice:
             return HttpResponseRedirect("/portal/lab/current/")
 
+        if user_type == 3:
+            allow_crt, allow_img, allow_ssh = get_control_options(stype, current_slice)
+
         output_script = ''
 
         template_env = {
@@ -77,6 +89,9 @@ class SliceControlView(LoginRequiredAutoLogoutView):
             'username': the_user(self.request),
             'title': t,
             'stype': stype,
+            'allow_ssh': allow_ssh,
+            'allow_crt': allow_crt,
+            'allow_img': allow_img,
         }
         template_env.update(page.prelude_env())
         return render(request, template_name, template_env)

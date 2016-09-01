@@ -1,0 +1,66 @@
+{% extends "layout-unfold1.html" %}
+{% block unfold_main %}
+
+<!--div class="onelab-title well-lg"-->
+<div style="text-align:center" class="well-sm">
+    <h2>Students List</h2>
+</div>
+{% if errors %}
+<ul>
+    {% for error in errors %}
+    <li>{{ error }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+<h2></h2>
+<h3>Manage Students</h3>
+<div id="middle_1" align="center">
+    <div class="well">
+        <table class="table table-bordered table-striped table-hover">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Student Name</th>
+                <th>Email</th>
+                <th>Status</th>
+                <th>Created</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for row in student_list %}
+            <tr class="border_bottom">
+                <td> {{ row.id }}</td>
+                <td> {{ row.first_name }} {{ row.last_name }}</td>
+                <td> {{ row.email }}</td>
+                <td>
+                        {% if row.status == 0 %}Disabled
+                        {% elif row.status == 1 %}Pending
+                        {% elif row.status == 2 %}Active
+					    {% else %}N/A
+                        {% endif %}
+                </td>
+                <td> {{ row.created }}</td>
+                <td>
+                    {% if row.status == 0 %}
+                    <button id="en_std" onclick="location.href='/lab/students/en/{{ row.id }}'"
+                        class="btn btn-default">Enable
+                        <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
+                    </button>
+                    {% elif row.status == 1 %}
+                    {% elif row.status == 2 %}
+                    <button id="dis_std" onclick="location.href='/lab/students/de/{{ row.id }}'"
+                        class="btn btn-default">Disable
+                        <span class="glyphicon glyphicon-lock" aria-hidden="true"></span>
+                    </button>
+                    {% endif %}
+
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+</div>
+{% endblock %}

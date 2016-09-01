@@ -25,23 +25,29 @@
             <div class="form-group form-inline">
                 <input id="course_key" type="text" name="course_key" placeholder="Registration Key" size="25" class="form-control"/>
             </div>
-            <button type="submit" value="Enroll" class="btn btn-default">Enroll
-            </button>
+            <button type="submit" value="Enroll" class="btn btn-default">Enroll</button>
         </form>
         <hr/>
-        <table class="table table-bordered table-hover mytable">
-            <thead>
+        <table class="table table-bordered table-hover table-striped mytable">
+            <thead><tr>
             <th>Title</th>
             <th>Instructor Name</th>
             <th>Added Date</th>
-            </thead>
+            <th></th></tr>
+            </thead><tbody>
             {% for row in courses_list %}
             <tr class="border_bottom">
-                <td class="odd"> {{ row.course_ref.title }}</td>
-                <td class="even"> {{ row.course_ref.instructor_ref }}</td>
-                <td class="odd"> {{ row.added }}</td>
+                <td > {{ row.course_ref.title }}</td>
+                <td > {{ row.course_ref.instructor_ref }}</td>
+                <td > {{ row.added }}</td>
+                <td>
+                    <button id="unroll_course" onclick="location.href='/lab/my_courses/del/{{ row.id }}'"
+                        class="btn btn-default">Unroll
+                             <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+                        </button>
+                </td>
             </tr>
-            {% endfor %}
+            {% endfor %}</tbody>
         </table>
 
     </div>
