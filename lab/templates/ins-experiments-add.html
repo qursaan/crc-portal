@@ -39,20 +39,23 @@
                       <span class="glyphicon glyphicon-calendar"></span>
                   </span>
         </div>
-        <script>
-            $(document).ready(function(){
-                $('#duedate input').datepicker({});
-                $('#duedate input').datepicker('option', 'minDate' ,'0d');
-            });
-        </script>
+    </div>
+
+    <div class="form-group">
+        <label for="ex_file" class="col-xs-2 control-label">Supplement File</label>
+        <div class="col-xs-5">
+            <div class="ui-widget">
+                <input id="ex_file" type="file" name="ex_file" />
+            </div>
+        </div>
     </div>
 
     <div class="form-group">
         <label for="ex_detail" class="col-xs-2 control-label">Description</label>
         <div class="col-xs-5">
             <div class="ui-widget">
-                            <textarea id="ex_detail" name="ex_detail" class="form-control" style="height:110px;"
-                                      placeholder="Description" required>{{ ex_detail }}</textarea>
+                <textarea id="ex_detail" name="ex_detail" class="form-control" style="height:110px;"
+                      placeholder="Description">{{ ex_detail }}</textarea>
             </div>
         </div>
     </div>
@@ -82,31 +85,126 @@
                 <div id="max-std-duration"></div>
             </div>
         </div>
-        <script>
-            $( "#max-std-duration" ).slider({
-                range: "min",
-                value: 1,
-                min: 1,
-                max: 10,
-                slide: function( event, ui ) {
-                    $( "#max_duration" ).val(ui.value);
-                }
-            });
-            $( "#max_duration" ).val( $( "#max-std-duration" ).slider( "value" ) );
-        </script>
     </div>
 
     <div class="form-group">
         <label for="control_options" class="col-xs-2 control-label">Control Options</label>
         <div class="col-xs-5">
             <div id="control_options" class="ui-widget checkbox">
-                    <label><input type="checkbox" name="allow_ssh" value="1">Allow SSH </input></label>
-                    <br>
-                    <label><input type="checkbox" name="allow_img" value="1">Load/Save Image </input></label>
-                    <br>
-                    <label><input type="checkbox" name="allow_crt" value="1">Allow Control Nodes </input></label>
+                <label><input type="checkbox" name="allow_ssh" value="1">Allow SSH </input></label>
+                <br>
+                <label><input type="checkbox" name="allow_img" value="1">Load/Save Image </input></label>
+                <br>
+                <label><input type="checkbox" name="allow_crt" value="1">Allow Control Nodes </input></label>
             </div>
         </div>
     </div>
+
+    <div class="form-group">
+        <div for="pre_exp" class="ui-widget col-xs-2 control-label">
+            <label>Template Lab</label></div>
+        <div class="col-xs-5"><div class="ui-widget checkbox">
+            <label><b><input type="checkbox" id="use_lab" name="use_lab" value="use_lab" > Use existing labs</input></b></label>
+            <div id="use_lab_group" hidden>
+                {% regroup labs_list by lab_ref as glab_list %}
+                {% for gf in glab_list %}
+                    <!--value="{{gf.grouper.id}}"
+                    {% if forloop.counter0 = 0 %} checked="checked" {% endif %}-->
+                    <label><input type="radio" name="pre_exp" value="{{forloop.counter0}}"
+                    data="{{gf.grouper.requirement}}">{{gf.grouper}}</input></label>
+                    <div>
+                        <select name="t_lab" class="form-control user-input">
+                            {% for row in gf.list %}
+                            <option value="{{ row.id }}" label="{{ row.title }}">
+                                {{ row.title }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                {% endfor %}
+            </div>
+        </div></div>
+
+    </div>
+
 </fieldset>
+<script>
+$(document).ready(function(){
+    $(":checkbox").attr("autocomplete", "off");
+    $('#duedate input').datepicker({});
+    $('#duedate input').datepicker('option', 'minDate' ,'0d');
+
+    $( "#max-std-duration" ).slider({
+        range: "min",
+        value: 1,
+        min: 1,
+        max: 10,
+        slide: function( event, ui ) {
+            $( "#max_duration" ).val(ui.value);
+        }
+    });
+    $( "#max_duration" ).val( $( "#max-std-duration" ).slider( "value" ) );
+});
+
+$('#use_lab').click(function(){
+    if($(this).is(':checked')){
+        $('#use_lab_group').show();
+    }else{
+        $('#use_lab_group').hide();
+        $("#server_type").removeAttr("disabled");
+        $('input[name="resource_group"]').removeAttr("disabled");
+    }
+});
+
+$(":radio[name='pre_exp']").on("change", function() {
+    if(this.checked)
+    {
+        var dstr = $(this).attr("data");
+        var dlist = dstr.split(";");
+        for( d in dlist )
+        {
+            var di = dlist[d].split("=");
+            if( di[0] == "server_type" )
+            {
+                if(di[1]=="omf"){
+                    $("#server_type").val('omf').change();
+                }else if(di[1]=="sim"){
+                    $("#server_type").val('sim').change();
+                }else{
+                    continue;
+                }
+                $("#server_type").attr("disabled","disabled");
+            }
+            else if( di[0]=="nodes" )
+            {
+                if(di[1] =="all")
+                    $('input[name="resource_group"]').removeAttr("disabled");
+                else{
+                    var nodes = di[1].split(",");
+                    $('input[name="resource_group"]').attr("disabled","disabled");
+                    for (n in nodes)
+                    {
+                        $('input[name="resource_group"][node-id="' + nodes[n] +'"]').removeAttr("disabled");
+                    }
+                }
+            }
+            else if( di[0]=="devices" )
+            {
+                if(di[1] =="all")
+                    continue;
+                else{
+                    var devices = di[1].split(",");
+                    for (d in devices)
+                    {
+                        $('input[name="resource_group"][device-id!="' + devices[d] +'"]').attr("disabled","disabled");
+                    }
+                }
+            }
+        }
+    }else{
+
+    }
+});
+
+</script>
 {% endblock %}

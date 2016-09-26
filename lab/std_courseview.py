@@ -10,7 +10,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from portal.actions import get_user_by_email, get_user_type
-from lab.actions import add_all_courses_by_email
+from lab.actions import add_all_courses_by_email, remove_course_by_emails
 from lab.models import StudentCourses
 
 
@@ -52,7 +52,9 @@ def student_course_cancel(request, cid):
     if user_type != 3:
         # messages.error(page.request, 'Error: You have not permission to access this page.')
         return HttpResponseRedirect("/")
+
     course = StudentCourses.objects.get(id=course_id)
+    remove_course_by_emails(the_user(request), course.course_ref.id)
     course.delete()
     messages.success(request, 'Success: Unroll from Course.')
     return HttpResponseRedirect("/lab/my_courses/")

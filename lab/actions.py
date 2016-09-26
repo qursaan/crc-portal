@@ -1,5 +1,5 @@
 
-from lab.models import StudentCourses, StudentsExperiment, Experiments, Course
+from lab.models import StudentCourses, StudentsExperiment, Experiments, Course, LabsParameter
 from portal.models import MyUser  # , PendingSlice
 from portal.reservation_status import ReservationStatus
 from portal.actions import get_user_by_email
@@ -23,6 +23,16 @@ def add_all_courses_by_email(user_emails):
     courses = Course.objects.filter(email_list__contains=user_emails)
     for c in courses:
         add_course_by_email(c, user_emails)
+
+
+def remove_course_by_emails(user_emails, course_id):
+    course = Course.objects.filter(id=course_id, email_list__contains=user_emails)
+    if course:
+        new_email_list = course[0].email_list
+        new_email_list = new_email_list.replace(user_emails, "")
+        course[0].email_list = new_email_list
+        course[0].save()
+
 
 
 def get_std_requests(supervisor_id):
@@ -73,6 +83,7 @@ def get_control_options(stype, reserve_ref):
     allow_img = True
     allow_ssh = True
     allow_crt = True
+    supp_file = None
     s_exp = None
     if stype == "omf":
         s_exp = StudentsExperiment.objects.filter(reservation_ref=reserve_ref)
@@ -82,7 +93,10 @@ def get_control_options(stype, reserve_ref):
         allow_crt = s_exp[0].experiment_ref.allow_crt
         allow_ssh = s_exp[0].experiment_ref.allow_ssh
         allow_img = s_exp[0].experiment_ref.allow_img
-    return allow_crt, allow_img, allow_ssh
+        supp_file = s_exp[0].experiment_ref.sup_files
+        lab_temp_ref = s_exp[0].experiment_ref.lab_template_ref
+        lab_param_list = LabsParameter.objects.filter(lab_ref=lab_temp_ref.lab_ref)
+    return allow_crt, allow_img, allow_ssh, supp_file, lab_temp_ref, lab_param_list
 
 
 def get_count_students_experiments(c_user):

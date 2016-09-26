@@ -109,23 +109,24 @@
                                     class="btn btn-default badge1" data-badge="{{ active_count }}">Current Requests
                             </button>
                         </li>
-                        {% if user_type == 0 or user_type == 1 %} <!--admin or researcher-->
+                        {% if user_type == 0 or user_type == 1 or user_type == 2 %} <!--admin or researcher-->
                         <li role="presentation">
                             <button id="lab_request" onclick="location.href='/portal/lab/reservation/'"
                                     class="btn btn-default">Request Slice
                             </button>
                         </li>
-                        {% elif user_type == 2 %} <!--instructor-->
-                        <li role="presentation">
-                            <button id="lab_course" onclick="location.href='/lab/courses/'"
-                                    class="btn btn-default" >Courses List
-                            </button>
-                        </li>
-                        <li role="presentation">
-                            <button id="lab_experiment" onclick="location.href='/lab/experiments/'"
-                                    class="btn btn-default badge1" data-badge="{{ bulk_count }}">Bulk Reservations
-                            </button>
-                        </li>
+                        {% endif %}
+                        {% if user_type == 2 %} <!--instructor-->
+                            <li role="presentation">
+                                <button id="lab_course" onclick="location.href='/lab/courses/'"
+                                        class="btn btn-default" >Courses List
+                                </button>
+                            </li>
+                            <li role="presentation">
+                                <button id="lab_experiment" onclick="location.href='/lab/experiments/'"
+                                        class="btn btn-default badge1" data-badge="{{ bulk_count }}">Bulk Reservations
+                                </button>
+                            </li>
                         {% elif user_type == 3 %} <!--student-->
                         <li role="presentation">
                             <button id="lab_s_course" onclick="location.href='/lab/my_courses/'"

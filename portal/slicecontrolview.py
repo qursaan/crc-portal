@@ -5,7 +5,7 @@ from unfold.page import Page
 from ui.topmenu import topmenu_items, the_user
 #
 from portal.models import Reservation, ReservationDetail, SimReservation, \
-    TestbedImage, UserImage, SimulationImage
+    TestbedImage, UserImage, SimulationImage, ReservationFrequency
 from lab.models import Experiments
 from lab.actions import get_control_options
 from portal.navigation import action_load_save_image, omf_exe, remote_node, \
@@ -17,6 +17,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.template.loader import render_to_string
+
 
 
 class SliceControlView(LoginRequiredAutoLogoutView):
@@ -32,15 +33,18 @@ class SliceControlView(LoginRequiredAutoLogoutView):
         page.add_js_files(["js/jquery.validate.js", "js/my_account.register.js", "js/my_account.edit_profile.js"])
         page.add_css_files(["css/plugin.css"])  # "css/onelab.css"
 
-
         image_list = None
         current_slice = None
         user_image_list = []
         node_list = []
+        freq_list = []
         allow_ssh = True
         allow_crt = True
         allow_img = True
-
+        supp_file = None
+        show_lab = False
+        lab_ref = None
+        lab_param_list = []
 
         user = get_user_by_email(the_user(self.request))
         if user:
@@ -60,6 +64,7 @@ class SliceControlView(LoginRequiredAutoLogoutView):
             if stype == "omf":
                 current_slice = Reservation.objects.get(id=slice_id)
                 node_list = ReservationDetail.objects.filter(reservation_ref=current_slice)
+                freq_list = ReservationFrequency.objects.filter(reservation_ref=current_slice)
                 image_list = TestbedImage.objects.all()
                 t = 'Testbeds Remote Control Panel'
             elif stype == "sim":
@@ -73,7 +78,9 @@ class SliceControlView(LoginRequiredAutoLogoutView):
             return HttpResponseRedirect("/portal/lab/current/")
 
         if user_type == 3:
-            allow_crt, allow_img, allow_ssh = get_control_options(stype, current_slice)
+            allow_crt, allow_img, allow_ssh, supp_file, lab_ref, lab_param_list = get_control_options(stype, current_slice)
+            if lab_ref:
+                show_lab = True
 
         output_script = ''
 
@@ -85,6 +92,7 @@ class SliceControlView(LoginRequiredAutoLogoutView):
             'deadline': current_slice.end_time,
             'user_image_list': user_image_list,
             'node_list': node_list,
+            'freq_list': freq_list,
             'output': output_script,
             'username': the_user(self.request),
             'title': t,
@@ -92,6 +100,10 @@ class SliceControlView(LoginRequiredAutoLogoutView):
             'allow_ssh': allow_ssh,
             'allow_crt': allow_crt,
             'allow_img': allow_img,
+            'supp_file': supp_file,
+            'show_lab': show_lab,
+            'lab_ref': lab_ref,
+            'lab_param_list': lab_param_list,
         }
         template_env.update(page.prelude_env())
         return render(request, template_name, template_env)

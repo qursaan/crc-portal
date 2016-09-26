@@ -1,5 +1,5 @@
 from django.contrib import admin
-from lab.models import Course, StudentCourses, Experiments,StudentsExperiment
+from lab.models import Course, StudentCourses, Experiments,StudentsExperiment, InstalledLab, LabsTemplate, LabsParameter
 # Register your models here.
 
 
@@ -21,3 +21,18 @@ class StudentsExperimentAdmin(admin.ModelAdmin):
 @admin.register(Experiments)
 class ExperimentsAdmin(admin.ModelAdmin):
     list_display = ('id', 'instructor_ref', 'course_ref', 'title', 'due_date', 'reservation_type', 'description', 'max_duration' ,'server_type','reservation_ref','sim_reservation_ref','created')
+
+
+@admin.register(InstalledLab)
+class InstalledLabAdmin(admin.ModelAdmin):
+    list_display = ('id', 'title')
+
+
+@admin.register(LabsTemplate)
+class LabsTemplateAdmin(admin.ModelAdmin):
+    list_display = ('id', 'title', 'lab_ref', 'exp_param')
+
+
+@admin.register(LabsParameter)
+class LabsParameterAdmin(admin.ModelAdmin):
+    list_display = ('id', 'title', 'lab_ref', 'def_value', 'values', 'type')

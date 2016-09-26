@@ -55,7 +55,7 @@ class RegistrationView (FreeAccessView):
             reg_fname = request.POST.get('firstname', '')
             reg_lname = request.POST.get('lastname', '')
             reg_auth = request.POST.get('authority_hrn', '')
-            reg_username = request.POST.get('username', '')
+            reg_username = request.POST.get('username', '').lower()
             reg_email = request.POST.get('email','').lower()
             reg_password = request.POST.get('password','') # request.POST['password']
             reg_usertype = request.POST.get('usertype','')

@@ -10,6 +10,38 @@ class SupervisorStudents(models.Model):
 '''
 
 
+class InstalledLab(models.Model):
+    title = models.CharField(max_length=64)
+    requirement = models.CharField(max_length=256, null=True)
+
+    def __unicode__(self):
+        return self.title
+
+
+class LabsTemplate(models.Model):
+    title = models.CharField(max_length=64)
+    lab_ref = models.ForeignKey(InstalledLab, null=True)
+    exp_param = models.CharField(max_length=256, null=True)
+
+    def __unicode__(self):
+        return self.title
+
+
+class LabsParameter(models.Model):
+    title = models.CharField(max_length=64)
+    param_id = models.CharField(max_length=30, null=True)
+    lab_ref = models.ForeignKey(InstalledLab, null=False)
+    type = models.CharField(max_length=64, null=True)
+    def_value = models.CharField(max_length=64, null=True)
+    values = models.CharField(max_length=256, null=True)
+
+    def values_as_list(self):
+        return self.values.split(',')
+
+    def __unicode__(self):
+        return self.title
+
+
 class Course(models.Model):
     instructor_ref = models.ForeignKey(MyUser, null=True)
     title        = models.CharField(max_length=64)
@@ -61,6 +93,10 @@ class Experiments(models.Model):
     allow_crt = models.BooleanField(default=False)
     allow_ssh = models.BooleanField(default=False)
     allow_img = models.BooleanField(default=False)
+    # files
+    sup_files = models.CharField(max_length=256,null=True)
+    # existing labs
+    lab_template_ref = models.ForeignKey(LabsTemplate, null=True)
 
     def __unicode__(self):
         return self.title
@@ -76,6 +112,7 @@ class StudentsExperiment(models.Model):
     # 0-Reserved, 1-Finish, 2-Cancel
     status = models.IntegerField(default=0)
 
+
 '''
 class ExperimentTemplate(models.Model):
     owner = models.ForeignKey(User)
@@ -89,4 +126,5 @@ class Experiment(models.Model):
     course = models.ForeignKey(Course)
     template = models.ForeignKey(ExperimentTemplate)
     due_date = models.DateTimeField()
+
 '''

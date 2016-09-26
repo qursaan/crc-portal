@@ -45,7 +45,7 @@
 <h3>Request a Slice</h3>
 {% endblock page_title %}
 <div class='well'>
-    <form id="commentForm" class="form-horizontal" action="" method="post" role="form" onsubmit="return(validate());">
+    <form id="commentForm" class="form-horizontal" enctype="multipart/form-data" action="" method="post" role="form" onsubmit="return(validate());">
         {% csrf_token %}
         {% block instructor_area %}
         {% endblock instructor_area %}
@@ -259,7 +259,7 @@
                                             {% for r in resource_list %}
                                             {% if r.node_ref.id = n.id and r.device_ref.id = i.id %}
                                             <label class="checkbox-inline">
-                                                <input type="checkbox" name="resource_group" value="{{r.id}}"
+                                                <input type="checkbox" name="resource_group" value="{{r.id}}" node-id="{{n.id}}" device-id="{{i.id}}"
                                                        title="{{ r.device_ref.type }}">{{ r.device_ref.type }}</input>
                                             </label>
                                             {% endif %}
@@ -428,7 +428,7 @@ $(document).ready(function(){
         v_range = 0;
     });*/
 });
-/******************************************* Validation **************/
+/*                                                                                                                              ****************************************** Validation **************/
 function set_validation(v_type, msg){
     $('#validation_error').removeAttr('class');
     $('#validation_error').html( msg ) ;
@@ -548,7 +548,7 @@ $('#server_type').change(function(){
          $('#sim_group').hide();
          max_duration = {{omf_max_duration}};
          select_type  = "omf";
-         if(n_usrp==1)
+         if(n_usrp>=1)
             $('#freq_group').show();
     } else {
          $('#sim_group').show();

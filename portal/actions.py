@@ -118,7 +118,7 @@ def schedule_auto_online(reserve_id, stype="omf", use_bulk=False, reserve_type="
         return False
 
 
-def schedule_checking(nodelist, start_datetime, end_datetime, stype="omf",use_bulk=False):
+def schedule_checking(nodelist, start_datetime, end_datetime, stype="omf", use_bulk=False):
     new_list = []
     for n in nodelist:
         new_list.append(int(n))
@@ -144,7 +144,7 @@ def schedule_checking(nodelist, start_datetime, end_datetime, stype="omf",use_bu
     for n in node_list:
         for r in overlap:
             if r.node_ref.id == n.id:
-                t1 = t2 = None
+                # t1 = t2 = None
 
                 # correct ref
                 if stype == "omf":
@@ -176,7 +176,7 @@ def schedule_checking_all(start_datetime, end_datetime, stype="omf"):
     busy_list = ReservationStatus.get_busy_list()
     overlap = None
     node_list = []
-    busy_list = []
+    # busy_list = []
 
     if stype == "omf":
         node_list = VirtualNode.objects.all()
@@ -189,7 +189,7 @@ def schedule_checking_all(start_datetime, end_datetime, stype="omf"):
     for n in node_list:
         for r in overlap:
             if r.node_ref.id == n.id:
-                t1 = t2 = None
+                # t1 = t2 = None
 
                 # correct ref
                 if stype == "omf":
@@ -208,7 +208,7 @@ def schedule_checking_all(start_datetime, end_datetime, stype="omf"):
     return busy_list
 
 
-def schedule_checking_freq(freq_list, start_datetime, end_datetime):
+def schedule_checking_freq(freq_list, start_datetime, end_datetime, use_bulk=False):
 
     new_list = []
     for n in freq_list:
@@ -217,7 +217,7 @@ def schedule_checking_freq(freq_list, start_datetime, end_datetime):
     curr_start = start_datetime
     curr_end = end_datetime
 
-    busy_list = ReservationStatus.get_busy_list()
+    busy_list = ReservationStatus.get_busy_list(use_bulk)
     output_list = ""
     freq_list = FrequencyRanges.objects.filter(pk__in=new_list)
 

@@ -84,7 +84,7 @@ class Experiment(object):
     @staticmethod
     def get(id):
         try:
-            return models.Experiment.objects.get(id)
+            return models.Experiments.objects.get(id)
         except:
             return None
 
@@ -174,8 +174,8 @@ class Course(object):
         course = Course.get(course_id)
         template = ExperimentTemplate.get(template_id)
         if course is not None and template is not None:
-            e = models.Experiment(course=course, template=template,
-                                  due_date=due_date)
+            e = models.Experiments(course=course, template=template,
+                                   due_date=due_date)
             e.save()
 
     # Change experiment due date

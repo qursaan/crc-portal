@@ -127,6 +127,11 @@
             <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">
                 <span class="glyphicon glyphicon-info-sign"></span> Instructions</a>
             </li>
+            {% if show_lab %}
+            <li role="presentation"><a href="#lab" aria-controls="lab" role="tab" data-toggle="tab">
+                <span class="glyphicon glyphicon glyphicon-tasks"></span> Experiment Lab</a>
+            </li>
+            {% endif %}
             {% if allow_img %}
             <li role="presentation"><a href="#loadimage" aria-controls="loadimage" role="tab" data-toggle="tab">
                 <span class="glyphicon glyphicon-circle-arrow-down"></span> Load Images</a>
@@ -135,6 +140,7 @@
             {% if stype == "omf" %}
             <li role="presentation"><a href="#manager" aria-controls="manager" role="tab" data-toggle="tab">
                 <span class="glyphicon glyphicon-play"></span> Script Manager</a>
+            </li>
             {% endif %}
             {% if allow_ssh %}
             <li role="presentation"><a href="#terminal" aria-controls="terminal" role="tab" data-toggle="tab">
@@ -176,10 +182,106 @@
                     <li>Open <b><i>Save Image</i></b> tab to save your image if you want to save your work</li>
                     {% endif %}
                 </ol>
+
+                {% if supp_file %}
+                <ul>
+                    <li>
+                        <b><a href="{{supp_file}}">View Supplement files</a></b>
+                    </li>
+                </ul>
+                {% else %}
                 <ul>
                     <li><a href="/portal/experiment">See how to use external tools</a></li>
                 </ul>
+                {% endif %}
             </div>
+{% if show_lab %}
+            <div role="tabpanel" class="tab-pane" id="lab">
+                <h4>Experiment Lab</h4>
+                <div class="well"> <!--run lab-->
+                    <form class="cmxform form-horizontal" id="run-lab-form" method="post"
+                          action="run_lab" role="form">
+                        <fieldset>
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <div class="col-xs-12">
+                                    <div class="ui-widget btn-toolbar" role="group">
+                                        <div class="btn-group" role="group">
+                                            <button class="btn btn-default" type="reset">Clear Parameters</button>
+                                            <button id="run_exp_lab" class="refresh_btn btn btn-danger" type="button">
+                                                Run!
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <h5>Experiment: <b>{{lab_ref.title}} </b> @ {{lab_ref.lab_ref}}</h5>
+                            {% for p in lab_param_list %}
+                            <div class="form-group">
+                                <label class="col-xs-2 control-label">{{p}}</label>
+                                <div class="col-xs-4">
+                                    <div class="ui-widget">
+                                    {% if p.type = "range" %}
+                                        <div>
+                                            <input id="{{p.param_id}}" type="text" class="form-control user-input" name="{{p.param_id}}" value="{{p.def_value}}" readonly/>
+                                        </div>
+                                        <div id="slider-{{p.param_id}}"></div>
+                                        <script>
+                                            var xrange = Number("{{p.values}}".split(',')[0]);
+                                            var yrange = Number("{{p.values}}".split(',')[1]);
+                                            $(document).ready(function(){
+                                                $( "#slider-{{p.param_id}}" ).slider({
+                                                    range: "min",
+                                                    value: 70,
+                                                    min: xrange,
+                                                    max: yrange,
+                                                    slide: function( event, ui ) {
+                                                        $( "#{{p.param_id}}" ).val(ui.value);
+                                                    }
+                                                });
+                                                $( "#{{p.param_id}}" ).val( $( "#slider-{{p.param_id}}" ).slider( "value" ) );
+                                            });
+                                        </script>
+                                    {% elif p.type = "list" %}
+                                        <select id="{{p.param_id}}" name="{{p.param_id}}"  class="form-control user-input" value="{{ p.def_value }}">
+                                            {% for row in p.values_as_list %}
+                                            <option value="{{row}}" label="{{row}}">
+                                                {{row}}
+                                            </option>
+                                            {% endfor %}
+                                        </select>
+                                    {% elif p.type = "nodes" %}
+                                        <select id="{{p.param_id}}" name="{{p.param_id}}"  class="form-control user-input" value="">
+                                            {% for row in node_list %}
+                                            <option value="{{ row.node_ref.vm_name }}" label="{{row.node_ref}}">
+                                                {{row.node_ref}}
+                                            </option>
+                                            {% endfor %}
+                                        </select>
+                                    {% elif p.type = "frequency" %}
+                                        <select id="{{p.param_id}}" name="{{p.param_id}}"  class="form-control user-input" value="">
+                                            {% for row in freq_list %}
+                                            <option value="{{row.frequency_ref}}" label="{{row.frequency_ref}}">
+                                                {{row.frequency_ref}}
+                                            </option>
+                                            {% endfor %}
+                                        </select>
+                                    {% elif p.type = "bool" %}
+                                        <select id="{{p.param_id}}" name="{{p.param_id}}"  class="form-control user-input" value="{{p.def_value}}">
+                                            <option value="0" label="No">No</option>
+                                            <option value="1" label="Yes">Yes</option>
+                                        </select>
+                                    {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </fieldset>
+                    </form>
+
+                </div>
+            </div>
+{% endif %}
 {% if allow_img %}
             <div role="tabpanel" class="tab-pane" id="loadimage">
                 <h4>Loading Image</h4>
@@ -195,7 +297,7 @@
                                             <button class="btn btn-default" type="reset">
                                                 Clear Selection
                                             </button>
-                                            <button id="refresh_btn1" class="refresh_btn btn btn-default" type="button">
+                                            <button id="refresh_btn1" data-id="refresh" class="refresh_btn btn btn-default" type="button">
                                                 Refresh Status
                                             </button>
                                             <button id="load_image_btn" class="submit btn btn-danger" type="button">
@@ -274,7 +376,7 @@
                                     <div class="ui-widget btn-toolbar" role="group">
                                         <div class="btn-group" role="group">
                                             <button class="btn btn-default" type="reset">Clear Selection</button>
-                                            <button id="refresh_btn2" class="refresh_btn btn btn-default" type="button">
+                                            <button id="refresh_btn2" data-id="refresh" class="refresh_btn btn btn-default" type="button">
                                                 Refresh Status
                                             </button>
                                             <button id="save-image-btn" class="submit btn btn-danger" type="button">Save
@@ -333,7 +435,7 @@
                                     <div class="ui-widget btn-toolbar" role="group">
                                         <div class="btn-group" role="group">
                                             <button class="btn btn-default" type="reset">Clear Selection</button>
-                                            <button id="refresh_btn3" class="refresh_btn btn btn-default" type="button">
+                                            <button id="refresh_btn3" data-id="refresh" class="refresh_btn btn btn-default" type="button">
                                                 Refresh Status
                                             </button>
                                             <button id="remote_start" name="b_start" class="btn btn-info" type="button">
@@ -996,21 +1098,45 @@ function closeModal() {
 };
 
 function disableRefresh() {
-    document.getElementById("refresh_btn1").innerHTML = "Checking Status ...";
-    document.getElementById("refresh_btn1").disabled = true;
-    document.getElementById("refresh_btn2").innerHTML = "Checking Status ...";
-    document.getElementById("refresh_btn2").disabled = true;
-    document.getElementById("refresh_btn3").innerHTML = "Checking Status ...";
-    document.getElementById("refresh_btn3").disabled = true;
+    $('button[data-id="refresh"]').text("Checking Status ...");
+    $('button[data-id="refresh"]').attr("disabled","disabled");
+
+    /*if( document.getElementById('refresh_btn1') !== null )
+    {
+        document.getElementById("refresh_btn1").innerHTML = "Checking Status ...";
+        document.getElementById("refresh_btn1").disabled = true;
+    }
+    if( document.getElementById('refresh_btn2') !== null )
+    {
+        document.getElementById("refresh_btn2").innerHTML = "Checking Status ...";
+        document.getElementById("refresh_btn2").disabled = true;
+    }
+    if( document.getElementById('refresh_btn3') !== null )
+    {
+        document.getElementById("refresh_btn3").innerHTML = "Checking Status ...";
+        document.getElementById("refresh_btn3").disabled = true;
+    }*/
 };
 
 function enableRefresh() {
-    document.getElementById("refresh_btn1").innerHTML= "Refresh Status";
-    document.getElementById("refresh_btn1").disabled = false;
-    document.getElementById("refresh_btn2").innerHTML= "Refresh Status";
-    document.getElementById("refresh_btn2").disabled = false;
-    document.getElementById("refresh_btn3").innerHTML= "Refresh Status";
-    document.getElementById("refresh_btn3").disabled = false;
+    $('button[data-id="refresh"]').text("Refresh Status");
+    $('button[data-id="refresh"]').removeAttr("disabled");
+
+    /*if( document.getElementById('refresh_btn1') !== null )
+    {
+        document.getElementById("refresh_btn1").innerHTML=
+        document.getElementById("refresh_btn1").disabled = false;
+    }
+    if( document.getElementById('refresh_btn2') !== null )
+    {
+        document.getElementById("refresh_btn2").innerHTML= "Refresh Status";
+        document.getElementById("refresh_btn2").disabled = false;
+    }
+    if( document.getElementById('refresh_btn3') !== null )
+    {
+        document.getElementById("refresh_btn3").innerHTML= "Refresh Status";
+        document.getElementById("refresh_btn3").disabled = false;
+    }*/
 };
 
 function print_recolor(aid, level, msg)

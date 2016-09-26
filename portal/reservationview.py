@@ -5,6 +5,7 @@ from dateutil import parser
 
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
+from django.core.files.storage import FileSystemStorage
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.template.loader import render_to_string
@@ -17,7 +18,7 @@ from portal.actions import get_authority_by_user, get_authority_emails, \
 from portal.models import SimReservation, Reservation, ReservationDetail, \
     SimulationImage, TestbedImage, ResourcesInfo, VirtualNode, PhysicalNode, SimulationVM, \
     FrequencyRanges, ReservationFrequency
-from lab.models import Course, Experiments
+from lab.models import Course, Experiments, LabsTemplate
 
 from ui.topmenu import topmenu_items, the_user
 from unfold.loginrequired import LoginRequiredAutoLogoutView
@@ -72,6 +73,7 @@ class ReservationView(LoginRequiredAutoLogoutView):
         courses_list = None
         if reserve_type == "I":
             courses_list = Course.objects.filter(instructor_ref=user)
+            labs_list = LabsTemplate.objects.all()
             template_name = "ins-experiments-add.html"
             omf_max_duration = sim_max_duration
         elif reserve_type == "R":
@@ -97,22 +99,31 @@ class ReservationView(LoginRequiredAutoLogoutView):
             ex_course = None
             ex_due_date = None
             ex_detail = None
-            ex_reserve_type = None
+            # ex_reserve_type = None
             ex_max_duration = None
             ex_allow_shh = None
             ex_allow_crt = None
             ex_allow_img = None
+            ex_file = None
+            ex_use_labs = None
+            ex_idx_lab = None
+            ex_tmp_lab = None
 
             if reserve_type == "I":
                 ex_title = request.POST.get('ex_title', '')
                 ex_course = request.POST.get('ex_course', '')
                 ex_due_date = request.POST.get('due_date', '')
                 ex_detail = request.POST.get('ex_detail', '')
-                ex_reserve_type = request.POST.get('reserve_type', '')
+                # ex_reserve_type = request.POST.get('reserve_type', '')
                 ex_max_duration = request.POST.get('max_duration', '')
+                if len(request.FILES) > 0:
+                    ex_file = request.FILES['ex_file']
                 ex_allow_shh = request.POST.get('allow_ssh', False)
                 ex_allow_crt = request.POST.get('allow_crt', False)
                 ex_allow_img = request.POST.get('allow_img', False)
+                ex_use_labs = request.POST.get('use_lab', False)
+                ex_idx_lab = int(request.POST.get('pre_exp', '-1'))
+                ex_tmp_lab = request.POST.getlist('t_lab', [])
 
                 if ex_title is None or ex_title == '':
                     self.errors.append('Experiment Name is mandatory')
@@ -254,6 +265,22 @@ class ReservationView(LoginRequiredAutoLogoutView):
                         se.sim_reservation_ref = s
                     se.save()
 
+                    # Save file and update
+                    if ex_file:
+                        fs = FileSystemStorage()
+                        new_filename = user.username + "_" + request_date.strftime('%d_%m_%Y') + "_" + ex_file.name
+                        filename = fs.save(new_filename, ex_file)
+                        uploaded_file_url = fs.url(filename)
+                        se.sup_files = uploaded_file_url
+                        se.save()
+
+                    if ex_use_labs and len(ex_tmp_lab) > ex_idx_lab >= 0:
+                        lab_temp_id = int(ex_tmp_lab[ex_idx_lab])
+                        lab_temp_obj = LabsTemplate.objects.get(id=lab_temp_id)
+                        if lab_temp_obj:
+                            se.lab_template_ref = lab_temp_obj
+                            se.save()
+
                 # The recipients are the PI of the authority
                 # TODO: @qursaan
                 recipients = get_authority_emails(authority_hrn)  # authority_get_pi_emails(request, authority_hrn)
@@ -325,6 +352,10 @@ class ReservationView(LoginRequiredAutoLogoutView):
         }
 
         if reserve_type == "I":
+            if not courses_list:
+                messages.success(request, 'Success: Add a Course First!')
+                return HttpResponseRedirect("/lab/courses/")
+
             template_env['ex_title'] = request.POST.get('ex_title', '')
             template_env['ex_course'] = request.POST.get('ex_course', '')
             template_env['due_date'] = request.POST.get('ex_due_date', '')
@@ -332,6 +363,7 @@ class ReservationView(LoginRequiredAutoLogoutView):
             template_env['reserve_type'] = request.POST.get('ex_reserve_type', '')
             template_env['max_duration'] = request.POST.get('ex_max_duration', '')
             template_env['ex_courses_list'] = courses_list
+            template_env['labs_list'] = labs_list
             template_env['title'] = "Add New Experiment"
 
         template_env.update(page.prelude_env())

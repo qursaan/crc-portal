@@ -225,22 +225,30 @@ def check_availability_bulk(request):
     the_type = exp.server_type
 
     if the_type == "omf":
-        nodes = ReservationDetail.objects.filter(reservation_ref=exp.reservation_ref)
-        the_nodes = []
-        for n in nodes:
-            the_nodes.append(n.node_ref.id)
+        if exp.reservation_ref.start_time > start_datetime and exp.reservation_ref.end_time > end_datetime :
+            msg = "<ul><li>Selected time is exceed the bulk range time .</li></ul>"
+        else:
+            nodes = ReservationDetail.objects.filter(reservation_ref=exp.reservation_ref)
+            the_nodes = []
+            for n in nodes:
+                the_nodes.append(n.node_ref.id)
 
-        freq = ReservationFrequency.objects.filter(reservation_ref=exp.reservation_ref)
-        the_freq = []
-        for f in freq:
-            the_freq.append(f.frequency_ref.id)
-        msg = schedule_checking(the_nodes, start_datetime, end_datetime, "omf", use_bulk=True)
-        if the_freq:
-            msg += schedule_checking_freq(the_freq, start_datetime, end_datetime)
+            freq = ReservationFrequency.objects.filter(reservation_ref=exp.reservation_ref)
+            the_freq = []
+            for f in freq:
+                the_freq.append(f.frequency_ref.id)
+
+            msg = schedule_checking(the_nodes, start_datetime, end_datetime, "omf", use_bulk=True)
+            if the_freq:
+                msg += schedule_checking_freq(the_freq, start_datetime, end_datetime, use_bulk=True)
+
     elif the_type == "sim":
-        nodes = SimReservation.objects.get(id=exp.sim_reservation_ref.id)
-        the_nodes = nodes.node_ref.id
-        msg = schedule_checking(the_nodes, start_datetime, end_datetime, "sim",use_bulk=True)
+        if exp.sim_reservation_ref.start_time > start_datetime and exp.sim_reservation_ref.end_time > end_datetime :
+            msg = "<ul><li>Selected time is exceed the bulk range time .</li></ul>"
+        else:
+            nodes = SimReservation.objects.get(id=exp.sim_reservation_ref.id)
+            the_nodes = nodes.node_ref.id
+            msg = schedule_checking(the_nodes, start_datetime, end_datetime, "sim", use_bulk=True)
 
     free = "0"
     if not msg:

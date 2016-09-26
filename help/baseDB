@@ -82,3 +82,26 @@ INSERT INTO PORTAL.portal_virtualnode VALUES(9,'node3r',3,3,'vm3');
 INSERT INTO PORTAL.portal_virtualnode VALUES(10,'node4w',1,4,'vm1');
 INSERT INTO PORTAL.portal_virtualnode VALUES(11,'node4u',2,4,'vm2');
 COMMIT;
+
+
+BEGIN TRANSACTION;
+;
+INSERT INTO PORTAL.lab_installedLab VALUES(1,'Wireless Communication Labs','server_type=omf;nodes=2,3;devices=2');
+INSERT INTO PORTAL.lab_installedLab VALUES(2,'Network Labs','server_type=sim;');
+;
+INSERT INTO PORTAL.lab_labstemplate VALUES(1,'QAM and MPSK without channel coding',1,'');
+INSERT INTO PORTAL.lab_labstemplate VALUES(2,'QAM and MPSK with channel coding',1,'');
+INSERT INTO PORTAL.lab_labstemplate VALUES(3,'FSK modulation',1,'');
+INSERT INTO PORTAL.lab_labstemplate VALUES(4,'Spread Spectrum Communication',1,'');
+INSERT INTO PORTAL.lab_labstemplate VALUES(5,'OFDM',1,'');
+;
+INSERT INTO PORTAL.lab_labsparameter VALUES(1,'Tx Gain','tx_gain','range','70','0,80');
+INSERT INTO PORTAL.lab_labsparameter VALUES(2,'Rx Gain','rx_gain','range','70','0,80');
+INSERT INTO PORTAL.lab_labsparameter VALUES(3,'Sample Rate','sample_rate','list','0.25e6','0.25e6,0.5e6,1e6');
+INSERT INTO PORTAL.lab_labsparameter VALUES(4,'Transmitter Node','transmitter_node','nodes','','');
+INSERT INTO PORTAL.lab_labsparameter VALUES(5,'Receiver Node','receiver_node','nodes','','');
+INSERT INTO PORTAL.lab_labsparameter VALUES(6,'Modulation','modulation','list','BPSK','BPSK,QPSK,8QAM,16QAM,8PSK');
+INSERT INTO PORTAL.lab_labsparameter VALUES(7,'Ber','ber','bool','0','0,1');
+INSERT INTO PORTAL.lab_labsparameter VALUES(8,'frequency','frequency','frequency','','');
+
+COMMIT;
