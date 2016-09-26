@@ -149,9 +149,10 @@ $(document).ready(function(){
 $('#use_lab').click(function(){
     if($(this).is(':checked')){
         $('#use_lab_group').show();
+        $(":radio[name='pre_exp']").change();
     }else{
         $('#use_lab_group').hide();
-        $("#server_type").removeAttr("disabled");
+        $("#server_type").removeAttr("readonly");
         $('input[name="resource_group"]').removeAttr("disabled");
     }
 });
@@ -167,13 +168,15 @@ $(":radio[name='pre_exp']").on("change", function() {
             if( di[0] == "server_type" )
             {
                 if(di[1]=="omf"){
-                    $("#server_type").val('omf').change();
+                     select_type  = "omf";
+                     $("#server_type").val('omf').change();
                 }else if(di[1]=="sim"){
-                    $("#server_type").val('sim').change();
+                     select_type  = "sim";
+                     $("#server_type").val('sim').change();
                 }else{
                     continue;
                 }
-                $("#server_type").attr("disabled","disabled");
+                $("#server_type").attr("readonly","readonly");
             }
             else if( di[0]=="nodes" )
             {
@@ -201,8 +204,6 @@ $(":radio[name='pre_exp']").on("change", function() {
                 }
             }
         }
-    }else{
-
     }
 });
 

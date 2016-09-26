@@ -210,6 +210,9 @@ class FrequencyRanges(models.Model):
     def __unicode__(self):
         return self.freq_start + ":" + self.freq_end
 
+    def frequency_value(self):
+        return  str((float(self.freq_start) + float(self.freq_end))/2) + "e6"
+
 
 class VirtualNode(models.Model):
     node_ref = models.ForeignKey(PhysicalNode, null=True)

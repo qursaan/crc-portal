@@ -201,6 +201,8 @@
                 <div class="well"> <!--run lab-->
                     <form class="cmxform form-horizontal" id="run-lab-form" method="post"
                           action="run_lab" role="form">
+                        <input type="text" id="exp_name" name="exp_name" value="{{lab_ref.exp_param}}" hidden/>
+                        <input type="text" id="user_id" name="user_id" value="{{user_id}}" hidden/>
                         <fieldset>
                             {% csrf_token %}
                             <div class="form-group">
@@ -215,70 +217,85 @@
                                     </div>
                                 </div>
                             </div>
-                            <h5>Experiment: <b>{{lab_ref.title}} </b> @ {{lab_ref.lab_ref}}</h5>
-                            {% for p in lab_param_list %}
+                            <h5>Experiment's Parameters: <b>{{lab_ref.title}} </b> @ {{lab_ref.lab_ref}}</h5>
                             <div class="form-group">
-                                <label class="col-xs-2 control-label">{{p}}</label>
-                                <div class="col-xs-4">
-                                    <div class="ui-widget">
-                                    {% if p.type = "range" %}
-                                        <div>
-                                            <input id="{{p.param_id}}" type="text" class="form-control user-input" name="{{p.param_id}}" value="{{p.def_value}}" readonly/>
-                                        </div>
-                                        <div id="slider-{{p.param_id}}"></div>
-                                        <script>
-                                            var xrange = Number("{{p.values}}".split(',')[0]);
-                                            var yrange = Number("{{p.values}}".split(',')[1]);
-                                            $(document).ready(function(){
-                                                $( "#slider-{{p.param_id}}" ).slider({
-                                                    range: "min",
-                                                    value: 70,
-                                                    min: xrange,
-                                                    max: yrange,
-                                                    slide: function( event, ui ) {
-                                                        $( "#{{p.param_id}}" ).val(ui.value);
-                                                    }
+                                {% for p in lab_param_list %}
+                                <div class="form-group">
+                                    <label class="col-xs-2 control-label">{{p}}</label>
+                                    <div class="col-xs-4">
+                                        <div class="ui-widget">
+                                        {% if p.type = "range" %}
+                                            <div>
+                                                <input id="{{p.param_id}}" data-id="lab_param" type="text" class="form-control user-input" name="{{p.param_id}}" value="{{p.def_value}}" readonly/>
+                                            </div>
+                                            <div id="slider-{{p.param_id}}"></div>
+                                            <script>
+                                                var xrange = Number("{{p.values}}".split(',')[0]);
+                                                var yrange = Number("{{p.values}}".split(',')[1]);
+                                                $(document).ready(function(){
+                                                    $( "#slider-{{p.param_id}}" ).slider({
+                                                        range: "min",
+                                                        value: 70,
+                                                        min: xrange,
+                                                        max: yrange,
+                                                        slide: function( event, ui ) {
+                                                            $( "#{{p.param_id}}" ).val(ui.value);
+                                                        }
+                                                    });
+                                                    $( "#{{p.param_id}}" ).val( $( "#slider-{{p.param_id}}" ).slider( "value" ) );
                                                 });
-                                                $( "#{{p.param_id}}" ).val( $( "#slider-{{p.param_id}}" ).slider( "value" ) );
-                                            });
-                                        </script>
-                                    {% elif p.type = "list" %}
-                                        <select id="{{p.param_id}}" name="{{p.param_id}}"  class="form-control user-input" value="{{ p.def_value }}">
-                                            {% for row in p.values_as_list %}
-                                            <option value="{{row}}" label="{{row}}">
-                                                {{row}}
-                                            </option>
-                                            {% endfor %}
-                                        </select>
-                                    {% elif p.type = "nodes" %}
-                                        <select id="{{p.param_id}}" name="{{p.param_id}}"  class="form-control user-input" value="">
-                                            {% for row in node_list %}
-                                            <option value="{{ row.node_ref.vm_name }}" label="{{row.node_ref}}">
-                                                {{row.node_ref}}
-                                            </option>
-                                            {% endfor %}
-                                        </select>
-                                    {% elif p.type = "frequency" %}
-                                        <select id="{{p.param_id}}" name="{{p.param_id}}"  class="form-control user-input" value="">
-                                            {% for row in freq_list %}
-                                            <option value="{{row.frequency_ref}}" label="{{row.frequency_ref}}">
-                                                {{row.frequency_ref}}
-                                            </option>
-                                            {% endfor %}
-                                        </select>
-                                    {% elif p.type = "bool" %}
-                                        <select id="{{p.param_id}}" name="{{p.param_id}}"  class="form-control user-input" value="{{p.def_value}}">
-                                            <option value="0" label="No">No</option>
-                                            <option value="1" label="Yes">Yes</option>
-                                        </select>
-                                    {% endif %}
+                                            </script>
+                                        {% elif p.type = "list" %}
+                                            <select id="{{p.param_id}}" data-id="lab_param" name="{{p.param_id}}" class="form-control user-input" value="{{ p.def_value }}">
+                                                {% for row in p.values_as_list %}
+                                                <option value="{{row}}" label="{{row}}">
+                                                    {{row}}
+                                                </option>
+                                                {% endfor %}
+                                            </select>
+                                        {% elif p.type = "nodes" %}
+                                            <select id="{{p.param_id}}" data-id="lab_param" name="{{p.param_id}}" class="form-control user-input" value="">
+                                                {% for row in node_list %}
+                                                <option value="{{ row.node_ref.vm_name }}" label="{{row.node_ref}}">
+                                                    {{row.node_ref}}
+                                                </option>
+                                                {% endfor %}
+                                            </select>
+                                        {% elif p.type = "frequency" %}
+                                            <select id="{{p.param_id}}" data-id="lab_param" name="{{p.param_id}}"  class="form-control user-input" value="">
+                                                {% for row in freq_list %}
+                                                <option value="{{row.frequency_ref.frequency_value}}" label="{{row.frequency_ref.frequency_value}}">
+                                                    {{row.frequency_ref.frequency_value}}
+                                                </option>
+                                                {% endfor %}
+                                            </select>
+                                        {% elif p.type = "bool" %}
+                                            <select id="{{p.param_id}}" data-id="lab_param" name="{{p.param_id}}"  class="form-control user-input" value="{{p.def_value}}">
+                                                <option value="0" label="No">No</option>
+                                                <option value="1" label="Yes">Yes</option>
+                                            </select>
+                                        {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            <div class="form-group">
+                                <div class="col-xs-12"><h5>Output terminal</h5>
+                                    <div class="">
+                                        <textarea id="exp_output" readonly="readonly" style="height:200px; width:100%;" class="console">{{ output }}</textarea>
                                     </div>
                                 </div>
                             </div>
-                            {% endfor %}
+                            <div class="form-group">
+                                <div class="col-xs-12"><h5>Results</h5>
+                                    <video id="exp_result" alt="result" width="640" class="console"
+                                           src=""
+                                           type="video/mp4" controls></video>
+                                </div>
+                            </div>
                         </fieldset>
                     </form>
-
                 </div>
             </div>
 {% endif %}
@@ -477,7 +494,7 @@
                 </div>
             </div>
 {% endif %}
-            {% if stype == "omf" %}
+{% if stype == "omf" %}
             <div role="tabpanel" class="tab-pane" id="manager">
                 <h4>Execute Script</h4>
                 <div class="well">
@@ -536,7 +553,7 @@
                     </form>
                 </div>
             </div>
-            {% endif %}
+{% endif %}
 {% if allow_ssh %}
             <div role="tabpanel" class="tab-pane" id="terminal">
                 <h4>Web Terminal</h4>
@@ -615,6 +632,7 @@ var count = 0;
 var loading_List=[];
 var saving_List=[];
 var exe_List=[];
+var lab_list=[];
 var activityTable;
 var change_flag = false;
 var deadline = new Date("{{ deadline.isoformat }}");
@@ -649,6 +667,9 @@ function myTimer() {
     }
     for (var a in exe_List) {
         checking_status_exe(exe_List[a][0], exe_List[a][1], a, exe_List);
+    }
+    for( var a in lab_list){
+        checking_status_lab(lab_list[a][0], lab_list[a][1], a, lab_list);
     }
     if ( change_flag )
     {
@@ -880,7 +901,7 @@ function checking_status_exe(eid, aid, idx, a_list) {
             //console.log(result);
             var is_done = result['done'];
             if(is_done==false){
-                var log = result['log']
+                var log = result['log'];
                 var output ='';
                 for (txt in log){
                     output += log[txt] + '\n';
@@ -1203,6 +1224,90 @@ function check_status(node_id) {
         }
     });
 };
+/****************Lab*************************************/
+{% if show_lab %}
+$('#run_exp_lab').on('click', function(event){
+    event.preventDefault();
+    aid = add_activity("Running Experiment");
+    $('#run_exp_lab').attr("disabled","disabled");
+    create_lab_post(aid);
+});
 
+function create_lab_post(aid,lparam) {
+    openModal();
+    $.ajax({
+        url : "control_lab_run",
+        type : "POST",
+        data : $("#run-lab-form").serialize() ,
+        success : function(json) {
+            $('#exp_output').val("");
+            print_recolor(aid,2,"In progress...");
+            lab_list.push([json['exp_id'],aid]);
+            closeModal();
+            $('#run_exp_lab').removeAttr("disabled");
+        },
+        error : function(xhr,errmsg,err) {
+            print_recolor(aid,3,"Server not connected, try again later");
+            closeModal();
+            $('#run_exp_lab').removeAttr("disabled");
+        }
+    });
+};
+
+function checking_result_lab(eid) {
+    $.ajax({
+        url  : "control_lab_result",
+        type : "POST",
+        data : {the_eid: eid,},
+        success : function(result) {
+             var video = document.getElementById('exp_result');
+             video.setAttribute("src", result);
+        },
+        error : function(xhr,errmsg,err) {
+        }
+    });
+};
+
+function checking_status_lab(eid, aid, idx, a_list) {
+    $.ajax({
+        url  : "control_lab_check",
+        type : "POST",
+        data : {the_eid: eid,},
+        success : function(result) {
+            //console.log(result);
+            var is_done = result['done'];
+
+            if(is_done==false){
+                var log = result['log'];
+                var output ='';
+                for (txt in log){
+                    output += log[txt] + '\n';
+                }
+
+                $('#exp_output').val(output);
+                $('#exp_output').scrollTop($('#exp_output')[0].scrollHeight);
+                print_recolor(aid,2,"In progress");
+            } else {
+                var log = result['log'];
+                var output ='';
+                for (txt in log){
+                    output += log[txt] + '\n';
+                }
+
+                $('#exp_output').val(output);
+                $('#exp_output').scrollTop($('#exp_output')[0].scrollHeight);
+                print_recolor(aid,1,"Complete");
+                a_list.splice(idx,1);
+                checking_result_lab(eid);
+            }
+        },
+        error : function(xhr,errmsg,err) {
+           console.log(err);
+           print_recolor(aid,3,"Server not connected, try again later");
+           a_list.splice(idx,1);
+        }
+    });
+};
+{% endif %}
 </script>
 {% endblock %}

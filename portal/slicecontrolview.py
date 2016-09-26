@@ -9,7 +9,8 @@ from portal.models import Reservation, ReservationDetail, SimReservation, \
 from lab.models import Experiments
 from lab.actions import get_control_options
 from portal.navigation import action_load_save_image, omf_exe, remote_node, \
-    check_task_progress, check_exe_progress, slice_on_time, abort_exe_progress
+    check_task_progress, check_exe_progress, slice_on_time, abort_exe_progress, \
+    lab_run, lab_check, lab_result
 
 from portal.actions import get_user_by_email, get_user_type
 #
@@ -95,6 +96,7 @@ class SliceControlView(LoginRequiredAutoLogoutView):
             'freq_list': freq_list,
             'output': output_script,
             'username': the_user(self.request),
+            'user_id': user.id,
             'title': t,
             'stype': stype,
             'allow_ssh': allow_ssh,
@@ -182,3 +184,24 @@ def control_load_sample(request):
         return HttpResponse(json.dumps(response_data), content_type="application/json")
     else:
         return HttpResponse(json.dumps({"error": "this isn't happening"}), content_type="application/json")
+
+
+@login_required
+def control_lab_run(request):
+    if request.method != 'POST':
+        return HttpResponseRedirect("/")
+    return lab_run(request)
+
+
+@login_required
+def control_lab_check(request):
+    if request.method != 'POST':
+        return HttpResponseRedirect("/")
+    return lab_check(request)
+
+
+@login_required
+def control_lab_result(request):
+    if request.method != 'POST':
+        return HttpResponseRedirect("/")
+    return lab_result(request)

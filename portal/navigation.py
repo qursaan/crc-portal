@@ -7,9 +7,11 @@ from django.utils import timezone
 #
 from crc.settings import BASE_IMAGE_DIR
 from ui.topmenu import topmenu_items, the_user
-from portal.models import UserImage, TestbedImage,Reservation, SimReservation, SimulationImage
-from portal.actions import get_user_by_email, get_task_id, update_task_testbed, check_next_task_duration, get_username_by_email
-from portal.backend_actions import load_images, save_images, vm_restart, vm_shutdown, vm_start, exe_script,exe_check,check_load_images,check_save_images, exe_abort
+from portal.models import UserImage, TestbedImage, Reservation, SimReservation, SimulationImage
+from portal.actions import get_user_by_email, get_task_id, update_task_testbed, check_next_task_duration, \
+    get_username_by_email
+from portal.backend_actions import load_images, save_images, vm_restart, vm_shutdown, vm_start, exe_script, exe_check, \
+    check_load_images, check_save_images, exe_abort, commlab_exe, commlab_check, commlab_result
 from reservation_status import ReservationStatus
 
 
@@ -53,7 +55,7 @@ def action_load_save_image(request, action):
     if stype is None:
         return HttpResponse("error: Please go back and try again", content_type="text/plain")
 
-    if not slice_on_time(request,stype):
+    if not slice_on_time(request, stype):
         return HttpResponse('eof', content_type="text/plain")
     # for any action  ############# TODO: @qursaan
 
@@ -126,8 +128,8 @@ def action_load_save_image(request, action):
 
         # for any action  ##########
         if r == 1:
-            return HttpResponse('success: start '+action+' ...', content_type="text/plain")
-    return HttpResponse('error: Unable to '+action+' image', content_type="text/plain")
+            return HttpResponse('success: start ' + action + ' ...', content_type="text/plain")
+    return HttpResponse('error: Unable to ' + action + ' image', content_type="text/plain")
 
 
 # OK OK OK OK
@@ -146,7 +148,7 @@ def slice_on_time(request, stype):
         messages.success(request, 'Error: You have not permission to access this page.')
         del request.session['slice_id']
         return False
-    if current_slice.end_time < timezone.now() :
+    if current_slice.end_time < timezone.now():
         del request.session['slice_id']
         current_slice.status = ReservationStatus.get_expired()
         current_slice.save()
@@ -159,9 +161,9 @@ def slice_on_time(request, stype):
 def update_user_images(image_name, user):
     try:
         new_image = UserImage(
-            user_ref = user,
-            image_name = image_name,
-            location = BASE_IMAGE_DIR + image_name + ".ndz",
+            user_ref=user,
+            image_name=image_name,
+            location=BASE_IMAGE_DIR + image_name + ".ndz",
         )
         new_image.save()
     except:
@@ -222,5 +224,30 @@ def omf_exe(request):
         return HttpResponse({"error": "Error, Invalid Script"}, content_type="text/plain")
 
 
+def lab_run(request):
+    if not slice_on_time(request, "omf"):
+        return HttpResponse('eof', content_type="text/plain")
+    else:
+
+        t = commlab_exe(request.POST)
+        if t != 0:
+            return HttpResponse(t, content_type="application/json")
+        return HttpResponse({"error": "Error, Invalid Script"}, content_type="text/plain")
 
 
+def lab_check(request):
+    exe_id = request.POST.get('the_eid', None)
+    if exe_id:
+        ol = commlab_check(exe_id)
+        if ol != 0:
+            return HttpResponse(ol, content_type="application/json")
+    return HttpResponse('{"error": "Error, Invalid File"}', content_type="application/json")
+
+
+def lab_result(request):
+    exe_id = request.POST.get('the_eid', None)
+    if exe_id:
+        ol = commlab_result(exe_id)
+        if ol != 0:
+            return HttpResponse(ol, content_type="text/plain")
+    return HttpResponse('{"error": "Error, Invalid File"}', content_type="application/json")

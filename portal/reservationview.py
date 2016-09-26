@@ -216,7 +216,7 @@ class ReservationView(LoginRequiredAutoLogoutView):
                         p.save()
 
                     # TODO: @qursaan
-                    if not schedule_auto_online(s.id, "omf",use_bulk,reserve_type):
+                    if not schedule_auto_online(s.id, "omf", use_bulk, reserve_type):
                         self.errors.append('Sorry, Time slot is not free')
                         s.delete()
 

@@ -148,3 +148,30 @@ def exe_abort(exp_id):
     else:
         return 0
 
+
+# Experiments Lab ############################################################
+def commlab_exe(post_data):
+    post_data = json.dumps(post_data)
+    result = urllib2.urlopen('http://'+BACKEND_IP+':7777/api/v1/commlabs/', data=post_data)
+    if result.getcode() == 200:
+        return result.read()
+    else:
+        return 0
+
+
+def commlab_check(user_id):
+    result = urllib2.urlopen('http://'+BACKEND_IP+':7777/api/v1/commlabs/status/' + str(user_id))
+    if result.getcode() == 200:
+        return result.read()
+    else:
+        return 0
+
+
+def commlab_result(user_id):
+    return 'http://'+BACKEND_IP+':7777/api/v1/commlabs/results/' + str(user_id)
+    #result = urllib2.urlopen('http://'+BACKEND_IP+':7777/api/v1/commlabs/results/' + str(user_id))
+    #if result.getcode() == 200:
+    #    return result.read()
+    #else:
+    #    return 0'''
+
