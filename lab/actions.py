@@ -85,6 +85,8 @@ def get_control_options(stype, reserve_ref):
     allow_crt = True
     supp_file = None
     s_exp = None
+    lab_param_list = []
+    
     if stype == "omf":
         s_exp = StudentsExperiment.objects.filter(reservation_ref=reserve_ref)
     elif stype == "sim":
@@ -95,7 +97,8 @@ def get_control_options(stype, reserve_ref):
         allow_img = s_exp[0].experiment_ref.allow_img
         supp_file = s_exp[0].experiment_ref.sup_files
         lab_temp_ref = s_exp[0].experiment_ref.lab_template_ref
-        lab_param_list = LabsParameter.objects.filter(lab_ref=lab_temp_ref.lab_ref)
+        if lab_temp_ref:
+            lab_param_list = LabsParameter.objects.filter(lab_ref=lab_temp_ref.lab_ref)
     return allow_crt, allow_img, allow_ssh, supp_file, lab_temp_ref, lab_param_list
 
 
