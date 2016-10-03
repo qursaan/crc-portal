@@ -8,6 +8,7 @@ USER_HOME = "/home/crc-users/"
 
 BACKEND_IP = "193.227.16.199"
 
+
 # User Management ####################################################
 def create_backend_user(username, password):
     post_data = {

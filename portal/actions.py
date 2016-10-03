@@ -506,7 +506,7 @@ def portal_validate_request(wsgi_request, request_ids):
                 up_user = MyUser.objects.get(id=request['id'])
                 web_user = User.objects.get(id=up_user.id)
                 # TODO: Create user file here
-                result = 1 #create_backend_user(up_user.username, up_user.password)
+                result = create_backend_user(up_user.username, up_user.password)
                 if result == 1:
                     up_user.status = 2
                     up_user.save()

@@ -152,7 +152,7 @@ class StudentReserveView(LoginRequiredAutoLogoutView):
                     )
                     s.save()
                     # TODO: @qursaan
-                    if not schedule_auto_online(s.id, "sim",use_bulk=True,reserve_type="R"):
+                    if not schedule_auto_online(s.id, "sim", use_bulk=True, reserve_type="R"):
                         self.errors.append('Sorry, Time slot is not free')
                         s.delete()
 

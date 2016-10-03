@@ -948,7 +948,7 @@ $('#load_image_btn').on('click', function(event){
 $('#save-image-btn').on('click', function(event){
     event.preventDefault();
     image_name = $('input[name="image_name"]').val();
-    node_name = $('input[name="node_group2"]:checked').val();
+    node_name  = $('input[name="node_group2"]:checked').val();
     aid = add_activity("Saving Image on Node: " +node_name);
     saving_image(node_name,image_name, aid);
 });
@@ -1261,6 +1261,7 @@ function checking_result_lab(eid) {
         data : {the_eid: eid,},
         success : function(result) {
              var video = document.getElementById('exp_result');
+             result  = result + "?t=" + new Date();
              video.setAttribute("src", result);
         },
         error : function(xhr,errmsg,err) {
