@@ -77,7 +77,7 @@
                         <td> {{ row.description }}</td>
                         <td> {% if row.external_link %} <a href="{{row.external_link}}" target="_blank">Web</a> {% endif %}</td>
                         <td>
-                            <a id="download_lib" href="download{{ row.file }}"
+                            <a id="download_lib" href="{{ row.file }}"
                                class="btn btn-default">Download!
                                 <span class="glyphicon glyphicon-download" aria-hidden="true"></span>
                             </a>
