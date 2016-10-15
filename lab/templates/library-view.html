@@ -77,10 +77,12 @@
                         <td> {{ row.description }}</td>
                         <td> {% if row.external_link %} <a href="{{row.external_link}}" target="_blank">Web</a> {% endif %}</td>
                         <td>
-                            <button id="download_lib" onclick="location.href='{{ row.file }}'"
-                                class="btn btn-default">Download
-                                <span class="glyphicon glyphicon-download" aria-hidden="true"></span>
-                            </button>
+                            <form method="get" action="{{ row.file }}">
+                                <button id="download_lib"
+                                    type="submit" class="btn btn-default">Download!
+                                    <span class="glyphicon glyphicon-download" aria-hidden="true"></span>
+                                </button>
+                            </form>
                         </td>
                     </tr>
                     {% endfor %}
