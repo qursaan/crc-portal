@@ -31,7 +31,7 @@ class AddLibraryView(LoginRequiredAutoLogoutView):
 
         user = get_user_by_email(the_user(request))
         user_type = get_user_type(user)
-        if user_type != 1 and user_type != 2 and user_type != 3:
+        if 0 <= user_type <= 3:
             messages.error(page.request, 'Error: You have not permission to access this page.')
             return HttpResponseRedirect("/")
 
