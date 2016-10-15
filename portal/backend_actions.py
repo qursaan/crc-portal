@@ -55,20 +55,19 @@ def vm_shutdown(vm_name):
 
 
 # Slicing ############################################################
-def create_slice(username, start_time, end_time):
-    return 1
-    
-    """post_data = {
+def create_slice(username, start_time, end_time, node_list):
+    post_data = {
         'user_name': username,
-        'start_time': str(start_time),
-        'end_time': str(end_time),
+        'nodes_list': node_list,
+        'start_time': str(start_time.strftime('%H:%M %Y-%m-%d')),
+        'end_time': str(end_time.strftime('%H:%M %Y-%m-%d')),
     }
     post_data = json.dumps(post_data)
     result = urllib2.urlopen('http://'+BACKEND_IP+':7777/api/v1/slice/', data=post_data)
     if result.getcode() == 200:
         return 1
     else:
-        return 0"""
+        return 0
 
 
 # Imaging ############################################################

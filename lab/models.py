@@ -1,7 +1,6 @@
 from django.db import models
-import uuid
-from portal.models import Reservation, SimReservation, MyUser  # as User
 from django.utils import timezone
+from portal.models import Reservation, SimReservation, MyUser  # as User
 
 '''
 class SupervisorStudents(models.Model):
@@ -44,15 +43,15 @@ class LabsParameter(models.Model):
 
 class Course(models.Model):
     instructor_ref = models.ForeignKey(MyUser, null=True)
-    title        = models.CharField(max_length=64)
-    code         = models.CharField(max_length=32, null=True)
-    key          = models.CharField(max_length=30, null=False)
+    title = models.CharField(max_length=64)
+    code = models.CharField(max_length=32, null=True)
+    key = models.CharField(max_length=30, null=False)
     # key = models.UUIDField(default=uuid.uuid4, editable=False)
-    description  = models.TextField(null=True)
-    is_active    = models.BooleanField(default=True)
+    description = models.TextField(null=True)
+    is_active = models.BooleanField(default=True)
     max_students = models.IntegerField(default=10)
-    email_list   = models.TextField(null=True)
-    created      = models.DateTimeField(default=timezone.now)
+    email_list = models.TextField(null=True)
+    created = models.DateTimeField(default=timezone.now)
 
     # owner = models.ForeignKey(User)
     # instructors = models.ManyToManyField(User)
@@ -71,7 +70,7 @@ class StudentCourses(models.Model):
     status = models.IntegerField(default=0)
     added = models.DateTimeField(default=timezone.now)
     # def __unicode__(self):
-        # return self.students_ref.first_name + " @ " + self.course_ref
+    # return self.students_ref.first_name + " @ " + self.course_ref
 
 
 class Experiments(models.Model):
@@ -94,7 +93,7 @@ class Experiments(models.Model):
     allow_ssh = models.BooleanField(default=False)
     allow_img = models.BooleanField(default=False)
     # files
-    sup_files = models.CharField(max_length=256,null=True)
+    sup_files = models.CharField(max_length=256, null=True)
     # existing labs
     lab_template_ref = models.ForeignKey(LabsTemplate, null=True)
 
@@ -112,6 +111,20 @@ class StudentsExperiment(models.Model):
     # 0-Reserved, 1-Finish, 2-Cancel
     status = models.IntegerField(default=0)
 
+
+class CustomLibrary(models.Model):
+    user_ref = models.ForeignKey(MyUser, null=True)
+    name = models.CharField(max_length=256, null=True)
+    author = models.CharField(max_length=256, null=True)
+    type = models.CharField(max_length=256, null=True)
+    tag = models.CharField(max_length=256, null=True)
+    external_link = models.TextField(null=True)
+    description = models.TextField(null=True)
+    file = models.TextField(null=True)
+    created = models.DateTimeField(default=timezone.now)
+
+    def __unicode__(self):
+        return self.name
 
 '''
 class ExperimentTemplate(models.Model):

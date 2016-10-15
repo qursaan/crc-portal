@@ -1,0 +1,98 @@
+{% extends "layout-unfold1.html" %}
+{% block unfold_main %}
+
+<div style="text-align:center" class="well-sm">
+    <h2>{{title}}</h2>
+</div>
+{% if errors %}
+<ul>
+    {% for error in errors %}
+        <li>{{ error }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+<h2></h2>
+<h3><a href="/lab/library">CRC Libraries </a> > Upload new library to CRC</h3>
+<div id="middle_1">
+    <div class="well">
+        <form class="cmxform form-horizontal" id="newlibrary" method="POST" action="" enctype="multipart/form-data"
+              role="form">
+            <fieldset>
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="lib_name" class="col-xs-2 control-label">Library Name</label>
+                    <div class="col-xs-4">
+                        <input id="lib_name" type="text" name="lib_name" class="form-control" minlength="2"
+                               value="{{ lib_name }}" placeholder="Library Name" required/>
+                    </div>
+                    <div class="col-xs-6"></div>
+                </div>
+                <div class="form-group">
+                    <label for="lib_auth" class="col-xs-2 control-label">Library Author</label>
+                    <div class="col-xs-4">
+                        <input id="lib_auth" type="text" name="lib_auth" class="form-control"
+                               placeholder="Author Name" value="{{ lib_auth }}" required/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="lib_type" class="col-xs-2 control-label">Code Type</label>
+                    <div class="col-xs-4">
+                        <select id="lib_type" name="lib_type" class="form-control user-input">
+                            <option value="NS2" label="NS2">NS2</option>
+                            <option value="NS3" label="NS3">NS3</option>
+                            <option value="Mininet" label="Mininet">Mininet</option>
+                            <option value="Gnuradio" label="Gnuradio">Gnuradio</option>
+                            <option value="Other" label="Other">Other</option>
+                        </select>
+                    </div>
+                    <label for="lib_type_other" class="col-xs-1 control-label">If other:</label>
+                    <div class="col-xs-2">
+                         <input id="lib_type_other" type="text" name="lib_type_other"
+                               class="form-control" value="{{ lib_type_other }}" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="lib_tag" class="col-xs-2 control-label">Search Tags</label>
+                    <div class="col-xs-4">
+                        <textarea id="lib_tag" name="lib_tag" class="form-control" style="height:110px;"
+                                  placeholder="like protocol type, channel sensing, or any other tags. Use Comma separator" required>{{ lib_tag }}</textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="lib_desc" class="col-xs-2 control-label">Description</label>
+                    <div class="col-xs-4">
+                        <textarea id="lib_desc" name="lib_desc" class="form-control" style="height:110px;"
+                                  placeholder="A short description" required>{{ lib_desc }}</textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="lib_link" class="col-xs-2 control-label">External URL</label>
+                    <div class="col-xs-4">
+                        <div class="ui-widget">
+                            <input id="lib_link" name="lib_link" value="{{ lib_link }}" type="url"
+                                   class="form-control user-input" placeholder="http://www.example.com"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="lib_file" class="col-xs-2 control-label">Code File</label>
+                    <div class="col-xs-4">
+                        <input id="lib_file" type="file" name="lib_file" required/>
+                    </div>
+                </div>
+
+                <div class="form-group" id="add_lib">
+                    <div class="col-xs-2"></div>
+                    <div class="col-xs-4"><div class="ui-widget">
+                        <div class="col-xs-1"></div>
+                        <button class="submit btn btn-success" type="submit">Add</button>
+                    </div></div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>
+<script>
+
+</script>
+{% endblock %}

@@ -1,5 +1,7 @@
 from django.contrib import admin
-from lab.models import Course, StudentCourses, Experiments,StudentsExperiment, InstalledLab, LabsTemplate, LabsParameter
+from lab.models import Course, StudentCourses, Experiments, StudentsExperiment, \
+    InstalledLab, LabsTemplate, LabsParameter, \
+    CustomLibrary
 # Register your models here.
 
 
@@ -36,3 +38,8 @@ class LabsTemplateAdmin(admin.ModelAdmin):
 @admin.register(LabsParameter)
 class LabsParameterAdmin(admin.ModelAdmin):
     list_display = ('id', 'title', 'lab_ref', 'def_value', 'values', 'type')
+
+
+@admin.register(CustomLibrary)
+class CustomLibraryAdmin(admin.ModelAdmin):
+    list_display = ('id', 'user_ref', 'name', 'author', 'type', 'tag', 'description', 'external_link', 'file')

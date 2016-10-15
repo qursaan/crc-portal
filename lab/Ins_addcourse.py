@@ -31,12 +31,12 @@ class AddCourseView(LoginRequiredAutoLogoutView):
         self.user_email = the_user(request)
         page = Page(request)
 
-        course_title = request.POST.get('course_title', '')
-        course_key = request.POST.get('course_key', '')
-        course_detail = request.POST.get('course_detail', None)
-        course_max = request.POST.get('course_max', '')
-        course_code = request.POST.get('course_code', '')
-        course_emails = request.POST.get('course_emails', None)
+        course_title = ''
+        course_key = ''
+        course_detail = ''
+        course_max = ''
+        course_code = ''
+        course_emails = ''
 
         if method == 'GET' and course_id:
             c = Course.objects.get(id=course_id)
@@ -50,6 +50,13 @@ class AddCourseView(LoginRequiredAutoLogoutView):
 
         if method == 'POST':
             self.errors = []
+
+            course_title = request.POST.get('course_title', '')
+            course_key = request.POST.get('course_key', '')
+            course_detail = request.POST.get('course_detail', '')
+            course_max = request.POST.get('course_max', '')
+            course_code = request.POST.get('course_code', '')
+            course_emails = request.POST.get('course_emails', '')
 
             user = get_user_by_email(the_user(self.request))
             user_type = get_user_type(user)
@@ -86,7 +93,7 @@ class AddCourseView(LoginRequiredAutoLogoutView):
                         c.max_students = course_max
                         c.email_list = course_emails
                         sv_course = c.save()
-                if sv_course:
+                #if sv_course:
                     # look for add student already register
                     s_email = [x.strip() for x in course_emails.split(',')]
                     for se in s_email:

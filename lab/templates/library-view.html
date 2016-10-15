@@ -1,0 +1,93 @@
+{% extends "layout-unfold1.html" %}
+{% block unfold_main %}
+
+<!--div class="onelab-title well-lg"-->
+<div style="text-align:center" class="well-sm">
+    <h2>Library Search</h2>
+</div>
+{% if errors %}
+<ul>
+    {% for error in errors %}
+    <li>{{ error }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+<h2></h2>
+<h3>Collaborative CRC Libraries</h3>
+<div id="middle_1" >
+    <div class="well">
+        <ul class='nav nav-pills nav-stacked' align="center">
+            <li role="presentation">
+                <button id="add_lib" onclick="location.href='/lab/library/add'"
+                        class="btn btn-default">Add New Library
+                    <span class="glyphicon glyphicon-plus" aria-hidden="true"/>
+                </button>
+            </li>
+        </ul>
+        <div><p>For more information about how to add library to node
+            <a href="http://www.hypexr.org/linux_scp_help.php" target="_blank">Click here</a></p></div>
+        <hr/>
+        <form class="cmxform form-horizontal" id="newlibrary" method="POST" action="" enctype="multipart/form-data"
+              role="form">
+            <fieldset>
+                {% csrf_token %}
+                <table class="table table-bordered table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Type</th>
+                            <th>Author</th>
+                            <th>Tags</th>
+                            <th>Description</th>
+                            <th>URL</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <tr >
+                        <td><input id="lib_name" type="text" name="lib_name"
+                                   {% if lib_name %} class="form-control label-warning" {% else %} class="form-control" {% endif %}
+                                   value="{{ lib_name }}" placeholder="Any" /></td>
+                        <td><input id="lib_type" type="text" name="lib_type"
+                                   {% if lib_type %} class="form-control label-warning" {% else %} class="form-control" {% endif %}
+                                   value="{{ lib_type }}" placeholder="Any" /></td>
+                        <td><input id="lib_auth" type="text" name="lib_auth"
+                                   {% if lib_auth %} class="form-control label-warning" {% else %} class="form-control" {% endif %}
+                                   value="{{ lib_auth }}" placeholder="Any" /></td>
+                        <td><input id="lib_tag" type="text" name="lib_tag"
+                                   {% if lib_tag %} class="form-control label-warning" {% else %} class="form-control" {% endif %}
+                                   value="{{ lib_tag }}" placeholder="Any" /></td>
+                        <td><input id="lib_desc" type="text" name="lib_desc"
+                                   {% if lib_desc %} class="form-control label-warning" {% else %} class="form-control" {% endif %}
+                                   value="{{ lib_desc }}" placeholder="Any" /></td>
+                        <td> </td>
+                        <td>
+                            <button id="search_lib" onclick="#"
+                                class="btn btn-info">Filter
+                                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                            </button>
+                        </td>
+                    </tr>
+                    {% for row in lib_list %}
+                    <tr class="border_bottom">
+                        <td> {{ row.name }}</td>
+                        <td> {{ row.type }}</td>
+                        <td> {{ row.author }}</td>
+                        <td> {{ row.tag }}</td>
+                        <td> {{ row.description }}</td>
+                        <td> {% if row.external_link %} <a href="{{row.external_link}}" target="_blank">Web</a> {% endif %}</td>
+                        <td>
+                            <button id="download_lib" onclick="location.href='{{ row.file }}'"
+                                class="btn btn-default">Download
+                                <span class="glyphicon glyphicon-download" aria-hidden="true"></span>
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </fieldset>
+            </form>
+    </div>
+</div>
+{% endblock %}

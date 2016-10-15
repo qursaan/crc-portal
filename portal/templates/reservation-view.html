@@ -260,7 +260,7 @@
                                             {% if r.node_ref.id = n.id and r.device_ref.id = i.id %}
                                             <label class="checkbox-inline">
                                                 <input type="checkbox" name="resource_group" value="{{r.id}}" node-id="{{n.id}}" device-id="{{i.id}}"
-                                                       title="{{ r.device_ref.type }}">{{ r.device_ref.type }}</input>
+                                                       title="{{ r.device_ref.type }}" autocomplete="off">{{ r.device_ref.type }}</input>
                                             </label>
                                             {% endif %}
                                             {% endfor %}

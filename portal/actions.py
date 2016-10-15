@@ -107,7 +107,10 @@ def schedule_auto_online(reserve_id, stype="omf", use_bulk=False, reserve_type="
             curr_slice.status = ReservationStatus.get_bulk()
         curr_slice.save()
 
-        output = create_slice(curr_slice.user_ref.username, utc_to_timezone(curr_start), utc_to_timezone(curr_end))
+        node_list = []
+        for n in new_list:
+            node_list.append(n.vm_name)
+        output = create_slice(curr_slice.user_ref.username, utc_to_timezone(curr_start), utc_to_timezone(curr_end), node_list)
         if output == 1:
             return True
         else:
@@ -331,7 +334,7 @@ def check_next_task_duration(task_id, stype):
 
 
 def get_count_active_slice(c_user):
-    busy_list = ReservationStatus.get_busy_list(allow_bulk=True,allow_pending=True)
+    busy_list = ReservationStatus.get_busy_list(allow_bulk=True, allow_pending=True)
     active_list_1 = Reservation.objects.filter(user_ref=c_user, status__in=busy_list)
     active_list_2 = SimReservation.objects.filter(user_ref=c_user, status__in=busy_list)
     current_time = timezone.now()

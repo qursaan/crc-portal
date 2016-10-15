@@ -9,6 +9,8 @@ from lab.std_courseview import StudentCoursesView, student_course_cancel
 from lab.std_addcourse import StudentAddCourseView
 from lab.std_experimentsview import StudentExperimentsView
 from lab.std_reserve import StudentReserveView, check_availability_bulk
+from lab.library_addview import AddLibraryView
+from lab.library_view import LibraryView
 from portal.reservationview import ReservationView, check_availability
 
 
@@ -34,4 +36,8 @@ urlpatterns = [
     url(r'^my_courses/experiments?$', StudentExperimentsView.as_view(), name='Enroll a new Course'),
     url(r'^my_courses/reserve/(?P<exp>[0-9]+)/$', StudentReserveView.as_view(), name='Reserve'),
     url(r'^my_courses/reserve/check_availability?$', check_availability_bulk),
+
+    # library
+    url(r'^library/add?$', AddLibraryView.as_view(), name='Add Library'),
+    url(r'^library?$', LibraryView.as_view(), name='Library View'),
 ]
