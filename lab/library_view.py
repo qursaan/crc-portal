@@ -24,7 +24,7 @@ class LibraryView(LoginRequiredAutoLogoutView):
 
         c_user = get_user_by_email(the_user(self.request))
         user_type = get_user_type(c_user)
-        if 0 <= user_type <= 3:
+        if user_type > 3:
             messages.error(page.request, 'Error: You have not permission to access this page.')
             return HttpResponseRedirect("/")
         lib_list = None
