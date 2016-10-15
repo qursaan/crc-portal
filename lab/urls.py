@@ -10,7 +10,7 @@ from lab.std_addcourse import StudentAddCourseView
 from lab.std_experimentsview import StudentExperimentsView
 from lab.std_reserve import StudentReserveView, check_availability_bulk
 from lab.library_addview import AddLibraryView
-from lab.library_view import LibraryView
+from lab.library_view import LibraryView, download
 from portal.reservationview import ReservationView, check_availability
 
 
@@ -40,4 +40,6 @@ urlpatterns = [
     # library
     url(r'^library/add?$', AddLibraryView.as_view(), name='Add Library'),
     url(r'^library?$', LibraryView.as_view(), name='Library View'),
+
+    url(r'^download/(?P<path>.*)$', download),
 ]
