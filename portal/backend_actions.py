@@ -57,7 +57,7 @@ def vm_shutdown(vm_name):
 # Slicing ############################################################
 def create_slice(username, start_time, end_time, node_list):
     post_data = {
-        'user_name': username,
+        'username': username,
         'nodes_list': node_list,
         'start_time': str(start_time.strftime('%H:%M %Y-%m-%d')),
         'end_time': str(end_time.strftime('%H:%M %Y-%m-%d')),
