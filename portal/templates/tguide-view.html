@@ -1,0 +1,15 @@
+{% extends "layout-unfold1.html" %}
+{% block unfold_main %}
+<script language="javascript" type="text/javascript">
+  function resizeIframe(obj) {
+    obj.style.height = obj.contentWindow.document.body.scrollHeight + 'px';
+    obj.style.width = obj.contentWindow.document.body.scrollWidth + 'px';
+  }
+</script>
+<div class='well'>
+    <!--div id="includedContent"></div-->
+    <iframe src="{{STATIC_URL}}tguide.htm"
+            frameborder="0" scrolling="no" onload="resizeIframe(this)" ></iframe>
+
+</div>
+{% endblock %}
