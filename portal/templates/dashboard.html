@@ -30,9 +30,9 @@
 <div id='ms-dashboard'>
     <div class="container">
         <div class="row">
-            <div class='col-xs-4' id="ms-dashboard-profile">
+            <div class='col-sm-3 ms-dashboard' id="ms-dashboard-profile">
                 <div class='ms-dashboard-caption'>
-                    <h2>User Account</h2>
+                    <h2>Manage</h2>
                 </div>
                 <div class='ms-dashboard-content'>
                     <ul>
@@ -44,16 +44,23 @@
                         {% endif %}
                     </ul>
                     <ul class='nav nav-pills nav-stacked'>
+                        {% if user_type != 4 %} <!-- admin -->
                         <li role="presentation">
                             <button id="account" onclick="location.href='/portal/account/'" class="btn btn-default">
                                 Profile
                             </button>
                             <!--button id="file" onclick="location.href='/portal/lab/tools/file_manager/'" class="btn btn-default" >Cloud Disk</button-->
                         </li>
+                        {% endif %}
                         {% if user_type == 0 %} <!-- admin -->
                         <li role="presentation">
                             <button id="requests" onclick="location.href='/portal/validate/'" class="btn btn-default">
                                 Manage Requests
+                            </button>
+                        </li>
+                        <li role="presentation">
+                            <button id="federation" onclick="location.href='/federation/'" class="btn btn-default">
+                                Federations
                             </button>
                         </li>
                         {% elif user_type == 2 %} <!--instructor-->
@@ -71,7 +78,7 @@
                     </ul>
                 </div>
             </div>
-            <div class='col-xs-4' id='ms-dashboard-testbeds'>
+            <div class='col-sm-3 ms-dashboard' id='ms-dashboard-testbeds'>
                 <div class='ms-dashboard-caption'>
                     <h2>Testbeds</h2>
                 </div>
@@ -96,13 +103,13 @@
                         </li>
                         <li role="presentation">
                             <button id="lab_library" onclick="location.href='/lab/library'"
-                                    class="btn btn-default">CRC Libraries
+                                    class="btn btn-default">Libraries
                             </button>
                         </li>
                     </ul>
                 </div>
             </div>
-            <div class='col-xs-4' id='ms-dashboard-slices'>
+            <div class='col-sm-3 ms-dashboard' id='ms-dashboard-slices'>
                 <div class='ms-dashboard-caption'>
                     <h2>Lab Panel</h2>
                 </div>
@@ -147,6 +154,25 @@
                         <li role="presentation">
                             <button id="lab_history" onclick="location.href='/portal/lab/history/'"
                                     class="btn btn-default">History
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class='col-sm-3 ms-dashboard' id='ms-dashboard-support'>
+                <div class='ms-dashboard-caption'>
+                    <h2>Support</h2>
+                </div>
+                <div class='ms-dashboard-content' id='tophat__list__support'>{{ support }}
+                    <ul class='nav nav-pills nav-stacked'>
+                        <li role="presentation">
+                            <button id="support-doc" onclick="location.href='/portal/support/documentation/'"
+                                    class="btn btn-default">Documentation
+                            </button>
+                        </li>
+                        <li role="presentation">
+                            <button id="support-contact" onclick="location.href='/portal/contact/'"
+                                    class="btn btn-default">Contact
                             </button>
                         </li>
                     </ul>

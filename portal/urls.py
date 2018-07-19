@@ -24,6 +24,7 @@ from portal.slicecontrolview import SliceControlView, \
 
 from portal.sliceview import SliceView
 from portal.testbedview import TestbedView, check_status
+from portal.emulationview import EmulationView
 from portal.schedulerview import SchedulerView, check_scheduler
 #from portal.documentationview import DocumentationView
 from portal.experimentview import ExperimentView
@@ -73,10 +74,12 @@ urlpatterns = [
     url(r'^history/?$', un_complete_page),
 
     # Dashboard
-    url(r'^dashboard/?$', DashboardView.as_view(), {'state': 'Welcome to CRC'}),
+    url(r'^/?$',DashboardView.as_view(), {'state': 'Welcome'}),
+    url(r'^dashboard/?$', DashboardView.as_view(), {'state': 'Welcome'}),
 
     # Testbeds
     url(r'^testbeds/map/?$', TestbedView.as_view(), name="testbeds"),
+    url(r'^testbeds/emulation/?$', EmulationView.as_view(), name="node_emulation"),
     url(r'^testbeds/map/check_status?$', check_status),
     # url(r'^testbeds/timeline/?$', TimelineView.as_view(), name='Timeline'),
     url(r'^testbeds/scheduler/?$', SchedulerView.as_view(), name='Scheduler'),

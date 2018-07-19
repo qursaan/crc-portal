@@ -1,13 +1,29 @@
-sudo apt-get install python-dev python-pip
+#1 Install mysql server
+--------------------------------------------------------
+apt-get install mysql-server
 
-sudo apt-get install libjpeg-dev
-sudo apt-get install libtiff-dev
-sudo apt-get install libfreetype6-dev
-sudo apt-get install python-imaging
+
+--------------------------------------------------------
+#2 install mail Postfix service
+--------------------------------------------------------
+apt-get install mailutils
+apt-get install postfix
+
+
+--------------------------------------------------------
+#3 install python libs...
+--------------------------------------------------------
+apt-get install python-dev python-pip
+
+apt-get install libjpeg-dev
+apt-get install libtiff-dev
+apt-get install libfreetype6-dev
+apt-get install python-imaging
 
 pip install django==1.8.4
 pip install django-mptt
-pip install django-polymorphic
+pip install django-polymorphic==1.3
+
 pip install Pillow
 
 pip install django-filer
@@ -19,4 +35,18 @@ pip install python-dateutil==2.4.2
 pip install pytz==2015.7
 pip install urllib3
 pip install MySQL-python
-pip install South==0.7.5
+pip install South==0.7.5d
+
+--------------------------------------------------------
+#3 install shell web services
+--------------------------------------------------------
+apt-get install openssl shellinabox
+
+
+-------------------------------------------------------
+#4 install back end services
+
+pip install Flask
+pip install flask-mysql
+pip install flask-crossdomain
+pip install decorators

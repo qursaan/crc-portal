@@ -1,30 +1,32 @@
-#from django.core.context_processors import csrf
-from django.http         import HttpResponseRedirect
-#from django.contrib.auth import logout
-from django.contrib.auth import authenticate,login
-from django.template     import RequestContext
-from django.shortcuts    import render_to_response
+# from django.core.context_processors import csrf
+from django.http import HttpResponseRedirect
+# from django.contrib.auth import logout
+from django.contrib.auth import authenticate, login
+from django.template import RequestContext
+from django.shortcuts import render_to_response
 
-from unfold.loginrequired    import FreeAccessView
-#from manifold.manifoldresult import ManifoldResult
-from ui.topmenu              import the_user, topmenu_items #, topmenu_items_live
-from crc.configengine        import ConfigEngine
+from unfold.loginrequired import FreeAccessView
+# from manifold.manifoldresult import ManifoldResult
+from ui.topmenu import the_user, topmenu_items  # , topmenu_items_live
+from crc.configengine import ConfigEngine
 
-#from django.views.generic      import View
-#from django.http               import Http404, HttpResponse
-#from django.template.loader    import get_template
-#from django.template           import Context
-#from portal.models             import PendingUser
-
+# from django.views.generic      import View
+# from django.http               import Http404, HttpResponse
+# from django.template.loader    import get_template
+# from django.template           import Context
+# from portal.models             import PendingUser
+from federate.models import Users
+from crc import settings
+from federate.fed_tasks import auth_federate_user
 
 class HomeView(FreeAccessView):
 
-    def default_env (self):
-        #print "qursaan", ConfigEngine().manifold_url()
+    def default_env(self):
+        # print "qursaan", ConfigEngine().manifold_url()
         return {
-                'MANIFOLD_URL': ConfigEngine().manifold_url(),
-                'title': 'Home Page',
-             }
+            'MANIFOLD_URL': ConfigEngine().manifold_url(),
+            'title': 'Home Page',
+        }
 
     def post(self, request):
         env = self.default_env()
@@ -51,8 +53,17 @@ class HomeView(FreeAccessView):
         #    env['layout_1_or_2']="layout-unfold2.html"
         #    return render_to_response('home-view.html',env, context_instance=RequestContext(request))
         # user was authenticated at the backend
-        #el
-        if auth_result is not None:
+        # el
+
+        # CHECK FOR FED USER
+        #
+        if auth_result is None and auth_federate_user(username,password):
+            auth_result = authenticate(username="feduser", password=settings.FED_PASS)
+            print "LOGGING IN"
+            login(request, auth_result)
+            return HttpResponseRedirect('/login-ok')
+
+        elif auth_result is not None:
             user = auth_result
             if user.is_active:
                 print "LOGGING IN"
@@ -70,12 +81,13 @@ class HomeView(FreeAccessView):
 
     # login-ok sets state="Welcome to CRC" in urls.py
     def get(self, request, state=None):
-
         env = self.default_env()
         env['username'] = the_user(request)
         env['topmenu_items'] = topmenu_items(None, request)
-        if state : env['state'] = state
-        elif not env['username'] : env['state'] = None
+        if state:
+            env['state'] = state
+        elif not env['username']:
+            env['state'] = None
         # use one or two columns for the layout - not logged in users will see the login prompt
         env['layout_1_or_2'] = "layout-unfold2.html" if not env['username'] else "layout-unfold1.html"
         return render_to_response('home-view.html', env, context_instance=RequestContext(request))

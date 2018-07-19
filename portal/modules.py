@@ -19,12 +19,14 @@ class Modules:
 
 class UserModules:
     @staticmethod
-    def is_user_valid(errors, reg_fname, reg_lname):
+    def is_user_valid(errors, reg_fname, reg_lname ,reg_email, reg_username):
         # POST values validation
         if re.search(r'^[\w+\s.@+-]+$', reg_fname) is None:
             errors.append('First Name may contain only letters, numbers, spaces and @/./+/-/_ characters.')
         if re.search(r'^[\w+\s.@+-]+$', reg_lname) is None:
             errors.append('Last Name may contain only letters, numbers, spaces and @/./+/-/_ characters.')
+        if(reg_email != reg_username):
+            errors.append('Email address must be matched with login')
         return not errors
 
     @staticmethod
@@ -56,7 +58,11 @@ class UserModules:
     @staticmethod
     def create_keys():
         from Crypto.PublicKey import RSA
-        private = RSA.generate(1024)
+        from Crypto import Random
+
+        # generate new key
+        random_generator = Random.new().read
+        private = RSA.generate(1024,random_generator)
         private_key = json.dumps(private.exportKey())
         public = private.publickey()
         pk = public.exportKey() #format='OpenSSH')
@@ -82,7 +88,7 @@ class UserModules:
             authority_hrn=reg_auth,
             username=reg_username,
             email=reg_email,
-            password=reg_password,
+            #password=reg_password,
             keypair=account_config,
             user_hrn=user_hrn,
             status=1,  # set 1 = Pending
@@ -134,7 +140,7 @@ class UserModules:
     def create_user_account(errors, reg_email, reg_username, reg_password,
                             reg_fname, reg_lname, reg_auth, reg_usertype, reg_supervisor):
         # (1)
-        UserModules.is_user_valid(errors, reg_fname, reg_lname)
+        UserModules.is_user_valid(errors, reg_fname, reg_lname, reg_email, reg_username)
         UserModules.is_user_unique(errors, reg_email, reg_username)
 
         ##################################################

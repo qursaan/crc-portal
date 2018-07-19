@@ -78,6 +78,10 @@ MAX_SIM_DURATION = 24*7
 MAX_BUK_DURATION = 24*7
 ALLOWED_HOSTS = []
 
+# FEDERATION SERVICES
+BACKENDIP = "127.0.0.1" #""193.227.16.199"
+FED_RUN = 0     # 0-STOP 1-RUNNING
+FED_PASS = 'XfedXuserXcrc'
 
 # File Browser Default Directory
 # FILEBROWSER_DIRECTORY = "uploads/"
@@ -112,6 +116,7 @@ INSTALLED_APPS = (
     'ui',
     'portal',
     'lab',
+    'federate',
     #'djcelery',
 
     # qursaan: file manager

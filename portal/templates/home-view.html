@@ -2,32 +2,28 @@
 
 {% block unfold_main %}
 <link rel="stylesheet" type="text/css" href='{{STATIC_URL}}css/registration.css' />
+<link rel="stylesheet" type="text/css" href='{{STATIC_URL}}css/login_t.css' />
 <div id="home-dashboard">
 	<!--<ul class="nav nav-tabs">
 	  <li class="active"><a href="#">USER</a></li>
 	  <li><a href="#">MANAGER</a></li>
 	</ul>-->
 	<div id="user">
-		<table>
-            {% if user.is_authenticated %}
-			<tr>
-				<td>PROFILE</td>
-				<td>SLICES</td>
-				<td>SUPPORT</td>
-			</tr>
-			<tr>
-				<td><img src='{{ STATIC_URL }}img/icon_user_color.png' alt="" /></td>
-				<td><img src='{{ STATIC_URL }}img/icon_slices.png' alt="" /></td>
-				<td><img src='{{ STATIC_URL }}img/icon_support.png' alt="" /></td>
-			</tr>
-            {% endif %}
-			<tr>
+		{% if user.is_authenticated %}
+			<!--table>
+				<tr>
+					<td>PROFILE</td>
+					<td>SLICES</td>
+					<td>SUPPORT</td>
+				</tr>
+				<tr>
+					<td><img src='{{ STATIC_URL }}img/icon_user_color.png' alt="" /></td>
+					<td><img src='{{ STATIC_URL }}img/icon_slices.png' alt="" /></td>
+					<td><img src='{{ STATIC_URL }}img/icon_support.png' alt="" /></td>
+				</tr>
+
+				<tr>
 				<td>
-				    {% block unfold_margin %}
-					{% if not user.is_authenticated %}
-				    	{% include 'widget-login.html' %}
-					{% endif %}
-					{% endblock unfold_margin %}
 				</td>
 				<td></td>
 				<td class="support">
@@ -35,7 +31,16 @@
 					<div><a href="/portal/support/documentation/">Documentation</a></div>
 				</td>
 			</tr>
-		</table>
+			</table-->
+		{% else %}
+			{% block unfold_margin %}
+
+			<!--{% if not user.is_authenticated %}-->
+				{% include 'widget-login.html' %}
+			<!--{% endif %}-->
+			{% endblock unfold_margin %}
+		{% endif %}
+
 	</div>
 	<div id="manager">
 		

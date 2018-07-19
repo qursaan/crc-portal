@@ -9,15 +9,7 @@ function create( template, vars, opts ){
 }
 
 jQuery(function ($){
-	// initialize widget on a container, passing in all the defaults.
-	// the defaults will apply to any notification created within this
-	// container, but can be overwritten on notification-by-notification
-	// basis.
 	$container = $("#notifications").notify();
-	
-	// create two when the pg loads
-	//create("default", { title:'Default Notification', text:'Example of a default notification.  I will fade out after 5 seconds'});
-	//create("sticky", { title:'Sticky Notification', text:'Example of a "sticky" notification.  Click on the X above to close me.'},{ expires:false });
 
 {% if messages %}
 	$(document).ready(function(){
@@ -32,7 +24,6 @@ jQuery(function ($){
 		{% endfor %}
 	});
 {% endif %}
-
 
 });
 </script>

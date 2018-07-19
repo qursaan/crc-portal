@@ -1,0 +1,192 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+import logging
+
+logging.basicConfig(
+    format='%(asctime)s %(levelname)s %(message)s',
+    # filename='/var/log/fed-service.log',
+    level=logging.INFO,
+    datefmt='%Y-%m-%d %H:%M:%S')
+
+import json
+from flask import Flask, jsonify, abort, request
+from flask_crossdomain import crossdomain
+# from flaskext.basicauth import BasicAuth
+from flaskext.mysql import MySQL
+# from paramiko.client import SSHClient
+# from paramiko import AutoAddPolicy
+from subprocess import call, Popen
+# import threading, os, random, string, portalocker , signal,base64
+# import time, thread, schedule
+from decorators import *
+
+app = Flask(__name__)
+# app.config['BASIC_AUTH_USERNAME'] = 'crc-user'
+# app.config['BASIC_AUTH_PASSWORD'] = 'crc-pass'
+# app.config['BASIC_AUTH_FORCE'] = True
+# basic_auth = BasicAuth(app)
+
+mysql = MySQL()
+app.config['MYSQL_DATABASE_USER'] = 'root'
+app.config['MYSQL_DATABASE_PASSWORD'] = 'portal123portal!'
+app.config['MYSQL_DATABASE_DB'] = 'PORTAL'
+app.config['MYSQL_DATABASE_HOST'] = '127.0.0.1'
+mysql.init_app(app)
+
+
+@app.errorhandler(404)
+def resource_not_found(e):
+    response = {'message': 'Resource Not Found'}
+    response = jsonify(response)
+    response.status_code = 404
+    return response
+
+
+@app.errorhandler(401)
+def not_authorized(e):
+    response = {'message': 'Not Authorized'}
+    response = jsonify(response)
+    response.status_code = 401
+    return response
+
+
+@app.errorhandler(400)
+def not_authorized(e):
+    response = {'message': 'Bad Request'}
+    response = jsonify(response)
+    response.status_code = 400
+    return response
+
+
+@app.errorhandler(405)
+def not_authorized(e):
+    response = {'message': 'Method Not Allowed'}
+    response = jsonify(response)
+    response.status_code = 405
+    return response
+
+
+start_flag = False
+
+
+def start_servies():
+    global start_flag
+
+    try:
+        if not start_flag:
+            start_flag = True
+
+    except Exception, err:
+        print ' x Error starting '
+        print err
+        exit(1)
+
+    finally:
+        print
+
+
+def start_logo():
+    print '''
+       __________  ______   ______         __                __  _           
+      / ____/ __ \/ ____/  / ____/__  ____/ /__  _________ _/ /_(_)___  ____ 
+     / /   / /_/ / /      / /_  / _ \/ __  / _ \/ ___/ __ `/ __/ / __ \/ __ \
+    / /___/ _, _/ /___   / __/ /  __/ /_/ /  __/ /  / /_/ / /_/ / /_/ / / / /
+    \____/_/ |_|\____/  /_/    \___/\__,_/\___/_/   \__,_/\__/_/\____/_/ /_/                                                                         
+                                               CRC Federation Backend Service
+    '''
+
+
+@app.route('/')
+def hello_world():
+    return 'CRC Federation Started!'
+
+
+@app.route('/api/v1/fed/status/', methods=['GET'])
+@crossdomain(origin='*')
+def api_fed_status():
+    global start_flag
+    if start_flag:
+        return jsonify({'status': 'on'})
+    else:
+        return jsonify({'status': 'off'})
+
+
+@app.route('/api/v1/fed/start/', methods=['GET'])
+@crossdomain(origin='*')
+def api_fed_start():
+    global start_flag
+    start_flag = 1
+    if start_flag:
+        return jsonify({'status': 'on'})
+    else:
+        return jsonify({'status': 'off'})
+
+
+@app.route('/api/v1/fed/stop/', methods=['GET'])
+@crossdomain(origin='*')
+def api_fed_stop():
+    global start_flag
+    start_flag = 0
+    if start_flag:
+        return jsonify({'status': 'on'})
+    else:
+        return jsonify({'status': 'off'})
+
+
+@app.route('/api/v1/fed/valid/key/', methods=['POST'])
+@crossdomain(origin='*')
+def api_fed_valid_key():
+    json_req = request.get_json(force=True, silent=True)
+
+    if json_req == None or 'pkey' not in json_req:
+        return abort(400)
+
+    try:
+        pkey = json_req['pkey']
+        # print "Pkey: ", pkey
+
+        conn = mysql.connect()
+        cursor = conn.cursor()
+        sql_str = """select public_key, private_key from PORTAL.federate_site where id=1;"""
+        cursor.execute(sql_str)
+
+        results = cursor.fetchall()
+
+        cursor.close()
+        conn.close()
+        # print "RESULTS " , results.count()
+
+        if results:
+            try:
+                from Crypto.PublicKey import RSA
+
+                newkey = RSA.importKey(json.loads(pkey))
+                enc_data = newkey.encrypt("1234567", 32)
+                # print enc_data
+                pkey = RSA.importKey(json.loads(results[0][1]))
+                dec_data = pkey.decrypt(enc_data)
+                # print dec_data
+            except Exception as ins:
+                print "ERROR: ", ins.message
+
+            if dec_data == "1234567":
+                print 'ok'
+                return jsonify({'status': 'ok'})
+            else:
+                return jsonify({'status': 'false'})
+    except:
+        return jsonify({'status': 'false'})
+    return jsonify({'status': 'false'})
+
+
+if __name__ == '__main__':
+    start_logo()
+    start_servies()
+
+    app.run(
+        host='0.0.0.0',
+        port=7770,
+        debug=True,
+        use_reloader=False,
+        threaded=True)

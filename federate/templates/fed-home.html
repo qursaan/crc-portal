@@ -1,0 +1,165 @@
+{% extends "fed-body.html" %}
+
+{% block htitle %}
+
+{% endblock %}
+
+{% block fedbody %}
+    <h3>Servies Information</h3>
+    <div class="form-horizontal">
+
+        <div class="form-group">
+            <div class="col-xs-12">
+                <div class="ui-widget btn-toolbar" role="group">
+                    <div class="btn-group" role="group">
+
+                        <button id="refresh_btn3" data-id="refresh" class="refresh_btn btn btn-default"
+                                type="button"
+                                onclick="location.href='/federation/'">
+                            Refresh Status
+                        </button>
+
+                        <button id="remote_start" name="b_start" class="btn btn-info" type="button"
+                                style="display: {% if fed_service != 0 %}none{% else %}block{% endif %}">
+                            START
+                        </button>
+
+                        <button id="remote_shutdown" name="b_shutdown" class="btn btn-danger" type="button"
+                                style="display: {% if fed_service == 0 %} none {% else %} block {% endif %}">
+                            STOP
+                        </button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="fed_level" class="col-xs-3 control-label">Federation Level</label>
+            <div class="col-xs-3">
+                <div class="ui-widget">
+                    <select id="fed_level" name="fed_level" class="form-control user-input"
+                            value="" autocomplete="off">
+                        <option value="l0" selected="selected">Level 0</option>
+                        <option value="l1">Level 1</option>
+                        <option value="l2">Level 2</option>
+                        <option value="l3">Level 3</option>
+                        <option value="l4">Level 4</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-xs-6"></div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-xs-6">
+                <table class="table table-hover">
+                    <thead>
+                    <th>#</th>
+                    <th>Local</th>
+                    <th>Remote</th>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <th scope="row">No of Sites</th>
+                        <td>1</td>
+                        <td>{{ n_remote_site }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">No of users</th>
+                        <td>{{ n_local_user }}</td>
+                        <td>{{ n_remote_user }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">No of Resources</th>
+                        <td>0</td>
+                        <td>0</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            fed_status();
+        });
+
+        $('#remote_start').on('click', function (event) {
+            event.preventDefault();
+            fed_running(1);
+        });
+        $('#remote_shutdown').on('click', function (event) {
+            event.preventDefault();
+            fed_running(0);
+        });
+
+        function fed_running(run_s) {
+            if (run_s == 1) {
+                $("#remote_start").text("STARTING ...");
+            } else if (run_s == 0) {
+                $("#remote_shutdown").text("STOPING ...");
+            }
+            openModal();
+            $.ajax({
+                url: "control_running_federate",
+                type: "POST",
+                data: {is_running: run_s,},
+                success: function (result) {
+                    //reset text
+                    $("#remote_start").text("START");
+                    $("#remote_shutdown").text("STOP");
+                    //start stop button switch
+                    if (run_s == 1) {
+                        $("#remote_start").hide();
+                        $("#remote_shutdown").show();
+                    } else if (run_s == 0) {
+                        $("#remote_start").show();
+                        $("#remote_shutdown").hide();
+                    }
+                    closeModal();
+                },
+                error: function (xhr, errmsg, err) {
+                    //reset text
+                    $("#remote_start").text("START");
+                    $("#remote_shutdown").text("STOP");
+                    closeModal();
+                }
+            });
+        };
+
+        function fed_status() {
+            $.ajax({
+                url: "federate_status",
+                type: "GET",
+                data: {},
+                success: function (result) {
+                    //reset text
+                    if (result == "1") {
+                        $("#remote_start").hide();
+                        $("#remote_shutdown").show();
+                    } else if (result == "0") {
+                        $("#remote_start").show();
+                        $("#remote_shutdown").hide();
+                    }
+                },
+                error: function (xhr, errmsg, err) {
+                    //reset text
+                    $("#remote_start").text("START");
+                    $("#remote_shutdown").text("STOP");
+                }
+            });
+        };
+
+        function openModal() {
+            document.getElementById('remote_start').disabled = true;
+            document.getElementById('remote_shutdown').disabled = true;
+        };
+
+        function closeModal() {
+            document.getElementById('remote_start').disabled = false;
+            document.getElementById('remote_shutdown').disabled = false;
+        };
+    </script>
+{% endblock %}

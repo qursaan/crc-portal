@@ -1,0 +1,949 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="d615e975-1238-451a-95aa-cccc4e40fde6" name="Default" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/federate/admin.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/federate/fedInfo_view.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/federate/fed_backend.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/federate/fed_service.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/federate/fed_tasks.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/federate/fed_view.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/federate/fedlist_view.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/federate/models.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/federate/templates/fed-body.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/federate/templates/fed-home.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/federate/templates/fed-list.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/federate/templates/fed-site.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/federate/tests.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/federate/urls.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/federate/views.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/portal/emulationview.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/portal/static/css/login_t.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/portal/static/img/node-emulation.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/portal/static/tguide.htm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/portal/static/tguide_files/image001.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/portal/static/tguide_files/image002.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/portal/static/tguide_files/image003.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/portal/static/tguide_files/image004.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/portal/static/tguide_files/image005.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/portal/static/tguide_files/image006.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/portal/static/tguide_files/image007.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/portal/static/tguide_files/image008.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/portal/static/tguide_files/image009.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/portal/static/tguide_files/image010.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/portal/static/tguide_files/image011.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/portal/static/tguide_files/image012.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/portal/static/tguide_files/image013.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/portal/static/tguide_files/image014.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/portal/static/tguide_files/image015.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/portal/static/tguide_files/image016.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/portal/static/tguide_files/image017.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/portal/static/tguide_files/image018.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/portal/static/tguide_files/image019.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/portal/static/tguide_files/image020.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/portal/static/tguide_files/image021.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/portal/static/tguide_files/image022.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/portal/static/tguide_files/image023.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/portal/static/tguide_files/image024.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/portal/static/tguide_files/image025.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/portal/templates/node-emulation-view.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/crc.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/crc.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth/manifoldbackend.py" beforeDir="false" afterPath="$PROJECT_DIR$/auth/manifoldbackend.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth/static/js/logout.js" beforeDir="false" afterPath="$PROJECT_DIR$/auth/static/js/logout.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth/templates/widget-login.html" beforeDir="false" afterPath="$PROJECT_DIR$/auth/templates/widget-login.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crc/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/crc/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crc/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/crc/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/help/baseDB" beforeDir="false" afterPath="$PROJECT_DIR$/help/baseDB" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/help/setup" beforeDir="false" afterPath="$PROJECT_DIR$/help/setup" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/help/setup2" beforeDir="false" afterPath="$PROJECT_DIR$/help/setup2" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lab/actions.py" beforeDir="false" afterPath="$PROJECT_DIR$/lab/actions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lab/migrations/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lab/std_addcourse.py" beforeDir="false" afterPath="$PROJECT_DIR$/lab/std_addcourse.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/portal/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/portal/admin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/portal/backend_actions.py" beforeDir="false" afterPath="$PROJECT_DIR$/portal/backend_actions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/portal/homeview.py" beforeDir="false" afterPath="$PROJECT_DIR$/portal/homeview.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/portal/migrations/0001_initial.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/portal/migrations/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/federate/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/portal/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/portal/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/portal/modules.py" beforeDir="false" afterPath="$PROJECT_DIR$/portal/modules.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/portal/slicecontrolview.py" beforeDir="false" afterPath="$PROJECT_DIR$/portal/slicecontrolview.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/portal/static/css/onelab_marko.css" beforeDir="false" afterPath="$PROJECT_DIR$/portal/static/css/onelab_marko.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/portal/static/css/registration.css" beforeDir="false" afterPath="$PROJECT_DIR$/portal/static/css/registration.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/portal/templates/contact-view.html" beforeDir="false" afterPath="$PROJECT_DIR$/portal/templates/contact-view.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/portal/templates/dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/portal/templates/dashboard.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/portal/templates/home-view.html" beforeDir="false" afterPath="$PROJECT_DIR$/portal/templates/home-view.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/portal/templates/registration-view.html" beforeDir="false" afterPath="$PROJECT_DIR$/portal/templates/registration-view.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/portal/templates/reservation-view.html" beforeDir="false" afterPath="$PROJECT_DIR$/portal/templates/reservation-view.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/portal/templates/slice-control-view.html" beforeDir="false" afterPath="$PROJECT_DIR$/portal/templates/slice-control-view.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/portal/templates/slicepending-view.html" beforeDir="false" afterPath="$PROJECT_DIR$/portal/templates/slicepending-view.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/portal/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/portal/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/portal/validationview.py" beforeDir="false" afterPath="$PROJECT_DIR$/portal/validationview.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/css/login.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/css/registration.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/css/registration.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/logout.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ui/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/ui/templates/base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ui/templates/messages-transient-header.html" beforeDir="false" afterPath="$PROJECT_DIR$/ui/templates/messages-transient-header.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ui/templates/widget-topmenu.html" beforeDir="false" afterPath="$PROJECT_DIR$/ui/templates/widget-topmenu.html" afterDir="false" />
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CoverageDataManager">
+    <SUITE FILE_PATH="coverage/crc_portal$fed_view.coverage" NAME="fed_view Coverage Results" MODIFIED="1529512069036" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/federate" />
+    <SUITE FILE_PATH="coverage/crc_portal$crc_py_run.coverage" NAME="crc_py_run Coverage Results" MODIFIED="1529512845384" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/crc_portal$fed_tasks.coverage" NAME="fed_tasks Coverage Results" MODIFIED="1529511354817" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/federate" />
+  </component>
+  <component name="DjangoConsoleOptions" custom-start-script="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)">
+    <option name="myCustomStartScript" value="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="HTML File" />
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>status</find>
+      <find>connect</find>
+      <find>terminal</find>
+      <find>testbed-view</find>
+      <find>logout</find>
+      <find>visible</find>
+      <find>hidden</find>
+      <find>terminal_window</find>
+      <find>console</find>
+      <find>openModal</find>
+      <find>193.22</find>
+      <find>access link</find>
+      <find>location</find>
+      <find>loc</find>
+      <find>redirect</find>
+      <find>json</find>
+      <find>GET</find>
+      <find>user_type</find>
+      <find>objects.filter</find>
+      <find>POST</find>
+      <find>token</find>
+      <find>federate_status</find>
+      <find>create two when the pg loads</find>
+      <find>insert_str prelude &quot;js/jquery-ui.min.js&quot;</find>
+      <find>&lt;!-- insert_str prelude &quot;js/jquery-ui.min.js&quot; --&gt;</find>
+      <find>if</find>
+      <find>check_availability</find>
+      <find>HttpResponse(output, content_type=&quot;application/json&quot;)</find>
+      <find>IP</find>
+      <find>site_ip</find>
+    </findStrings>
+    <dirStrings>
+      <dir>$PROJECT_DIR$/portal</dir>
+      <dir>$PROJECT_DIR$/portal/templates</dir>
+      <dir>$PROJECT_DIR$</dir>
+    </dirStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/lab/std_addcourse.py" />
+        <option value="$PROJECT_DIR$/portal/templates/contact-view.html" />
+        <option value="$PROJECT_DIR$/help/setup" />
+        <option value="$PROJECT_DIR$/portal/validationview.py" />
+        <option value="$PROJECT_DIR$/help/baseDB" />
+        <option value="$PROJECT_DIR$/lab/actions.py" />
+        <option value="$PROJECT_DIR$/portal/emulationview.py" />
+        <option value="$PROJECT_DIR$/portal/templates/node-emulation-view.html" />
+        <option value="$PROJECT_DIR$/auth/manifoldbackend.py" />
+        <option value="$PROJECT_DIR$/portal/templates/registration-view.html" />
+        <option value="$PROJECT_DIR$/portal/static/css/login.css" />
+        <option value="$PROJECT_DIR$/static/css/login.css" />
+        <option value="$PROJECT_DIR$/static/css/registration.css" />
+        <option value="$PROJECT_DIR$/portal/static/css/registration.css" />
+        <option value="$PROJECT_DIR$/portal/templates/home-view.html" />
+        <option value="$PROJECT_DIR$/portal/static/css/onelab_marko.css" />
+        <option value="$PROJECT_DIR$/auth/templates/widget-login.html" />
+        <option value="$PROJECT_DIR$/federate/fedview.py" />
+        <option value="$PROJECT_DIR$/crc/urls.py" />
+        <option value="$PROJECT_DIR$/portal/urls.py" />
+        <option value="$PROJECT_DIR$/auth/static/js/logout.js" />
+        <option value="$PROJECT_DIR$/ui/templates/widget-topmenu.html" />
+        <option value="$PROJECT_DIR$/static/js/logout.js" />
+        <option value="$PROJECT_DIR$/portal/templates/slicepending-view.html" />
+        <option value="$PROJECT_DIR$/federate/fedlist_view.py" />
+        <option value="$PROJECT_DIR$/federate/templates/fed-list.html" />
+        <option value="$PROJECT_DIR$/portal/templates/slice-control-view.html" />
+        <option value="$PROJECT_DIR$/portal/slicecontrolview.py" />
+        <option value="$PROJECT_DIR$/portal/models.py" />
+        <option value="$PROJECT_DIR$/portal/templates/dashboard.html" />
+        <option value="$PROJECT_DIR$/federate/siteinfo_view.py" />
+        <option value="$PROJECT_DIR$/federate/admin.py" />
+        <option value="$PROJECT_DIR$/portal/modules.py" />
+        <option value="$PROJECT_DIR$/portal/templates/reservation-view.html" />
+        <option value="$PROJECT_DIR$/ui/templates/base.html" />
+        <option value="$PROJECT_DIR$/federate/templates/fed-body.html" />
+        <option value="$PROJECT_DIR$/federate/urls.py" />
+        <option value="$PROJECT_DIR$/federate/sync_data.py" />
+        <option value="$PROJECT_DIR$/portal/backend_actions.py" />
+        <option value="$PROJECT_DIR$/help/setup2" />
+        <option value="$PROJECT_DIR$/crc/settings.py" />
+        <option value="$PROJECT_DIR$/federate/fed_view.py" />
+        <option value="$PROJECT_DIR$/federate/models.py" />
+        <option value="$PROJECT_DIR$/federate/fed_backend.py" />
+        <option value="$PROJECT_DIR$/federate/fedInfo_view.py" />
+        <option value="$PROJECT_DIR$/federate/fed_service.py" />
+        <option value="$PROJECT_DIR$/federate/templates/fed-site.html" />
+        <option value="$PROJECT_DIR$/federate/templates/fed-home.html" />
+        <option value="$PROJECT_DIR$/federate/fed_tasks.py" />
+        <option value="$PROJECT_DIR$/portal/homeview.py" />
+      </list>
+    </option>
+  </component>
+  <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsGulpfileManager">
+    <detection-done>true</detection-done>
+    <sorting>DEFINITION_ORDER</sorting>
+  </component>
+  <component name="NodePackageJsonFileManager">
+    <packageJsonPaths>
+      <path value="$PROJECT_DIR$/third-party/jonthornton-jquery-timepicker-1.8.9/package.json" />
+    </packageJsonPaths>
+  </component>
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="233" />
+    <option name="y" value="53" />
+    <option name="width" value="1113" />
+    <option name="height" value="715" />
+  </component>
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="Scope">
+        <subPane subId="Project Files">
+          <expand>
+            <path>
+              <item name="Root" type="cbb8eebc:String" user="Root" />
+              <item name="crc-portal" type="cbb8eebc:String" user="crc-portal" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="crc-portal" type="b2602c69:ProjectViewProjectNode" />
+              <item name="crc-portal" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="DefaultHtmlFileTemplate" value="HTML File" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.django.DjangoModulesConfigurable" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/portal/static/css" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/portal" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager" selected="Django server.DJ">
+    <configuration default="true" type="DjangoTestsConfigurationType" factoryName="Django tests">
+      <module name="crc-fed" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="TARGET" value="" />
+      <option name="SETTINGS_FILE" value="" />
+      <option name="CUSTOM_SETTINGS" value="false" />
+      <option name="USE_OPTIONS" value="false" />
+      <option name="OPTIONS" value="" />
+    </configuration>
+    <configuration default="true" type="PyBehaveRunConfigurationType" factoryName="Behave">
+      <module name="crc-fed" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="ADDITIONAL_ARGS" value="" />
+    </configuration>
+    <configuration default="true" type="PyLettuceRunConfigurationType" factoryName="Lettuce">
+      <module name="crc-fed" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="ADDITIONAL_ARGS" value="" />
+    </configuration>
+    <configuration name="crc_py_run" type="PythonConfigurationType" factoryName="Python">
+      <module name="crc" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="/usr/bin/python2.7" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/manage.py" />
+      <option name="PARAMETERS" value="runserver localhost:8080" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+    </configuration>
+    <configuration name="fed_tasks" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="crc" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/federate" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/federate/fed_tasks.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+    </configuration>
+    <configuration name="fed_view" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="crc" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/federate" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/federate/fed_view.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+    </configuration>
+    <configuration name="DJ" type="Python.DjangoServer" factoryName="Django server">
+      <module name="crc" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+        <env name="DJANGO_SETTINGS_MODULE" value="crc.settings" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="launchJavascriptDebuger" value="false" />
+      <option name="port" value="8001" />
+      <option name="host" value="" />
+      <option name="additionalOptions" value="" />
+      <option name="browserUrl" value="" />
+      <option name="runTestServer" value="false" />
+      <option name="runNoReload" value="false" />
+      <option name="useCustomRunCommand" value="false" />
+      <option name="customRunCommand" value="" />
+    </configuration>
+    <configuration default="true" type="Python.DjangoServer" factoryName="Django server">
+      <module name="crc-fed" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="launchJavascriptDebuger" value="false" />
+      <option name="port" value="8000" />
+      <option name="host" value="" />
+      <option name="additionalOptions" value="" />
+      <option name="browserUrl" value="" />
+      <option name="runTestServer" value="false" />
+      <option name="runNoReload" value="false" />
+      <option name="useCustomRunCommand" value="false" />
+      <option name="customRunCommand" value="" />
+    </configuration>
+    <configuration default="true" type="Python.FlaskServer" factoryName="Flask server">
+      <module name="crc-fed" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="launchJavascriptDebuger" value="false" />
+    </configuration>
+    <configuration default="true" type="Tox" factoryName="Tox">
+      <module name="crc-fed" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Doctests">
+      <module name="crc-fed" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Nosetests">
+      <module name="crc-fed" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="_new_regexPattern" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Twisted Trial">
+      <module name="crc-fed" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Unittests">
+      <module name="crc-fed" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="py.test">
+      <module name="crc-fed" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+    </configuration>
+    <list>
+      <item itemvalue="Django server.DJ" />
+      <item itemvalue="Python.crc_py_run" />
+      <item itemvalue="Python.fed_tasks" />
+      <item itemvalue="Python.fed_view" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.fed_view" />
+        <item itemvalue="Python.fed_tasks" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="d615e975-1238-451a-95aa-cccc4e40fde6" name="Default" comment="" />
+      <created>1518950475959</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1518950475959</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="-1" y="27" width="1368" height="742" extended-state="6" />
+    <layout>
+      <window_info anchor="bottom" id="TODO" order="6" sideWeight="0.4969605" weight="0.3293919" />
+      <window_info anchor="bottom" id="Event Log" order="12" sideWeight="0.3768997" side_tool="true" visible="true" weight="0.27195945" />
+      <window_info anchor="bottom" id="Database Changes" order="10" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="7" />
+      <window_info anchor="bottom" id="Python Console" order="8" sideWeight="0.8731003" weight="0.4358108" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.62234044" weight="0.4695946" />
+      <window_info anchor="bottom" x="278" y="251" width="760" height="267" id="Terminal" order="9" sideWeight="0.6231003" visible="true" weight="0.27195945" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.23480242" />
+      <window_info anchor="bottom" id="Docker" order="11" show_stripe_button="false" />
+      <window_info anchor="right" id="Database" order="3" />
+      <window_info anchor="right" id="SciView" order="4" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.77279633" weight="0.4831081" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="right" id="Commander" order="0" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.49316108" weight="0.41216215" />
+    </layout>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/federate/fed_tasks.py</url>
+          <line>59</line>
+          <option name="timeStamp" value="105" />
+        </line-breakpoint>
+      </breakpoints>
+      <default-breakpoints>
+        <breakpoint type="python-exception">
+          <properties notifyOnTerminate="true" exception="BaseException">
+            <option name="notifyOnTerminate" value="true" />
+          </properties>
+        </breakpoint>
+      </default-breakpoints>
+      <option name="time" value="109" />
+    </breakpoint-manager>
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/portal/templates/home-view.html">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ui/templates/layout-unfold2.html">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ui/templates/layout-unfold1.html">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ui/templates/view-unfold1.html">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/auth/templates/widget-login.html">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ui/templates/widget-topmenu.html">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/portal/templates/dashboard.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="18">
+          <caret line="46" column="44" selection-start-line="46" selection-start-column="44" selection-end-line="46" selection-end-column="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/portal/slicependingview.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="18">
+          <caret line="61" column="9" lean-forward="true" selection-start-line="61" selection-start-column="9" selection-end-line="61" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/portal/slicecontrolview.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="205">
+          <caret line="136" column="19" lean-forward="true" selection-start-line="136" selection-start-column="19" selection-end-line="136" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/local/lib/python2.7/dist-packages/django/core/handlers/wsgi.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3024">
+          <caret line="188" selection-start-line="188" selection-end-line="188" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/crc/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-540" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/portal/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="252">
+          <caret line="72" column="41" lean-forward="true" selection-start-line="72" selection-start-column="14" selection-end-line="72" selection-end-column="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/federate/views.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/portal/modules.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="990">
+          <caret line="65" column="26" selection-start-line="65" selection-start-column="22" selection-end-line="65" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/federate/admin.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="216">
+          <caret line="12" column="21" selection-start-line="12" selection-start-column="21" selection-end-line="12" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/portal/schedulerview.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-910">
+          <caret line="7" selection-start-line="7" selection-end-line="7" selection-end-column="58" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/portal/templates/scheduler-view.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="738">
+          <caret line="98" column="31" lean-forward="true" selection-start-line="98" selection-start-column="31" selection-end-line="98" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/portal/templates/registration-view.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2951">
+          <caret line="170" column="33" lean-forward="true" selection-start-line="170" selection-start-column="33" selection-end-line="170" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ui/templates/base.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="216">
+          <caret line="39" column="23" lean-forward="true" selection-start-line="39" selection-start-column="8" selection-end-line="39" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/federate/templates/fed-body.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="324">
+          <caret line="60" column="23" selection-start-line="60" selection-start-column="23" selection-end-line="60" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/portal/reservation_status.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-216" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/portal/registrationview.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1026">
+          <caret line="68" column="48" selection-start-line="68" selection-start-column="48" selection-end-line="68" selection-end-column="48" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/portal/reservationview.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="437">
+          <caret line="411" selection-start-line="411" selection-end-line="424" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/portal/templates/reservation-view.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-378">
+          <caret line="482" column="20" lean-forward="true" selection-start-line="482" selection-start-column="20" selection-end-line="482" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/portal/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="216">
+          <caret line="116" column="45" selection-start-line="116" selection-start-column="27" selection-end-line="116" selection-end-column="45" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/local/lib/python2.7/dist-packages/django/contrib/sites/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="593">
+          <caret line="84" column="15" lean-forward="true" selection-start-line="84" selection-start-column="15" selection-end-line="84" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/help/tasks">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/help/baseDB">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="252">
+          <caret line="14" column="30" selection-start-line="14" selection-start-column="30" selection-end-line="14" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/help/setup2">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="278">
+          <caret line="50" column="29" selection-start-line="50" selection-start-column="29" selection-end-line="50" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/help/Requirements">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/help/setup">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="594">
+          <caret line="39" column="24" selection-start-line="39" selection-start-column="24" selection-end-line="39" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/crc/settings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="249">
+          <caret line="192" column="21" selection-start-line="192" selection-start-column="21" selection-end-line="192" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/portal/backend_actions.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="112" column="14" selection-start-line="112" selection-start-column="14" selection-end-line="112" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/portal/navigation.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="223">
+          <caret line="186" column="34" selection-start-line="186" selection-start-column="32" selection-end-line="186" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="114">
+          <caret line="131" selection-start-line="131" selection-end-line="131" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/federate/fed_view.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-672">
+          <caret line="80" column="49" selection-start-line="80" selection-start-column="23" selection-end-line="80" selection-end-column="49" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/federate/templates/fed-home.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="252">
+          <caret line="41" column="55" selection-start-line="41" selection-start-column="55" selection-end-line="41" selection-end-column="55" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/federate/fedInfo_view.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-46">
+          <caret line="197" column="15" lean-forward="true" selection-start-line="197" selection-start-column="15" selection-end-line="197" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/federate/templates/fed-list.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-594" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/federate/templates/fed-site.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="738">
+          <caret line="127" column="29" lean-forward="true" selection-start-line="127" selection-start-column="29" selection-end-line="127" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/federate/fed_service.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-774">
+          <caret line="94" column="77" lean-forward="true" selection-start-line="94" selection-start-column="77" selection-end-line="94" selection-end-column="77" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/federate/tests.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/federate/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="216">
+          <caret line="13" column="44" selection-start-line="13" selection-start-column="44" selection-end-line="13" selection-end-column="44" />
+          <folding>
+            <element signature="e#0#28#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/federate/fedlist_view.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1368">
+          <caret line="84" column="49" selection-start-line="84" selection-start-column="49" selection-end-line="84" selection-end-column="49" />
+          <folding>
+            <element signature="e#23#80#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/federate/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="216">
+          <caret line="17" column="35" selection-start-line="17" selection-start-column="35" selection-end-line="17" selection-end-column="35" />
+          <folding>
+            <element signature="e#0#44#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/federate/fed_backend.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="756">
+          <caret line="45" column="28" selection-start-line="45" selection-start-column="28" selection-end-line="45" selection-end-column="28" />
+          <folding>
+            <element signature="e#23#36#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/federate/fed_tasks.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="72">
+          <caret line="14" selection-start-line="14" selection-end-line="14" />
+          <folding>
+            <element signature="e#0#24#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/unfold/loginrequired.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1206">
+          <caret line="71" selection-start-line="71" selection-end-line="71" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/local/lib/python2.7/dist-packages/django/views/generic/base.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1044">
+          <caret line="70" selection-start-line="70" selection-end-line="70" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/portal/homeview.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="118">
+          <caret line="56" selection-start-line="56" selection-end-line="56" />
+          <folding>
+            <element signature="e#50#94#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="18">
+          <caret line="1" lean-forward="true" selection-start-line="1" selection-end-line="1" />
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>

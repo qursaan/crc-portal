@@ -28,6 +28,7 @@
                 </div>
                 <div class="col-xs-6"><p class="form-hint">Enter your first name</p></div>
             </div>
+
             <div class="form-group">
                 <label for="lastname" class="col-xs-2 control-label">Last Name</label>
                 <div class="col-xs-4">
@@ -36,6 +37,7 @@
                 </div>
                 <div class="col-xs-6"><p class="form-hint">Enter your last name</p></div>
             </div>
+
             <div class="form-group">
                 <label for="authority_hrn" class="col-xs-2 control-label">Authority</label>
                 <div class="col-xs-4">
@@ -58,19 +60,20 @@
             checked for existence. In addition, the full HRN should be shown to the
             user.-->
             <div class="form-group">
-                <label for="username" class="col-xs-2 control-label">Username</label>
+                <label for="username" class="col-xs-2 control-label">Login Email</label>
                 <div class="col-xs-4">
-                    <input id="username" type="text" name="username" size="25" class="form-control" minlength="2"
-                           value="{{ username }}" placeholder="Login" required/>
+                    <input id="username" type="email" name="username" size="25"
+                           class="form-control" minlength="2"
+                           value="{{ username }}" placeholder="Login email" required/>
                 </div>
-                <div class="col-xs-6"><p class="form-hint">Enter your login</p></div>
+                <div class="col-xs-6"><p class="form-hint">Enter your login email</p></div>
             </div>
 
             <div class="form-group">
-                <label for="email" class="col-xs-2 control-label">Email</label>
+                <label for="email" class="col-xs-2 control-label">Confirm Email</label>
                 <div class="col-xs-4">
-                    <input id="email" type="email" name="email" size="25" class="form-control"
-                           value="{{ email }}" required/>
+                    <input id="email" type="email" name="email" size="25" placeholder="Confirm Login email"
+                           class="form-control" value="{{ email }}" required/>
                 </div>
                 <div class="col-xs-6"><p class="form-hint">Enter a valid email address</p></div>
             </div>
@@ -78,7 +81,7 @@
             <div class="form-group">
                 <label for="password" class="col-xs-2 control-label">Password</label>
                 <div class="col-xs-4">
-                    <input type="password" id="password" name="password"
+                    <input type="password" id="password" name="password"  placeholder="Password"
                            class="form-control" minlength="4" value="{{ password }}" required/>
                 </div>
                 <div class="col-xs-6"><p class="form-hint">Enter password</p></div>

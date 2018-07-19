@@ -78,7 +78,6 @@ def get_count_students(c_user):
     students = MyUser.objects.filter(supervisor_id=c_user.id, status__in=status_list, user_type=3).all()
     return students.count()
 
-
 def get_control_options(stype, reserve_ref):
     allow_img = True
     allow_ssh = True

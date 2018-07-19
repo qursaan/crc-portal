@@ -23,7 +23,6 @@ from portal.actions import get_requests, get_user_by_email
 # from manifold.manifoldapi       import execute_query
 # from manifold.core.query        import Query
 
-
 class ValidatePendingView(LoginRequiredAutoLogoutView): # FreeAccessView):
     template_name = "validate_pending.html"
 

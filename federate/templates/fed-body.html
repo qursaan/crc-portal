@@ -1,0 +1,64 @@
+{% extends "layout-unfold1.html" %}
+{% load i18n %}
+
+{% block head %}
+{{ wizard.form.media }}
+{% endblock %}
+
+{% block unfold_main %}
+
+<script type="text/javascript" src='{{STATIC_URL}}/js/moment.min.js'></script>
+<script type="text/javascript" src='{{STATIC_URL}}/js/bootstrap-datetimepicker.min.js'></script>
+
+<link rel="stylesheet" type="text/css" href='{{STATIC_URL}}/css/jquery-ui.css'/>
+<link rel="stylesheet" type="text/css" href='{{STATIC_URL}}/css/bootstrap-datetimepicker.min.css'/>
+<link rel="stylesheet" type="text/css" href='{{STATIC_URL}}/css/onelab.css'/>
+<link rel="stylesheet" type="text/css" href='{{STATIC_URL}}/css/registration.css'/>
+
+
+<div style="text-align:center" class="well-sm">
+    <h2>Federation Management Dashboard</h2>
+    {% block htitle %}
+
+    {% endblock htitle %}
+</div>
+
+{% if errors %}
+<ul>
+    {% for error in errors %}
+    <li>{{ error }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+<div class="row">
+    <div class="col-sm-2">
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link active" href="/federation/">Federation Service</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/federation/info">Site Information</a>
+            </li>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/federation/list">Sites List</a>
+            </li>
+            <!--li class="nav-item">
+                <a class="nav-link" href="#">Resources Management</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Policy Management</a>
+            <li class="nav-item">
+                <a class="nav-link disabled" href="#">Settings</a>
+            </li-->
+        </ul>
+
+    </div>
+    <div class="col-sm-10">
+        {% spaceless %}
+            {% block fedbody %}{% endblock fedbody %}
+        {% endspaceless %}
+    </div>
+</div>
+{% endblock %}

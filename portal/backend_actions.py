@@ -3,10 +3,11 @@ __author__ = 'pirate'
 import base64
 import json
 import urllib2
+from crc.settings import BACKENDIP
 
 USER_HOME = "/home/crc-users/"
 
-BACKEND_IP = "193.227.16.199"
+BACKEND_IP = BACKENDIP #"193.227.16.199"
 
 
 # User Management ####################################################

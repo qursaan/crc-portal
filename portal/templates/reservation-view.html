@@ -257,7 +257,7 @@
                                         {% for n in node_list %}
                                         <td>
                                             {% for r in resource_list %}
-                                            {% if r.node_ref.id = n.id and r.device_ref.id = i.id %}
+                                            {% if r.node_ref.id == n.id and r.device_ref.id == i.id %}
                                             <label class="checkbox-inline">
                                                 <input type="checkbox" name="resource_group" value="{{r.id}}" node-id="{{n.id}}" device-id="{{i.id}}"
                                                        title="{{ r.device_ref.type }}" autocomplete="off">{{ r.device_ref.type }}</input>
@@ -325,7 +325,9 @@
                                                     {% for n in gf.list %}
                                                     <td>
                                                         <label class="checkbox-inline">
-                                                            <input style="margin-left: 10px;" type="checkbox" name="freq_group" value="{{n.id}}"><br/>{{ n.freq_start }}<br/>{{ n.freq_end }}</input>
+                                                            <input style="margin-left: 10px;" type="checkbox" name="freq_group" value="{{n.id}}">
+                                                            <br/>{{ n.freq_start }}<br/>{{ n.freq_end }}
+                                                            </input>
                                                         </label>
                                                     </td>
                                                     {% endfor %}
@@ -418,8 +420,7 @@ $(document).ready(function(){
     $( "#sim_ram_size" ).val( $( "#ram-range-min" ).slider( "value" ) );
     $( "#slice_duration" ).val( $( "#slider-range-min" ).slider( "value" ) );
 
-
-    $('#active_time').datepair();
+    $( "#active_time" ).datepair();
     /*$(":checkbox").each(function() {
         if(this.checked)
             n_nodes+=1;
@@ -428,7 +429,7 @@ $(document).ready(function(){
         v_range = 0;
     });*/
 });
-/*                                                                                                                              ****************************************** Validation **************/
+
 function set_validation(v_type, msg){
     $('#validation_error').removeAttr('class');
     $('#validation_error').html( msg ) ;

@@ -1,29 +1,7 @@
-# import datetime
-# import hashlib
-# import random
+
 import re
 from django.db import models
 from django.utils import timezone
-
-# from django.conf              import settings
-# from django.core.mail         import send_mail
-# , transaction
-# from django.utils.translation import ugettext_lazy as _
-# from django.template.loader   import render_to_string
-
-# from django.core.validators import validate_email
-
-
-# try:
-#    from django.contrib.auth import get_user_model
-#    User = get_user_model()
-# except ImportError:
-# from django.contrib.auth.models import User
-
-# try:
-
-# except ImportError:
-#    datetime_now = datetime.datetime.now
 
 SHA1_RE = re.compile('^[a-f0-9]{40}$')
 
@@ -103,7 +81,7 @@ class MyUser(models.Model):
     # activated email 0=Not Active 1=Active
     active_email = models.IntegerField(null=True, default=0)
     is_admin = models.IntegerField(null=True, default=0)
-    # 0=admin 1=researcher 2=instructor 3=student
+    # 0=admin 1=researcher 2=instructor 3=student 4=federate
     user_type = models.IntegerField(null=True, default=0)
     # supervisor
     supervisor_id = models.IntegerField(null=True)
@@ -215,9 +193,9 @@ class FrequencyRanges(models.Model):
 
 
 class VirtualNode(models.Model):
+    vm_name = models.TextField('Virtual Node Name', default='NA')
     node_ref = models.ForeignKey(PhysicalNode, null=True)
     device_ref = models.ForeignKey(ResourcesInfo, null=True)
-    vm_name = models.TextField('Virtual Node Name', default='NA')
     hv_name = models.TextField('Hypervisor Name', default='NA')
 
     def __unicode__(self):

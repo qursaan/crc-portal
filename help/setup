@@ -1,3 +1,5 @@
+apt-get install software-properties-common
+apt-get install python-pip python-dev libmysqlclient-dev
 
 yum install python27
 yum install python-devel
@@ -24,9 +26,11 @@ sudo python2.7 -m pip install Pillow
 sudo python2.7 -m pip install pycrypto
 
 
-python2.7 manage.py makemigrations
-python2.7 manage.py migration
-/usr/bin/python2.7 manage.py runserver 193.227.16.199:8000
+
+python manage.py makemigrations
+python manage.py migrate
+
+python manage.py runserver 193.227.16.199:8000
 
 
 # Django's auth system
@@ -38,4 +42,8 @@ python manage.py migrate
 python manage.py makemigrations
 python manage.py syncdb
 
+
+# for reset
+find . -path "*/migrations/*.py" -not -name "__init__.py" -delete
+find . -path "*/migrations/*.pyc"  -delete
 

@@ -46,6 +46,8 @@ class SliceControlView(LoginRequiredAutoLogoutView):
         show_lab = False
         lab_ref = None
         lab_param_list = []
+       # vnc_link_access = None
+       # vnc = False
 
         user = get_user_by_email(the_user(self.request))
         if user:
@@ -106,6 +108,9 @@ class SliceControlView(LoginRequiredAutoLogoutView):
             'show_lab': show_lab,
             'lab_ref': lab_ref,
             'lab_param_list': lab_param_list,
+            'vnc_link_access': "http://193.227.16.199:6080/vnc.html",
+            'terminal_ip': "https://193.227.16.199:4200/"
+            #'vnc' :vnc,
         }
         template_env.update(page.prelude_env())
         return render(request, template_name, template_env)

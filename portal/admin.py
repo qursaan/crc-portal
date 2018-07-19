@@ -4,7 +4,7 @@ from portal.models import MyUser, Platform, Account, \
     PhysicalNode, ResourcesInfo, VirtualNode, NodeConnection, SimulationVM, FrequencyRanges, \
     UserImage, TestbedImage, SimulationImage, \
     Authority, PendingSlice, \
-    Reservation, ReservationDetail, SimReservation, ReservationFrequency
+    Reservation, SimReservation, ReservationFrequency #,ReservationDetail
 
 
 @admin.register(Platform)
@@ -89,7 +89,7 @@ class ReservationAdmin(admin.ModelAdmin):
                     'request_type', 'base_image_ref', 'purpose', 'status', 'created')
 
 
-@admin.register(ReservationDetail)
+#@admin.register(ReservationDetail)
 class ReservationDetailAdmin(admin.ModelAdmin):
     list_display = ('id', 'reservation_ref', 'node_ref', 'image_ref',)
 

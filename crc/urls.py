@@ -47,6 +47,8 @@ urlpatterns = [
     url(r'^portal/', include('portal.urls')),
     # Lab
     url(r'^lab/', include('lab.urls')),
+    # Federation
+    url(r'^federation/', include('federate.urls')),
     # filer
     # url(r'^filer/', include('filer.urls')),
 

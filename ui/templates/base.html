@@ -17,23 +17,23 @@
     </style>
     {{ header_prelude }}
     {% block head %}{% endblock head %}
-
-    {% insert_str prelude "css/layout-unfold.css" %}
-    {% insert_str prelude "css/manifold.css" %}
-    {% insert_str prelude "css/plugin.css" %}
-    {% insert_str prelude "css/onelab_marko.css" %}
-    {% insert_str prelude "css/themes/ui-lightness/jquery-ui.min.css" %}
-    {% insert_str prelude "js/jquery-2.2.0.min.js" %}
-    <!-- insert_str prelude "js/jquery-ui.min.js" -->
-    {% insert_str prelude "js/topmenu.js" %}
-    {% insert_str prelude "js/jquery.html5storage.min.js" %}
-    {% insert_str prelude "js/messages-runtime.js" %}
-    {% insert_str prelude "js/class.js" %}
-    {% insert_str prelude "js/plugin-helper.js" %}
-    {% insert_str prelude "js/mustache.js" %}
-    {% insert_str prelude "js/plugin.js" %}
-    {% insert_str prelude "js/manifold.js" %}
-
+    {% spaceless %}
+        {% insert_str prelude "css/layout-unfold.css" %}
+        {% insert_str prelude "css/manifold.css" %}
+        {% insert_str prelude "css/plugin.css" %}
+        {% insert_str prelude "css/onelab_marko.css" %}
+        {% insert_str prelude "css/themes/ui-lightness/jquery-ui.min.css" %}
+        {% insert_str prelude "js/jquery-2.2.0.min.js" %}
+        <!-- insert_str prelude "js/jquery-ui.min.js" -->
+        {% insert_str prelude "js/topmenu.js" %}
+        {% insert_str prelude "js/jquery.html5storage.min.js" %}
+        {% insert_str prelude "js/messages-runtime.js" %}
+        {% insert_str prelude "js/class.js" %}
+        {% insert_str prelude "js/plugin-helper.js" %}
+        {% insert_str prelude "js/mustache.js" %}
+        {% insert_str prelude "js/plugin.js" %}
+        {% insert_str prelude "js/manifold.js" %}
+    {% endspaceless %}
     </head>
 
     <body>

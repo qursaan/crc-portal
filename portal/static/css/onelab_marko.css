@@ -258,10 +258,11 @@ table.query-editor td {
 
 
 /* DASHBOARD */
-
+/*#ms-dashboard-support,
 #ms-dashboard-profile,
 #ms-dashboard-testbeds,
-#ms-dashboard-slices {
+#ms-dashboard-slices*/
+.ms-dashboard{
     -webkit-transition: all 50ms ease-out;
     -moz-transition: all 50ms ease-out;
     -o-transition: all 50ms ease-out;
@@ -275,22 +276,25 @@ table.query-editor td {
 	
 }
 
+/*#ms-dashboard-support:hover,
 #ms-dashboard-profile:hover,
 #ms-dashboard-testbeds:hover,
-#ms-dashboard-slices:hover {
+#ms-dashboard-slices:hover */
+.ms-dashboard:hover{
     margin-top: 65px;
 }
 
 #ms-dashboard-profile {
     background: url("../img/icon_users_color.png") top center no-repeat;
 }
-
 #ms-dashboard-testbeds {
     background: url("../img/icon_testbed_color.png") top center no-repeat;
 }
-
 #ms-dashboard-slices {
     background: url("../img/icon_slices_color.png") top center no-repeat;
+}
+#ms-dashboard-support {
+    background: url("../img/icon_support.png") top center no-repeat;
 }
 
 .ms-dashboard-content ul {
@@ -303,7 +307,11 @@ table.query-editor td {
     padding: 0 ;
 }
 
-
+.ms-dashboard>div.ms-dashboard-caption {
+    background: no-repeat url(#) ;
+    padding-left: 0 ;
+}
+/*
 #ms-dashboard-profile>div.ms-dashboard-caption {
     background: no-repeat url(#) ;
     padding-left: 0 ;
@@ -317,7 +325,7 @@ table.query-editor td {
 #ms-dashboard-slices>div.ms-dashboard-caption {
     background: no-repeat url(#) ;
     padding-left: 0 ;
-}   
+}   */
 
 
 
@@ -413,7 +421,7 @@ div#navigation li:last-child {
 /* HOME DASHBOARD */
 div#home-dashboard {
     color:black;
-    margin:25px 0;
+    /*margin:25px 0;*/
 }
 div#home-dashboard table {
     margin:25px;

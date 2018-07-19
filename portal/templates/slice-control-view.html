@@ -171,15 +171,23 @@
                     </li>
                     {% else %}
                     <li> To access the controller server use console
-                        ssh <b>crc-am@193.227.16.199</b> with password <b>CRC123</b>
+                        ssh <b>crc-am@193.227.16.199</b> with password <b>?</b>
                     </li>
                     <li> To access the any virtual node use
                         ssh <b>crc</b> with no password <!--b>crc123</b-->
+                    </li>
+                    <li>
+                        To use GNURadio toolkit remotly:
+                        <ul>
+                            <li>press <b>GNURadio Remote Access</b> from Access Link</li>
+                            <li>password: gnu123</li>
+                        </ul>
                     </li>
                     {% endif %}
                     <li>Execute script remotely using <b>or</b> use <a href="/portal/experiment">external tools</a></li>
                     {% if allow_img %}
                     <li>Open <b><i>Save Image</i></b> tab to save your image if you want to save your work</li>
+
                     {% endif %}
                 </ol>
 
@@ -351,8 +359,8 @@
                                         </label>
                                         <select id="osimage" name="osimage" class="form-control" value="{{ image_id }}">
                                             {% for row in image_list %}
-                                            <option value="{{ row.id }}" label="{{ row.image_name }} :: {{ row.image_type }}">
-                                                {{ row.image_name }} :: {{ row.image_type }}</option>
+                                            <option value="{{ row.id }}" label="{{ row.image_name }}">
+                                                {{ row.image_name }}</option>
                                             {% endfor %}
                                         </select>
                                     </div>
@@ -370,11 +378,24 @@
                                         </select>
                                     </div>
                                     {% endif %}
+
                                 </div>
                                 <div class="col-xs-4">
                                     <p class="form-hint">Select the Image</p>
                                 </div>
                             </div>
+                             <div id="vnc" class="form-group" hidden>
+                                 <label class="col-xs-2 control-label">Access Link</label>
+                                 <div class="col-xs-6">
+                                    <div class="ui-widget">
+                                        <label class="control-label">
+                                            <a id="vnc_link" name="vnc_link"
+                                             href="{{ vnc_link_access }}" target="_blank">GNURadio Remote Access
+                                        </a>
+                                        </label>
+                                    </div>
+                                 </div>
+                             </div>
 
                         </fieldset>
                     </form>
@@ -646,6 +667,15 @@ $(document).ready(function(){
     update_testbeds();
     initializeClock('clockdiv', deadline);
 });
+/**************************************************************/
+$('#osimage').change(function(){
+   var selectImage = $("#osimage option:selected").text().trim();
+   if( selectImage == "GNURadio-VNC"){
+        document.getElementById("vnc").hidden = false;
+   }else{
+        document.getElementById("vnc").hidden = true;
+   }
+})
 /***************************************** Editor ************/
 {% if stype == "omf" %}
     var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
@@ -1060,7 +1090,7 @@ $("#terminal_con").on('click', function(event){
 });
 
 function connect_terminal(){
-    var address  = ("https://193.227.16.199:4200/");
+    var address  = ("{{terminal_ip}}");
     var element  = document.getElementById("terminal_window");
     //var url =  element.src;
     element.src  = address;

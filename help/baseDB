@@ -8,16 +8,22 @@ FLUSH PRIVILEGES;
 
 BEGIN TRANSACTION;
 ;
-INSERT INTO PORTAL.portal_authority VALUES(1,'CRC VT','VT','crc','www.crclab.org','Alex','state','Egypt','crc','2015-09-14 23:41:26','qursaan@gmail.com',NULL,NULL);
+INSERT INTO PORTAL.portal_authority
+(id,site_name, site_authority, site_abbreviated_name,site_url,address_city,address_state,address_country,authority_hrn,created,email)
+VALUES(1,'CRC VT','VT','crc','www.crclab.org','Alex','Alex','Egypt','crc','2015-09-14 23:41:26','qursaan@gmail.com');
 ;
-INSERT INTO PORTAL.portal_myuser VALUES(1,'Mahmmoud','Mahdi','admin@qursaan.com','admin','{"user_public_key":"ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAAAgQC6RZYXskVLI4v3Leht6QV2cLNvIQKiaYmjFuwTWcviKOhn9rsQGqzi+Wr/vBPkk2qL76eyCCWPNCgQyrPHqpsmp1EF7hJoPi1lpCgc6ZxXqJcSRPg3R9dAJZhZKp+wuTebMuUfkjV6K0ibclycQ+NeoyXtIiDZBpDI59WUrX8jwQ==", "user_private_key":"-----BEGIN RSA PRIVATE KEY-----\nMIICXAIBAAKBgQC6RZYXskVLI4v3Leht6QV2cLNvIQKiaYmjFuwTWcviKOhn9rsQ\nGqzi+Wr/vBPkk2qL76eyCCWPNCgQyrPHqpsmp1EF7hJoPi1lpCgc6ZxXqJcSRPg3\nR9dAJZhZKp+wuTebMuUfkjV6K0ibclycQ+NeoyXtIiDZBpDI59WUrX8jwQIDAQAB\nAoGBAK2Km1Wkb06b5ZD6omuUB9TbFzFX7d5muSbK+lLk/EDOoAgMJSfR0nT8ryVn\nkpkIhuGs++2wDV4n15QdZfWGC1kU4tXjb3+qVw+XU5wkhxPwReMhdbQ/aiJmJW+7\n1Wv3ID2stppZlNP1K8PE73zjBdINcADzmVmEKUMJASQlU9YBAkEAxYgZFA+6Yuup\n5IeiqRCObwUNFM68K4Q6uxFG8sUG3jaluH/ekZTgykvyDkgK6pA6aZAyE19c2kdN\nMOmLfcbLsQJBAPFoR4frVna6jTDXqh/LsJMG/d7Po+STeyWd1G/l1XMBnA9R/xVg\nXk2gRmfqZeKIgrC72XLAUrvrIiGmytA1rRECQGSTZHmDfJqLdainqxm8FVnPz5ZN\noR/jJuhC5sYLrfCNEJo9eTzU+hPm0WuWIQDHyQYg5m5YuvVlIpeKAn1bMDECQGC2\nBQoXptDz1YJ+s8H/KSMNxwDPMHpu9wPP4f5eFg/30hx1HfrjW4Q/tFUHG4AQbkL9\nTpThJYPxJABVQKT/C/ECQHXOJpuhBlQSTjq+9axmnrO71O8UOVPmCeAZWYm4jXfR\n2tOHr4IOpWK+GFhLld1AN7VDOrr5d5zBVflHJ51uv4I=\n-----END RSA PRIVATE KEY-----", "user_hrn":"crc.admin"}','crc','2015-10-02 12:59:18',2,1,'None','crc',0,'admin');
+INSERT INTO PORTAL.portal_myuser VALUES(1,'Mahmmoud','Mahdi','admin@qursaan.com','admin','admin','{"user_public_key":"ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAAAgQC6RZYXskVLI4v3Leht6QV2cLNvIQKiaYmjFuwTWcviKOhn9rsQGqzi+Wr/vBPkk2qL76eyCCWPNCgQyrPHqpsmp1EF7hJoPi1lpCgc6ZxXqJcSRPg3R9dAJZhZKp+wuTebMuUfkjV6K0ibclycQ+NeoyXtIiDZBpDI59WUrX8jwQ==", "user_private_key":"-----BEGIN RSA PRIVATE KEY-----\nMIICXAIBAAKBgQC6RZYXskVLI4v3Leht6QV2cLNvIQKiaYmjFuwTWcviKOhn9rsQ\nGqzi+Wr/vBPkk2qL76eyCCWPNCgQyrPHqpsmp1EF7hJoPi1lpCgc6ZxXqJcSRPg3\nR9dAJZhZKp+wuTebMuUfkjV6K0ibclycQ+NeoyXtIiDZBpDI59WUrX8jwQIDAQAB\nAoGBAK2Km1Wkb06b5ZD6omuUB9TbFzFX7d5muSbK+lLk/EDOoAgMJSfR0nT8ryVn\nkpkIhuGs++2wDV4n15QdZfWGC1kU4tXjb3+qVw+XU5wkhxPwReMhdbQ/aiJmJW+7\n1Wv3ID2stppZlNP1K8PE73zjBdINcADzmVmEKUMJASQlU9YBAkEAxYgZFA+6Yuup\n5IeiqRCObwUNFM68K4Q6uxFG8sUG3jaluH/ekZTgykvyDkgK6pA6aZAyE19c2kdN\nMOmLfcbLsQJBAPFoR4frVna6jTDXqh/LsJMG/d7Po+STeyWd1G/l1XMBnA9R/xVg\nXk2gRmfqZeKIgrC72XLAUrvrIiGmytA1rRECQGSTZHmDfJqLdainqxm8FVnPz5ZN\noR/jJuhC5sYLrfCNEJo9eTzU+hPm0WuWIQDHyQYg5m5YuvVlIpeKAn1bMDECQGC2\nBQoXptDz1YJ+s8H/KSMNxwDPMHpu9wPP4f5eFg/30hx1HfrjW4Q/tFUHG4AQbkL9\nTpThJYPxJABVQKT/C/ECQHXOJpuhBlQSTjq+9axmnrO71O8UOVPmCeAZWYm4jXfR\n2tOHr4IOpWK+GFhLld1AN7VDOrr5d5zBVflHJ51uv4I=\n-----END RSA PRIVATE KEY-----", "user_hrn":"crc.admin"}','crc','crc','2015-10-02 12:59:18','None',2,1,1,0,null);
 ;
 INSERT INTO PORTAL.portal_platform VALUES(1,'crc','CRC VT-Lab');
+;
+INSERT INTO PORTAL.portal_account(id,user_ref_id,platform_ref_id,auth_type,config)
+ VALUES(1,1,1,'managed',NULL);
 ;
 INSERT INTO PORTAL.portal_physicalnode VALUES(1,'Node 1','crc',0,3,3,0,'node1');
 INSERT INTO PORTAL.portal_physicalnode VALUES(2,'Node 2','crc',0,3,3,0,'node2');
 INSERT INTO PORTAL.portal_physicalnode VALUES(3,'Node 3','crc',0,3,3,0,'node3');
 INSERT INTO PORTAL.portal_physicalnode VALUES(4,'Node 4','crc',0,3,3,0,'node4');
+
 ;
 INSERT INTO PORTAL.portal_resourcesinfo VALUES(1,'Wi-Fi','NA');
 INSERT INTO PORTAL.portal_resourcesinfo VALUES(2,'USRP','NA');
@@ -86,13 +92,13 @@ COMMIT;
 
 BEGIN TRANSACTION;
 ;
-INSERT INTO PORTAL.lab_installedLab VALUES(1,'Wireless Communication Labs','server_type=omf;nodes=2,3;devices=2');
-INSERT INTO PORTAL.lab_installedLab VALUES(2,'Network Labs','server_type=sim;');
+INSERT INTO PORTAL.lab_installedlab VALUES(1,'Wireless Communication Labs','server_type=omf;nodes=2,3;devices=2');
+INSERT INTO PORTAL.lab_installedlab VALUES(2,'Network Labs','server_type=sim;');
 ;
-INSERT INTO PORTAL.lab_labstemplate VALUES(1,'QAM and PSK modulation',1,'qam_psk_mod');
-INSERT INTO PORTAL.lab_labstemplate VALUES(2,'QAM and PSK with channel coding',1,'qam_psk_ch_coding');
-INSERT INTO PORTAL.lab_labstemplate VALUES(3,'Frequency Shift Keying',1,'fsk');
-INSERT INTO PORTAL.lab_labstemplate VALUES(4,'Direct Sequence Spread Spectrum',1,'dsss');
+INSERT INTO PORTAL.lab_labstemplate VALUES(1,'QAM and PSK modulation','qam_psk_mod',1);
+INSERT INTO PORTAL.lab_labstemplate VALUES(2,'QAM and PSK with channel coding','qam_psk_ch_coding',1);
+INSERT INTO PORTAL.lab_labstemplate VALUES(3,'Frequency Shift Keying','fsk',1);
+INSERT INTO PORTAL.lab_labstemplate VALUES(4,'Direct Sequence Spread Spectrum','dsss',1);
 INSERT INTO PORTAL.lab_labstemplate VALUES(5,'OFDM',1,'ofdm');
 ;
 INSERT INTO PORTAL.lab_labsparameter VALUES(1,'Tx Gain','tx_gain','range','70','0,80',1);

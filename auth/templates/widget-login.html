@@ -1,26 +1,32 @@
-<div class="well">
-	{% if state %}
-	<span class="help-block">{{ state }}</span>
-	{% endif %}
-	<form action="/login/" method="post" role="form">
-	  {% csrf_token %}
-	  {% if next %}
-	  <input type="hidden" name="next" value="{{ next }}" />
-	  {% endif %}
-	<div class="form-group">
-    	<label for="username">Email address / Username</label>
-    	<input id="username" type="username" class="form-control" name="username" placeholder="Enter Email / username">
-  	</div>
-  	<div class="form-group">
-    	<label for="password">Password</label>
-    	<input id="password" type="password" class="form-control" name="password" placeholder="Password">
-	</div>
-	<div class="login-submit">
-		<input class="btn btn-default" type="submit" value="Sign In" />
-		<span class="lost-password">&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="/portal/pass_reset/">Can't access your account?</a></span>
-	</div>
-	<div class="login-signup">
-		<a href="/portal/register">Sign Up</a>
-	</div>
-	</form>
+<div class="back">
+    <div class="div-center">
+      <div class="content">
+        {% if state %}
+        <span class="help-block">{{ state }}</span>
+        {% endif %}
+        <h3>Account Login</h3>
+        <hr />
+        <form action="/login/" method="post" role="form">
+              {% csrf_token %}
+              {% if next %}
+              <input type="hidden" name="next" value="{{ next }}" />
+              {% endif %}
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input id="username" type="username" class="form-control" name="username" placeholder="Username">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input id="password" type="password" class="form-control" name="password" placeholder="Password">
+            </div>
+            <!--div class="login-submit"-->
+            <button class="btn btn-default" type="submit" value="Login" >SIGN IN</button>
+            <hr />
+            <button type="button" class="btn btn-link"
+                onclick="location.href='/portal/register'">Signup</button>
+            <button type="button" class="btn btn-link"
+                onclick="location.href='/portal/pass_reset/'">Reset Password</button>
+        </form>
+      </div>
+    </div>
 </div>

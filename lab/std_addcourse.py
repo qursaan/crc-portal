@@ -11,8 +11,6 @@ from unfold.page import Page
 
 
 # TODO: @qursaan
-
-
 class StudentAddCourseView(LoginRequiredAutoLogoutView):
     def __init__(self):
         self.user_email = ''
