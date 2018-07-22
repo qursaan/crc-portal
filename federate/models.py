@@ -20,3 +20,9 @@ class Site(models.Model):
 class Users(models.Model):
     site_ref = models.ForeignKey(Site, null=True)
     username = models.TextField(null=True)
+
+    def __unicode__(self):
+        return self.username + " @ " + self.site_ref.name
+
+class Resources(models.Model):
+    resource_key = models.TextField('Resource Key', default='NA')

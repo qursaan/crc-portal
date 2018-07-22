@@ -3,6 +3,7 @@ __author__ = 'qursaan'
 from django.contrib import messages
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
+#from portal.user_access_profile import UserAccessProfile
 from portal.actions import get_user_by_email, get_user_type
 from portal.modules import UserModules
 from ui.topmenu import topmenu_items, the_user
@@ -26,6 +27,7 @@ class FedInfoView(LoginRequiredAutoLogoutView):
         return self.get_or_post(request, 'GET')
 
     def get_or_post(self, request, method):
+        #usera = UserAccessProfile(request)
         self.user_email = the_user(request)
         page = Page(request)
 

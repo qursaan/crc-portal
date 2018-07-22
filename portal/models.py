@@ -1,5 +1,5 @@
 
-import re
+import re, uuid
 from django.db import models
 from django.utils import timezone
 
@@ -159,6 +159,12 @@ class AccessHistory(models.Model):
 
 
 # Resources *******************************************************
+class ResourceProfile(models.Model):
+    uid = models.UUIDField(default=uuid.uuid4,editable=False)
+    name = models.TextField(default='NA')
+    shared = models.BooleanField(default=False)
+
+
 class ResourcesInfo(models.Model):
     type = models.TextField(default='NA')
     description = models.TextField(default='NA')

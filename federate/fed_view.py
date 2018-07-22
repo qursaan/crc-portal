@@ -1,8 +1,9 @@
-from ui.topmenu import topmenu_items, the_user
+from ui.topmenu import topmenu_items #, the_user
 from unfold.loginrequired import LoginRequiredAutoLogoutView
 from unfold.page import Page
 from crc import settings
 from portal.models import MyUser
+from portal.user_access_profile import UserAccessProfile
 from portal.modules import UserModules
 from federate.models import Users, Site
 from django.contrib.auth.decorators import login_required
@@ -26,13 +27,14 @@ class FedView(LoginRequiredAutoLogoutView):
         n_local_user = MyUser.objects.filter().count()
         n_remote_user = Users.objects.filter().count()
         n_remote_site = Site.objects.filter().count()  # - 1
+        t_user = UserAccessProfile(self.request)
 
         context = super(FedView, self).get_context_data(**kwargs)
         context['fed_service'] = settings.FED_RUN
         context['n_local_user'] = n_local_user
         context['n_remote_user'] = n_remote_user
         context['n_remote_site'] = n_remote_site
-        context['username'] = the_user(self.request)
+        context['username'] = t_user.get_username() # the_user(self.request)
         context['topmenu_items'] = topmenu_items('Testbed View', page.request)
         prelude_env = page.prelude_env()
         context.update(prelude_env)
