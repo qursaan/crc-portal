@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+import uuid
 
 # Create your models here.
 class Site(models.Model):
@@ -25,4 +26,4 @@ class Users(models.Model):
         return self.username + " @ " + self.site_ref.name
 
 class Resources(models.Model):
-    resource_key = models.TextField('Resource Key', default='NA')
+    resource_uid = models.UUIDField(default=uuid.uuid4)

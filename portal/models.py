@@ -160,9 +160,12 @@ class AccessHistory(models.Model):
 
 # Resources *******************************************************
 class ResourceProfile(models.Model):
-    uid = models.UUIDField(default=uuid.uuid4,editable=False)
+    uid = models.UUIDField(default=uuid.uuid4, editable=False)
     name = models.TextField(default='NA')
     shared = models.BooleanField(default=False)
+
+    def __unicode__(self):
+        return self.name
 
 
 class ResourcesInfo(models.Model):

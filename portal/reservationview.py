@@ -1,33 +1,31 @@
 __author__ = 'qursaan'
 
 import json
-from dateutil import parser
+from datetime import timedelta
 
+from dateutil import parser
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.core.mail import send_mail
 from django.core.files.storage import FileSystemStorage
+from django.core.mail import send_mail
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.utils import timezone
-from django.contrib import messages
 
+# TODO: @qursaan
+from crc.settings import SUPPORT_EMAIL, MAX_OMF_DURATION, MAX_SIM_DURATION
+from lab.models import Course, Experiments, LabsTemplate
 from portal.actions import get_authority_by_user, get_authority_emails, \
-    get_user_by_email, get_user_type, \
     schedule_auto_online, schedule_checking, schedule_checking_freq  # schedule_sim_online, \
 from portal.models import SimReservation, Reservation, ReservationDetail, \
     SimulationImage, TestbedImage, ResourcesInfo, VirtualNode, PhysicalNode, SimulationVM, \
     FrequencyRanges, ReservationFrequency
-from lab.models import Course, Experiments, LabsTemplate
-
-from ui.topmenu import topmenu_items, the_user
+from portal.user_access_profile import UserAccessProfile
+from reservation_status import ReservationStatus
+from ui.topmenu import topmenu_items  # , the_user
 from unfold.loginrequired import LoginRequiredAutoLogoutView
 from unfold.page import Page
-
-# TODO: @qursaan
-from crc.settings import SUPPORT_EMAIL, MAX_OMF_DURATION, MAX_SIM_DURATION, MAX_BUK_DURATION
-from datetime import timedelta
-from reservation_status import ReservationStatus
 
 
 class ReservationView(LoginRequiredAutoLogoutView):
@@ -43,7 +41,8 @@ class ReservationView(LoginRequiredAutoLogoutView):
         return self.get_or_post(request, 'GET', url)
 
     def get_or_post(self, request, method, url):
-        self.user_email = the_user(request)
+        usera = UserAccessProfile(request)
+        self.user_email = usera.username  # the_user(request)
         page = Page(request)
         reserve_type = None
         use_bulk = False
@@ -54,9 +53,10 @@ class ReservationView(LoginRequiredAutoLogoutView):
             reserve_type = "I"
             use_bulk = True
 
-        user_hrn = the_user(request)
-        user = get_user_by_email(user_hrn)
-        user_type = get_user_type(user)
+        user_hrn = usera.username # the_user(request)
+        usera = UserAccessProfile(request)
+        user = usera.user_obj # get_user_by_email(user_hrn)
+        user_type = usera.user_type # get_user_type(user)
 
         if user_type != 2 and reserve_type == "I":  # (user_type != 1 and reserve_type == "R")
             messages.error(page.request, 'Error: You have not permission to access this page.')
@@ -130,7 +130,7 @@ class ReservationView(LoginRequiredAutoLogoutView):
                 if ex_due_date is None or ex_due_date == '':
                     self.errors.append('ex_due_date is mandatory')
 
-            authority_hrn = get_authority_by_user(the_user(request))
+            authority_hrn = get_authority_by_user(usera.username)
             slice_name = request.POST.get('slice_name', None)
             server_type = request.POST.get('server_type', '')
             request_type = request.POST.get('request_type', '')
@@ -184,7 +184,6 @@ class ReservationView(LoginRequiredAutoLogoutView):
                 self.errors.append('Purpose is mandatory')
 
             if not self.errors:
-
                 if server_type == "omf":
                     s = Reservation(
                         user_ref=user,
@@ -301,7 +300,7 @@ class ReservationView(LoginRequiredAutoLogoutView):
 
                 template_env = {
                     'topmenu_items': topmenu_items('test_page', request),
-                    'username': the_user(request),
+                    'username': usera.username,
                     'title': 'Request',
                 }
                 template_env.update(page.prelude_env())
@@ -309,7 +308,7 @@ class ReservationView(LoginRequiredAutoLogoutView):
 
         template_env = {
             'topmenu_items': topmenu_items('Request a slice', page.request),
-            'username': the_user(request),
+            'username': usera.username,
             'errors': self.errors,
             'slice_name': request.POST.get('slice_name', ''),
             'server_type': request.POST.get('server_type', ''),

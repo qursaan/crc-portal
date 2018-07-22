@@ -1,17 +1,20 @@
 __author__ = 'pirate'
 
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseRedirect
+#
+from django.utils import timezone
+
+from portal.actions import get_count_active_slice
+from portal.models import Reservation, SimReservation
+from portal.reservation_status import ReservationStatus
+from portal.user_access_profile import UserAccessProfile
+from ui.topmenu import topmenu_items  # , the_user
 from unfold.loginrequired import LoginRequiredAutoLogoutView
 #
 from unfold.page import Page
-from ui.topmenu import topmenu_items, the_user
-#
-from django.utils import timezone
-from django.http import HttpResponseRedirect
-from django.contrib import messages
-from django.contrib.auth.decorators import login_required
-from portal.actions import get_user_by_email, get_count_active_slice
-from portal.models import  Reservation, SimReservation
-from portal.reservation_status import ReservationStatus
+
 
 # status 0-disabled, 1-pending, 3-active, 4-expired, 5-canceled
 class SliceHistoryView(LoginRequiredAutoLogoutView):
@@ -27,7 +30,9 @@ class SliceHistoryView(LoginRequiredAutoLogoutView):
                             # "css/account_view.css",
                             "css/plugin.css"])
 
-        c_user = get_user_by_email(the_user(self.request))
+        usera = UserAccessProfile(self.request)
+
+        c_user = usera.user_obj #get_user_by_email(the_user(self.request))
         history_list_omf = Reservation.objects.filter(user_ref=c_user)
         history_list_sim = SimReservation.objects.filter(user_ref=c_user)
         context = super(SliceHistoryView, self).get_context_data(**kwargs)
@@ -38,7 +43,7 @@ class SliceHistoryView(LoginRequiredAutoLogoutView):
         # the menu items on the top
         context['topmenu_items'] = topmenu_items('Request Log', page.request)  # @qursaan change from _live
         # so we can sho who is logged
-        context['username'] = the_user(self.request)
+        context['username'] = usera.username #the_user(self.request)
         prelude_env = page.prelude_env()
         context.update(prelude_env)
         return context
@@ -55,8 +60,8 @@ class SliceCurrentView(LoginRequiredAutoLogoutView):
         page.add_js_files(["js/jquery.validate.js", "js/my_account.register.js", "js/my_account.edit_profile.js"])
         page.add_css_files(["css/onelab.css",
                             "css/plugin.css"])
-
-        c_user = get_user_by_email(the_user(self.request))
+        usera = UserAccessProfile(self.request)
+        c_user = usera.user_obj # get_user_by_email(the_user(self.request))
         get_count_active_slice(c_user)
         pending_list_1 = Reservation.objects.filter(user_ref=c_user, status=ReservationStatus.get_pending())
         active_list_1 = Reservation.objects.filter(user_ref=c_user, status=ReservationStatus.get_active())
@@ -76,7 +81,7 @@ class SliceCurrentView(LoginRequiredAutoLogoutView):
         # the menu items on the top
         # context['topmenu_items'] = topmenu_items('Reservation Status', page.request)  # @qursaan change from _live
         # so we can sho who is logged
-        context['username'] = the_user(self.request)
+        context['username'] = usera.username # the_user(self.request)
         # context ['firstname'] = config['firstname']
         prelude_env = page.prelude_env()
         context.update(prelude_env)

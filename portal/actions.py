@@ -229,7 +229,7 @@ def schedule_checking_freq(freq_list, start_datetime, end_datetime, use_bulk=Fal
         frequency_ref__in=freq_list)
 
     for r in overlap:
-        t1 = t2 = None
+        # t1 = t2 = None
 
         # case 0: assume  start & end between s and e
         t1 = r.reservation_ref.start_time

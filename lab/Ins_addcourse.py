@@ -1,14 +1,13 @@
 __author__ = 'qursaan'
-
+from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
-from django.utils import timezone
-from django.contrib import messages
-from lab.models import Course, StudentCourses
+
 from lab.actions import add_course_by_email
-from portal.actions import get_user_by_email, get_user_type
-from ui.topmenu import topmenu_items, the_user
+from lab.models import Course  # , StudentCourses
+# from portal.actions import get_user_by_email, get_user_type
+from portal.user_access_profile import UserAccessProfile
+from ui.topmenu import topmenu_items  # , the_user
 from unfold.loginrequired import LoginRequiredAutoLogoutView
 from unfold.page import Page
 
@@ -28,7 +27,8 @@ class AddCourseView(LoginRequiredAutoLogoutView):
         return self.get_or_post(request, 'GET', cid)
 
     def get_or_post(self, request, method, course_id):
-        self.user_email = the_user(request)
+        usera = UserAccessProfile(request)
+        self.user_email = usera.username #the_user(request)
         page = Page(request)
 
         course_title = ''
@@ -58,8 +58,8 @@ class AddCourseView(LoginRequiredAutoLogoutView):
             course_code = request.POST.get('course_code', '')
             course_emails = request.POST.get('course_emails', '')
 
-            user = get_user_by_email(the_user(self.request))
-            user_type = get_user_type(user)
+            user = usera.user_obj #get_user_by_email(the_user(self.request))
+            user_type = usera.user_type #get_user_type(user)
             if user_type != 2:
                 messages.error(page.request, 'Error: You have not permission to access this page.')
                 return HttpResponseRedirect("/")
@@ -111,7 +111,7 @@ class AddCourseView(LoginRequiredAutoLogoutView):
 
         template_env = {
             'topmenu_items': topmenu_items('Add a course', page.request),
-            'username': the_user(request),
+            'username': usera.username, #the_user(request),
             'errors': self.errors,
             'course_title': course_title,
             'course_key': course_key,

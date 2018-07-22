@@ -4,7 +4,8 @@ from django.template.loader import render_to_string
 
 from crc.settings import SUPPORT_EMAIL
 from portal.forms import ContactForm
-from ui.topmenu import topmenu_items, the_user
+from portal.user_access_profile import UserAccessProfile
+from ui.topmenu import topmenu_items  # , the_user
 from unfold.loginrequired import FreeAccessView
 
 
@@ -45,6 +46,6 @@ class ContactView(FreeAccessView):
         return render(request, 'contact-view.html', {
             'form': form,
             'topmenu_items': topmenu_items('Contact', request),
-            'username': the_user(request),
+            'username': UserAccessProfile(request).username,
             'title': 'Contact Us',
         })

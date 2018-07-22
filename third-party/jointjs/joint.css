@@ -94,7 +94,7 @@ very thin.
 .connection-wrap {
    fill: none;
    stroke: black;
-   stroke-width: 15;
+   stroke-width: 15pt;
    stroke-linecap: round;
    stroke-linejoin: round;
    opacity: 0;

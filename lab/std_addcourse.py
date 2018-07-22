@@ -4,8 +4,7 @@ from django.contrib import messages
 from django.http import HttpResponseRedirect
 
 from lab.models import StudentCourses, Course
-from portal.actions import get_user_by_email, get_user_type
-from ui.topmenu import the_user
+from portal.user_access_profile import UserAccessProfile
 from unfold.loginrequired import LoginRequiredAutoLogoutView
 from unfold.page import Page
 
@@ -23,14 +22,15 @@ class StudentAddCourseView(LoginRequiredAutoLogoutView):
         return HttpResponseRedirect("/")
 
     def get_or_post(self, request, method):
-        self.user_email = the_user(request)
+        usera = UserAccessProfile(request)
+        self.user_email = usera.username
         page = Page(request)
 
         if method == 'POST':
             self.errors = []
 
-            user = get_user_by_email(the_user(self.request))
-            user_type = get_user_type(user)
+            user = usera.user_obj # get_user_by_email(the_user(self.request))
+            user_type = usera.user_type # get_user_type(user)
             if user_type != 3:
                 messages.error(page.request, 'Error: You have not permission to access this page.')
                 return HttpResponseRedirect("/")

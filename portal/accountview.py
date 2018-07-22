@@ -3,10 +3,12 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
 
-from portal.actions import get_user_by_email
-from ui.topmenu import topmenu_items, the_user
+from portal.user_access_profile import UserAccessProfile
+# from portal.actions import get_user_by_email
+from ui.topmenu import topmenu_items  # , the_user
 from unfold.loginrequired import LoginRequiredAutoLogoutView
 from unfold.page import Page
+
 
 #
 # from manifold.core.query import Query
@@ -33,7 +35,8 @@ class AccountView(LoginRequiredAutoLogoutView):
         # user_details = MyUser.objects.filter(email=the_user(self.request))
         # user_query  = Query().get('local:user').select('config','email','status')
         # user_details = execute_query(self.request, user_query)
-        user_detail = get_user_by_email(the_user(self.request))
+        usera = UserAccessProfile(self.request)
+        user_detail = usera.user_obj # get_user_by_email(the_user(self.request))
 
         # not always found in user_details...
         config = {}
@@ -216,7 +219,7 @@ class AccountView(LoginRequiredAutoLogoutView):
         # the menu items on the top
         context['topmenu_items'] = topmenu_items('My Account', page.request)  # @qursaan change from _live
         # so we can sho who is logged
-        context['username'] = the_user(self.request)
+        context['username'] = usera.username
         prelude_env = page.prelude_env()
         context.update(prelude_env)
         return context
@@ -295,7 +298,8 @@ def account_process(request):
 
     # getting the user_id from the session
     user_id = ''
-    user_details = get_user_by_email(the_user(request))
+    usera = UserAccessProfile(request)
+    user_details = usera.user_obj # get_user_by_email(the_user(request))
     if user_details:
         user_id = user_details.id
 
@@ -339,7 +343,7 @@ def account_process(request):
         # manifold_update_user(request,request.user.email,user_params)
         #        return HttpResponse('Success: Password Changed!!')
         if user_details:
-            web_user = User.objects.get_by_natural_key(the_user(request))
+            web_user = User.objects.get_by_natural_key(usera.username)
             # TODO: change web user password
             user_details.password = request.POST['password']
             messages.success(request, 'Success: Password Updated.')

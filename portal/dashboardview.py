@@ -1,11 +1,12 @@
-from portal.actions import get_count_active_slice, \
-    get_user_by_email, get_user_type
-from lab.actions import get_count_students_course,  get_count_students_pending, \
+from lab.actions import get_count_students_course, get_count_students_pending, \
     get_count_bulk_experiments, get_count_students_experiments, \
     get_count_students
-from ui.topmenu import topmenu_items, the_user
+from portal.actions import get_count_active_slice
+from portal.user_access_profile import UserAccessProfile
+from ui.topmenu import topmenu_items  # , the_user
 from unfold.loginrequired import LoginRequiredAutoLogoutView
 from unfold.page import Page
+
 
 # from django.contrib import messages
 # import json
@@ -27,7 +28,7 @@ class DashboardView(LoginRequiredAutoLogoutView):
         # messages.info(self.request, 'You have logged in')
         page = Page(self.request)
 
-        print "Dashboard page"
+        # print "Dashboard page"
         # Slow...
         # slice_query = Query().get('slice').filter_by('user.user_hrn', 'contains', user_hrn).select('slice_hrn')
         # testbed_query  = Query().get('network').select('network_hrn','platform','version')
@@ -75,12 +76,12 @@ class DashboardView(LoginRequiredAutoLogoutView):
         # so we can sho who is logged
         # page.expose_js_metadata()
         # the page header and other stuff
-
-        c_user_email = the_user(self.request)
-        c_user = get_user_by_email(c_user_email)
+        usera = UserAccessProfile(self.request)
+        # c_user_email =  the_user(self.request)
+        c_user = usera.user_obj # get_user_by_email(c_user_email)
         context = super(DashboardView, self).get_context_data(**kwargs)
         context['title'] = 'Dashboard'
-        context['username'] = the_user(self.request)
+        context['username'] = usera.username
         context['topmenu_items'] = topmenu_items('Dashboard', page.request)
         context['active_count'] = get_count_active_slice(c_user)
         context['course_count'] = get_count_students_course(c_user)
@@ -88,6 +89,6 @@ class DashboardView(LoginRequiredAutoLogoutView):
         context['std_exp_count'] = get_count_students_experiments(c_user)
         context['student_count'] = get_count_students(c_user)
         context['bulk_count'] = get_count_bulk_experiments(c_user)
-        context['user_type'] = get_user_type(c_user)
+        context['user_type'] = usera.user_type
         context.update(page.prelude_env())
         return context

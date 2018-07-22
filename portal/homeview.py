@@ -7,8 +7,9 @@ from django.shortcuts import render_to_response
 
 from unfold.loginrequired import FreeAccessView
 # from manifold.manifoldresult import ManifoldResult
-from ui.topmenu import the_user, topmenu_items  # , topmenu_items_live
+from ui.topmenu import topmenu_items  # , topmenu_items_live
 from crc.configengine import ConfigEngine
+from portal.user_access_profile import UserAccessProfile
 
 # from django.views.generic      import View
 # from django.http               import Http404, HttpResponse
@@ -61,6 +62,7 @@ class HomeView(FreeAccessView):
             auth_result = authenticate(username="feduser", password=settings.FED_PASS)
             print "LOGGING IN"
             login(request, auth_result)
+            request.session['username'] = username
             return HttpResponseRedirect('/login-ok')
 
         elif auth_result is not None:
@@ -82,7 +84,7 @@ class HomeView(FreeAccessView):
     # login-ok sets state="Welcome to CRC" in urls.py
     def get(self, request, state=None):
         env = self.default_env()
-        env['username'] = the_user(request)
+        env['username'] = UserAccessProfile(request).username
         env['topmenu_items'] = topmenu_items(None, request)
         if state:
             env['state'] = state

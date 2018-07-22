@@ -1,5 +1,6 @@
 __author__ = 'qursaan'
 import os
+
 from django.contrib import messages
 # from django.contrib.auth.decorators import login_required
 from django.core.files.storage import FileSystemStorage
@@ -8,8 +9,9 @@ from django.shortcuts import render
 from django.utils import timezone
 
 from lab.models import CustomLibrary
-from portal.actions import get_user_by_email, get_user_type
-from ui.topmenu import topmenu_items, the_user
+# from portal.actions import get_user_by_email, get_user_type
+from portal.user_access_profile import UserAccessProfile
+from ui.topmenu import topmenu_items  # , the_user
 from unfold.loginrequired import LoginRequiredAutoLogoutView
 from unfold.page import Page
 
@@ -26,11 +28,13 @@ class AddLibraryView(LoginRequiredAutoLogoutView):
         return self.get_or_post(request, 'GET')
 
     def get_or_post(self, request, method):
-        self.user_email = the_user(request)
+        usera = UserAccessProfile(request)
+
+        self.user_email = usera.username  # the_user(request)
         page = Page(request)
 
-        user = get_user_by_email(the_user(request))
-        user_type = get_user_type(user)
+        user = usera.user_obj  # get_user_by_email(the_user(request))
+        user_type = usera.user_type  # get_user_type(user)
         if user_type > 3:
             messages.error(page.request, 'Error: You have not permission to access this page.')
             return HttpResponseRedirect("/")
@@ -97,7 +101,7 @@ class AddLibraryView(LoginRequiredAutoLogoutView):
 
         template_env = {
             'topmenu_items': topmenu_items('Add new library', page.request),
-            'username': the_user(request),
+            'username': usera.username,  # the_user(request),
             'errors': self.errors,
             'title': "Add New Library"
         }

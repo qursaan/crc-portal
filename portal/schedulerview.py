@@ -10,11 +10,13 @@ from django.shortcuts import render
 from django.utils import timezone
 
 from portal.actions import utc_to_timezone
-from portal.models import SimReservation, VirtualNode, SimulationVM, ReservationDetail
-from ui.topmenu import topmenu_items, the_user
+from portal.models import SimReservation, VirtualNode, SimulationVM, \
+    ReservationDetail
+from portal.user_access_profile import UserAccessProfile
+from reservation_status import ReservationStatus
+from ui.topmenu import topmenu_items  # , the_user
 from unfold.loginrequired import LoginRequiredAutoLogoutView
 from unfold.page import Page
-from reservation_status import ReservationStatus
 
 
 class SchedulerView(LoginRequiredAutoLogoutView):
@@ -29,7 +31,8 @@ class SchedulerView(LoginRequiredAutoLogoutView):
         return self.get_or_post(request, 'GET')
 
     def get_or_post(self, request, method):
-        self.user_email = the_user(request)
+        usera = UserAccessProfile(request)
+        self.user_email = usera.username # the_user(request)
         page = Page(request)
 
         server_type = "omf"
@@ -46,7 +49,7 @@ class SchedulerView(LoginRequiredAutoLogoutView):
 
         template_env = {
             'topmenu_items': topmenu_items('Scheduler View', page.request),
-            'username': the_user(request),
+            'username': usera.username,
             'server_type': request.POST.get('server_type', server_type),
             'errors': self.errors,
             'title': "Scheduler View",

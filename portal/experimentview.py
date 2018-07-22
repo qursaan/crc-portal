@@ -1,7 +1,8 @@
 from django.shortcuts import render
 
-from ui.topmenu import topmenu_items, the_user
+from ui.topmenu import topmenu_items #, the_user
 from unfold.loginrequired import FreeAccessView
+from portal.user_access_profile import UserAccessProfile
 
 
 # splitting the 2 functions done here
@@ -16,6 +17,6 @@ class ExperimentView(FreeAccessView):
     def _display(self, request):
         return render(request, 'experiment-view.html', {
             'topmenu_items': topmenu_items('experiment', request),
-            'username': the_user(request),
+            'username': UserAccessProfile(request).username,
             'title': 'Experiment Tools Information',
         })

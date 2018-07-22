@@ -1,12 +1,15 @@
 __author__ = 'pirate'
-from unfold.page            import Page
-from django.http            import HttpResponse  # HttpResponseRedirect
+from datetime import datetime
+
 from django.contrib.auth.decorators import login_required
-from portal.models          import VirtualNode, PhysicalNode
+from django.http import HttpResponse  # HttpResponseRedirect
+
 from portal.backend_actions import get_vm_status
-from unfold.loginrequired   import LoginRequiredAutoLogoutView
-from ui.topmenu             import topmenu_items, the_user
-from datetime               import datetime
+from portal.models import VirtualNode, PhysicalNode
+from portal.user_access_profile import UserAccessProfile
+from ui.topmenu import topmenu_items  # , the_user
+from unfold.loginrequired import LoginRequiredAutoLogoutView
+from unfold.page import Page
 
 
 # ********** View Testbed Map Page *********** #
@@ -26,7 +29,7 @@ class TestbedView(LoginRequiredAutoLogoutView):
         context['node_list'] = node_list
         context['last_update'] = datetime.now()
         context['title'] = 'TESTBEDS VIEW'
-        context['username'] = the_user(self.request)
+        context['username'] = UserAccessProfile(self.request).username
         context['topmenu_items'] = topmenu_items('Testbed View', page.request)
         prelude_env = page.prelude_env()
         context.update(prelude_env)
@@ -41,5 +44,3 @@ def check_status(request):
         return HttpResponse(ol, content_type="application/json")
     else:
         return HttpResponse('{"Error": "Error"}', content_type="application/json")
-
-

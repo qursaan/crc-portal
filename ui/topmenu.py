@@ -61,7 +61,8 @@ def topmenu_items_static(current, request):
 
 # tmp - transition phase
 def topmenu_items (current, request):
-    print "WARNING -- please now use topmenu_items_live (label, page) toplevel_items is deprecated -- WARNING"
+    #TODO: @qursaan removed
+    # print "WARNING -- please now use topmenu_items_live (label, page) toplevel_items is deprecated -- WARNING"
     return topmenu_items_static(current, request)
 
 # integrated helper function for an animated menu

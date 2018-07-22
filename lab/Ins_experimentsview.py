@@ -1,15 +1,16 @@
 __author__ = 'pirate'
 
-from django.shortcuts import render
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from ui.topmenu import topmenu_items, the_user
+from django.http import HttpResponseRedirect
+from django.shortcuts import render
+
+# from portal.actions import get_user_by_email, get_user_type
+from lab.models import Experiments
+from portal.user_access_profile import UserAccessProfile
+from ui.topmenu import topmenu_items  # , the_user
 from unfold.loginrequired import LoginRequiredAutoLogoutView
 from unfold.page import Page
-
-from django.http import HttpResponseRedirect
-from portal.actions import get_user_by_email, get_user_type
-from lab.models import Experiments
 
 
 class ExperimentsView(LoginRequiredAutoLogoutView):
@@ -21,9 +22,9 @@ class ExperimentsView(LoginRequiredAutoLogoutView):
 
     def get_or_post(self, request, method):
         page = Page(self.request)
-
-        c_user = get_user_by_email(the_user(self.request))
-        user_type = get_user_type(c_user)
+        usera = UserAccessProfile(request)
+        c_user = usera.user_obj #get_user_by_email(the_user(self.request))
+        user_type = usera.user_type #get_user_type(c_user)
         if user_type != 2:
             messages.error(page.request, 'Error: You have not permission to access this page.')
             return HttpResponseRedirect("/")
@@ -36,7 +37,7 @@ class ExperimentsView(LoginRequiredAutoLogoutView):
         template_env = {
             'topmenu_items': topmenu_items('Experiments List', page.request),
             # 'errors': errors,
-            'username': the_user(self.request),
+            'username': usera.username, #the_user(self.request),
             'exp_list': exp_list,
             'title': 'Current Experiments',
         }
@@ -47,9 +48,9 @@ class ExperimentsView(LoginRequiredAutoLogoutView):
 @login_required
 def experiments_cancel(request, exp):
     exp_id = int(exp)
-
-    c_user = get_user_by_email(the_user(request))
-    user_type = get_user_type(c_user)
+    usera = UserAccessProfile(request)
+    #c_user = get_user_by_email(the_user(request))
+    user_type = usera.get_user_type() # get_user_type(c_user)
     if user_type != 2:
         # messages.error(page.request, 'Error: You have not permission to access this page.')
         return HttpResponseRedirect("/")

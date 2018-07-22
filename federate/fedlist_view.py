@@ -1,13 +1,16 @@
 __author__ = 'qursaan'
-from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.http import  HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from portal.actions import  get_user_by_email, get_user_type
-from ui.topmenu import topmenu_items, the_user
+
+from federate.models import Site
+from portal.user_access_profile import UserAccessProfile
+# from portal.actions import  get_user_by_email, get_user_type
+from ui.topmenu import topmenu_items  # , the_user
 from unfold.loginrequired import LoginRequiredAutoLogoutView
 from unfold.page import Page
-from federate.models import Site
+
 
 # TODO: @qursaan
 
@@ -24,12 +27,13 @@ class FedListView(LoginRequiredAutoLogoutView):
         return self.get_or_post(request, 'GET')
 
     def get_or_post(self, request, method):
-        self.user_email = the_user(request)
+        usera = UserAccessProfile(request)
+        self.user_email = usera.username #the_user(request)
         page = Page(request)
 
         self.errors = []
-        user = get_user_by_email(the_user(self.request))
-        user_type = get_user_type(user)
+        #user = get_user_by_email(the_user(self.request))
+        user_type = usera.user_type #get_user_type(user)
         if user_type != 0:
             messages.error(page.request, 'Error: You have not permission to access this page.')
             return HttpResponseRedirect("/")
@@ -57,7 +61,7 @@ class FedListView(LoginRequiredAutoLogoutView):
         template_name = "fed-list.html"
         template_env = {
             'topmenu_items': topmenu_items('Site Information', page.request),
-            'username': the_user(self.request),
+            'username': usera.username, #the_user(self.request),
             'fedlist': fedlist,
             'title': 'Site Information',
         }

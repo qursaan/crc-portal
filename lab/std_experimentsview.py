@@ -1,15 +1,15 @@
 __author__ = 'pirate'
 
-from django.shortcuts import render
-
-from ui.topmenu import topmenu_items, the_user
-from unfold.loginrequired import LoginRequiredAutoLogoutView
-from unfold.page import Page
-
 # from django.utils import timezone
 from django.http import HttpResponseRedirect
-from portal.actions import get_user_by_email, get_user_type
+from django.shortcuts import render
+
 from lab.models import StudentCourses, Course, Experiments, StudentsExperiment
+# from portal.actions import get_user_by_email, get_user_type
+from portal.user_access_profile import UserAccessProfile
+from ui.topmenu import topmenu_items  # , the_user
+from unfold.loginrequired import LoginRequiredAutoLogoutView
+from unfold.page import Page
 
 
 class StudentExperimentsView(LoginRequiredAutoLogoutView):
@@ -21,9 +21,9 @@ class StudentExperimentsView(LoginRequiredAutoLogoutView):
 
     def get_or_post(self, request, method):
         page = Page(self.request)
-
-        c_user = get_user_by_email(the_user(self.request))
-        user_type = get_user_type(c_user)
+        usera = UserAccessProfile(request)
+        c_user = usera.user_obj #get_user_by_email(the_user(self.request))
+        user_type = usera.user_type #get_user_type(c_user)
         if user_type != 3:
             # messages.error(page.request, 'Error: You have not permission to access this page.')
             return HttpResponseRedirect("/")
@@ -50,7 +50,7 @@ class StudentExperimentsView(LoginRequiredAutoLogoutView):
 
         template_env = {
             'topmenu_items': topmenu_items('My Courses', page.request),
-            'username': the_user(self.request),
+            'username': usera.username,
             'exp_list': exp_list,
             'std_exp_list': std_exp_list,
             'title': 'My Courses',

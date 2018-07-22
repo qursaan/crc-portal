@@ -2,20 +2,21 @@ __author__ = 'qursaan'
 
 import json
 from datetime import timedelta
-from dateutil import parser
 
+from dateutil import parser
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.utils import timezone
 
-from lab.models import Course, Experiments, StudentsExperiment
-from portal.actions import get_authority_by_user, get_user_by_email, get_user_type, \
+from lab.models import Experiments, StudentsExperiment
+from portal.actions import get_authority_by_user, \
     schedule_checking, schedule_checking_freq, schedule_auto_online
-from portal.models import Reservation, ReservationDetail, ReservationFrequency,SimReservation
+from portal.models import Reservation, ReservationDetail, ReservationFrequency, SimReservation
 from portal.reservation_status import ReservationStatus
-from ui.topmenu import topmenu_items, the_user
+from portal.user_access_profile import UserAccessProfile
+from ui.topmenu import topmenu_items  # , the_user
 from unfold.loginrequired import LoginRequiredAutoLogoutView
 from unfold.page import Page
 
@@ -35,14 +36,15 @@ class StudentReserveView(LoginRequiredAutoLogoutView):
         return self.get_or_post(request, 'GET', exp)
 
     def get_or_post(self, request, method, exp_id):
-        self.user_email = the_user(request)
+        usera = UserAccessProfile(request)
+        self.user_email = usera.username
         page = Page(request)
 
         self.errors = []
         # print "EXP:", exp_id
 
-        user = get_user_by_email(the_user(self.request))
-        user_type = get_user_type(user)
+        user = usera.user_obj # get_user_by_email(the_user(self.request))
+        user_type = usera.user_type # get_user_type(user)
         if user_type != 3 or exp_id is None:
             messages.error(page.request, 'Error: You have not permission to access this page.')
             return HttpResponseRedirect("/")
@@ -65,7 +67,7 @@ class StudentReserveView(LoginRequiredAutoLogoutView):
             self.errors = []
 
             request_date = timezone.now()  # request.POST.get('request_date', '')
-            authority_hrn = get_authority_by_user(the_user(request))
+            authority_hrn = get_authority_by_user(usera.username)
 
             purpose = request.POST.get('ex_detail', '')
             # date
@@ -173,7 +175,7 @@ class StudentReserveView(LoginRequiredAutoLogoutView):
 
                 template_env = {
                     'topmenu_items': topmenu_items('test_page', request),
-                    'username': the_user(request),
+                    'username': usera.username,
                     'title': 'Request',
                 }
                 template_env.update(page.prelude_env())
@@ -182,7 +184,7 @@ class StudentReserveView(LoginRequiredAutoLogoutView):
         template_name = "std-experiments-add.html"
         template_env = {
             'topmenu_items': topmenu_items('Reserve Experiment', page.request),
-            'username': the_user(self.request),
+            'username': usera.username,
             'ex_title': exp.title,
             'exp_id': exp_id,
             'max_duration': max_duration,

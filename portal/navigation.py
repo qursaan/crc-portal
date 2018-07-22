@@ -6,10 +6,11 @@ from django.contrib import messages
 from django.utils import timezone
 #
 from crc.settings import BASE_IMAGE_DIR
-from ui.topmenu import topmenu_items, the_user
+from ui.topmenu import topmenu_items #, the_user
 from portal.models import UserImage, TestbedImage, Reservation, SimReservation, SimulationImage
-from portal.actions import get_user_by_email, get_task_id, update_task_testbed, check_next_task_duration, \
+from portal.actions import get_task_id, update_task_testbed, check_next_task_duration, \
     get_username_by_email
+from portal.user_access_profile import UserAccessProfile
 from portal.backend_actions import load_images, save_images, vm_restart, vm_shutdown, vm_start, exe_script, exe_check, \
     check_load_images, check_save_images, exe_abort, commlab_exe, commlab_check, commlab_result
 from reservation_status import ReservationStatus
@@ -118,8 +119,10 @@ def action_load_save_image(request, action):
             user_image_name = request.POST.get('the_image', 'untitled').replace(" ", "_")
             if user_image_name == '':
                 user_image_name = "untitled"
-            user_name = the_user(request)
-            user = get_user_by_email(user_name)
+
+            usera = UserAccessProfile(request)
+            #user_name = the_user(request)
+            user = usera.user_obj # get_user_by_email(user_name)
             r = save_images(task_id, user_image_name, ".", node_name)
             if r == 1:
                 image_name = user_image_name + "_" + node_name
@@ -217,7 +220,7 @@ def omf_exe(request):
         if not script:
             return HttpResponse(request, 'Script Empty', content_type="text/plain")
 
-        username = get_username_by_email(the_user(request))
+        username = UserAccessProfile(request).username # get_username_by_email(the_user(request))
         t = exe_script("%s" % script, username)
         if t != 0:
             return HttpResponse(t, content_type="application/json")

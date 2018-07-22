@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from portal.models import MyUser, Platform, Account, \
+from portal.models import MyUser, Platform, Account, ResourceProfile, \
     PhysicalNode, ResourcesInfo, VirtualNode, NodeConnection, SimulationVM, FrequencyRanges, \
     UserImage, TestbedImage, SimulationImage, \
     Authority, PendingSlice, \
@@ -35,6 +35,11 @@ class AuthorityAdmin(admin.ModelAdmin):
 
 
 # Resources ****************************************************
+@admin.register(ResourceProfile)
+class ResourceProfileAdmin(admin.ModelAdmin):
+    list_display = ('id', 'uid', 'name', 'shared')
+
+
 @admin.register(ResourcesInfo)
 class ResourceInfoAdmin(admin.ModelAdmin):
     list_display = ('id', 'type')

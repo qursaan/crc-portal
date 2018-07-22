@@ -1,6 +1,8 @@
 from django.shortcuts import render
+
+from portal.user_access_profile import UserAccessProfile
+from ui.topmenu import topmenu_items
 from unfold.loginrequired import FreeAccessView
-from ui.topmenu import topmenu_items, the_user
 
 
 # ************ Support Page ***************
@@ -16,7 +18,7 @@ class SupportView(FreeAccessView):
     def _display(self, request):
         return render(request, 'support-view.html', {
             'topmenu_items': topmenu_items('support', request),
-            'username': the_user(request),
+            'username': UserAccessProfile(request).username,
             'title': 'Support',
         })
 
@@ -28,7 +30,7 @@ class GuideView(FreeAccessView):
     def _display(self, request):
         return render(request, 'guide-view.html', {
             'topmenu_items': topmenu_items('Guide', request),
-            'username': the_user(request),
+            'username': UserAccessProfile(request).username,
             'title': 'Portal Guide',
         })
 
@@ -40,6 +42,6 @@ class TGuideView(FreeAccessView):
     def _display(self, request):
         return render(request, 'tguide-view.html', {
             'topmenu_items': topmenu_items('Guide', request),
-            'username': the_user(request),
+            'username': UserAccessProfile(request).username,
             'title': 'Portal Teaching Guide',
         })

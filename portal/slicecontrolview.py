@@ -1,24 +1,24 @@
 __author__ = 'pirate'
 import json
-from unfold.loginrequired import LoginRequiredAutoLogoutView
-from unfold.page import Page
-from ui.topmenu import topmenu_items, the_user
+
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render
+from django.template.loader import render_to_string
+
+from lab.actions import get_control_options
 #
 from portal.models import Reservation, ReservationDetail, SimReservation, \
     TestbedImage, UserImage, SimulationImage, ReservationFrequency
-from lab.models import Experiments
-from lab.actions import get_control_options
 from portal.navigation import action_load_save_image, omf_exe, remote_node, \
     check_task_progress, check_exe_progress, slice_on_time, abort_exe_progress, \
     lab_run, lab_check, lab_result
-
-from portal.actions import get_user_by_email, get_user_type
+# from portal.actions import get_user_by_email, get_user_type
 #
-from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseRedirect
-from django.contrib.auth.decorators import login_required
-from django.template.loader import render_to_string
-
+from portal.user_access_profile import UserAccessProfile
+from ui.topmenu import topmenu_items  # , the_user
+from unfold.loginrequired import LoginRequiredAutoLogoutView
+from unfold.page import Page
 
 
 class SliceControlView(LoginRequiredAutoLogoutView):
@@ -48,12 +48,12 @@ class SliceControlView(LoginRequiredAutoLogoutView):
         lab_param_list = []
        # vnc_link_access = None
        # vnc = False
-
-        user = get_user_by_email(the_user(self.request))
+        usera = UserAccessProfile(self.request)
+        user = usera.user_obj # get_user_by_email(the_user(self.request))
         if user:
             user_image_list = UserImage.objects.filter(user_ref=user).all()
 
-        user_type = get_user_type(user)
+        user_type = usera.user_type # get_user_type(user)
 
         slice_id = page.request.session.get('slice_id', None)
         stype = page.request.session.get('stype', None)
@@ -97,7 +97,7 @@ class SliceControlView(LoginRequiredAutoLogoutView):
             'node_list': node_list,
             'freq_list': freq_list,
             'output': output_script,
-            'username': the_user(self.request),
+            'username': usera.username, # the_user(self.request),
             'user_id': user.id,
             'title': t,
             'stype': stype,

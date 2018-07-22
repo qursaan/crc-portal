@@ -91,4 +91,3 @@ class RegistrationView (FreeAccessView):
         }
         template_env.update(page.prelude_env())
         return render(request, 'registration-view.html', template_env)
-
