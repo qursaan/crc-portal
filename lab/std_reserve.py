@@ -102,6 +102,7 @@ class StudentReserveView(LoginRequiredAutoLogoutView):
                 if exp.server_type == "omf":
                     s = Reservation(
                         user_ref=user,
+                        username=usera.session_username,
                         f_start_time=start_datetime,
                         f_end_time=end_datetime,
                         slice_name=exp.reservation_ref.slice_name,
@@ -138,6 +139,7 @@ class StudentReserveView(LoginRequiredAutoLogoutView):
                 elif exp.server_type == "sim":
                     s = SimReservation(
                         user_ref=user,
+                        username=usera.session_username,
                         slice_name=exp.sim_reservation_ref.slice_name,
                         slice_duration=slice_duration,  # approve_date
                         request_date=request_date,

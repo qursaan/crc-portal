@@ -83,13 +83,13 @@ class SimulationImageAdmin(admin.ModelAdmin):
 
 @admin.register(UserImage)
 class MyUserImageAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user_ref', 'image_name', 'location', 'image_type', 'created')
+    list_display = ('id', 'user_ref', 'username', 'image_name', 'location', 'image_type', 'created')
 
 
 # Reservations *******************************************************
 @admin.register(Reservation)
 class ReservationAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user_ref', 'start_time', 'end_time', 'f_start_time', 'f_end_time',
+    list_display = ('id', 'user_ref', 'username', 'start_time', 'end_time', 'f_start_time', 'f_end_time',
                     'slice_name', 'slice_duration', 'approve_date', 'request_date',
                     'request_type', 'base_image_ref', 'purpose', 'status', 'created')
 
@@ -106,7 +106,7 @@ class ReservationFrequencyAdmin(admin.ModelAdmin):
 
 @admin.register(SimReservation)
 class SimReservationAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user_ref', 'start_time', 'end_time', 'f_start_time', 'f_end_time',
+    list_display = ('id', 'user_ref', 'username', 'start_time', 'end_time', 'f_start_time', 'f_end_time',
                     'slice_name', 'slice_duration', 'approve_date', 'request_date',
                     'request_type', 'node_ref', 'image_ref', 'purpose', 'status', 'created')
 

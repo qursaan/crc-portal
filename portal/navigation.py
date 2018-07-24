@@ -126,7 +126,7 @@ def action_load_save_image(request, action):
             r = save_images(task_id, user_image_name, ".", node_name)
             if r == 1:
                 image_name = user_image_name + "_" + node_name
-                update_user_images(image_name, user)
+                update_user_images(image_name, user, usera.session_username)
                 update_task_testbed(task_id, action, stype)
 
         # for any action  ##########
@@ -161,10 +161,11 @@ def slice_on_time(request, stype):
 
 
 # OK OK OK OK
-def update_user_images(image_name, user):
+def update_user_images(image_name, user, username):
     try:
         new_image = UserImage(
             user_ref=user,
+            username=username,
             image_name=image_name,
             location=BASE_IMAGE_DIR + image_name + ".ndz",
         )

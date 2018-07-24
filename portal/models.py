@@ -162,6 +162,7 @@ class AccessHistory(models.Model):
 class ResourceProfile(models.Model):
     uid = models.UUIDField(default=uuid.uuid4, editable=False)
     name = models.TextField(default='NA')
+    # false = private , true = public
     shared = models.BooleanField(default=False)
 
     def __unicode__(self):
@@ -184,6 +185,9 @@ class PhysicalNode(models.Model):
     num_virtual = models.IntegerField(default=0)
     num_connection = models.IntegerField(default=0)
     node_ip = models.TextField(default='NA')
+    resource_profile_ref = models.ForeignKey(ResourceProfile, null=True)
+    #0=testbed , 1= simulation
+    type = models.IntegerField(default=0)
 
     def __unicode__(self):
         return self.node_name
@@ -229,6 +233,7 @@ class SimulationVM(models.Model):
 # Images *******************************************************
 class UserImage(models.Model):
     user_ref = models.ForeignKey(MyUser, null=True)
+    username = models.TextField(default=None, null=True)
     image_name = models.CharField(max_length=300, null=True)
     location = models.TextField(default='NA')
     image_type = models.CharField(max_length=200, null=True)
@@ -260,6 +265,7 @@ class SimulationImage(models.Model):
 # Reservations *******************************************************
 class Reservation(models.Model):
     user_ref = models.ForeignKey(MyUser, null=True)
+    username = models.TextField(default=None, null=True)
     authority_hrn = models.TextField(null=True)
     start_time = models.DateTimeField('Actual Start Time', null=True)
     end_time = models.DateTimeField('Actual End Time', null=True)
@@ -295,6 +301,7 @@ class ReservationFrequency(models.Model):
 
 class SimReservation(models.Model):
     user_ref = models.ForeignKey(MyUser, null=True)
+    username = models.TextField(default=None, null=True)
     start_time = models.DateTimeField(null=True)
     end_time = models.DateTimeField(null=True)
     authority_hrn = models.TextField(null=True)

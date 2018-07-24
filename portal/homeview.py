@@ -70,6 +70,7 @@ class HomeView(FreeAccessView):
             if user.is_active:
                 print "LOGGING IN"
                 login(request, user)
+                request.session['username'] = username
                 return HttpResponseRedirect('/login-ok')
             else:
                 env['state'] = "Your account is not active, please contact the site admin."

@@ -333,10 +333,10 @@ def check_next_task_duration(task_id, stype):
     return True
 
 
-def get_count_active_slice(c_user):
+def get_count_active_slice(c_user,username):
     busy_list = ReservationStatus.get_busy_list(allow_bulk=True, allow_pending=True)
-    active_list_1 = Reservation.objects.filter(user_ref=c_user, status__in=busy_list)
-    active_list_2 = SimReservation.objects.filter(user_ref=c_user, status__in=busy_list)
+    active_list_1 = Reservation.objects.filter(user_ref=c_user,username=username, status__in=busy_list)
+    active_list_2 = SimReservation.objects.filter(user_ref=c_user,username=username, status__in=busy_list)
     current_time = timezone.now()
     total_count = active_list_1.count() + active_list_2.count()
     # confirm active session

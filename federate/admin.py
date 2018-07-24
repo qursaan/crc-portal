@@ -7,8 +7,6 @@ class MySiteAdmin(admin.ModelAdmin):
 
 
 
-
-
 # Register your models here.
 @admin.register(Users)
 class MyUserAdmin(admin.ModelAdmin):

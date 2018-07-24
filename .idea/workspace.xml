@@ -5,53 +5,31 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d615e975-1238-451a-95aa-cccc4e40fde6" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/federate/fedresource_view.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/federate/templates/fed-resources.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth/static/css/logout.css" beforeDir="false" afterPath="$PROJECT_DIR$/auth/static/css/logout.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/federate/fedInfo_view.py" beforeDir="false" afterPath="$PROJECT_DIR$/federate/fedInfo_view.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/federate/fed_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/federate/fed_service.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/federate/fed_tasks.py" beforeDir="false" afterPath="$PROJECT_DIR$/federate/fed_tasks.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crc/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/crc/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/federate/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/federate/admin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/federate/fed_backend.py" beforeDir="false" afterPath="$PROJECT_DIR$/federate/fed_backend.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/federate/fed_view.py" beforeDir="false" afterPath="$PROJECT_DIR$/federate/fed_view.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/federate/fedlist_view.py" beforeDir="false" afterPath="$PROJECT_DIR$/federate/fedlist_view.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/federate/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/federate/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/federate/templates/fed-body.html" beforeDir="false" afterPath="$PROJECT_DIR$/federate/templates/fed-body.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab/Ins_addcourse.py" beforeDir="false" afterPath="$PROJECT_DIR$/lab/Ins_addcourse.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab/Ins_coursesview.py" beforeDir="false" afterPath="$PROJECT_DIR$/lab/Ins_coursesview.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab/Ins_experimentsview.py" beforeDir="false" afterPath="$PROJECT_DIR$/lab/Ins_experimentsview.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab/ins_manage_std.py" beforeDir="false" afterPath="$PROJECT_DIR$/lab/ins_manage_std.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab/ins_validationview.py" beforeDir="false" afterPath="$PROJECT_DIR$/lab/ins_validationview.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab/library_addview.py" beforeDir="false" afterPath="$PROJECT_DIR$/lab/library_addview.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab/library_view.py" beforeDir="false" afterPath="$PROJECT_DIR$/lab/library_view.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab/std_addcourse.py" beforeDir="false" afterPath="$PROJECT_DIR$/lab/std_addcourse.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab/std_courseview.py" beforeDir="false" afterPath="$PROJECT_DIR$/lab/std_courseview.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab/std_experimentsview.py" beforeDir="false" afterPath="$PROJECT_DIR$/lab/std_experimentsview.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/federate/templates/fed-home.html" beforeDir="false" afterPath="$PROJECT_DIR$/federate/templates/fed-home.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/federate/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/federate/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lab/actions.py" beforeDir="false" afterPath="$PROJECT_DIR$/lab/actions.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lab/std_reserve.py" beforeDir="false" afterPath="$PROJECT_DIR$/lab/std_reserve.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/portal/accountview.py" beforeDir="false" afterPath="$PROJECT_DIR$/portal/accountview.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/portal/actions.py" beforeDir="false" afterPath="$PROJECT_DIR$/portal/actions.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/portal/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/portal/admin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/portal/contactview.py" beforeDir="false" afterPath="$PROJECT_DIR$/portal/contactview.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/portal/backend_actions.py" beforeDir="false" afterPath="$PROJECT_DIR$/portal/backend_actions.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/portal/dashboardview.py" beforeDir="false" afterPath="$PROJECT_DIR$/portal/dashboardview.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/portal/experimentview.py" beforeDir="false" afterPath="$PROJECT_DIR$/portal/experimentview.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/portal/filemanagerview.py" beforeDir="false" afterPath="$PROJECT_DIR$/portal/filemanagerview.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/portal/homeview.py" beforeDir="false" afterPath="$PROJECT_DIR$/portal/homeview.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/portal/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/portal/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/portal/navigation.py" beforeDir="false" afterPath="$PROJECT_DIR$/portal/navigation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/portal/registrationview.py" beforeDir="false" afterPath="$PROJECT_DIR$/portal/registrationview.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/portal/reservationview.py" beforeDir="false" afterPath="$PROJECT_DIR$/portal/reservationview.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/portal/schedulerview.py" beforeDir="false" afterPath="$PROJECT_DIR$/portal/schedulerview.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/portal/slicecontrolview.py" beforeDir="false" afterPath="$PROJECT_DIR$/portal/slicecontrolview.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/portal/slicependingview.py" beforeDir="false" afterPath="$PROJECT_DIR$/portal/slicependingview.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/portal/slicerequestview.py" beforeDir="false" afterPath="$PROJECT_DIR$/portal/slicerequestview.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/portal/sliceview.py" beforeDir="false" afterPath="$PROJECT_DIR$/portal/sliceview.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/portal/supportview.py" beforeDir="false" afterPath="$PROJECT_DIR$/portal/supportview.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/portal/templates/slicerequest-view.html" beforeDir="false" afterPath="$PROJECT_DIR$/portal/templates/slicerequest-view.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/portal/testbedview.py" beforeDir="false" afterPath="$PROJECT_DIR$/portal/testbedview.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/portal/timelineview.py" beforeDir="false" afterPath="$PROJECT_DIR$/portal/timelineview.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/portal/templates/reservation-view.html" beforeDir="false" afterPath="$PROJECT_DIR$/portal/templates/reservation-view.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/portal/user_access_profile.py" beforeDir="false" afterPath="$PROJECT_DIR$/portal/user_access_profile.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/portal/validationview.py" beforeDir="false" afterPath="$PROJECT_DIR$/portal/validationview.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/third-party/jointjs/joint.css" beforeDir="false" afterPath="$PROJECT_DIR$/third-party/jointjs/joint.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/third-party/timeline3/js/locale/en.json" beforeDir="false" afterPath="$PROJECT_DIR$/third-party/timeline3/js/locale/en.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ui/topmenu.py" beforeDir="false" afterPath="$PROJECT_DIR$/ui/topmenu.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -88,23 +66,50 @@
     <option name="myCustomStartScript" value="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="reservationview.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/portal/reservationview.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="164">
+              <caret line="303" column="25" selection-start-line="303" selection-start-column="25" selection-end-line="303" selection-end-column="25" />
+              <folding>
+                <element signature="e#3124#13006#0" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="reservation-view.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/portal/templates/reservation-view.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="198">
+              <caret line="74" column="66" lean-forward="true" selection-start-line="74" selection-start-column="66" selection-end-line="74" selection-end-column="66" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="models.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/portal/models.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="378">
+              <caret line="188" column="5" selection-start-line="188" selection-start-column="5" selection-end-line="188" selection-end-column="5" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="HTML File" />
         <option value="Python Stub" />
         <option value="Python Script" />
+        <option value="HTML File" />
       </list>
     </option>
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>location</find>
-      <find>loc</find>
-      <find>redirect</find>
-      <find>json</find>
       <find>GET</find>
       <find>user_type</find>
       <find>objects.filter</find>
@@ -131,6 +136,10 @@
       <find>session</find>
       <find>__in</find>
       <find>ERROR FED</find>
+      <find>USER_HOME</find>
+      <find>get_cou</find>
+      <find>database</find>
+      <find>user_ref</find>
     </findStrings>
     <dirStrings>
       <dir>$PROJECT_DIR$/portal</dir>
@@ -144,57 +153,57 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/help/setup2" />
-        <option value="$PROJECT_DIR$/crc/settings.py" />
-        <option value="$PROJECT_DIR$/federate/fed_backend.py" />
-        <option value="$PROJECT_DIR$/federate/templates/fed-site.html" />
-        <option value="$PROJECT_DIR$/federate/templates/fed-home.html" />
-        <option value="$PROJECT_DIR$/ui/topmenu.py" />
-        <option value="$PROJECT_DIR$/portal/userAccessProfile.pyi" />
-        <option value="$PROJECT_DIR$/portal/userAccessProfile.py" />
-        <option value="$PROJECT_DIR$/lab/Ins_coursesview.py" />
-        <option value="$PROJECT_DIR$/lab/Ins_experimentsview.py" />
-        <option value="$PROJECT_DIR$/federate/fedlist_view.py" />
-        <option value="$PROJECT_DIR$/lab/ins_validationview.py" />
         <option value="$PROJECT_DIR$/lab/library_addview.py" />
         <option value="$PROJECT_DIR$/lab/library_view.py" />
         <option value="$PROJECT_DIR$/lab/std_addcourse.py" />
         <option value="$PROJECT_DIR$/lab/std_courseview.py" />
         <option value="$PROJECT_DIR$/lab/std_experimentsview.py" />
-        <option value="$PROJECT_DIR$/lab/std_reserve.py" />
         <option value="$PROJECT_DIR$/portal/contactview.py" />
-        <option value="$PROJECT_DIR$/portal/dashboardview.py" />
         <option value="$PROJECT_DIR$/portal/experimentview.py" />
         <option value="$PROJECT_DIR$/portal/filemanagerview.py" />
         <option value="$PROJECT_DIR$/portal/testbedview.py" />
         <option value="$PROJECT_DIR$/portal/supportview.py" />
         <option value="$PROJECT_DIR$/portal/timelineview.py" />
         <option value="$PROJECT_DIR$/portal/sliceview.py" />
-        <option value="$PROJECT_DIR$/portal/navigation.py" />
         <option value="$PROJECT_DIR$/portal/slicerequestview.py" />
-        <option value="$PROJECT_DIR$/portal/slicependingview.py" />
-        <option value="$PROJECT_DIR$/portal/slicecontrolview.py" />
         <option value="$PROJECT_DIR$/portal/schedulerview.py" />
-        <option value="$PROJECT_DIR$/portal/reservationview.py" />
         <option value="$PROJECT_DIR$/auth/static/css/logout.css" />
         <option value="$PROJECT_DIR$/third-party/jointjs/joint.css" />
         <option value="$PROJECT_DIR$/lab/ins_manage_std.py" />
         <option value="$PROJECT_DIR$/portal/validationview.py" />
-        <option value="$PROJECT_DIR$/portal/admin.py" />
-        <option value="$PROJECT_DIR$/portal/models.py" />
-        <option value="$PROJECT_DIR$/federate/models.py" />
         <option value="$PROJECT_DIR$/federate/fed_service.py" />
         <option value="$PROJECT_DIR$/portal/registrationview.py" />
-        <option value="$PROJECT_DIR$/portal/homeview.py" />
-        <option value="$PROJECT_DIR$/portal/user_access_profile.py" />
-        <option value="$PROJECT_DIR$/federate/fed_tasks.py" />
         <option value="$PROJECT_DIR$/lab/modules.py" />
         <option value="$PROJECT_DIR$/portal/accountview.py" />
-        <option value="$PROJECT_DIR$/portal/actions.py" />
-        <option value="$PROJECT_DIR$/federate/fed_view.py" />
         <option value="$PROJECT_DIR$/federate/fedInfo_view.py" />
         <option value="$PROJECT_DIR$/lab/Ins_addcourse.py" />
         <option value="$PROJECT_DIR$/third-party/timeline3/js/locale/en.json" />
+        <option value="$PROJECT_DIR$/federate/admin.py" />
+        <option value="$PROJECT_DIR$/federate/fed_backend.py" />
+        <option value="$PROJECT_DIR$/portal/backend_actions.py" />
+        <option value="$PROJECT_DIR$/federate/models.py" />
+        <option value="$PROJECT_DIR$/federate/fed_resources.py" />
+        <option value="$PROJECT_DIR$/federate/urls.py" />
+        <option value="$PROJECT_DIR$/federate/templates/fed-body.html" />
+        <option value="$PROJECT_DIR$/federate/fedresource_view.py" />
+        <option value="$PROJECT_DIR$/federate/templates/fed-resources.html" />
+        <option value="$PROJECT_DIR$/federate/fed_tasks.py" />
+        <option value="$PROJECT_DIR$/portal/homeview.py" />
+        <option value="$PROJECT_DIR$/portal/user_access_profile.py" />
+        <option value="$PROJECT_DIR$/lab/actions.py" />
+        <option value="$PROJECT_DIR$/federate/fed_view.py" />
+        <option value="$PROJECT_DIR$/federate/templates/fed-home.html" />
+        <option value="$PROJECT_DIR$/crc/settings.py" />
+        <option value="$PROJECT_DIR$/portal/navigation.py" />
+        <option value="$PROJECT_DIR$/portal/slicecontrolview.py" />
+        <option value="$PROJECT_DIR$/portal/actions.py" />
+        <option value="$PROJECT_DIR$/portal/dashboardview.py" />
+        <option value="$PROJECT_DIR$/lab/std_reserve.py" />
+        <option value="$PROJECT_DIR$/portal/slicependingview.py" />
+        <option value="$PROJECT_DIR$/portal/admin.py" />
+        <option value="$PROJECT_DIR$/portal/models.py" />
+        <option value="$PROJECT_DIR$/portal/templates/reservation-view.html" />
+        <option value="$PROJECT_DIR$/portal/reservationview.py" />
       </list>
     </option>
   </component>
@@ -226,6 +235,17 @@
             <path>
               <item name="crc-portal" type="b2602c69:ProjectViewProjectNode" />
               <item name="crc-portal" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="crc-portal" type="b2602c69:ProjectViewProjectNode" />
+              <item name="crc-portal" type="462c0819:PsiDirectoryNode" />
+              <item name="portal" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="crc-portal" type="b2602c69:ProjectViewProjectNode" />
+              <item name="crc-portal" type="462c0819:PsiDirectoryNode" />
+              <item name="portal" type="462c0819:PsiDirectoryNode" />
+              <item name="templates" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -553,27 +573,28 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-1" y="27" width="1368" height="742" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info anchor="bottom" id="TODO" order="6" sideWeight="0.4969605" weight="0.3293919" />
-      <window_info anchor="bottom" id="Event Log" order="12" sideWeight="0.4050152" side_tool="true" visible="true" weight="0.3766892" />
+      <window_info anchor="bottom" id="Event Log" order="12" sideWeight="0.5151976" side_tool="true" visible="true" weight="0.13513513" />
       <window_info anchor="bottom" id="Database Changes" order="10" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="7" />
-      <window_info anchor="bottom" id="Python Console" order="8" sideWeight="0.87234044" weight="0.4358108" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.7446808" weight="0.4712838" />
+      <window_info anchor="bottom" id="Python Console" order="8" sideWeight="0.87158054" weight="0.4358108" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.74088144" weight="0.2043919" />
       <window_info anchor="bottom" x="278" y="251" width="760" height="267" id="Terminal" order="9" sideWeight="0.62082064" weight="0.46114865" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.25835866" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.21200608" />
       <window_info anchor="bottom" id="Docker" order="11" show_stripe_button="false" />
-      <window_info active="true" anchor="bottom" id="Inspection Results" order="13" sideWeight="0.5949848" visible="true" weight="0.3766892" />
       <window_info anchor="right" id="Database" order="3" weight="0.32978722" />
-      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.48784193" weight="0.41216215" />
+      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.48480242" visible="true" weight="0.13513513" />
       <window_info anchor="right" id="SciView" order="4" weight="0.32978722" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
-      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.76975685" weight="0.5050676" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.76899695" weight="0.16216215" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info active="true" anchor="bottom" id="Inspection Results" order="13" sideWeight="0.5949848" visible="true" weight="0.3766892" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Concurrent Activities Diagram" order="13" sideWeight="0.49924013" weight="0.3293919" />
@@ -594,192 +615,14 @@
           </properties>
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="121" />
+      <option name="time" value="123" />
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/lab/Ins_experimentsview.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-60">
-          <caret line="51" column="5" selection-start-line="51" selection-start-column="5" selection-end-line="51" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/federate/fedlist_view.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="18">
-          <caret line="1" lean-forward="true" selection-start-line="1" selection-end-line="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lab/ins_validationview.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="18">
-          <caret line="1" selection-start-line="1" selection-end-line="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lab/library_addview.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="144">
-          <caret line="11" column="61" lean-forward="true" selection-start-line="11" selection-start-column="61" selection-end-line="11" selection-end-column="61" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lab/library_view.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-72">
-          <caret line="2" lean-forward="true" selection-start-line="2" selection-end-line="2" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lab/std_addcourse.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-735">
-          <caret line="2" lean-forward="true" selection-start-line="2" selection-end-line="2" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lab/std_courseview.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret line="6" lean-forward="true" selection-start-line="6" selection-end-line="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lab/std_reserve.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-126">
-          <caret line="2" selection-start-line="2" selection-end-line="2" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lab/std_experimentsview.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-847">
-          <caret line="2" selection-start-line="2" selection-end-line="2" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/portal/dashboardview.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-37">
-          <caret line="82" column="9" lean-forward="true" selection-start-line="82" selection-start-column="9" selection-end-line="82" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/portal/filemanagerview.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="162">
-          <caret line="15" column="63" selection-start-line="15" selection-start-column="63" selection-end-line="15" selection-end-column="63" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/portal/experimentview.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="19" column="35" selection-start-line="19" selection-start-column="35" selection-end-line="19" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/portal/testbedview.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="810">
-          <caret line="45" column="82" selection-start-line="45" selection-start-column="82" selection-end-line="45" selection-end-column="82" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/portal/supportview.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/portal/timelineview.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="18">
-          <caret line="1" selection-start-line="1" selection-end-line="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ui/topmenu.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="36">
-          <caret line="2" column="8" selection-start-line="2" selection-start-column="8" selection-end-line="2" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/portal/navigation.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3726">
-          <caret line="222" column="56" selection-start-line="222" selection-start-column="56" selection-end-line="222" selection-end-column="56" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/portal/slicerequestview.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
-          <caret line="7" selection-start-line="7" selection-end-line="7" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/portal/slicependingview.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1494">
-          <caret line="83" column="46" selection-start-line="83" selection-start-column="46" selection-end-line="83" selection-end-column="46" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/portal/slicecontrolview.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="18">
-          <caret line="1" lean-forward="true" selection-start-line="1" selection-end-line="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/portal/schedulerview.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-180">
-          <caret line="2" selection-start-line="2" selection-end-line="2" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/third-party/jointjs/joint.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="89">
-          <caret line="96" column="21" selection-start-line="96" selection-start-column="21" selection-end-line="96" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/static/css/logout.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="18">
-          <caret line="1" column="15" selection-start-line="1" selection-start-column="15" selection-end-line="1" selection-end-column="15" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/auth/static/css/logout.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="18">
-          <caret line="1" column="19" selection-start-line="1" selection-start-column="19" selection-end-line="1" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/portal/reservationview.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="18">
-          <caret line="2" selection-start-line="2" selection-end-line="2" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/portal/sliceview.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="36">
           <caret line="2" column="6" selection-start-line="2" selection-start-column="6" selection-end-line="2" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/portal/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-396">
-          <caret line="77" column="20" selection-start-line="77" selection-start-column="11" selection-end-line="77" selection-end-column="20" />
         </state>
       </provider>
     </entry>
@@ -797,71 +640,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/portal/admin.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="223">
-          <caret line="48" column="42" lean-forward="true" selection-start-line="48" selection-start-column="42" selection-end-line="48" selection-end-column="42" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/portal/registrationview.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret lean-forward="true" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/portal/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="377">
-          <caret line="317" lean-forward="true" selection-start-line="317" selection-end-line="317" />
-          <folding>
-            <element signature="e#1#16#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/federate/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="36">
-          <caret line="2" column="11" selection-start-line="2" selection-start-column="11" selection-end-line="2" selection-end-column="11" />
-          <folding>
-            <element signature="e#0#28#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/federate/fed_backend.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="377">
-          <caret line="48" column="12" lean-forward="true" selection-start-line="48" selection-start-column="12" selection-end-line="48" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/portal/user_access_profile.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="36">
-          <caret line="2" selection-start-line="2" selection-end-line="2" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/federate/fed_service.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1170">
-          <caret line="65" column="22" selection-start-line="65" selection-start-column="22" selection-end-line="65" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/federate/fed_tasks.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1764">
-          <caret line="109" selection-start-line="109" selection-end-line="109" />
-          <folding>
-            <element signature="e#0#37#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/plugins/active_filters/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -873,9 +651,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="188">
           <caret line="15" column="21" lean-forward="true" selection-start-line="15" selection-start-column="21" selection-end-line="15" selection-end-column="21" />
-          <folding>
-            <element signature="e#1859#2056#0" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -883,13 +658,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="272">
           <caret line="441" column="8" lean-forward="true" selection-start-line="441" selection-start-column="8" selection-end-line="441" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/portal/actions.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="489" column="28" selection-start-line="489" selection-start-column="28" selection-end-line="489" selection-end-column="28" />
         </state>
       </provider>
     </entry>
@@ -904,30 +672,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="272">
           <caret line="37" column="12" lean-forward="true" selection-start-line="37" selection-start-column="12" selection-end-line="37" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/federate/fed_view.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="94" column="20" selection-start-line="94" selection-start-column="20" selection-end-line="94" selection-end-column="20" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/federate/fedInfo_view.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="65" column="10" lean-forward="true" selection-start-line="65" selection-start-column="10" selection-end-line="65" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/portal/homeview.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="95" lean-forward="true" selection-start-line="95" selection-end-line="95" />
         </state>
       </provider>
     </entry>
@@ -963,6 +707,226 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="112">
           <caret line="18" column="9" selection-start-line="18" selection-start-column="9" selection-end-line="18" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/federate/admin.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="144">
+          <caret line="8" selection-start-line="8" selection-end-line="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/federate/fed_backend.py" />
+    <entry file="file:///usr/local/lib/python2.7/dist-packages/django/contrib/auth/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="402" column="4" selection-start-line="402" selection-start-column="4" selection-end-line="402" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/federate/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="377">
+          <caret line="29" column="4" selection-start-line="29" selection-start-column="4" selection-end-line="29" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/federate/templates/fed-list.html" />
+    <entry file="file://$PROJECT_DIR$/federate/templates/fed-body.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="202">
+          <caret line="47" column="63" selection-start-line="47" selection-start-column="63" selection-end-line="47" selection-end-column="63" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/federate/fedlist_view.py" />
+    <entry file="file://$PROJECT_DIR$/federate/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="216">
+          <caret line="20" column="28" lean-forward="true" selection-start-line="20" selection-start-column="28" selection-end-line="20" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/federate/fedresource_view.py" />
+    <entry file="file://$PROJECT_DIR$/federate/templates/fed-resources.html" />
+    <entry file="file://$PROJECT_DIR$/portal/modules.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret line="104" column="29" selection-start-line="104" selection-start-column="29" selection-end-line="104" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/federate/fed_service.py" />
+    <entry file="file://$PROJECT_DIR$/federate/fed_tasks.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1836">
+          <caret line="113" selection-start-line="113" selection-end-line="113" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/portal/registrationview.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1278">
+          <caret line="82" column="35" selection-start-line="82" selection-start-column="35" selection-end-line="82" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/portal/homeview.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="576">
+          <caret line="51" column="18" selection-start-line="51" selection-start-column="18" selection-end-line="51" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/federate/fedInfo_view.py" />
+    <entry file="file://$PROJECT_DIR$/federate/fed_view.py" />
+    <entry file="file://$PROJECT_DIR$/federate/templates/fed-home.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2844">
+          <caret line="158" selection-start-line="158" selection-end-line="158" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/crc/__init__.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/crc/crc.ini.localhost">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="288">
+          <caret line="16" column="13" selection-start-line="16" selection-start-column="13" selection-end-line="16" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/crc/settings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="307">
+          <caret line="315" lean-forward="true" selection-start-line="315" selection-end-line="315" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/portal/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1098">
+          <caret line="94" column="36" selection-start-line="94" selection-start-column="36" selection-end-line="94" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/portal/backend_actions.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="16">
+          <caret line="89" column="4" selection-start-line="89" selection-start-column="4" selection-end-line="89" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/portal/testbedview.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="288">
+          <caret line="26" column="35" selection-start-line="26" selection-start-column="35" selection-end-line="26" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/portal/user_access_profile.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="252">
+          <caret line="14" column="36" selection-start-line="14" selection-start-column="29" selection-end-line="14" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/portal/navigation.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="18">
+          <caret line="165" column="20" selection-start-line="165" selection-start-column="20" selection-end-line="165" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lab/actions.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="162">
+          <caret line="65" column="36" selection-start-line="65" selection-start-column="36" selection-end-line="65" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/portal/dashboardview.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="77">
+          <caret line="85" column="43" selection-start-line="85" selection-start-column="43" selection-end-line="85" selection-end-column="43" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lab/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="26">
+          <caret line="106" column="40" selection-start-line="106" selection-start-column="40" selection-end-line="106" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/portal/actions.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="42">
+          <caret line="74" column="22" selection-start-line="74" selection-start-column="22" selection-end-line="74" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/portal/slicecontrolview.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="56">
+          <caret line="70" column="32" selection-start-line="70" selection-start-column="32" selection-end-line="70" selection-end-column="32" />
+          <folding>
+            <element signature="e#22#33#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/portal/slicependingview.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="99">
+          <caret line="127" column="20" selection-start-line="127" selection-start-column="20" selection-end-line="127" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lab/std_reserve.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="43">
+          <caret line="139" column="24" selection-start-line="139" selection-start-column="24" selection-end-line="139" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/portal/admin.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="76">
+          <caret line="108" column="50" selection-start-line="108" selection-start-column="50" selection-end-line="108" selection-end-column="50" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/portal/schedulerview.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="52">
+          <caret line="86" column="23" selection-start-line="86" selection-start-column="23" selection-end-line="86" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/portal/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="378">
+          <caret line="188" column="5" selection-start-line="188" selection-start-column="5" selection-end-line="188" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/portal/templates/reservation-view.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="198">
+          <caret line="74" column="66" lean-forward="true" selection-start-line="74" selection-start-column="66" selection-end-line="74" selection-end-column="66" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/portal/reservationview.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="164">
+          <caret line="303" column="25" selection-start-line="303" selection-start-column="25" selection-end-line="303" selection-end-column="25" />
+          <folding>
+            <element signature="e#3124#13006#0" />
+          </folding>
         </state>
       </provider>
     </entry>

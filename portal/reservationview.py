@@ -20,7 +20,7 @@ from portal.actions import get_authority_by_user, get_authority_emails, \
     schedule_auto_online, schedule_checking, schedule_checking_freq  # schedule_sim_online, \
 from portal.models import SimReservation, Reservation, ReservationDetail, \
     SimulationImage, TestbedImage, ResourcesInfo, VirtualNode, PhysicalNode, SimulationVM, \
-    FrequencyRanges, ReservationFrequency
+    FrequencyRanges, ReservationFrequency, ResourceProfile
 from portal.user_access_profile import UserAccessProfile
 from reservation_status import ReservationStatus
 from ui.topmenu import topmenu_items  # , the_user
@@ -79,16 +79,6 @@ class ReservationView(LoginRequiredAutoLogoutView):
         elif reserve_type == "R":
             template_name = "reservation-view.html"
 
-        # Resources
-        resources_list = VirtualNode.objects.all()
-        resources_info = ResourcesInfo.objects.all()
-        node_list = PhysicalNode.objects.all()
-        sim_vm_list = SimulationVM.objects.all()
-        freq_list = FrequencyRanges.objects.all()
-
-        # Images
-        sim_img_list = SimulationImage.objects.all()
-        omf_img_list = TestbedImage.objects.all()
 
         s = None
 
@@ -187,6 +177,7 @@ class ReservationView(LoginRequiredAutoLogoutView):
                 if server_type == "omf":
                     s = Reservation(
                         user_ref=user,
+                        username=usera.session_username,
                         f_start_time=start_datetime,
                         f_end_time=end_datetime,
                         slice_name=slice_name,
@@ -222,6 +213,7 @@ class ReservationView(LoginRequiredAutoLogoutView):
                 elif server_type == "sim":
                     s = SimReservation(
                         user_ref=user,
+                        username=usera.session_username,
                         slice_name=slice_name,
                         slice_duration=slice_duration,  # approve_date
                         request_date=request_date,
@@ -305,6 +297,24 @@ class ReservationView(LoginRequiredAutoLogoutView):
                 }
                 template_env.update(page.prelude_env())
                 return render(request, 'slice-request-ack-view.html', template_env)  # Redirect after POST
+
+        # Resources
+        if usera.access_all:
+            profile_list = ResourceProfile.objects.all()
+            sim_vm_list = SimulationVM.objects.all()
+            freq_list =  FrequencyRanges.objects.all()
+        else:
+            profile_list = ResourceProfile.objects.filter(shared=True)
+            sim_vm_list = None
+            freq_list = None
+
+        node_list = PhysicalNode.objects.filter(resource_profile_ref__in=profile_list, type=0)
+        resources_list = VirtualNode.objects.filter(node_ref__in=node_list)
+        resources_info = ResourcesInfo.objects.all()
+
+        # Images
+        sim_img_list = SimulationImage.objects.all()
+        omf_img_list = TestbedImage.objects.all()
 
         template_env = {
             'topmenu_items': topmenu_items('Request a slice', page.request),

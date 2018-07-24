@@ -69,6 +69,7 @@ EMAIL_PORT = 25
 EMAIL_USE_TLS = False
 SUPPORT_EMAIL = "qursaan@gmail.com"
 BASE_IMAGE_DIR = "/usr/local/share/storage/"
+USER_HOME = "/home/crc-users/"
 
 ACCOUNT_ACTIVATION_DAYS = 7  # One-week activation window; you may, of course, use a different value.
 

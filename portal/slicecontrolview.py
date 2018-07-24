@@ -19,6 +19,7 @@ from portal.user_access_profile import UserAccessProfile
 from ui.topmenu import topmenu_items  # , the_user
 from unfold.loginrequired import LoginRequiredAutoLogoutView
 from unfold.page import Page
+from crc.settings import BACKENDIP
 
 
 class SliceControlView(LoginRequiredAutoLogoutView):
@@ -50,7 +51,9 @@ class SliceControlView(LoginRequiredAutoLogoutView):
        # vnc = False
         usera = UserAccessProfile(self.request)
         user = usera.user_obj # get_user_by_email(the_user(self.request))
-        if user:
+        if usera.access_all is False:
+            user_image_list = UserImage.objects.filter(user_ref=user,username=usera.session_username).all()
+        elif user:
             user_image_list = UserImage.objects.filter(user_ref=user).all()
 
         user_type = usera.user_type # get_user_type(user)
@@ -108,8 +111,8 @@ class SliceControlView(LoginRequiredAutoLogoutView):
             'show_lab': show_lab,
             'lab_ref': lab_ref,
             'lab_param_list': lab_param_list,
-            'vnc_link_access': "http://193.227.16.199:6080/vnc.html",
-            'terminal_ip': "https://193.227.16.199:4200/"
+            'vnc_link_access': "http://"+BACKENDIP+":6080/vnc.html",
+            'terminal_ip': "https://"+BACKENDIP+":4200/"
             #'vnc' :vnc,
         }
         template_env.update(page.prelude_env())

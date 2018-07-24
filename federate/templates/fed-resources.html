@@ -1,0 +1,60 @@
+{% extends "fed-body.html" %}
+
+{% block htitle %}
+
+{% endblock %}
+
+{% block fedbody %}
+<h3>Federation List</h3>
+
+<form id="fedlist" class="form-horizontal" action="" method="post" role="form">
+    {% csrf_token %}
+    <div class="col-xs-12">
+        <div class="ui-widget btn-toolbar" role="group">
+            <div class="btn-group" role="group">
+
+                <button id="refresh_btn3" name="refresh_list" data-id="refresh" class="btn btn-default"
+                        type="button"
+                        onclick="location.href='/federation/resources/'">
+                    Refresh
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-12">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Resources Name</th>
+                <th>uid</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for row in resourceslist %}
+            <tr class="{% if row.shared == 0 %}error{% elif row.shared == 1 %}success{% else %}warning{% endif %}">
+                <td> {{ row.name }}</td>
+                <td> {{ row.uid }}</td>
+                <td>
+                    {%   if row.shared ==  1 %}Public
+                    {% elif row.shared == 0 %}Private
+                    {% else %}N/A
+                    {% endif %}
+                </td>
+                <td>
+                    <a href='/federation/resources/e/{{ row.id }}' class="btn btn-default">
+                        <span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span>
+                    </a>
+                    <a href='/federation/resources/d/{{ row.id }}' class="btn btn-default">
+                        <span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span>
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</form>
+
+{% endblock %}

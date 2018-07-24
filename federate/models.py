@@ -27,3 +27,4 @@ class Users(models.Model):
 
 class Resources(models.Model):
     resource_uid = models.UUIDField(default=uuid.uuid4)
+    

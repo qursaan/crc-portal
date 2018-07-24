@@ -83,7 +83,7 @@ class DashboardView(LoginRequiredAutoLogoutView):
         context['title'] = 'Dashboard'
         context['username'] = usera.username
         context['topmenu_items'] = topmenu_items('Dashboard', page.request)
-        context['active_count'] = get_count_active_slice(c_user)
+        context['active_count'] = get_count_active_slice(c_user,usera.session_username)
         context['course_count'] = get_count_students_course(c_user)
         context['pending_count'] = get_count_students_pending(c_user)
         context['std_exp_count'] = get_count_students_experiments(c_user)

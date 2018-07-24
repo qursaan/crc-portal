@@ -5,7 +5,6 @@ import json
 import urllib2
 from crc.settings import BACKENDIP
 
-USER_HOME = "/home/crc-users/"
 BACKEND_IP = BACKENDIP #"193.227.16.199"
 
 

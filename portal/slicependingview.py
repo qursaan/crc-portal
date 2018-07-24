@@ -33,8 +33,8 @@ class SliceHistoryView(LoginRequiredAutoLogoutView):
         usera = UserAccessProfile(self.request)
 
         c_user = usera.user_obj #get_user_by_email(the_user(self.request))
-        history_list_omf = Reservation.objects.filter(user_ref=c_user)
-        history_list_sim = SimReservation.objects.filter(user_ref=c_user)
+        history_list_omf = Reservation.objects.filter(user_ref=c_user,username=usera.session_username)
+        history_list_sim = SimReservation.objects.filter(user_ref=c_user,username=usera.session_username)
         context = super(SliceHistoryView, self).get_context_data(**kwargs)
         context['history_list_omf'] = history_list_omf
         context['history_list_sim'] = history_list_sim
@@ -62,11 +62,11 @@ class SliceCurrentView(LoginRequiredAutoLogoutView):
                             "css/plugin.css"])
         usera = UserAccessProfile(self.request)
         c_user = usera.user_obj # get_user_by_email(the_user(self.request))
-        get_count_active_slice(c_user)
-        pending_list_1 = Reservation.objects.filter(user_ref=c_user, status=ReservationStatus.get_pending())
-        active_list_1 = Reservation.objects.filter(user_ref=c_user, status=ReservationStatus.get_active())
-        pending_list_2 = SimReservation.objects.filter(user_ref=c_user, status=ReservationStatus.get_pending())
-        active_list_2 = SimReservation.objects.filter(user_ref=c_user, status=ReservationStatus.get_active())
+        get_count_active_slice(c_user=c_user,username=usera.session_username)
+        pending_list_1 = Reservation.objects.filter(user_ref=c_user,username=usera.session_username, status=ReservationStatus.get_pending())
+        active_list_1 = Reservation.objects.filter(user_ref=c_user,username=usera.session_username, status=ReservationStatus.get_active())
+        pending_list_2 = SimReservation.objects.filter(user_ref=c_user,username=usera.session_username, status=ReservationStatus.get_pending())
+        active_list_2 = SimReservation.objects.filter(user_ref=c_user,username=usera.session_username, status=ReservationStatus.get_active())
 
         context = super(SliceCurrentView, self).get_context_data(**kwargs)
         context['current_list_1'] = pending_list_1

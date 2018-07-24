@@ -65,18 +65,27 @@ def make_request_user(user):
 
 def get_count_students_course(c_user):
     course_list = StudentCourses.objects.filter(students_ref=c_user)
-    return course_list.count()
+    if course_list:
+        return course_list.count()
+    else:
+        return 0
 
 
 def get_count_students_pending(c_user):
     pending = MyUser.objects.filter(status=1, supervisor_id=c_user.id, user_type=3).all()
-    return pending.count()
+    if pending:
+        return pending.count()
+    else:
+        return 0
 
 
 def get_count_students(c_user):
     status_list = [0, 2]
     students = MyUser.objects.filter(supervisor_id=c_user.id, status__in=status_list, user_type=3).all()
-    return students.count()
+    if status_list:
+        return students.count()
+    else:
+        return 0
 
 def get_control_options(stype, reserve_ref):
     allow_img = True

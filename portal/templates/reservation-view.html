@@ -74,7 +74,9 @@
                         <select id="server_type" name="server_type" class="form-control user-input"
                                 value="{{ server_type }}" autocomplete="off">
                             <option value="omf" selected="selected">Testbed Nodes</option>
-                            <option value="sim">Simulation Server</option>
+                            {%  if sim_vm_list != None %}
+                                <option value="sim">Simulation Server</option>
+                            {%  endif %}
                         </select>
                     </div>
                 </div>
