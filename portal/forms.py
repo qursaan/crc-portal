@@ -3,21 +3,22 @@
 # portal/forms.py: forms for the portal application
 # This file is part of the Manifold project.
 #
-from django import forms
-#from portal.models import PendingUser, PendingSlice
-#from crispy_forms.helper import FormHelper
-#from crispy_forms.layout import Submit
-from django.utils.translation import ugettext_lazy as _
-from django.contrib.auth.tokens import default_token_generator
-from django.contrib.auth import get_user_model #authenticate,
-from django.contrib.sites.models import get_current_site
-from django.utils.http import int_to_base36
-from django.template import loader
 from captcha.fields import CaptchaField
+from django import forms
+from django.contrib.auth import get_user_model  # authenticate,
+from django.contrib.auth.tokens import default_token_generator
+from django.contrib.sites.models import get_current_site
+from django.template import loader
+from django.utils.http import int_to_base36
+# from portal.models import PendingUser, PendingSlice
+# from crispy_forms.helper import FormHelper
+# from crispy_forms.layout import Submit
+from django.utils.translation import ugettext_lazy as _
 
 
 class CaptchaTestForm(forms.Form):
     captcha = CaptchaField()
+
 
 # TODO: Remove these automated forms and use html templates and views like any other page !
 # from django.contrib.auth.hashers import identify_hasher
@@ -35,6 +36,7 @@ def is_password_unusable(pw):
         from django.contrib.auth.hashers import UNUSABLE_PASSWORD_PREFIX
         return pw.startswith(UNUSABLE_PASSWORD_PREFIX)
 
+
 # xxx painful, but...
 # bootstrap3 requires the <input> fields to be tagged class='form-control'
 # my first idea was to add this in the view template of course, BUT
@@ -43,7 +45,7 @@ def is_password_unusable(pw):
 # so as we have a demo coming up soon, and until we can come with a less intrusive way to handle this...
 # 
 # initial version was
-#class ContactForm(forms.Form):
+# class ContactForm(forms.Form):
 #    first_name = forms.CharField()
 #    last_name = forms.CharField()
 #    affiliation = forms.CharField()
@@ -54,55 +56,55 @@ def is_password_unusable(pw):
 
 
 class ContactForm(forms.Form):
-    first_name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}))
-    last_name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}))
-    authority = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}))
-    email = forms.EmailField(widget=forms.TextInput(attrs={'class':'form-control'}))
-    subject = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'class':'form-control'}))
-    description = forms.CharField(widget=forms.Textarea(attrs={'class':'form-control'}))
+    first_name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
+    last_name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
+    authority = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
+    email = forms.EmailField(widget=forms.TextInput(attrs={'class': 'form-control'}))
+    subject = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'class': 'form-control'}))
+    description = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control'}))
     captcha = CaptchaField()
-    cc_myself = forms.BooleanField(required=False, widget=forms.CheckboxInput(attrs={'class':'form-control'}))
+    cc_myself = forms.BooleanField(required=False, widget=forms.CheckboxInput(attrs={'class': 'form-control'}))
 
 
 class PassResetForm(forms.Form):
-    email = forms.EmailField(widget=forms.TextInput(attrs={'class':'form-control'}))
+    email = forms.EmailField(widget=forms.TextInput(attrs={'class': 'form-control'}))
 
 
 class SliceRequestForm(forms.Form):
-#    slice_name = forms.CharField()
-#    authority_hrn = forms.ChoiceField(choices=[(1, 'un')])
-#    number_of_nodes  = forms.DecimalField()
-#    type_of_nodes = forms.CharField()
-#    purpose = forms.CharField(widget=forms.Textarea)
-#    email = forms.EmailField()
-#    cc_myself = forms.BooleanField(required=False)
+    #    slice_name = forms.CharField()
+    #    authority_hrn = forms.ChoiceField(choices=[(1, 'un')])
+    #    number_of_nodes  = forms.DecimalField()
+    #    type_of_nodes = forms.CharField()
+    #    purpose = forms.CharField(widget=forms.Textarea)
+    #    email = forms.EmailField()
+    #    cc_myself = forms.BooleanField(required=False)
 
     slice_name = forms.CharField(
-        widget=forms.TextInput(attrs={'class':'form-control'}), 
+        widget=forms.TextInput(attrs={'class': 'form-control'}),
         help_text="The name for the slice you wish to create")
     authority_hrn = forms.ChoiceField(
-        widget    = forms.Select(attrs={'class':'form-control'}),
-        choices   = [],
-        help_text = "An authority responsible for vetting your slice")
+        widget=forms.Select(attrs={'class': 'form-control'}),
+        choices=[],
+        help_text="An authority responsible for vetting your slice")
     number_of_nodes = forms.DecimalField(
-        widget    = forms.TextInput(attrs={'class':'form-control'}),
-        help_text = "The number of nodes you expect to request (informative)")
+        widget=forms.TextInput(attrs={'class': 'form-control'}),
+        help_text="The number of nodes you expect to request (informative)")
     type_of_nodes = forms.CharField(
-        widget    = forms.TextInput(attrs={'class':'form-control'}),
-        help_text = "The type of nodes you expect to request (informative)")
+        widget=forms.TextInput(attrs={'class': 'form-control'}),
+        help_text="The type of nodes you expect to request (informative)")
     purpose = forms.CharField(
-        widget    = forms.Textarea(attrs={'class':'form-control'}),
-        help_text = "The purpose of your experiment (informative)")
+        widget=forms.Textarea(attrs={'class': 'form-control'}),
+        help_text="The purpose of your experiment (informative)")
     email = forms.EmailField(
-        widget    = forms.TextInput(attrs={'class':'form-control'}),
-        help_text = "Your email address")
+        widget=forms.TextInput(attrs={'class': 'form-control'}),
+        help_text="Your email address")
     cc_myself = forms.BooleanField(
-        widget    = forms.CheckboxInput(attrs={'class':'form-control'}),
-        required  = False,
-        help_text = "If you'd like to be cc'ed on the request email")
+        widget=forms.CheckboxInput(attrs={'class': 'form-control'}),
+        required=False,
+        help_text="If you'd like to be cc'ed on the request email")
 
     def __init__(self, *args, **kwargs):
-        initial =  kwargs.get('initial', {})
+        initial = kwargs.get('initial', {})
         authority_hrn = initial.get('authority_hrn', None)
 
         # set just the initial value
@@ -115,13 +117,13 @@ class SliceRequestForm(forms.Form):
         super(SliceRequestForm, self).__init__(*args, **kwargs)
 
         # self.fields only exist after, so a double validation is needed
-        if authority_hrn:# and authority_hrn[0] not in (c[0] for c in authority_hrn):
+        if authority_hrn:  # and authority_hrn[0] not in (c[0] for c in authority_hrn):
             # XXX This does not work, the choicefield is not updated...
-            #self.fields['authority_hrn'].choices.extend(authority_hrn)
+            # self.fields['authority_hrn'].choices.extend(authority_hrn)
             self.fields['authority_hrn'] = forms.ChoiceField(
-                widget    = forms.Select(attrs={'class':'form-control'}),
-                choices   = authority_hrn,
-                help_text = "An authority responsible for vetting your slice")
+                widget=forms.Select(attrs={'class': 'form-control'}),
+                choices=authority_hrn,
+                help_text="An authority responsible for vetting your slice")
 
 
 class PasswordResetForm(forms.Form):

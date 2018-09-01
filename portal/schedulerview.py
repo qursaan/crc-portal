@@ -93,7 +93,7 @@ def get_reservation_status_list(server_type, request_date, status):
         x = []
         for r in reserve_list:
             if r.node_ref.id == n.id:
-                t1 = t2 = None
+                # t1 = t2 = None
 
                 # correct ref
                 if server_type == "omf":

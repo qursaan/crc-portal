@@ -1,4 +1,3 @@
-
 from lab.models import StudentCourses, StudentsExperiment, Experiments, Course, LabsParameter
 from portal.models import MyUser  # , PendingSlice
 from portal.reservation_status import ReservationStatus
@@ -36,7 +35,7 @@ def remove_course_by_emails(user_emails, course_id):
 
 
 def get_std_requests(supervisor_id):
-    print "get_request_by_supervisor = ", supervisor_id
+    print ("get_request_by_supervisor = ", supervisor_id)
     pending_users = None
 
     if supervisor_id:
@@ -64,6 +63,8 @@ def make_request_user(user):
 
 
 def get_count_students_course(c_user):
+    if c_user is None:
+        return 0
     course_list = StudentCourses.objects.filter(students_ref=c_user)
     if course_list:
         return course_list.count()
@@ -72,6 +73,8 @@ def get_count_students_course(c_user):
 
 
 def get_count_students_pending(c_user):
+    if c_user is None:
+        return 0
     pending = MyUser.objects.filter(status=1, supervisor_id=c_user.id, user_type=3).all()
     if pending:
         return pending.count()
@@ -80,6 +83,8 @@ def get_count_students_pending(c_user):
 
 
 def get_count_students(c_user):
+    if c_user is None:
+        return 0
     status_list = [0, 2]
     students = MyUser.objects.filter(supervisor_id=c_user.id, status__in=status_list, user_type=3).all()
     if status_list:
@@ -111,6 +116,8 @@ def get_control_options(stype, reserve_ref):
 
 
 def get_count_students_experiments(c_user):
+    if c_user is None:
+        return 0
     student_course_list = StudentCourses.objects.filter(students_ref=c_user)
     total_count = 0
     for sc in student_course_list:
@@ -120,6 +127,8 @@ def get_count_students_experiments(c_user):
 
 
 def get_count_bulk_experiments(c_user):
+    if c_user is None:
+        return 0
     active_list_1 = Experiments.objects.filter(instructor_ref=c_user, status=0)
 
     total_count = active_list_1.count()

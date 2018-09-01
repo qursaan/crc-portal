@@ -29,18 +29,17 @@ class FedResourceView(LoginRequiredAutoLogoutView):
 
     def get_or_post(self, request, method):
         usera = UserAccessProfile(request)
-        self.user_email = usera.username #the_user(request)
+        self.user_email = usera.username  # the_user(request)
         page = Page(request)
 
         self.errors = []
-        #user = get_user_by_email(the_user(self.request))
-        user_type = usera.user_type #get_user_type(user)
+        # user = get_user_by_email(the_user(self.request))
+        user_type = usera.user_type  # get_user_type(user)
         if user_type != 0:
             messages.error(page.request, 'Error: You have not permission to access this page.')
             return HttpResponseRedirect("/")
 
         resourceslist = ResourceProfile.objects.all()
-
 
         if method == 'POST':
             self.errors = []
@@ -48,7 +47,7 @@ class FedResourceView(LoginRequiredAutoLogoutView):
         template_name = "fed-resources.html"
         template_env = {
             'topmenu_items': topmenu_items('Site Information', page.request),
-            'username': usera.username, #the_user(self.request),
+            'username': usera.username,  # the_user(self.request),
             'resourceslist': resourceslist,
             'title': 'Resources Information',
         }

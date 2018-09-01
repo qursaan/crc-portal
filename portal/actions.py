@@ -1,3 +1,4 @@
+
 import json
 from datetime import datetime, timedelta
 
@@ -473,7 +474,7 @@ def get_request_by_id(ids):
 
 # ******** Get request by authority hrn *************** #
 def get_requests(authority_hrns=None):
-    print "get_request_by_authority auth_hrns = ", authority_hrns
+    print("get_request_by_authority auth_hrns = ", authority_hrns)
     if not authority_hrns:
         pending_users = MyUser.objects.filter(status=1).all()
         pending_slices = PendingSlice.objects.filter(status=1).all()

@@ -105,7 +105,7 @@ class SliceRequestView(LoginRequiredAutoLogoutView):
             sim_os_image = request.POST.get('sim_os', '1')
             email = self.user_email
             # user_hrn = user_hrn
-            cc_myself = True
+            # cc_myself = True
             # print request_date
             # 10/01/2015 12:00 PM
             request_date = parser.parse(request_date)
@@ -113,12 +113,12 @@ class SliceRequestView(LoginRequiredAutoLogoutView):
 
             # if (authority_hrn is None or authority_hrn == ''):
             #    self.errors.append('Please, select an authority')
-            if (request_date is None or request_date == ''):
+            if request_date is None or request_date == '':
                 self.errors.append('Please, determine the request date and time')
             # What kind of slice name is valid?
-            if (slice_name is None or slice_name == ''):
+            if slice_name is None or slice_name == '':
                 self.errors.append('Slice Name is mandatory')
-            if (purpose is None or purpose == ''):
+            if purpose is None or purpose == '':
                 self.errors.append('Purpose is mandatory')
 
             if not self.errors:

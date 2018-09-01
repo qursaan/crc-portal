@@ -9,7 +9,7 @@ logging.basicConfig(
     level=logging.INFO,
     datefmt='%Y-%m-%d %H:%M:%S')
 
-import json
+import json, urllib2
 from flask import Flask, jsonify, abort, request
 from flask_crossdomain import crossdomain
 # from flaskext.basicauth import BasicAuth
@@ -19,7 +19,7 @@ from flaskext.mysql import MySQL
 # from paramiko import AutoAddPolicy
 # from subprocess import call, Popen
 # import threading, os, random, string, portalocker , signal,base64
-# import time, thread, schedule
+import time, thread, schedule, threading
 # from decorators import *
 
 app = Flask(__name__)
@@ -71,31 +71,52 @@ def not_authorized(e):
 start_flag = False
 
 
-def start_servies():
+def start_sync():
+    print("Start Sync ...")
+    sync_data()
+    #schedule.every().minute.do(sync_data)
+
+    """while True:
+        schedule.run_pending()
+        time.sleep(1)"""
+
+def stop_sync():
+    print "Stop Sync ..."
+    schedule.clear()
+
+
+def sync_data():
     global start_flag
+    if start_flag:
+        try:
+            print "Start Sync data"
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            sql_str = """select url from PORTAL.federate_site where id=1;"""
+            cursor.execute(sql_str)
 
-    try:
-        if not start_flag:
-            start_flag = True
+            results = cursor.fetchall()
 
-    except Exception, err:
-        print ' x Error starting '
-        print err
-        exit(1)
+            cursor.close()
+            conn.close()
 
-    finally:
-        print
+            if results:
+                try:
+                    server_ip = results[0][0]
+                    print "Server IP" , server_ip
 
+                    result = urllib2.urlopen(server_ip + 'federation/fed/update/')
+                    if result.getcode() == 200:
+                        print "Success"
+                    else:
+                        print "Fail"
+                except Exception as ins :
+                    print "ERROR CONNECT TO SITE ", ins.message
 
-def start_logo():
-    print '''
-       __________  ______   ______         __                __  _           
-      / ____/ __ \/ ____/  / ____/__  ____/ /__  _________ _/ /_(_)___  ____ 
-     / /   / /_/ / /      / /_  / _ \/ __  / _ \/ ___/ __ `/ __/ / __ \/ __ \
-    / /___/ _, _/ /___   / __/ /  __/ /_/ /  __/ /  / /_/ / /_/ / /_/ / / / /
-    \____/_/ |_|\____/  /_/    \___/\__,_/\___/_/   \__,_/\__/_/\____/_/ /_/                                                                         
-                                               CRC Federation Backend Service
-    '''
+        except Exception as ins:
+            print "ERROR: ", ins.message
+
+    print "End Sync data"
 
 
 @app.route('/')
@@ -119,6 +140,7 @@ def api_fed_start():
     global start_flag
     start_flag = 1
     if start_flag:
+        start_sync()
         return jsonify({'status': 'on'})
     else:
         return jsonify({'status': 'off'})
@@ -132,6 +154,7 @@ def api_fed_stop():
     if start_flag:
         return jsonify({'status': 'on'})
     else:
+        stop_sync()
         return jsonify({'status': 'off'})
 
 
@@ -181,9 +204,19 @@ def api_fed_valid_key():
     return jsonify({'status': 'false'})
 
 
+def start_logo():
+    print '''
+       __________  ______   ______         __                __  _           
+      / ____/ __ \/ ____/  / ____/__  ____/ /__  _________ _/ /_(_)___  ____
+     / /   / /_/ / /      / /_  / _ \/ __  / _ \/ ___/ __ `/ __/ / __ \/ __ \ 
+    / /___/ _, _/ /___   / __/ /  __/ /_/ /  __/ /  / /_/ / /_/ / /_/ / / / /
+    \____/_/ |_|\____/  /_/    \___/\__,_/\___/_/   \__,_/\__/_/\____/_/ /_/
+                                              CRC Federation Backend Service
+    '''
+
+
 if __name__ == '__main__':
     start_logo()
-    start_servies()
 
     app.run(
         host='0.0.0.0',

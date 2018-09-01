@@ -202,7 +202,7 @@ function on_click_event() {
 					// request_status: NAME -> dict (status, description)
 					var status_str = '';
 					$.each(request_status, function(name, result) {
-						if (status_str != '')
+						if (status_str !== '')
 							status_str += ' -- ';
 						if (result.status) {
 							status_str += '<font color="green">OK</font>';

@@ -29,7 +29,7 @@ class Event:
         self.data = self.make_data()
 
     def split(self):
-        args = self.structure.split(";");
+        args = self.structure.split(";")
         self.raw = args[0]
         self.channel = args[1]
         self.print_method = args[2]

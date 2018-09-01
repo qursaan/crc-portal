@@ -13,6 +13,7 @@ Including another URLconf
     1. Add an import:  from blog import urls as blog_urls
     2. Add a URL to urlpatterns:  url(r'^blog/', include(blog_urls))
 """
+
 from django.conf.urls import include, url
 from django.conf import settings
 from django.contrib import admin
@@ -27,18 +28,17 @@ import portal.homeview
 from django.template.base import add_to_builtins
 add_to_builtins('insert_above.templatetags.insert_tags')
 
-
-#import portal.platformsview
+# import portal.platformsview
 home_view       = portal.homeview.HomeView.as_view()
 dashboard_view  = portal.dashboardview.DashboardView.as_view()
-#dashboard_view = portal.navigation.dashboard
-#portal.dashboardview.DashboardView.as_view()
-#platforms_view=portal.platformsview.PlatformsView.as_view()
+# dashboard_view = portal.navigation.dashboard
+# portal.dashboardview.DashboardView.as_view()
+# platforms_view=portal.platformsview.PlatformsView.as_view()
 
 the_default_view     = dashboard_view
 the_after_login_view = dashboard_view
 the_login_view       = home_view
-#admin.autodiscover()
+# admin.autodiscover()
 
 urlpatterns = [
     # default view

@@ -5,9 +5,7 @@ from ui.topmenu import topmenu_items  # , the_user
 from unfold.loginrequired import LoginRequiredAutoLogoutView  # ,FreeAccessView
 from unfold.page import Page
 
-
 # from portal.modules import get_user_by_email
-
 # import json
 # from django.http                import HttpResponseRedirect, HttpResponse
 # from django.shortcuts           import render

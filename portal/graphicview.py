@@ -1,9 +1,8 @@
 __author__ = 'pirate'
 
-from django.shortcuts     import render
+from ui.topmenu import topmenu_items, the_user
 from unfold.loginrequired import LoginRequiredAutoLogoutView
-from ui.topmenu           import topmenu_items, the_user
-from unfold.page          import Page
+from unfold.page import Page
 
 
 class GraphicBuilderView (LoginRequiredAutoLogoutView):

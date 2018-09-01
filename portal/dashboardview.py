@@ -1,5 +1,7 @@
-from lab.actions import get_count_students_course, get_count_students_pending, \
-    get_count_bulk_experiments, get_count_students_experiments, \
+from lab.actions import get_count_students_course, \
+    get_count_students_pending, \
+    get_count_bulk_experiments, \
+    get_count_students_experiments, \
     get_count_students
 from portal.actions import get_count_active_slice
 from portal.user_access_profile import UserAccessProfile

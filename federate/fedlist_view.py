@@ -28,18 +28,17 @@ class FedListView(LoginRequiredAutoLogoutView):
 
     def get_or_post(self, request, method):
         usera = UserAccessProfile(request)
-        self.user_email = usera.username #the_user(request)
+        self.user_email = usera.username  # the_user(request)
         page = Page(request)
 
         self.errors = []
-        #user = get_user_by_email(the_user(self.request))
-        user_type = usera.user_type #get_user_type(user)
+        # user = get_user_by_email(the_user(self.request))
+        user_type = usera.user_type  # get_user_type(user)
         if user_type != 0:
             messages.error(page.request, 'Error: You have not permission to access this page.')
             return HttpResponseRedirect("/")
 
         fedlist = Site.objects.all()
-
 
         if method == 'POST':
             self.errors = []
@@ -61,7 +60,7 @@ class FedListView(LoginRequiredAutoLogoutView):
         template_name = "fed-list.html"
         template_env = {
             'topmenu_items': topmenu_items('Site Information', page.request),
-            'username': usera.username, #the_user(self.request),
+            'username': usera.username,  # the_user(self.request),
             'fedlist': fedlist,
             'title': 'Site Information',
         }
@@ -71,19 +70,18 @@ class FedListView(LoginRequiredAutoLogoutView):
 
 @login_required
 def site_enable(request, site_id):
-    site_id = int(site_id)
-    current_site = Site.objects.get(id=site_id)
-    current_site.status = 2
-    current_site.save()
-    messages.success(request, 'Success: Site Enabled.')
-    return HttpResponseRedirect("/federation/list")
+    return site_update(request, site_id, 2, "Enabled")
 
 
 @login_required
 def site_disable(request, site_id):
+    return site_update(request, site_id, 0, "Disabled")
+
+
+def site_update(request, site_id, status_val, txt):
     site_id = int(site_id)
     current_site = Site.objects.get(id=site_id)
-    current_site.status = 0
+    current_site.status = status_val
     current_site.save()
-    messages.success(request, 'Success: Site Disabled.')
+    messages.success(request, 'Success: Site ' + txt)
     return HttpResponseRedirect("/federation/list")

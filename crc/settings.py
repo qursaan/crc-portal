@@ -12,7 +12,8 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
-#from celery import Celery
+
+# from celery import Celery
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -26,6 +27,7 @@ except:
     # something is badly wrong here
     ROOT = None
     import traceback
+
     traceback.print_exc()
 
 # assume we have ./static present already
@@ -60,9 +62,11 @@ ADMINS = (
 )
 
 MANAGERS = ADMINS
-
+MEDIA_URL = '/media/'
+STATIC_URL = '/static/'
+# ******************************************************************* #
 # Mail configuration
-DEFAULT_FROM_EMAIL = "root@crclab.org" # "root@theseus.ipv6.lip6.fr"
+DEFAULT_FROM_EMAIL = "root@crclab.org"  # "root@theseus.ipv6.lip6.fr"
 EMAIL_HOST_PASSWORD = "food"
 EMAIL_HOST = "localhost"
 EMAIL_PORT = 25
@@ -70,37 +74,36 @@ EMAIL_USE_TLS = False
 SUPPORT_EMAIL = "qursaan@gmail.com"
 BASE_IMAGE_DIR = "/usr/local/share/storage/"
 USER_HOME = "/home/crc-users/"
-
+# FEDERATION SERVICES
+BACKENDIP = "127.0.0.1"  # ""193.227.16.199"
+FED_PASS = 'XfedXuserXcrc'
+FED_RUN = 1  # 0-STOP 1-RUNNING
+FED_PORT = 7770
+# ******************************************************************* #
 ACCOUNT_ACTIVATION_DAYS = 7  # One-week activation window; you may, of course, use a different value.
 
 # System parameters
 MAX_OMF_DURATION = 8
-MAX_SIM_DURATION = 24*7
-MAX_BUK_DURATION = 24*7
+MAX_SIM_DURATION = 24 * 7
+MAX_BUK_DURATION = 24 * 7
 ALLOWED_HOSTS = []
-
-# FEDERATION SERVICES
-BACKENDIP = "127.0.0.1" #""193.227.16.199"
-FED_RUN = 0     # 0-STOP 1-RUNNING
-FED_PASS = 'XfedXuserXcrc'
 
 # File Browser Default Directory
 # FILEBROWSER_DIRECTORY = "uploads/"
 THUMBNAIL_HIGH_RESOLUTION = True
 FILER_CANONICAL_URL = 'uploads/'
 
-
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
-    #'django.template.loaders.eggs.Loader',
+    # 'django.template.loaders.eggs.Loader',
 )
 
 # Application definition
 INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.auth',
-    #'django.contrib.sites',
+    # 'django.contrib.sites',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
@@ -113,17 +116,16 @@ INSTALLED_APPS = (
     'unfold',
     # plugins
     'plugins',
+
     # views
     'ui',
     'portal',
     'lab',
     'federate',
-    #'djcelery',
-
+    # 'djcelery',
     # qursaan: file manager
-    #'grappelli',
-    #'filebrowser',
-
+    # 'grappelli',
+    # 'filebrowser',
     # filer
     'filer',
     'mptt',
@@ -132,7 +134,7 @@ INSTALLED_APPS = (
     'captcha',
 )
 
-#CELERY_RESULT_BACKEND=('djcelery.backends.database:DatabaseBackend',)
+# CELERY_RESULT_BACKEND=('djcelery.backends.database:DatabaseBackend',)
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -147,7 +149,7 @@ MIDDLEWARE_CLASSES = (
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
-    #'auth.manifoldbackend.ManifoldBackend',
+    # 'auth.manifoldbackend.ManifoldBackend',
 )
 
 ROOT_URLCONF = 'crc.urls'
@@ -156,10 +158,10 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [os.path.join(HTTPROOT, "templates"),
-                os.path.join(AUTHROOT, "templates"), ],
+                 os.path.join(AUTHROOT, "templates"), ],
         'APP_DIRS': True,
         'OPTIONS': {
-            #'builtins': ['insert_above.templatetags.insert_tags', ],
+            # 'builtins': ['insert_above.templatetags.insert_tags', ],
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
@@ -168,9 +170,9 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'django.core.context_processors.static',
             ],
-            #'builtins': [
+            # 'builtins': [
             #    'django.contrib.staticfiles.templatetags.staticfiles',
-            #],
+            # ],
         },
     },
 ]
@@ -192,7 +194,7 @@ DATABASES = {
         'NAME': 'PORTAL',
         'USER': 'portaluser',
         'PASSWORD': 'portal123portal!',
-        'HOST': 'localhost',   # Or an IP Address that your DB is hosted on
+        'HOST': 'localhost',  # Or an IP Address that your DB is hosted on
         'PORT': '3306',
     }
 }
@@ -201,29 +203,18 @@ DATABASES = {
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
-
-TIME_ZONE = 'Africa/Cairo' #'UTC'
-
+TIME_ZONE = 'Africa/Cairo'  # 'UTC'
 USE_I18N = True
-
 USE_L10N = True
-
 USE_TZ = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
 MEDIA_ROOT = os.path.join(HTTPROOT, 'media')
 
-# URL that handles the media served from MEDIA_ROOT. Make sure to use a
-# trailing slash.
-# Examples: "http://media.lawrence.com/media/", "http://example.com/media/"
-MEDIA_URL = '/media/'
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 STATIC_ROOT = os.path.join(HTTPROOT, 'static')
-
-STATIC_URL = '/static/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
@@ -233,11 +224,12 @@ STATICFILES_DIRS = (
     # Thierry : we do not need to detail the contents
     # of our 'apps' since they're mentioned in INSTALLED_APPS
     os.path.join(AUTHROOT, "static"),
-    #os.path.join(ROOT, "static"),
+    # os.path.join(ROOT, "static"),
 )
 
 # Needed by PluginFinder
 PLUGIN_DIR = os.path.join(ROOT, 'plugins')
+
 # ThirdPartyFinder
 THIRDPARTY_DIR = os.path.join(ROOT, 'third-party')
 
@@ -249,9 +241,8 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     'unfold.collectstatic.PluginFinder',
     'unfold.collectstatic.ThirdPartyFinder',
-    #'django.contrib.staticfiles.finders.DefaultStorageFinder',
+    # 'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
-
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to

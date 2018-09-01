@@ -232,7 +232,7 @@
                                     <label class="col-xs-2 control-label">{{p}}</label>
                                     <div class="col-xs-4">
                                         <div class="ui-widget">
-                                        {% if p.type = "range" %}
+                                        {% if p.type == "range" %}
                                             <div>
                                                 <input id="{{p.param_id}}" data-id="lab_param" type="text" class="form-control user-input" name="{{p.param_id}}" value="{{p.def_value}}" readonly/>
                                             </div>
@@ -253,7 +253,7 @@
                                                     $( "#{{p.param_id}}" ).val( $( "#slider-{{p.param_id}}" ).slider( "value" ) );
                                                 });
                                             </script>
-                                        {% elif p.type = "list" %}
+                                        {% elif p.type == "list" %}
                                             <select id="{{p.param_id}}" data-id="lab_param" name="{{p.param_id}}" class="form-control user-input" value="{{ p.def_value }}">
                                                 {% for row in p.values_as_list %}
                                                 <option value="{{row}}" label="{{row}}">
@@ -261,7 +261,7 @@
                                                 </option>
                                                 {% endfor %}
                                             </select>
-                                        {% elif p.type = "nodes" %}
+                                        {% elif p.type == "nodes" %}
                                             <select id="{{p.param_id}}" data-id="lab_param" name="{{p.param_id}}" class="form-control user-input" value="">
                                                 {% for row in node_list %}
                                                 <option value="{{ row.node_ref.vm_name }}" label="{{row.node_ref}}">
@@ -269,7 +269,7 @@
                                                 </option>
                                                 {% endfor %}
                                             </select>
-                                        {% elif p.type = "frequency" %}
+                                        {% elif p.type == "frequency" %}
                                             <select id="{{p.param_id}}" data-id="lab_param" name="{{p.param_id}}"  class="form-control user-input" value="">
                                                 {% for row in freq_list %}
                                                 <option value="{{row.frequency_ref.frequency_value}}" label="{{row.frequency_ref.frequency_value}}">
@@ -277,7 +277,7 @@
                                                 </option>
                                                 {% endfor %}
                                             </select>
-                                        {% elif p.type = "bool" %}
+                                        {% elif p.type == "bool" %}
                                             <select id="{{p.param_id}}" data-id="lab_param" name="{{p.param_id}}"  class="form-control user-input" value="{{p.def_value}}">
                                                 <option value="0" label="No">No</option>
                                                 <option value="1" label="Yes">Yes</option>
@@ -608,7 +608,7 @@
         </div>
         <div id="fade"></div>
         <div id="modal">
-            <img id="loader" src="{{STATIC_URL}}/img/loading1.gif"/>
+            <img id="loader" src="{{STATIC_URL}}img/loading1.gif"/>
         </div>
     </div>
 

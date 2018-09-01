@@ -10,6 +10,9 @@
 #   Jordan Augé       <jordan.auge@lip6.fr> 
 
 class dfs_color:
+    def __init__(self):
+        pass
+
     WHITE = 1 # not yet visited
     GRAY  = 2 # currently visited
     BLACK = 3 # visited

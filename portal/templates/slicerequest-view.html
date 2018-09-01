@@ -174,7 +174,7 @@
                                             {% for n in node_list %}
                                                 <td>
                                                     {% for r in resource_list %}
-                                                        {% if r.node_id.id = n.id and r.device_id.id = i.id %}
+                                                        {% if r.node_id.id == n.id and r.device_id.id == i.id %}
                                                             <label class="checkbox-inline">
                                                                 <input type="checkbox" name="resource_group" value="{{r.device_id.id}}">{{ r.device_id.type }}</input>
                                                             </label>

@@ -1,24 +1,23 @@
 # from django.core.context_processors import csrf
-from django.http import HttpResponseRedirect
 # from django.contrib.auth import logout
 from django.contrib.auth import authenticate, login
-from django.template import RequestContext
+from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
-
-from unfold.loginrequired import FreeAccessView
-# from manifold.manifoldresult import ManifoldResult
-from ui.topmenu import topmenu_items  # , topmenu_items_live
-from crc.configengine import ConfigEngine
-from portal.user_access_profile import UserAccessProfile
+from django.template import RequestContext
 
 # from django.views.generic      import View
 # from django.http               import Http404, HttpResponse
 # from django.template.loader    import get_template
 # from django.template           import Context
 # from portal.models             import PendingUser
-from federate.models import Users
 from crc import settings
+from crc.configengine import ConfigEngine
 from federate.fed_tasks import auth_federate_user
+from portal.user_access_profile import UserAccessProfile
+# from manifold.manifoldresult import ManifoldResult
+from ui.topmenu import topmenu_items  # , topmenu_items_live
+from unfold.loginrequired import FreeAccessView
+
 
 class HomeView(FreeAccessView):
 
@@ -58,7 +57,7 @@ class HomeView(FreeAccessView):
 
         # CHECK FOR FED USER
         #
-        if auth_result is None and auth_federate_user(username,password):
+        if auth_result is None and auth_federate_user(username, password):
             auth_result = authenticate(username="feduser", password=settings.FED_PASS)
             print "LOGGING IN"
             login(request, auth_result)

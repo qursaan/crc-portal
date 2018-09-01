@@ -25,7 +25,7 @@ def the_user(request):
 def topmenu_items_static(current, request):
     has_user = request.user.is_authenticated()
     result = []
-    print request.user
+    print(request.user)
     if has_user:
         result.append({'label':'Dashboard', 'href': '/portal/dashboard/'})
         result.append({'label':'Request a slice', 'href': '/portal/slice_request/'})

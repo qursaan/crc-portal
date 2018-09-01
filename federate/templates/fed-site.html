@@ -15,35 +15,35 @@
                 <label for="site_name" class="col-xs-2 control-label">Site Name</label>
                 <div class="col-xs-4">
                     <input id="site_name" type="text" name="site_name" class="form-control"
-                           minlength="2" value="{{ site_name }}" placeholder="Site Name" required/>
+                           minlength="2" value="{% if site_name != None %}{{ site_name }}{% endif %}" placeholder="Site Name" required/>
                 </div>
             </div>
             <div class="form-group">
                 <label for="site_url" class="col-xs-2 control-label">Site Portal URL</label>
                 <div class="col-xs-4">
                     <input id="site_url" type="text" name="site_url" class="form-control"
-                           minlength="2" value="{{ site_url }}" placeholder="Site Servies URL" required/>
+                           minlength="2" value="{% if site_url != None %}{{ site_url }}{% endif %}" placeholder="Site Servies URL" required/>
                 </div>
             </div>
             <div class="form-group">
                 <label for="site_ip" class="col-xs-2 control-label">Federation IP URL</label>
                 <div class="col-xs-4">
                     <input id="site_ip" type="text" name="site_ip" class="form-control"
-                           minlength="2" value="{{ site_ip }}" placeholder="Federation IP URL" required/>
+                           minlength="2" value="{% if site_ip != None %}{{ site_ip }}{% endif %}" placeholder="Federation IP URL" required/>
                 </div>
             </div>
             <div class="form-group">
                 <label for="site_location" class="col-xs-2 control-label">Location</label>
                 <div class="col-xs-4">
                     <input id="site_location" type="text" name="site_location" class="form-control"
-                           minlength="2" value="{{ site_location }}" placeholder="Physical Location" required/>
+                           minlength="2" value="{% if site_location !=  None %}{{ site_location }}{% endif %}" placeholder="Physical Location" required/>
                 </div>
             </div>
             <div class="form-group">
                 <label for="site_contact" class="col-xs-2 control-label">Contact</label>
                 <div class="col-xs-4">
                     <input id="site_contact" type="text" name="site_contact" class="form-control"
-                           minlength="2" value="{{ site_contact }}" placeholder="Contact Email/Phone" required/>
+                           minlength="2" value="{% if site_contact !=  None %}{{ site_contact }}{% endif %}" placeholder="Contact Email/Phone" required/>
                 </div>
             </div>
             <div class="form-group">

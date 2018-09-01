@@ -12,8 +12,9 @@ class UserAccessProfile:
         if request.user.is_authenticated():
             self.username = request.user.email
             self.session_username = request.session.get('username', None)
-        if self.username is 'feduser':
-            self.access_all = False
+            if 'FedUser' in self.username:
+                self.access_all = False
+
 
         print("Session username:", self.username)
 

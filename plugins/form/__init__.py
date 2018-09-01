@@ -5,7 +5,7 @@ class CreateForm (Plugin):
 
     def __init__ (self, **settings):
         Plugin.__init__(self, **settings)
-        print "SETTINGS", settings
+        print("SETTINGS", settings)
         assert 'page'   in settings, "You should specify page"
         assert 'object' in settings, "You should specify object"
 

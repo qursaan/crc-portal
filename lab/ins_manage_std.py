@@ -46,31 +46,23 @@ class ManageStudentView(LoginRequiredAutoLogoutView):
 
 @login_required
 def student_disable(request, sid):
-    s_id = int(sid)
-    usera = UserAccessProfile(request)
-    #c_user = get_user_by_email(the_user(request))
-    user_type = usera.user_type #get_user_type(c_user)
-    if user_type != 2:
-        messages.error(request, 'Error: You have not permission to access this page.')
-        return HttpResponseRedirect("/")
-    std_obj = MyUser.objects.get(id=s_id)
-    std_obj.status = 0
-    std_obj.save()
-    messages.success(request, 'Success: Update User.')
-    return HttpResponseRedirect("/lab/students/")
+    return student_update(request, sid, 0)
 
 
 @login_required
 def student_enable(request, sid):
+    return student_update(request, sid, 2)
+
+
+def student_update(request, sid, status_value):
     s_id = int(sid)
     usera = UserAccessProfile(request)
-    #c_user = get_user_by_email(the_user(request))
-    user_type = usera.user_type #get_user_type(c_user)
+    user_type = usera.user_type
     if user_type != 2:
         messages.error(request, 'Error: You have not permission to access this page.')
         return HttpResponseRedirect("/")
     std_obj = MyUser.objects.get(id=s_id)
-    std_obj.status = 2
+    std_obj.status = status_value
     std_obj.save()
     messages.success(request, 'Success: Update User.')
     return HttpResponseRedirect("/lab/students/")

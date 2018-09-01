@@ -45,8 +45,16 @@ apt-get install openssl shellinabox
 
 -------------------------------------------------------
 #4 install back end services
-
+-------------------------------------------------------
 pip install Flask
 pip install flask-mysql
 pip install flask-crossdomain
 pip install decorators
+pip install schedule
+
+------------------------------------------------------
+#5 install RestFramework
+------------------------------------------------------
+pip install djangorestframework
+pip install markdown
+pip install django-filter

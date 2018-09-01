@@ -1,6 +1,5 @@
 from django.conf.urls import url  # patterns
-
-from federate.fed_view import FedView, control_running_federate, federate_status
+from federate.fed_view import FedView, control_running_federate, federate_status, get_site_users
 from federate.fedInfo_view import FedInfoView, SiteAddView, check_site
 from federate.fedlist_view import FedListView, site_enable,site_disable
 from federate.fedresource_view import FedResourceView, resource_disable, resource_enable
@@ -22,6 +21,7 @@ urlpatterns = [
 
     url(r'^fed/getUsers/', federate_getUsers),
     url(r'^fed/getAuth/', federate_getAuth),
+    url(r'^fed/update/',  get_site_users),
     url(r'^federate_status/', federate_status),
     url(r'^control_running_federate/?$', control_running_federate),
 ]

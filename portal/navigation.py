@@ -26,7 +26,7 @@ def un_complete_page(request):
 
 # OK OK OK OK
 def remote_node(request):
-    stype = request.POST.get('stype', None);
+    stype = request.POST.get('stype', None)
     if stype is None:
         return HttpResponse("error: Please go back and try again", content_type="text/plain")
 
@@ -60,7 +60,7 @@ def action_load_save_image(request, action):
         return HttpResponse('eof', content_type="text/plain")
     # for any action  ############# TODO: @qursaan
 
-    node_name = None
+    # node_name = None
     if action == 'load':
         node_name = request.POST.getlist('the_node[]', None)
     else:  # Save
@@ -177,7 +177,7 @@ def update_user_images(image_name, user, username):
 
 # action[Load,save]
 def check_task_progress(request, action):
-    stype = request.POST.get('stype', None);
+    stype = request.POST.get('stype', None)
     node_name = request.POST.get('the_node', None)
     slice_id = request.session.get('slice_id', None)
     if stype and slice_id and node_name:

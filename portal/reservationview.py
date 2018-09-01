@@ -79,7 +79,6 @@ class ReservationView(LoginRequiredAutoLogoutView):
         elif reserve_type == "R":
             template_name = "reservation-view.html"
 
-
         s = None
 
         if method == 'POST':
@@ -163,7 +162,7 @@ class ReservationView(LoginRequiredAutoLogoutView):
                 slice_duration = dur
 
             email = self.user_email
-            cc_myself = True
+            # cc_myself = True
             # request_date    = parser.parse(request_date)
 
             if request_date is None or request_date == '':
@@ -302,7 +301,7 @@ class ReservationView(LoginRequiredAutoLogoutView):
         if usera.access_all:
             profile_list = ResourceProfile.objects.all()
             sim_vm_list = SimulationVM.objects.all()
-            freq_list =  FrequencyRanges.objects.all()
+            freq_list = FrequencyRanges.objects.all()
         else:
             profile_list = ResourceProfile.objects.filter(shared=True)
             sim_vm_list = None

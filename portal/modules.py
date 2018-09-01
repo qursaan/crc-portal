@@ -14,10 +14,13 @@ from crc.settings import SUPPORT_EMAIL
 
 class Modules:
     def __init__(self):
-        return None
+        pass
 
 
 class UserModules:
+    def __init__(self):
+        pass
+
     @staticmethod
     def is_user_valid(errors, reg_fname, reg_lname ,reg_email, reg_username):
         # POST values validation
@@ -25,7 +28,7 @@ class UserModules:
             errors.append('First Name may contain only letters, numbers, spaces and @/./+/-/_ characters.')
         if re.search(r'^[\w+\s.@+-]+$', reg_lname) is None:
             errors.append('Last Name may contain only letters, numbers, spaces and @/./+/-/_ characters.')
-        if(reg_email != reg_username):
+        if reg_email != reg_username:
             errors.append('Email address must be matched with login')
         return not errors
 
