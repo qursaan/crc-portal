@@ -1,15 +1,15 @@
-from types import StringTypes
-try:
-    set
-except NameError:
-    from sets import Set
-    set = Set
+#from types import StringTypes
+#try:
+#    set
+#except NameError:
+#    from sets import Set
+#    set = Set
 
 import time
 import datetime # Jordan
 #from manifold.util.parameter import Parameter, Mixed, python_type
 from manifold.util.predicate import Predicate, eq
-from itertools               import ifilter
+#from itertools               import ifilter
 
 class Filter(set):
     """
@@ -25,8 +25,8 @@ class Filter(set):
         try:
             for element in l:
                 f.add(Predicate(*element))
-        except Exception, e:
-            print "Error in setting Filter from list", e
+        except Exception as e:
+            print ("Error in setting Filter from list", e)
             return None
         return f
 
@@ -52,7 +52,7 @@ class Filter(set):
         """
         NOTE: We can only handle simple clauses formed of AND fields.
         """
-        raise Exception, "Not implemented"
+        raise Exception("Not implemented")
 
     def filter_by(self, predicate):
         self.add(predicate)
@@ -131,7 +131,7 @@ class Filter(set):
             if x.key == key and x.op == op:
                 x.value = value
                 return
-        raise KeyError, key
+        raise KeyError(key)
 
     def set_eq(self, key, value):
         return self.set_op(key, eq, value)

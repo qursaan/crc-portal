@@ -1,0 +1,92 @@
+--------------------------------------------------------
+#1 Prepare basics
+--------------------------------------------------------
+apt-get update
+apt-get -y upgrade
+apt-get install libssl-dev openssl
+apt-get install software-properties-common
+
+
+--------------------------------------------------------
+#2 Install mysql server
+--------------------------------------------------------
+apt-get install mysql-server
+apt-get install libsqlite3-dev
+
+--------------------------------------------------------
+#3 install mail Postfix service
+--------------------------------------------------------
+apt-get install mailutils
+apt-get install postfix
+
+--------------------------------------------------------
+#4 install python...
+--------------------------------------------------------
+wget https://www.python.org/ftp/python/3.5.0/Python-3.5.0.tgz
+tar xzvf Python-3.5.0.tgz
+cd Python-3.5.0
+./configure
+make
+sudo make install
+
+--------------------------------------------------------
+#5 install python libs...
+--------------------------------------------------------
+apt-get install build-essential libpq-dev libssl-dev openssl libffi-dev zlib1g-dev
+apt-get install python3-pip python3-dev
+apt-get install python-django gunicorn python-gevent
+
+
+pip install --upgrade setuptools
+python3 -m pip install --upgrade pip setuptools
+
+#### Install virtualenv ### NOT REQUIRED
+pip3 install virtualenv
+pip3 install virtualenvwrapper
+mkdir django-apps
+virtualenv django-apps/crc
+. django-apps/crc/bin/activate
+
+--------------------------------------------------------
+#6 install Django ...
+--------------------------------------------------------
+pip3 install --upgrade django
+pip3 install Django==2.1.1
+pip3 install mysqlclient
+
+
+--------------------------------------------------------
+#7 install Django Modules...
+--------------------------------------------------------
+pip3 install django-mptt
+pip3 install django-mptt --upgrade
+pip3 install django-polymorphic==2.0
+pip3 install djangorestframework
+##pip3 install django-filer     # Filtering support
+pip3 install markdown         # Markdown support for the browsable API.
+pip3 install mysql-connector-python mysql-connector-python
+pip3 install applicationinsights
+pip3 install pyparsing==2.2.1
+pip3 install python-dateutil==2.7.3
+pip3 install pycrypto
+
+--------------------------------------------------------
+#8 install shell web services
+--------------------------------------------------------
+apt-get install openssl shellinabox
+
+-------------------------------------------------------
+#9 install back end services
+-------------------------------------------------------
+pip3 install Flask
+pip3 install flask-mysql
+pip3 install flask-crossdomain
+pip3 install decorators
+pip3 install schedule
+
+------------------------------------------------------
+#5 install RestFramework
+------------------------------------------------------
+pip3 install djangorestframework
+pip3 install markdown
+pip3 install django-filter

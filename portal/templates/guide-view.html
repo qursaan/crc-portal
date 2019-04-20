@@ -1,4 +1,4 @@
-{% extends "layout-unfold1.html" %}
+{% extends "layout-unfold3.html" %}
 {% block unfold_main %}
 <script language="javascript" type="text/javascript">
   function resizeIframe(obj) {
@@ -10,6 +10,5 @@
     <!--div id="includedContent"></div-->
     <iframe src="{{STATIC_URL}}guide.htm"
             frameborder="0" scrolling="no" onload="resizeIframe(this)" ></iframe>
-
 </div>
 {% endblock %}

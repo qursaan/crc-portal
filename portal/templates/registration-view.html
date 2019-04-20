@@ -1,211 +1,170 @@
 {% extends "layout-unfold1.html" %}
 
 {% block unfold_main %}
-<link rel="stylesheet" type="text/css" href='{{ STATIC_URL }}css/jquery-ui.css'/>
-<div class="onelab-title well-lg">
-    <h2>CRC Experimenter Registration</h2>
-    <!--h3>For First Line Support please <a href="/portal/contact">Contact Support</a></h3-->
-</div>
 
-{% if errors %}
-<ul>
-    {% for error in errors %}
-    <li>{{ error }}</li>
-    {% endfor %}
-</ul>
-{% endif %}
+    <script type="text/javascript" src='{{ STATIC_URL }}js/jquery.validate.1.14.js'></script>
 
-<div class="well">
-    <form class="cmxform form-horizontal" id="registrationForm" method="POST" action="" enctype="multipart/form-data"
-          role="form">
-        <fieldset>
-            {% csrf_token %}
-            <div class="form-group">
-                <label for="firstname" class="col-xs-2 control-label">First Name</label>
-                <div class="col-xs-4">
-                    <input id="firstname" type="text" name="firstname" class="form-control" minlength="2"
-                           value="{{ firstname }}" placeholder="First Name" required/>
+    <div class="onelab-title">
+        <h2>Registration: Request New Account</h2>
+        <!--h3>For First Line Support please <a href="/portal/contact">Contact Support</a></h3-->
+    </div>
+
+    {% if errors %}
+        <ul>
+            {% for error in errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <div>
+        <form id="registrationForm" method="POST" action="" enctype="multipart/form-data"
+              role="form" autocomplete="off">
+            <fieldset>
+                {% csrf_token %}
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label for="firstname" class="col-form-label">First Name</label>
+
+                        <input id="firstname" type="text" name="firstname" class="form-control" minlength="2"
+                               value="{{ firstname }}" placeholder="First Name" required/>
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label for="lastname" class="col-form-label">Last Name</label>
+                        <input id="lastname" type="text" name="lastname" size="25" class="form-control" minlength="2"
+                               value="{{ lastname }}" placeholder="Last Name" required/>
+                    </div>
+
                 </div>
-                <div class="col-xs-6"><p class="form-hint">Enter your first name</p></div>
-            </div>
 
-            <div class="form-group">
-                <label for="lastname" class="col-xs-2 control-label">Last Name</label>
-                <div class="col-xs-4">
-                    <input id="lastname" type="text" name="lastname" size="25" class="form-control" minlength="2"
-                           value="{{ lastname }}" placeholder="Last Name" required/>
-                </div>
-                <div class="col-xs-6"><p class="form-hint">Enter your last name</p></div>
-            </div>
-
-            <div class="form-group">
-                <label for="authority_hrn" class="col-xs-2 control-label">Authority</label>
-                <div class="col-xs-4">
-                    <div class="ui-widget">
-                        <select id="authority_hrn" name="authority_hrn" class="form-control" value="{{ authority_hrn }}"
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label for="authority_hrn" class="col-form-label">Authority</label>
+                        <select id="authority_hrn" name="authority_hrn" class="custom-select form-control"
+                                value="{{ authority_hrn }}"
                                 required>
                             {% for row in authorities %}
-                            <option value="{{ row.authority_hrn }}" label="{{ row.site_name }}">{{ row.site_name }}
-                            </option>
+                                <option value="{{ row.authority_hrn }}"
+                                        label="{{ row.site_name }}">{{ row.site_name }}
+                                </option>
                             {% endfor %}
                         </select>
                         <!--input id="authority_hrn" name="authority_hrn" class="form-control" value="{{ authority_hrn }}" required-->
+                        <small id="emailHelp" class="form-text text-muted">An authority responsible for verifying your
+                            account
+                        </small>
                     </div>
                 </div>
-                <div class="col-xs-6"><p class="form-hint">An authority responsible for verifying your account</p></div>
-            </div>
 
-            <!-- LOGIN
-            TODO: Login should be suggested from user email or first/last name, and
-            checked for existence. In addition, the full HRN should be shown to the
-            user.-->
-            <div class="form-group">
-                <label for="username" class="col-xs-2 control-label">Login Email</label>
-                <div class="col-xs-4">
-                    <input id="username" type="email" name="username" size="25"
-                           class="form-control" minlength="2"
-                           value="{{ username }}" placeholder="Login email" required/>
-                </div>
-                <div class="col-xs-6"><p class="form-hint">Enter your login email</p></div>
-            </div>
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label for="username" class="col-form-label">Login Email</label>
+                        <input id="username" type="email" name="username" size="25"
+                               class="form-control" minlength="2"
+                               value="{{ username }}" placeholder="Login email" autocomplete="off" required/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="email" class="col-form-label">Confirm Email</label>
 
-            <div class="form-group">
-                <label for="email" class="col-xs-2 control-label">Confirm Email</label>
-                <div class="col-xs-4">
-                    <input id="email" type="email" name="email" size="25" placeholder="Confirm Login email"
-                           class="form-control" value="{{ email }}" required/>
+                        <input id="email" type="email" name="email" size="25"
+                               placeholder="Confirm Login email"
+                               class="form-control" value="{{ email }}" required/>
+                    </div>
                 </div>
-                <div class="col-xs-6"><p class="form-hint">Enter a valid email address</p></div>
-            </div>
 
-            <div class="form-group">
-                <label for="password" class="col-xs-2 control-label">Password</label>
-                <div class="col-xs-4">
-                    <input type="password" id="password" name="password"  placeholder="Password"
-                           class="form-control" minlength="4" value="{{ password }}" required/>
-                </div>
-                <div class="col-xs-6"><p class="form-hint">Enter password</p></div>
-            </div>
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label for="password" class="col-form-label">Password</label>
 
-            <div class="form-group">
-                <label for="confirmpassword" class="col-xs-2 control-label">Confirm Password</label>
-                <div class="col-xs-4">
-                    <input type="password" id="confirmpassword" name="confirmpassword"
-                           minlength="4" class="form-control" value="" placeholder="Confirm Password" required/>
-                </div>
-                <div class="col-xs-6"><p class="form-hint">Retype the password</p></div>
-            </div>
+                        <input type="password" id="password" name="password" placeholder="Password"
+                               class="form-control" minlength="4" value="{{ password }}" required/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="confirmpassword" class="col-form-label">Confirm Password</label>
 
-            <div class="form-group">
-                <label for="usertype" class="col-xs-2 control-label">Register As</label>
-                <div class="col-xs-4">
-                    <select name="usertype" class="form-control" id="usertype" required>
-                        <option value="1">Researcher</option>
-                        <option value="2">Instructor</option>
-                        <option value="3">Student</option>
-                    </select>
+                        <input type="password" id="confirmpassword" name="confirmpassword"
+                               minlength="4" class="form-control" value="" placeholder="Confirm Password" required/>
+                    </div>
                 </div>
-                <div class="col-xs-6"><p class="form-hint">Choose the registration type</p></div>
-            </div>
-            <div id="super_group" hidden="hidden">
-                <div class="form-group">
-                    <label for="supervisor" class="col-xs-2 control-label">Supervisor</label>
-                    <div class="col-xs-4">
-                        <div class="ui-widget">
-                            <select id="supervisor" name="supervisor" class="form-control" value="{{ supervisor }}"
+                <div class="row">
+                    <div id="quota_group" class="col-md-6">
+                        <label for="quota" class="col-form-label">Quota Plan</label>
+                        <select id="quota" name="quota" class="form-control custom-select "
+                                value="{{ quota }}"
+                                required>
+                            {% for row in quotas %}
+                                <option value="{{ row.id }}" label="{{ row }}">{{ row }}</option>
+                            {% endfor %}
+                        </select>
+                        <small id="groupHelp" class="form-text text-muted">A Quota plan for account
+                        </small>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="usertype" class="col-form-label">Register As</label>
+
+                        <select name="usertype" class="form-control custom-select " id="usertype" required>
+                            <option value="1">Researcher</option>
+                            <option value="2">Instructor</option>
+                            <option value="3">Student</option>
+                        </select>
+
+                        <small id="registerHelp" class="form-text text-muted">The registration account{% comment %}{% endcomment %}
+                            type
+                        </small>
+                    </div>
+                        <div id="super_group" class="col-md-6">
+                            <label for="supervisor" class="col-form-label">Supervisor</label>
+                            <select id="supervisor" name="supervisor" class="form-control custom-select "
+                                    value="{{ supervisor }}"
                                     required>
                                 {% for row in supervisors %}
-                                <option value="{{ row.id }}" label="{{ row }}">{{ row }}</option>
+                                    <option value="{{ row.id }}" label="{{ row }}">{{ row }}</option>
                                 {% endfor %}
                             </select>
                             <!--input id="authority_hrn" name="authority_hrn" class="form-control" value="{{ authority_hrn }}" required-->
+                            <small id="groupHelp" class="form-text text-muted">A supervisor responsible for verifying your
+                                account
+                            </small>
                         </div>
                     </div>
-                    <div class="col-xs-6"><p class="form-hint">A supervisor responsible for verifying your account</p>
-                    </div>
+                <div class="row">
+
                 </div>
+                <!--div class="form-group row">
+              <label for="key-policy" class="col-sm-4 col-form-label">My Keys</label>
+              <div class="col-sm-8">
+                    <select name="question" class="form-control" id="key-policy" required>
+                      <option value="generate">Generate key pairs for me </option>
+                      <option value="upload">Upload my public key </option>
+                    </select>
+              </div>
+              <div class="col-sm-8"><p class="form-hint">Genkey: Account Delegation Automatic (Recommended)</p> </div>
             </div>
-            <!--div class="form-group">
-          <label for="key-policy" class="col-xs-2 control-label">My Keys</label>
-          <div class="col-xs-4">
-                <select name="question" class="form-control" id="key-policy" required>
-                  <option value="generate">Generate key pairs for me </option>
-                  <option value="upload">Upload my public key </option>
-                </select>
-          </div>
-          <div class="col-xs-6"><p class="form-hint">Genkey: Account Delegation Automatic (Recommended)</p> </div>
-        </div>
-        <div id="upload_key" class="form-group" style="display:none;" >
-          <label for="user_public_key" class="col-xs-2 control-label">Upload public key</label>
-          <div class="col-xs-4">
-                <input id="user_public_key" type="file" name="user_public_key"
-                       class="form-control" required />
-                <p class="warning" id="pkey_del_msg">Once your account is validated, you will have to delegate your credentials manually using SFA [Advanced users only]</p>
-          </div>
-          <div class="col-xs-6"><p class="form-hint">Account Delegation: Manual (Advanced Users)</p></div>
-        </div-->
-            {% for field in form %}
-            <div class="form-group">
-                <label for='{{ field.html_name }}' class="col-xs-3 control-label">{{ field.label }}</label>
-                <div class="col-xs-6">{{ field }}
-                    <!--p class="form-hint">Enter Words</p-->
-                </div>
-            </div>
-            {% endfor %}
-            <div class="form-group" id="register">
-                <span class="col-xs-2"></span>
-                <button class="submit btn btn-success col-xs-4" type="submit">Register</button>
-            </div>
-        </fieldset>
-    </form>
-</div>
-<script>
-$('#usertype').change(function(){
-    if($(this).val()=="3"){
-         $('#super_group').show();
-    } else {
-         $('#super_group').hide();
-    }
-});
-$(function() {
-    if($('#usertype').val()=="3")
-    {
-        $('#super_group').show();
-    } else {
-         $('#super_group').hide();
-    }
-    $('#usertype').val()=="-1"
-});
-</script>
-<!--script>
-jQuery(document).ready(function(){
-    var availableTags = [
-    {% if authorities %}
-        {% for authority in authorities %}
-            {% if authority.name %}
-                {value:"{{ authority.authority_hrn }}",label:"{{authority.name}}"},
-            {% else %}
-                {value:"{{ authority.authority_hrn }}",label:"{{authority.authority_hrn}}"},
-            {% endif %}
-        {% endfor %}
-    {% else %}
-        {value:"",label:"No authority found !!!"}
-    {% endif %}
-    ];
-    jQuery( "#authority_hrn" ).autocomplete({
-      source: availableTags,
-      minLength: 0,
-      change: function (event, ui) {
-          if(!ui.item){
-              //http://api.jqueryui.com/autocomplete/#event-change -
-              // The item selected from the menu, if any. Otherwise the property is null
-              //so clear the item for force selection
-              jQuery("#authority_hrn").val("");
-          }
-      }
-      //select: function( event, ui ) {console.log(jQuery(this))}
-    });
-});
-</script-->
+            <div id="upload_key" class="form-group row" style="display:none;" >
+              <label for="user_public_key" class="col-sm-4 col-form-label">Upload public key</label>
+              <div class="col-sm-8">
+                    <input id="user_public_key" type="file" name="user_public_key"
+                           class="form-control" required />
+                    <p class="warning" id="pkey_del_msg">Once your account is validated, you will have to delegate your credentials manually using SFA [Advanced users only]</p>
+              </div>
+              <div class="col-sm-8"><p class="form-hint">Account Delegation: Manual (Advanced Users)</p></div>
+            </div-->
+                <hr/>
+                <button class="submit btn btn-dark bg" type="submit">Register</button>
+
+            </fieldset>
+        </form>
+    </div>
+    <script>
+        $(document).ready(function () {
+
+            $("#registrationForm").validate(); // <- INITIALIZES PLUGIN
+
+        });
+    </script>
+
 {% endblock %}
 

@@ -109,7 +109,7 @@ class SliceRequestView(LoginRequiredAutoLogoutView):
             # print request_date
             # 10/01/2015 12:00 PM
             request_date = parser.parse(request_date)
-            print request_date
+            print (request_date)
 
             # if (authority_hrn is None or authority_hrn == ''):
             #    self.errors.append('Please, select an authority')
@@ -175,7 +175,7 @@ class SliceRequestView(LoginRequiredAutoLogoutView):
                 return render(request, 'slice-request-ack-view.html', template_env)  # Redirect after POST
 
         template_env = {
-            'topmenu_items': topmenu_items('Request a slice', page.request),
+            #'topmenu_items': topmenu_items('Request a slice', page.request),
             'username': usera.username,
             'errors': self.errors,
             'slice_name': request.POST.get('slice_name', ''),

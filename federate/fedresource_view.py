@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 
-from portal.models import ResourceProfile
+from portal.models import PhysicalNode, VirtualNode
 from federate.models import Site
 from portal.user_access_profile import UserAccessProfile
 # from portal.actions import  get_user_by_email, get_user_type
@@ -39,7 +39,7 @@ class FedResourceView(LoginRequiredAutoLogoutView):
             messages.error(page.request, 'Error: You have not permission to access this page.')
             return HttpResponseRedirect("/")
 
-        resourceslist = ResourceProfile.objects.all()
+        resourceslist = VirtualNode.objects.all()
 
         if method == 'POST':
             self.errors = []
@@ -58,7 +58,7 @@ class FedResourceView(LoginRequiredAutoLogoutView):
 @login_required
 def resource_enable(request, resource_id):
     resource_id = int(resource_id)
-    current_res = ResourceProfile.objects.get(id=resource_id)
+    current_res = VirtualNode.objects.get(id=resource_id)
     current_res.shared = True
     current_res.save()
     messages.success(request, 'Success: Resources Enabled.')
@@ -68,7 +68,7 @@ def resource_enable(request, resource_id):
 @login_required
 def resource_disable(request, resource_id):
     resource_id = int(resource_id)
-    current_res = ResourceProfile.objects.get(id=resource_id)
+    current_res = VirtualNode.objects.get(id=resource_id)
     current_res.shared = False
     current_res.save()
     messages.success(request, 'Success: Resources Disabled.')

@@ -5,70 +5,79 @@
 {% endblock %}
 
 {% block fedbody %}
-<h3>Federation List</h3>
+    <h4 xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">Federation List</h4>
 
-<form id="fedlist" class="form-horizontal" action="" method="post" role="form">
-    {% csrf_token %}
-    <div class="col-xs-12">
-        <div class="ui-widget btn-toolbar" role="group">
-            <div class="btn-group" role="group">
+    <form id="fedlist" class="form-horizontal" action="" method="post" role="form">
+        {% csrf_token %}
+        <div class="col-md-12">
+            <div class="btn-toolbar" role="group">
+                <div class="btn-group" role="group">
 
-                <button id="refresh_btn3" name="refresh_list" data-id="refresh" class="btn btn-default"
-                        type="button"
-                        onclick="location.href='/federation/list/'">
-                    Refresh
-                </button>
-                <button id="add_site" name="add_site" class="btn btn-info" type="button"
-                        onclick="location.href='/federation/add/'">
-                    Add New Site
-                </button>
+                    <button id="refresh_btn3" name="refresh_list" data-id="refresh" class="btn btn-default"
+                            type="button"
+                            onclick="location.href='/federation/list/'">
+                        Refresh
+                    </button>
+                    <button id="add_site" name="add_site" class="btn btn-info" type="button"
+                            onclick="location.href='/federation/add/'">
+                        Add New Site
+                    </button>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col-xs-12">
-        <table class="table">
-            <thead>
-            <tr>
-                <th>Site Name</th>
-                <th>IP</th>
-                <th>Created</th>
-                <th>Status</th>
-                <th>Action</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for row in fedlist %}
-            <tr class="{% if row.status == 0 %}error{% elif row.status == 1 %}warning{% elif row.status == 2 %}success{% elif row.status == 3 %}warning{% elif row.status == 4 %}warning{% endif %}">
-                <td> {{ row.name }}</td>
-                <td> {{ row.ip }}</td>
-                <td> {{ row.created }}</td>
-                <td>
-                    {%   if row.status == 0 %}Disabled
-                    {% elif row.status == 1 %}Pending
-                    {% elif row.status == 2 %}Active
-                    {% elif row.status == 3 %}Expired
-                    {% elif row.status == 4 %}Canceled
-                    {% else %}N/A
-                    {% endif %}
-                </td>
-                <td>
-                    <a href='/federation/add/{{ row.id }}' class="btn btn-default">
-                        <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
-                    </a>
-
-                    <a href='/federation/site/e/{{ row.id }}' class="btn btn-default">
-                        <span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span>
-                    </a>
-                    <a href='/federation/site/d/{{ row.id }}' class="btn btn-default">
-                        <span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span>
-                    </a>
-
-                </td>
-            </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    </div>
-</form>
+        <hr/>
+        <div class="col-md-12">
+            <table class="table table-sm table-condensed table-hover">
+                <thead class="thead-dark">
+                <tr>
+                    <th>Site Name</th>
+                    <th>IP</th>
+                    <th>Created</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for row in fedlist %}
+                    <tr class="table-{% if row.status == 0 %}error{% elif row.status == 1 %}warning{% elif row.status == 2 %}success{% elif row.status == 3 %}warning{% elif row.status == 4 %}warning{% endif %}">
+                        <td> {{ row.name }} {% if row.id == 1 %} [this site]{% endif %}</td>
+                        <td> {{ row.ip }}</td>
+                        <td> {{ row.created }}</td>
+                        <td>
+                            {% if row.status == 0 %}Disabled
+                            {% elif row.status == 1 %}Pending
+                            {% elif row.status == 2 %}Active
+                            {% elif row.status == 3 %}Expired
+                            {% elif row.status == 4 %}Canceled
+                            {% else %}N/A
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="btn-group">
+                                {% if row.status == 2 %}
+                                    <button type="button" onclick="location.href='/federation/site/d/{{ row.id }}'"
+                                        class="btn btn-sm  btn-dark">
+                                        <span class="fas fa-stop" aria-hidden="true"></span>
+                                    </button>
+                                {% else %}
+                                    <button type="button"
+                                            onclick="location.href='/federation/site/e/{{ row.id }}'"
+                                                    class="btn btn-sm btn-dark">
+                                        <span class="fas fa-play" aria-hidden="true"></span>
+                                    </button>
+                                {% endif %}
+                                <!--button type="button"
+                                onclick="location.href='/federation/site/d/{#{ row.id }#}'"
+                                        class="btn btn-sm  btn-dark">
+                                    <span class="fas fa-trash" aria-hidden="true"></span>
+                                </button-->
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </form>
 
 {% endblock %}

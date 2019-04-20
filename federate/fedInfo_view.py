@@ -4,9 +4,9 @@ from django.contrib import messages
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from portal.user_access_profile import UserAccessProfile
-#from portal.actions import get_user_by_email, get_user_type
+# from portal.actions import get_user_by_email, get_user_type
 from portal.modules import UserModules
-from ui.topmenu import topmenu_items#, the_user
+from ui.topmenu import topmenu_items  # , the_user
 from unfold.loginrequired import LoginRequiredAutoLogoutView
 from unfold.page import Page
 from federate.models import Site
@@ -27,13 +27,12 @@ class FedInfoView(LoginRequiredAutoLogoutView):
         return self.get_or_post(request, 'GET')
 
     def get_or_post(self, request, method):
-        usera = UserAccessProfile(request)
-        self.user_email = usera.username # the_user(request)
+        user_a = UserAccessProfile(request)
+        self.user_email = user_a.username  # the_user(request)
         page = Page(request)
 
         self.errors = []
-        #user = get_user_by_email(the_user(self.request))
-        user_type = usera.user_type #get_user_type(user)
+        user_type = user_a.user_type  # get_user_type(user)
         if user_type != 0:
             messages.error(page.request, 'Error: You have not permission to access this page.')
             return HttpResponseRedirect("/")
@@ -55,7 +54,8 @@ class FedInfoView(LoginRequiredAutoLogoutView):
             self.errors = []
             site_name = request.POST.get('site_name', None)
             site_url = request.POST.get('site_url', None)
-            site_ip = request.POST.get('site_ip', None)
+            #site_ip = request.POST.get('site_ip', None)
+            site_ip = request.POST.get('site_url', None)
             site_location = request.POST.get('site_location', None)
             site_contact = request.POST.get('site_contact', None)
 
@@ -71,7 +71,7 @@ class FedInfoView(LoginRequiredAutoLogoutView):
         template_name = "fed-site.html"
         template_env = {
             'topmenu_items': topmenu_items('Site Information', page.request),
-            'username': usera.username, #the_user(self.request),
+            'username': user_a.username,  # the_user(self.request),
             'site_name': site.name,
             'site_url': site.url,
             'site_ip': site.ip,
@@ -99,12 +99,11 @@ class SiteAddView(LoginRequiredAutoLogoutView):
 
     def get_or_post(self, request, fid, method):
         usera = UserAccessProfile(request)
-        self.user_email = usera.username # the_user(request)
+        self.user_email = usera.username  # the_user(request)
         page = Page(request)
 
         self.errors = []
-        #user = get_user_by_email(the_user(self.request))
-        user_type = usera.user_type #get_user_type(user)
+        user_type = usera.user_type  # get_user_type(user)
         if user_type != 0:
             messages.error(page.request, 'Error: You have not permission to access this page.')
             return HttpResponseRedirect("/")
@@ -151,7 +150,7 @@ class SiteAddView(LoginRequiredAutoLogoutView):
                 site.save()
                 messages.success(request, 'Success: Update site information')
                 return HttpResponseRedirect('/federation/list')
-            else:
+            else:  # create new site
                 site = Site(
                     name=site_name,
                     url=site_url,
@@ -167,7 +166,7 @@ class SiteAddView(LoginRequiredAutoLogoutView):
         template_name = "fed-site.html"
         template_env = {
             'topmenu_items': topmenu_items('Site Information', page.request),
-            'username': usera.username, #the_user(self.request),
+            'username': usera.username,  # the_user(self.request),
             'site_name': site_name,
             'site_url': site_url,
             'site_ip': site_ip,
@@ -187,28 +186,18 @@ def check_site(request):
     site_ip = request.POST.get('site_url', None)
     site_pkey = request.POST.get('site_pkey', None)
 
-    '''
-    try:
-       from Crypto.PublicKey import RSA
-
-        newkey = RSA.importKey(json.loads(site_pkey))
-        enc_data = newkey.encrypt("1234567890", 32)
-        print enc_data
-
-    except Exception as ins:
-        print "ERROR: ", ins.message'''
-
+    print("Check site:", site_ip)
     msg = validate_key(site_ip, site_pkey)
 
-    key= 0
-    site =0
+    key = 0
+    site = 0
 
     if msg == 1:
-        key= 1
+        key = 1
         site = 1
     elif msg == 2:
         key = 0
-        site =1
+        site = 1
 
     output = {
         "key": key,

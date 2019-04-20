@@ -6,17 +6,19 @@
 
 {% block unfold_main %}
 
-<div style="text-align:center" class="well-sm">
-    <h1>Testbeds Status</h1>
+<div class="onelab-title">
+    <h2>Testbeds Status</h2>
 </div>
-<h2>Building Map</h2>
+
 <div id="middle1" align="center">
+    <h3>Building Map</h3>
     <div class="well">
         <img src="{{STATIC_URL}}img/topology.svg" width="700px"/>
     </div>
-    </div>
-<h2>Nodes Information</h2>
+</div>
+
 <div id="middle2" align="center">
+    <h3>Nodes Information</h3>
     <div class="well">
         <form name="refresh-form" class="cmxform form-horizontal" id="refresh_form" enctype="multipart/form-data" method="post" action="" role="form" novalidate>
             <fieldset>{% csrf_token %}

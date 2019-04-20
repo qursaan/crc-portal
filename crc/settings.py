@@ -48,6 +48,13 @@ if not os.path.isdir(ROOT):
 if not os.path.isdir(HTTPROOT):
     raise Exception("Cannot find HTTPROOT %s for unfold" % HTTPROOT)
 
+try:
+    import pymysql
+    pymysql.install_as_MySQLdb()
+except:
+    pass
+
+
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
@@ -56,6 +63,8 @@ SECRET_KEY = '!d2c&%9oqijgj8nfbjp+2m!hbyb08b36-j#tglpo*t02yh3=)b'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+#ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1','localhost']
 ####################
 ADMINS = (
     # ('your_name', 'your_email@test.com'),
@@ -64,6 +73,7 @@ ADMINS = (
 MANAGERS = ADMINS
 MEDIA_URL = '/media/'
 STATIC_URL = '/static/'
+
 # ******************************************************************* #
 # Mail configuration
 DEFAULT_FROM_EMAIL = "root@crclab.org"  # "root@theseus.ipv6.lip6.fr"
@@ -72,51 +82,58 @@ EMAIL_HOST = "localhost"
 EMAIL_PORT = 25
 EMAIL_USE_TLS = False
 SUPPORT_EMAIL = "qursaan@gmail.com"
+# Storage settings
 BASE_IMAGE_DIR = "/usr/local/share/storage/"
 USER_HOME = "/home/crc-users/"
-# FEDERATION SERVICES
+# Backend setting
 BACKENDIP = "127.0.0.1"  # ""193.227.16.199"
+# Federation setting
 FED_PASS = 'XfedXuserXcrc'
-FED_RUN = 1  # 0-STOP 1-RUNNING
+#FED_RUN = 1  # 0-STOP 1-RUNNING
 FED_PORT = 7770
 # ******************************************************************* #
 ACCOUNT_ACTIVATION_DAYS = 7  # One-week activation window; you may, of course, use a different value.
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
+
 
 # System parameters
 MAX_OMF_DURATION = 8
 MAX_SIM_DURATION = 24 * 7
 MAX_BUK_DURATION = 24 * 7
-ALLOWED_HOSTS = []
+# @upgraded
+SITE_ID = 1
 
 # File Browser Default Directory
 # FILEBROWSER_DIRECTORY = "uploads/"
 THUMBNAIL_HIGH_RESOLUTION = True
 FILER_CANONICAL_URL = 'uploads/'
 
-TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.Loader',
-    'django.template.loaders.app_directories.Loader',
-    # 'django.template.loaders.eggs.Loader',
-)
+# TEMPLATE_LOADERS = (
+# 'django.template.loaders.filesystem.Loader',
+# 'django.template.loaders.app_directories.Loader',
+# 'django.template.loaders.eggs.Loader',
+# )
 
 # Application definition
 INSTALLED_APPS = (
+    # Basics
     'django.contrib.admin',
     'django.contrib.auth',
-    # 'django.contrib.sites',
+    'django.contrib.sites',  # @upgraded
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'insert_above',
+    # third party
+    #'insert_above',
     # our project
     'crc',
     # core of UI
-    'manifold',
+    #'manifold',
     'unfold',
     # plugins
     'plugins',
-
     # views
     'ui',
     'portal',
@@ -127,24 +144,25 @@ INSTALLED_APPS = (
     # 'grappelli',
     # 'filebrowser',
     # filer
-    'filer',
-    'mptt',
-    'easy_thumbnails',
+    # 'filer',
+    #'mptt',
+    #'easy_thumbnails',
     # captcha
-    'captcha',
+    #'captcha',
+    'rest_framework',
 )
 
 # CELERY_RESULT_BACKEND=('djcelery.backends.database:DatabaseBackend',)
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = (
+    'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.middleware.security.SecurityMiddleware',
+    # 'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
 )
 
 AUTHENTICATION_BACKENDS = (
@@ -159,8 +177,9 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [os.path.join(HTTPROOT, "templates"),
                  os.path.join(AUTHROOT, "templates"), ],
-        'APP_DIRS': True,
+        # 'APP_DIRS': True,
         'OPTIONS': {
+            'debug': DEBUG,
             # 'builtins': ['insert_above.templatetags.insert_tags', ],
             'context_processors': [
                 'django.template.context_processors.debug',
@@ -168,11 +187,18 @@ TEMPLATES = [
                 'django.template.context_processors.media',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'django.core.context_processors.static',
+                'django.template.context_processors.static',
             ],
-            # 'builtins': [
-            #    'django.contrib.staticfiles.templatetags.staticfiles',
-            # ],
+            'builtins': [
+                'django.contrib.staticfiles.templatetags.staticfiles',  # @upgraded
+                'insert_above.templatetags.insert_tags',  # @upgraded
+            ],
+            'loaders': [
+                # insert your TEMPLATE_LOADERS here
+                'django.template.loaders.filesystem.Loader',
+                'django.template.loaders.app_directories.Loader',
+                # 'django.template.loaders.eggs.Loader',
+            ],
         },
     },
 ]
@@ -180,27 +206,37 @@ TEMPLATES = [
 WSGI_APPLICATION = 'crc.wsgi.application'
 
 # Database
-# https://docs.djangoproject.com/en/1.8/ref/settings/#databases
-
-# DATABASES = {
-#    'default': {
-#        'ENGINE': 'django.db.backends.sqlite3',
-#        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#    }
-# }
+# https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'PORTAL',
-        'USER': 'portaluser',
-        'PASSWORD': 'portal123portal!',
-        'HOST': 'localhost',  # Or an IP Address that your DB is hosted on
-        'PORT': '3306',
+        'OPTIONS': {
+            'read_default_file': os.path.join(BASE_DIR, 'crc/db.cnf'),
+            #'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+        },
     }
 }
 
+# Password validation
+# https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
+
+AUTH_PASSWORD_VALIDATORS = [
+    {
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    },
+]
+
 # Internationalization
-# https://docs.djangoproject.com/en/1.8/topics/i18n/
+# https://docs.djangoproject.com/en/2.1/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'Africa/Cairo'  # 'UTC'
@@ -210,11 +246,11 @@ USE_TZ = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
-MEDIA_ROOT = os.path.join(HTTPROOT, 'media')
+MEDIA_ROOT = os.path.join(ROOT, 'media')
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.8/howto/static-files/
-STATIC_ROOT = os.path.join(HTTPROOT, 'static')
+# https://docs.djangoproject.com/en/2.1/howto/static-files/
+STATIC_ROOT = os.path.join(ROOT, 'static2')
 
 # Additional locations of static files
 STATICFILES_DIRS = (
@@ -223,15 +259,15 @@ STATICFILES_DIRS = (
     # Don't forget to use absolute paths, not relative paths.
     # Thierry : we do not need to detail the contents
     # of our 'apps' since they're mentioned in INSTALLED_APPS
-    os.path.join(AUTHROOT, "static"),
+    os.path.join(BASE_DIR, "static"),
     # os.path.join(ROOT, "static"),
 )
 
 # Needed by PluginFinder
-PLUGIN_DIR = os.path.join(ROOT, 'plugins')
+PLUGIN_DIR = os.path.join(BASE_DIR, 'plugins')
 
 # ThirdPartyFinder
-THIRDPARTY_DIR = os.path.join(ROOT, 'third-party')
+THIRDPARTY_DIR = os.path.join(BASE_DIR, 'third-party')
 
 # List of finder classes that know how to find static files in
 # various locations.
@@ -303,4 +339,14 @@ LOGGING = {
             'propagate': False,
         }
     },
+}
+
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
+        #'rest_framework.authentication.BasicAuthentication',
+        #'rest_framework.authentication.SessionAuthentication',
+    ]
 }

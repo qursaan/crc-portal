@@ -1,185 +1,241 @@
-{% extends "layout-unfold1.html" %}
+{% extends "layout-unfold2.html" %}
 
 {% block head %}
 {% endblock %}
 
 {% block unfold_main %}
-<style type="text/css">
-    .badge1 {
-        position:relative;
-    }
-    .badge1[data-badge]:after {
-        content:attr(data-badge);
-        position:absolute;
-        top:-10px;
-        right:-10px;
-        font-size:.7em;
-        background:green;
-        color:white;
-        width:18px;height:18px;
-        text-align:center;
-        line-height:18px;
-        border-radius:50%;
-        box-shadow:0 0 1px #333;
+    <style type="text/css">
+        .badge1 {
+            position: relative;
         }
-    .btn{
-        width:160px;
-    }
-</style>
-<div id='tophat_status'></div>
-<div id='ms-dashboard'>
-    <div class="container">
-        <div class="row">
-            <div class='col-sm-3 ms-dashboard' id="ms-dashboard-profile">
-                <div class='ms-dashboard-caption'>
-                    <h2>Manage</h2>
-                </div>
-                <div class='ms-dashboard-content'>
-                    <ul>
+
+        .badge1[data-badge]:after {
+            content: attr(data-badge);
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            font-size: .7em;
+            background: green;
+            color: white;
+            width: 18px;
+            height: 18px;
+            text-align: center;
+            line-height: 18px;
+            border-radius: 50%;
+            box-shadow: 0 0 1px #333;
+        }
+
+        .home-col {
+            min-width: 180px;
+        }
+    </style>
+    <div id='tophat_status'></div>
+    <div id='ms-dashboard'>
+        <div class="container">
+            <div class="row">
+                <div class='col-sm-3 ms-dashboard home-col' id="ms-dashboard-profile">
+                    <div class='ms-dashboard-caption'>
+                        <h2>Manage</h2>
+                    </div>
+                    <div class='ms-dashboard-content'>
                         {% if person.last_name %}
-                        <li><span id='username'>{{person.first_name}} {{person.last_name}}</span></li>
+                            <ul>
+                                <li><span id='username'>{{ person.first_name }} {{ person.last_name }}</span></li>
+                            </ul>
                         {% endif %}
                         {% if person.email %}
-                        <li><b>Email: </b><a href='mailto:{{person.email}}'>{{person.email}}</a></li>
+                            <ul>
+                                <li><b>Email: </b><a href='mailto:{{ person.email }}'>{{ person.email }}</a></li>
+                            </ul>
                         {% endif %}
-                    </ul>
-                    <ul class='nav nav-pills nav-stacked'>
-                        {% if user_type != 4 %} <!-- admin -->
-                        <li role="presentation">
-                            <button id="account" onclick="location.href='/portal/account/'" class="btn btn-default">
-                                Profile
-                            </button>
-                            <!--button id="file" onclick="location.href='/portal/lab/tools/file_manager/'" class="btn btn-default" >Cloud Disk</button-->
-                        </li>
-                        {% endif %}
-                        {% if user_type == 0 %} <!-- admin -->
-                        <li role="presentation">
-                            <button id="requests" onclick="location.href='/portal/validate/'" class="btn btn-default">
-                                Manage Requests
-                            </button>
-                        </li>
-                        <li role="presentation">
-                            <button id="federation" onclick="location.href='/federation/'" class="btn btn-default">
-                                Federations
-                            </button>
-                        </li>
-                        {% elif user_type == 2 %} <!--instructor-->
-                        <li role="presentation">
-                            <button id="std_request" onclick="location.href='/lab/validate/'"
-                                    class="btn btn-default badge1" data-badge="{{ pending_count }}">Pending Students
-                            </button>
-                        </li>
-                        <li role="presentation">
-                             <button id="std_manage" onclick="location.href='/lab/students/'"
-                                    class="btn btn-default badge1" data-badge="{{ student_count }}">Manage Students
-                            </button>
-                        </li>
-                        {% endif %}
-                    </ul>
+                        <ul class='nav nav-pills nav-stacked nav-fill'>
+                            {% if user_type != 4 %} <!-- admin -->
+                                <li class="nav-item" role="presentation">
+                                    <button id="account" onclick="location.href='/portal/account/'"
+                                            class="btn btn-dark btn-block  btn-block">
+                                        Profile
+                                    </button>
+                                    <!--button id="file" onclick="location.href='/portal/lab/tools/file_manager/'" class="btn btn-dark btn-block" >Cloud Disk</button-->
+                                </li>
+                            {% endif %}
+                            <li class="nav-item" role="presentation">
+                                <button id="stats" onclick="location.href='/portal/stats/'"
+                                        class="btn btn-dark btn-block">
+                                    Statistics
+                                </button>
+                            </li>
+                            {% if user_type == 0 %} <!-- admin -->
+                                <li class="nav-item" role="presentation">
+                                    <button id="requests" onclick="location.href='/admin/'"
+                                            class="btn btn-dark btn-block">
+                                        Admin Site
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button id="requests" onclick="location.href='/portal/validate/'"
+                                            class="btn btn-dark btn-block badge1" data-badge="{{ request_count }}">
+                                        Manage Requests
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button id="federation" onclick="location.href='/federation/'"
+                                            class="btn btn-dark btn-block">
+                                        Federation Control
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button id="stats_a" onclick="location.href='/portal/stats_site/'"
+                                            class="btn btn-dark btn-block">
+                                        Site Statistics
+                                    </button>
+                                </li>
+                            {% elif user_type == 2 %} <!--instructor-->
+                                <li class="nav-item" role="presentation">
+                                    <button id="std_request" onclick="location.href='/lab/validate/'"
+                                            class="btn btn-dark btn-block badge1" data-badge="{{ pending_count }}">
+                                        Pending Students
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button id="std_manage" onclick="location.href='/lab/students/'"
+                                            class="btn btn-dark btn-block badge1" data-badge="{{ student_count }}">
+                                        Manage Students
+                                    </button>
+                                </li>
+                            {% endif %}
+                            {% if user_type == 0 or user_type == 2 %}
+                                <li class="nav-item" role="presentation">
+                                    <button id="messaging" onclick="location.href='/portal/messaging/'"
+                                            class="btn btn-dark btn-block">
+                                        Messaging
+                                    </button>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </div>
                 </div>
-            </div>
-            <div class='col-sm-3 ms-dashboard' id='ms-dashboard-testbeds'>
-                <div class='ms-dashboard-caption'>
-                    <h2>Testbeds</h2>
-                </div>
-                <div class='ms-dashboard-content' id='tophat__list__platform__network_name'>{{ testbeds }}
-                    <ul class='nav nav-pills nav-stacked'>
-                        <li role="presentation">
-                            <button id="testbed_status" onclick="location.href='/portal/testbeds/map/'"
-                                    class="btn btn-default">View Map
-                            </button>
-                        </li>
-                        {% if user_type == 0 or user_type == 1 %}
-                        <li role="presentation">
-                            <button id="graphic_builder" onclick="location.href='/portal/lab/tools/builder/'"
-                                    class="btn btn-default">Use Builder
-                            </button>
-                        </li>
-                        {% endif %}
-                        <li role="presentation">
-                            <button id="testbed_timeline" onclick="location.href='/portal/testbeds/scheduler/'"
-                                    class="btn btn-default">Scheduler Timeline
-                            </button>
-                        </li>
-                        <li role="presentation">
-                            <button id="lab_library" onclick="location.href='/lab/library'"
-                                    class="btn btn-default">Libraries
-                            </button>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class='col-sm-3 ms-dashboard' id='ms-dashboard-slices'>
-                <div class='ms-dashboard-caption'>
-                    <h2>Lab Panel</h2>
-                </div>
-                <div class='ms-dashboard-content' id='tophat__list__slice_hrn__slice_hrn'>{{ slices }}
-                    <ul class='nav nav-pills nav-stacked'>
+                <div class='col-sm-3 ms-dashboard home-col' id='ms-dashboard-testbeds'>
+                    <div class='ms-dashboard-caption'>
+                        <h2>Testbeds</h2>
+                    </div>
+                    <div class='ms-dashboard-content' id='tophat__list__platform__network_name'>{{ testbeds }}
+                        <ul class='nav nav-pills nav-stacked nav-fill'>
+                            <li class="nav-item" role="presentation">
+                                <button id="testbed_resources" onclick="location.href='/portal/testbeds/resources/'"
+                                        class="btn btn-dark btn-block">View Resources
+                                </button>
+                            </li>
 
-                        <li role="presentation">
-                            <button id="lab_status" onclick="location.href='/portal/lab/current/'"
-                                    class="btn btn-default badge1" data-badge="{{ active_count }}">Current Requests
-                            </button>
-                        </li>
-                        {% if user_type == 0 or user_type == 1 or user_type == 2 or user_type == 4 %} <!--admin or researcher-->
-                        <li role="presentation">
-                            <button id="lab_request" onclick="location.href='/portal/lab/reservation/'"
-                                    class="btn btn-default">Request Slice
-                            </button>
-                        </li>
-                        {% endif %}
-                        {% if user_type == 2 %} <!--instructor-->
-                            <li role="presentation">
-                                <button id="lab_course" onclick="location.href='/lab/courses/'"
-                                        class="btn btn-default" >Courses List
+                            <li class="nav-item" role="presentation">
+                                <button id="testbed_timeline" onclick="location.href='/portal/testbeds/scheduler/'"
+                                        class="btn btn-dark btn-block">Scheduler Timeline
                                 </button>
                             </li>
-                            <li role="presentation">
-                                <button id="lab_experiment" onclick="location.href='/lab/experiments/'"
-                                        class="btn btn-default badge1" data-badge="{{ bulk_count }}">Bulk Reservations
+                            <li class="nav-item" role="presentation">
+                                <button id="testbed_status" onclick="location.href='/portal/testbeds/map/'"
+                                        class="btn btn-dark btn-block">View Map
                                 </button>
                             </li>
-                        {% elif user_type == 3 %} <!--student-->
-                        <li role="presentation">
-                            <button id="lab_s_course" onclick="location.href='/lab/my_courses/'"
-                                    class="btn btn-default badge1" data-badge="{{ course_count }}">My Courses
-                            </button>
-                        </li>
-                        <li role="presentation">
-                            <button id="lab_s_experiment" onclick="location.href='/lab/my_courses/experiments'"
-                                    class="btn btn-default badge1" data-badge="{{ std_exp_count }}">My Experiments
-                            </button>
-                        </li>
-                        {% endif %}
-                        <li role="presentation">
-                            <button id="lab_history" onclick="location.href='/portal/lab/history/'"
-                                    class="btn btn-default">History
-                            </button>
-                        </li>
-                    </ul>
+                            {% if user_type == 0 or user_type == 1 %}
+                                <li class="nav-item" role="presentation">
+                                    <button id="graphic_builder" onclick="location.href='/portal/lab/tools/builder/'"
+                                            class="btn btn-dark btn-block">Use Builder
+                                    </button>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </div>
                 </div>
-            </div>
-            <div class='col-sm-3 ms-dashboard' id='ms-dashboard-support'>
-                <div class='ms-dashboard-caption'>
-                    <h2>Support</h2>
+                <div class='col-sm-3 ms-dashboard home-col' id='ms-dashboard-slices'>
+                    <div class='ms-dashboard-caption'>
+                        <h2>Lab Panel</h2>
+                    </div>
+                    <div class='ms-dashboard-content' id='tophat__list__slice_hrn__slice_hrn'>{{ slices }}
+                        <ul class='nav nav-pills nav-stacked nav-fill'>
+
+                            <li class="nav-item" role="presentation">
+                                <button id="lab_status" onclick="location.href='/portal/lab/current/'"
+                                        class="btn btn-dark btn-block badge1" data-badge="{{ active_count }}">Current
+                                    Requests
+                                </button>
+                            </li>
+                            {% if user_type == 0 or user_type == 1 or user_type == 2 or user_type == 4 %}
+                                <!-- Admin or Researcher -->
+                                {% if user_type == 0 %}
+                                    <li class="nav-item" role="presentation">
+                                        <button id="lab_request_admin"
+                                                onclick="location.href='/portal/lab/reservation_a/'"
+                                                class="btn btn-dark btn-block">Maintenance Reserve
+                                        </button>
+                                    </li>
+                                {% endif %}
+                                <li class="nav-item" role="presentation">
+                                    <button id="lab_request" onclick="location.href='/portal/lab/reservation/'"
+                                            class="btn btn-dark btn-block">Request Slice
+                                    </button>
+                                </li>
+                            {% endif %}
+                            {% if user_type == 2 %} <!--instructor-->
+                                <li class="nav-item" role="presentation">
+                                    <button id="lab_course" onclick="location.href='/lab/courses/'"
+                                            class="btn btn-dark btn-block">Courses List
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button id="lab_experiment" onclick="location.href='/lab/experiments/'"
+                                            class="btn btn-dark btn-block badge1" data-badge="{{ bulk_count }}">Bulk
+                                        Reservations
+                                    </button>
+                                </li>
+                            {% elif user_type == 3 %} <!--student-->
+                                <li class="nav-item" role="presentation">
+                                    <button id="lab_s_course" onclick="location.href='/lab/my_courses/'"
+                                            class="btn btn-dark btn-block badge1" data-badge="{{ course_count }}">My
+                                        Courses
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button id="lab_s_experiment" onclick="location.href='/lab/my_courses/experiments'"
+                                            class="btn btn-dark btn-block badge1" data-badge="{{ std_exp_count }}">My
+                                        Experiments
+                                    </button>
+                                </li>
+                            {% endif %}
+                            <li class="nav-item" role="presentation">
+                                <button id="lab_history" onclick="location.href='/portal/lab/history/'"
+                                        class="btn btn-dark btn-block">History
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button id="lab_library" onclick="location.href='/lab/library'"
+                                        class="btn btn-dark btn-block">Libraries
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-                <div class='ms-dashboard-content' id='tophat__list__support'>{{ support }}
-                    <ul class='nav nav-pills nav-stacked'>
-                        <li role="presentation">
-                            <button id="support-doc" onclick="location.href='/portal/support/documentation/'"
-                                    class="btn btn-default">Documentation
-                            </button>
-                        </li>
-                        <li role="presentation">
-                            <button id="support-contact" onclick="location.href='/portal/contact/'"
-                                    class="btn btn-default">Contact
-                            </button>
-                        </li>
-                    </ul>
+                <div class='col-sm-3 ms-dashboard home-col' id='ms-dashboard-support'>
+                    <div class='ms-dashboard-caption'>
+                        <h2>Support</h2>
+                    </div>
+                    <div class='ms-dashboard-content' id='tophat__list__support'>{{ support }}
+                        <ul class='nav nav-pills nav-stacked nav-fill'>
+                            <li class="nav-item" role="presentation">
+                                <button type="button" id="support-doc"
+                                        onclick="location.href='/portal/support/documentation/'"
+                                        class="btn btn-dark btn-block">Documentation
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button id="support-contact" onclick="location.href='/portal/contact/'"
+                                        class="btn btn-dark btn-block">Contact
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
 {% endblock %}

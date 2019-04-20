@@ -1,1344 +1,1390 @@
-{% extends "layout-unfold1.html" %}
+{% extends "layout-unfold3.html" %}
 {% block unfold_main %}
-<!--link rel="stylesheet" type="text/css" href='{{ STATIC_URL }}css/onelab.css' /-->
-<link rel="stylesheet" type="text/css" href='{{ STATIC_URL }}css/registration.css'/>
-<link rel="stylesheet" href="{{STATIC_URL}}css/codemirror.css"/>
-<link rel="stylesheet" href="{{STATIC_URL}}css/rubyblue.css"/>
-<link rel="stylesheet" href="{{STATIC_URL}}css/fullscreen.css"/>
-<link rel="stylesheet" href="{{STATIC_URL}}css/fade.css"/>
-<script type="text/javascript" src="{{STATIC_URL}}js/codemirror.js"></script>
-<script type="text/javascript" src="{{STATIC_URL}}js/placeholder.js"></script>
-<script type="text/javascript" src="{{STATIC_URL}}js/ruby.js"></script>
-<script type="text/javascript" src="{{STATIC_URL}}js/fullscreen.js"></script>
+    <link rel="stylesheet" type="text/css" href='{{ STATIC_URL }}css/registration.css'/>
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/codemirror.css"/>
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/rubyblue.css"/>
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/fullscreen.css"/>
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/fade.css"/>
+    <script type="text/javascript" src='{{ STATIC_URL }}js/jquery.validate.1.14.js'></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/codemirror.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/placeholder.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/ruby.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/fullscreen.js"></script>
 
-<style type="text/css">
+    <style type="text/css">
+        #activity_tbl.table > tbody > tr > td {
+            padding: 1px !important;
+            font-size: 12px;
+        }
 
-    .table>tbody>tr>td{
-        padding: 1px !important;
-        font-size: 12px;
-    }
+        #activity_tbl > .table-bordered > tbody > tr > td,
+        #activity_tbl > .table-bordered > thead > tr > th,
+        #activity_tbl > .table-bordered > tfoot > tr > th {
+            border: none !important;
+            border-bottom: 1px solid #ddd !important;
+        }
 
-    .table-bordered>tbody>tr>td , .table-bordered>thead>tr>th, .table-bordered>tfoot>tr>th{
-        border: none !important;
-        border-bottom: 1px solid #ddd !important;
-    }
+        #clockdiv {
+            margin-bottom: 10px;
+            display: inline-block;
+            font-weight: 100;
+            text-align: center;
+            font-size: 18px;
+            min-width: 270px;
+            background-color: #212529;
+        }
 
-    #clockdiv{
-        color: #fff;
-        display: inline-block;
-        font-weight: 100;
-        text-align: center;
-        font-size: 18px;
-    }
+        #clockdiv > div {
+            padding: 3px;
+            background: #212529;
+            display: inline-block;
+        }
 
-    #clockdiv > div{
-        padding: 3px;
-        background: #00BF96;
-        display: inline-block;
-    }
+        #clockdiv div > span {
+            padding: 2px;
+            background: lightgrey;
+            display: inline-block;
+        }
 
-    #clockdiv div > span{
-        padding: 2px;
-        background: #00816A;
-        display: inline-block;
-    }
+        .smalltext {
+            color: lightgrey;
+            padding-top: 5px;
+            font-size: 10px;
+        }
 
-    .smalltext{
-        padding-top: 5px;
-        font-size: 10px;
-    }
-    .headclock{
-        padding: 0px;
-        font-size: 10px;
-    }
+        .headclock {
+            padding: 0;
+            font-size: 10px;
+        }
 
-    .console {
-        font-family:Courier;
-        font-size:12px;
-        color: #CCCCCC;
-        background: #000000;
-        border: 3px double #CCCCCC;
-        padding: 10px !important;
-    }
-    .console2 {
-        background: #FFFFFF !important;
-    }
+        .console {
+            font-family: Courier, serif;
+            font-size: 12px;
+            color: #CCCCCC;
+            background: #000000;
+            border: 3px double #CCCCCC;
+            padding: 10px !important;
+        }
 
-    #table-wrapper {
-        position:relative;
-    }
-    #activityList {
-        height:350px;
-        overflow:auto;
-    }
-    #table-wrapper table {
-        width:100%;
-    }
+        .console2 {
+            background: #FFFFFF !important;
+        }
 
-    #activity_list{
+        #table-wrapper {
+            position: relative;
+        }
 
-    }
-    pre{
-        color: #CCCCCC !important;
-        background: #000000 !important;
-        font-family:Courier !important;
-    }
-</style>
+        #activityList {
+            height: 350px;
+            overflow: auto;
+        }
 
-<div class="col-xs-12">
-    <div style="text-align:center" class="col-xs-9 well-sm">
+        #table-wrapper table {
+            width: 100%;
+        }
+
+        #activity_list {
+
+        }
+
+        pre {
+            color: #CCCCCC !important;
+            background: #000000 !important;
+            font-family: Courier !important;
+        }
+    </style>
+
+    <div class="onelab-title">
         <h2>{{ title }}</h2>
     </div>
-    <div class="col-xs-3" id="clockdiv">
-        <div >
-            <span>Remaining</span>
-            <div class="smalltext">Slice Time</div>
-        </div>
-        <div>
-            <span class="days"></span>
-            <div class="smalltext">Days</div>
-        </div>
-        <div>
-            <span class="hours"></span>
-            <div class="smalltext">Hours</div>
-        </div>
-        <div>
-            <span class="minutes"></span>
-            <div class="smalltext">Minutes</div>
-        </div>
-        <div>
-            <span class="seconds"></span>
-            <div class="smalltext">Seconds</div>
-        </div>
-    </div>
-</div>
 
-{% if messages %}
-<ul class="messages">
-    {% for message in messages %}
-    <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
-    {% endfor %}
-</ul>
-{% endif %}
-
-<div id="dashboard" class="container">
-    <div id="tabs_list" class="col-xs-9">
-        <ul class="nav nav-tabs" role="tablist">
-            <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">
-                <span class="glyphicon glyphicon-info-sign"></span> Instructions</a>
-            </li>
-            {% if show_lab %}
-            <li role="presentation"><a href="#lab" aria-controls="lab" role="tab" data-toggle="tab">
-                <span class="glyphicon glyphicon glyphicon-tasks"></span> Experiment Lab</a>
-            </li>
-            {% endif %}
-            {% if allow_img %}
-            <li role="presentation"><a href="#loadimage" aria-controls="loadimage" role="tab" data-toggle="tab">
-                <span class="glyphicon glyphicon-circle-arrow-down"></span> Load Images</a>
-            </li>
-            {% endif %}
-            {% if stype == "omf" %}
-            <li role="presentation"><a href="#manager" aria-controls="manager" role="tab" data-toggle="tab">
-                <span class="glyphicon glyphicon-play"></span> Script Manager</a>
-            </li>
-            {% endif %}
-            {% if allow_ssh %}
-            <li role="presentation"><a href="#terminal" aria-controls="terminal" role="tab" data-toggle="tab">
-                <span class="glyphicon glyphicon-expand"></span> Console</a>
-            </li>
-            {% endif %}
-            {% if allow_img %}
-            <li role="presentation"><a href="#saveimage" aria-controls="saveimage" role="tab" data-toggle="tab">
-                <span class="glyphicon glyphicon-cloud-download"></span> Save Images</a>
-            </li>
-            {% endif %}
-            {% if allow_crt %}
-            <li role="presentation"><a href="#remote" aria-controls="remote" role="tab" data-toggle="tab">
-                <span class="glyphicon glyphicon-flash"></span> Remote Control</a>
-            </li>
-            {% endif %}
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+            {% endfor %}
         </ul>
-        <div class="tab-content">
-            <div role="tabpanel" class="tab-pane active" id="home">
-                <h4>Instruction:</h4>
-                <ol>
+    {% endif %}
+
+    <div id="dashboard" class="container row">
+        <div id="tabs_list" class="col-md-9">
+            <div class="card bg-light">
+                <div class="card-header">
+                    <ul class="nav nav-tabs nav-stacked card-header-tabs" role="tablist">
+                        <li class="nav-item">
+                            <a href="#home" class="nav-link active" aria-controls="home" role="tab"
+                               data-toggle="tab">
+                                <!--span class="glyphicon glyphicon-info-sign"></span-->
+                                <span class="fas fa-codepen"></span> Instructions</a>
+                        </li>
+                        {% if show_lab %}
+                            <li class="nav-item">
+                                <a href="#lab" class="nav-link" aria-controls="lab" role="tab" data-toggle="tab">
+                                    <span class="fas fa-tasks"></span> Experiment Lab</a>
+                            </li>
+                        {% endif %}
+                        {% if allow_img %}
+                            <li class="nav-item">
+                                <a href="#loadimage" class="nav-link" aria-controls="loadimage" role="tab"
+                                   data-toggle="tab">
+                                    <span class="fas fa-upload"></span> Load Images</a>
+                            </li>
+                        {% endif %}
+                        {% if stype == "omf" %}
+                            <li class="nav-item">
+                                <a href="#manager" class="nav-link" aria-controls="manager" role="tab"
+                                   data-toggle="tab">
+                                    <span class="fas fa-file-code"></span> Script Manager</a>
+                            </li>
+                        {% endif %}
+                        {% if allow_ssh %}
+                            <li class="nav-item">
+                                <a href="#terminal" class="nav-link" aria-controls="terminal" role="tab"
+                                   data-toggle="tab">
+                                    <span class="fas fa-terminal"></span> Console</a>
+                            </li>
+                        {% endif %}
+                        {% if allow_img %}
+                            <li class="nav-item">
+                                <a href="#saveimage" class="nav-link" aria-controls="saveimage" role="tab"
+                                   data-toggle="tab">
+                                    <span class="fas fa-download"></span> Save Images</a>
+                            </li>
+                        {% endif %}
+                        {% if allow_crt %}
+                            <li class="nav-item">
+                                <a href="#remote" class="nav-link" aria-controls="remote" role="tab" data-toggle="tab">
+                                    <span class="fas fa-magic"></span> Remote Control</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
+
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="home">
+                        <div class="card-body">
+                            <h5 class="card-title">Instruction</h5>
+                            <p class="card-text">
+                            <ol>
+                                {% if allow_img %}
+                                    <li>Open <b><i>Load Image</i></b> tab and load image</li>
+                                    <li>Wait <b>Loading</b> process finish</li>
+                                {% endif %}
+                                {% if stype == "omf" %}
+                                    <li>In <b><i>Execute Manager</i></b> tab and past your script <b>or</b> edit from
+                                        existing
+                                        template
+                                    </li>
+                                {% else %}
+                                    <li> To access the controller server use console
+                                        ssh <b>crc-am@193.227.16.199</b> with pa$$word <b>?</b>
+                                    </li>
+                                    <li> To access the any virtual node use
+                                        ssh <b>crc</b> with no pa$$w0rd <!--b>crc123</b-->
+                                    </li>
+                                    <li>
+                                        To use GNURadio toolkit remotly:
+                                        <ul>
+                                            <li>press <b>GNURadio Remote Access</b> from Access Link</li>
+                                            <li>password: gnu123</li>
+                                        </ul>
+                                    </li>
+                                {% endif %}
+                                <li>Execute script remotely using <b>or</b> use <a href="/portal/experiment">external
+                                    tools</a>
+                                </li>
+                                {% if allow_img %}
+                                    <li>Open <b><i>Save Image</i></b> tab to save your image if you want to save your
+                                        work
+                                    </li>
+
+                                {% endif %}
+                            </ol>
+                            {% if supp_file %}
+                                <a class="btn btn-outline-dark" href="{{ supp_file }}">View Supplement files</a>
+
+                            {% else %}
+                                <a class="btn btn-outline-dark" href="/portal/experiment">
+                                    See how to use external tools</a>
+                            {% endif %}
+                            </p>
+                        </div>
+
+                    </div>
+                    {% if show_lab %}
+                        <div role="tabpanel" class="tab-pane" id="lab">
+                            <div class="card-body">
+                                <h5 class="card-title">Experiment Lab</h5>
+                                <!--run lab-->
+                                <form class="cmxform form-horizontal" id="run-lab-form" method="post"
+                                      action="run_lab" role="form">
+                                    <input type="text" id="exp_name" name="exp_name" value="{{ lab_ref.exp_param }}"
+                                           hidden/>
+                                    <input type="text" id="user_id" name="user_id" value="{{ user_id }}" hidden/>
+                                    <fieldset>
+                                        {% csrf_token %}
+                                        <div class="form-group col-md-12 btn-toolbar" role="toolbar">
+                                            <div class="btn-group mr-2" role="group">
+                                                <button class="btn btn-default" type="reset">Clear Parameters
+                                                </button>
+                                                <button id="run_exp_lab" class="refresh_btn btn btn-danger"
+                                                        type="button">
+                                                    Run!
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <h6>Experiment's Parameters: <b>{{ lab_ref.title }} </b> @ {{ lab_ref.lab_ref }}
+                                        </h6>
+                                        <div class="form-group col-md-12">
+                                            {% for p in lab_param_list %}
+                                                <div class="form-group">
+                                                    <label class="col-xs-2 control-label">{{ p }}</label>
+                                                    <div class="col-xs-4">
+                                                        <div class="ui-widget">
+                                                            {% if p.type == "range" %}
+                                                                <div>
+                                                                    <input id="{{ p.param_id }}" data-id="lab_param"
+                                                                           type="text" class="form-control user-input"
+                                                                           name="{{ p.param_id }}"
+                                                                           value="{{ p.def_value }}"
+                                                                           readonly/>
+                                                                </div>
+                                                                <div id="slider-{{ p.param_id }}"></div>
+                                                                <script>
+                                                                    var xrange = Number("{{p.values}}".split(',')[0]);
+                                                                    var yrange = Number("{{p.values}}".split(',')[1]);
+                                                                    $(document).ready(function () {
+                                                                        $("#slider-{{p.param_id}}").slider({
+                                                                            range: "min",
+                                                                            value: 70,
+                                                                            min: xrange,
+                                                                            max: yrange,
+                                                                            slide: function (event, ui) {
+                                                                                $("#{{p.param_id}}").val(ui.value);
+                                                                            }
+                                                                        });
+                                                                        $("#{{p.param_id}}").val($("#slider-{{p.param_id}}").slider("value"));
+                                                                    });
+                                                                </script>
+                                                            {% elif p.type == "list" %}
+                                                                <select id="{{ p.param_id }}" data-id="lab_param"
+                                                                        name="{{ p.param_id }}"
+                                                                        class="form-control user-input"
+                                                                        value="{{ p.def_value }}">
+                                                                    {% for row in p.values_as_list %}
+                                                                        <option value="{{ row }}" label="{{ row }}">
+                                                                            {{ row }}
+                                                                        </option>
+                                                                    {% endfor %}
+                                                                </select>
+                                                            {% elif p.type == "nodes" %}
+                                                                <select id="{{ p.param_id }}" data-id="lab_param"
+                                                                        name="{{ p.param_id }}"
+                                                                        class="form-control user-input" value="">
+                                                                    {% for row in node_list %}
+                                                                        <option value="{{ row.node_ref.vm_name }}"
+                                                                                label="{{ row.node_ref }}">
+                                                                            {{ row.node_ref }}
+                                                                        </option>
+                                                                    {% endfor %}
+                                                                </select>
+                                                            {% elif p.type == "frequency" %}
+                                                                <select id="{{ p.param_id }}" data-id="lab_param"
+                                                                        name="{{ p.param_id }}"
+                                                                        class="form-control user-input" value="">
+                                                                    {% for row in freq_list %}
+                                                                        <option value="{{ row.frequency_ref.frequency_value }}"
+                                                                                label="{{ row.frequency_ref.frequency_value }}">
+                                                                            {{ row.frequency_ref.frequency_value }}
+                                                                        </option>
+                                                                    {% endfor %}
+                                                                </select>
+                                                            {% elif p.type == "bool" %}
+                                                                <select id="{{ p.param_id }}" data-id="lab_param"
+                                                                        name="{{ p.param_id }}"
+                                                                        class="form-control user-input"
+                                                                        value="{{ p.def_value }}">
+                                                                    <option value="0" label="No">No</option>
+                                                                    <option value="1" label="Yes">Yes</option>
+                                                                </select>
+                                                            {% endif %}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                        <div class="form-group col-md-12">
+                                            <h5>Output terminal</h5>
+                                            <div class="">
+                                                <textarea id="exp_output" readonly="readonly"
+                                                          style="height:200px; width:100%;"
+                                                          class="console">{{ output }}</textarea>
+                                            </div>
+
+                                        </div>
+                                        <div class="form-group col-md-12">
+                                            <h5>Results</h5>
+                                            <video id="exp_result" alt="result" width="640" class="console"
+                                                   src=""
+                                                   type="video/mp4" controls></video>
+
+                                        </div>
+                                    </fieldset>
+                                </form>
+                            </div>
+                        </div>
+                    {% endif %}
                     {% if allow_img %}
-                    <li>Open <b><i>Load Image</i></b> tab and load image</li>
-                    <li>Wait <b>Loading</b> process finish</li>
+                        <div role="tabpanel" class="tab-pane" id="loadimage">
+                            <div class="card-body">
+                                <h5 class="card-title">Loading Image</h5>
+                                <form class="cmxform form-horizontal" id="load-image-form" method="post"
+                                      action="control_load_image" enctype="multipart/form-data" role="form">
+                                    <fieldset>
+                                        {% csrf_token %}
+                                        <div class="form-group col-md-12 btn-toolbar" role="toolbar">
+                                            <div class="btn-group mr-2" role="group">
+                                                <button class="btn btn-outline-dark" type="reset">
+                                                    Clear Selection
+                                                </button>
+                                                <button id="refresh_btn1" data-id="refresh"
+                                                        class="refresh_btn btn btn-outline-success" type="button">
+                                                    Refresh Status
+                                                </button>
+                                                <button id="load_image_btn" class="submit btn btn-danger" type="button">
+                                                    Load Image
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-12">
+                                            <h6 class="card-subtitle mb-2">Testbed Nodes</h6>
+
+                                            <div id="nodes">
+                                                {% for row in node_list %}
+                                                    <div class="form-check">
+                                                        <input id="i_node_{{ row.id }}"
+                                                               data-id="node_{{ row.node_ref.vm_name }}"
+                                                               type="checkbox" class="form-check-input"
+                                                               name="node_group1"
+                                                               value="{{ row.node_ref.vm_name }}">
+                                                        <label for="i_node_{{ row.id }}" class="form-check-label">
+                                                            <span name="node_{{ row.node_ref.vm_name }}"
+                                                               class="fas fa-power-off text-danger"></span> {{ row.node_ref }}
+                                                        </label>
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+                                            <small class="form-text text-muted">Select Target Testbed</small>
+
+                                        </div>
+                                        <div class="form-group col-md-12">
+                                            <h6 class="card-subtitle mb-2">Image</h6>
+                                            <div class="radio">
+                                                <label>
+                                                    <input type="radio" name="image_type" value="base_image"
+                                                           checked/>Base Image
+                                                </label>
+                                                <select id="osimage" name="osimage"
+                                                        class="custom-select form-control"
+                                                        value="{{ image_id }}">
+                                                    {% for row in image_list %}
+                                                        <option value="{{ row.id }}" label="{{ row.image_name }}">
+                                                            {{ row.image_name }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                            {% if user_image_list %}
+                                                <div class="radio">
+                                                    <label>
+                                                        <input type="radio" name="image_type" value="user_image"/>
+                                                        User Image
+                                                    </label>
+                                                    <select id="osimage_user" name="osimage_user"
+                                                            class="custom-select form-control"
+                                                            value="{{ user_image_id }}">
+                                                        {% for row in user_image_list %}
+                                                            <option value="{{ row.id }}"
+                                                                    label="{{ row.image_name }} :: Modified">{{ row.image_name }}
+                                                                :: Modified
+                                                            </option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            {% endif %}
+                                            <small class="form-text text-muted">Select the Image</small>
+
+                                        </div>
+                                        <div id="vnc" class="form-group col-md-12" hidden>
+                                            <label class="col-md-2 control-label">Access Link</label>
+                                            <div class="col-md-6">
+                                                <div class="ui-widget">
+                                                    <label class="control-label">
+                                                        <a id="vnc_link" name="vnc_link"
+                                                           href="{{ vnc_link_access }}" target="_blank">GNURadio Remote
+                                                            Access
+                                                        </a>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </fieldset>
+                                </form>
+                            </div>
+
+                        </div>
+
+                        <div role="tabpanel" class="tab-pane" id="saveimage">
+
+                            <div class="card-body">
+                                <h5 class="card-title">Saving Image</h5>
+                                <!--control_save_image-->
+                                <form class="cmxform form-horizontal" id="save-image-form" method="post"
+                                      action="control_save_image"
+                                      enctype="multipart/form-data" role="form">
+                                    <fieldset>
+                                        {% csrf_token %}
+                                        <div class="form-group btn-toolbar col-md-12" role="toolbar">
+                                            <div class="btn-group mr-2" role="group">
+                                                <button class="btn btn-outline-dark" type="reset">
+                                                    Clear Selection
+                                                </button>
+                                                <button id="refresh_btn2" data-id="refresh"
+                                                        class="refresh_btn btn btn-outline-success" type="button">
+                                                    Refresh Status
+                                                </button>
+                                                <button id="save-image-btn" class="submit btn btn-danger" type="button">
+                                                    Save Image
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group col-md-12">
+                                            <h6 class="card-subtitle mb-2">Testbed Nodes</h6>
+
+                                            {% for row in node_list %}
+                                                <div class="form-check">
+
+                                                    <input id="s_node_{{ row.id }}"
+                                                           class="form-check-input"
+                                                           data-id="node_{{ row.node_ref.vm_name }}"
+                                                           name="node_group2"
+                                                           type="radio"
+                                                           value="{{ row.node_ref.vm_name }}">
+                                                    <label for="s_node_{{ row.id }}" class="form-check-label">
+                                                        <span name="node_{{ row.node_ref.vm_name }}"
+                                                              class="fas fa-power-off text-danger"></span> {{ row.node_ref }}
+                                                    </label>
+                                                </div>
+                                            {% endfor %}
+
+
+                                            <small class="form-text text-muted">Select Target Testbed Node</small>
+                                        </div>
+
+                                        <div class="form-group col-md-6">
+                                            <div class="input-group">
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text">Image Name</span>
+                                                </div>
+                                                <input id="image_name" class="form-control" type="text"
+                                                       name="image_name"
+                                                       value="" required/>
+                                            </div>
+                                            <small class="form-text text-muted">
+                                                Enter the Image Name
+                                            </small>
+
+                                        </div>
+                                    </fieldset>
+                                </form>
+                            </div>
+
+                        </div>
+                    {% endif %}
+                    {% if allow_crt %}
+                        <div role="tabpanel" class="tab-pane" id="remote">
+                            <div class="card-body">
+                                <h5 class="card-title">Remote Control Machine</h5>
+                                <!--control_save_image-->
+                                <form class="cmxform form-horizontal" id="remote-image-form" method="post"
+                                      action="control_remote_node" enctype="multipart/form-data" role="form">
+                                    <fieldset>
+                                        {% csrf_token %}
+                                        <div class="form-group col-md-12 btn-toolbar" role="toolbar">
+                                            <div class="btn-group mr-2" role="group">
+                                                <button class="btn btn-outline-dark" type="reset">Clear Selection
+                                                </button>
+                                                <button id="refresh_btn3" data-id="refresh"
+                                                        class="refresh_btn btn btn-outline-success" type="button">
+                                                    Refresh Status
+                                                </button>
+                                                <button id="remote_start" name="b_start" class="btn btn-info"
+                                                        type="button">
+                                                    Start
+                                                </button>
+                                                <button id="remote_restart" name="b_restart"
+                                                        class="btn btn-warning" type="button">
+                                                    Restart
+                                                </button>
+                                                <button id="remote_shutdown" name="b_shutdown"
+                                                        class="btn btn-danger" type="button">
+                                                    Shutdown
+                                                </button>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group col-md-12">
+                                            <h6 class="card-subtitle mb-2">Nodes</h6>
+
+                                            {% for row in node_list %}
+                                                <div class="form-check">
+                                                    <input id="r_node_{{ row.id }}"
+                                                           type="radio"
+                                                           class="form-check-input"
+                                                           name="node_group3"
+                                                           value="{{ row.node_ref.vm_name }}">
+                                                    <label for="r_node_{{ row.id }}" class="form-check-label">
+                                                        <span name="node_{{ row.node_ref.vm_name }}"
+                                                              class="fas fa-power-off text-danger"></span>  {{ row.node_ref }}
+                                                    </label>
+                                                </div>
+                                            {% endfor %}
+
+                                            <small class="form-text text-muted">Select Target Testbed Node</small>
+                                        </div>
+                                    </fieldset>
+                                </form>
+                            </div>
+                        </div>
                     {% endif %}
                     {% if stype == "omf" %}
-                    <li>In <b><i>Execute Manager</i></b> tab and past your script <b>or</b> edit from existing template
-                    </li>
-                    {% else %}
-                    <li> To access the controller server use console
-                        ssh <b>crc-am@193.227.16.199</b> with password <b>?</b>
-                    </li>
-                    <li> To access the any virtual node use
-                        ssh <b>crc</b> with no password <!--b>crc123</b-->
-                    </li>
-                    <li>
-                        To use GNURadio toolkit remotly:
-                        <ul>
-                            <li>press <b>GNURadio Remote Access</b> from Access Link</li>
-                            <li>password: gnu123</li>
-                        </ul>
-                    </li>
-                    {% endif %}
-                    <li>Execute script remotely using <b>or</b> use <a href="/portal/experiment">external tools</a></li>
-                    {% if allow_img %}
-                    <li>Open <b><i>Save Image</i></b> tab to save your image if you want to save your work</li>
+                        <div role="tabpanel" class="tab-pane" id="manager">
 
-                    {% endif %}
-                </ol>
+                            <div class="card-body">
+                                <h5 class="card-title">Execute Script</h5>
 
-                {% if supp_file %}
-                <ul>
-                    <li>
-                        <b><a href="{{supp_file}}">View Supplement files</a></b>
-                    </li>
-                </ul>
-                {% else %}
-                <ul>
-                    <li><a href="/portal/experiment">See how to use external tools</a></li>
-                </ul>
-                {% endif %}
-            </div>
-{% if show_lab %}
-            <div role="tabpanel" class="tab-pane" id="lab">
-                <h4>Experiment Lab</h4>
-                <div class="well"> <!--run lab-->
-                    <form class="cmxform form-horizontal" id="run-lab-form" method="post"
-                          action="run_lab" role="form">
-                        <input type="text" id="exp_name" name="exp_name" value="{{lab_ref.exp_param}}" hidden/>
-                        <input type="text" id="user_id" name="user_id" value="{{user_id}}" hidden/>
-                        <fieldset>
-                            {% csrf_token %}
-                            <div class="form-group">
-                                <div class="col-xs-12">
-                                    <div class="ui-widget btn-toolbar" role="group">
-                                        <div class="btn-group" role="group">
-                                            <button class="btn btn-default" type="reset">Clear Parameters</button>
-                                            <button id="run_exp_lab" class="refresh_btn btn btn-danger" type="button">
-                                                Run!
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <h5>Experiment's Parameters: <b>{{lab_ref.title}} </b> @ {{lab_ref.lab_ref}}</h5>
-                            <div class="form-group">
-                                {% for p in lab_param_list %}
-                                <div class="form-group">
-                                    <label class="col-xs-2 control-label">{{p}}</label>
-                                    <div class="col-xs-4">
-                                        <div class="ui-widget">
-                                        {% if p.type == "range" %}
-                                            <div>
-                                                <input id="{{p.param_id}}" data-id="lab_param" type="text" class="form-control user-input" name="{{p.param_id}}" value="{{p.def_value}}" readonly/>
-                                            </div>
-                                            <div id="slider-{{p.param_id}}"></div>
-                                            <script>
-                                                var xrange = Number("{{p.values}}".split(',')[0]);
-                                                var yrange = Number("{{p.values}}".split(',')[1]);
-                                                $(document).ready(function(){
-                                                    $( "#slider-{{p.param_id}}" ).slider({
-                                                        range: "min",
-                                                        value: 70,
-                                                        min: xrange,
-                                                        max: yrange,
-                                                        slide: function( event, ui ) {
-                                                            $( "#{{p.param_id}}" ).val(ui.value);
-                                                        }
-                                                    });
-                                                    $( "#{{p.param_id}}" ).val( $( "#slider-{{p.param_id}}" ).slider( "value" ) );
-                                                });
-                                            </script>
-                                        {% elif p.type == "list" %}
-                                            <select id="{{p.param_id}}" data-id="lab_param" name="{{p.param_id}}" class="form-control user-input" value="{{ p.def_value }}">
-                                                {% for row in p.values_as_list %}
-                                                <option value="{{row}}" label="{{row}}">
-                                                    {{row}}
-                                                </option>
-                                                {% endfor %}
-                                            </select>
-                                        {% elif p.type == "nodes" %}
-                                            <select id="{{p.param_id}}" data-id="lab_param" name="{{p.param_id}}" class="form-control user-input" value="">
-                                                {% for row in node_list %}
-                                                <option value="{{ row.node_ref.vm_name }}" label="{{row.node_ref}}">
-                                                    {{row.node_ref}}
-                                                </option>
-                                                {% endfor %}
-                                            </select>
-                                        {% elif p.type == "frequency" %}
-                                            <select id="{{p.param_id}}" data-id="lab_param" name="{{p.param_id}}"  class="form-control user-input" value="">
-                                                {% for row in freq_list %}
-                                                <option value="{{row.frequency_ref.frequency_value}}" label="{{row.frequency_ref.frequency_value}}">
-                                                    {{row.frequency_ref.frequency_value}}
-                                                </option>
-                                                {% endfor %}
-                                            </select>
-                                        {% elif p.type == "bool" %}
-                                            <select id="{{p.param_id}}" data-id="lab_param" name="{{p.param_id}}"  class="form-control user-input" value="{{p.def_value}}">
-                                                <option value="0" label="No">No</option>
-                                                <option value="1" label="Yes">Yes</option>
-                                            </select>
-                                        {% endif %}
-                                        </div>
-                                    </div>
-                                </div>
-                                {% endfor %}
-                            </div>
-                            <div class="form-group">
-                                <div class="col-xs-12"><h5>Output terminal</h5>
-                                    <div class="">
-                                        <textarea id="exp_output" readonly="readonly" style="height:200px; width:100%;" class="console">{{ output }}</textarea>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-xs-12"><h5>Results</h5>
-                                    <video id="exp_result" alt="result" width="640" class="console"
-                                           src=""
-                                           type="video/mp4" controls></video>
-                                </div>
-                            </div>
-                        </fieldset>
-                    </form>
-                </div>
-            </div>
-{% endif %}
-{% if allow_img %}
-            <div role="tabpanel" class="tab-pane" id="loadimage">
-                <h4>Loading Image</h4>
-                <div class="well">
-                    <form class="cmxform form-horizontal" id="load-image-form" method="post" action="control_load_image"
-                          enctype="multipart/form-data" role="form">
-                        <fieldset>
-                            {% csrf_token %}
-                            <div class="form-group">
-                                <div class="col-xs-12">
-                                    <div class="ui-widget btn-toolbar" role="group">
-                                        <div class="btn-group" role="group">
-                                            <button class="btn btn-default" type="reset">
-                                                Clear Selection
-                                            </button>
-                                            <button id="refresh_btn1" data-id="refresh" class="refresh_btn btn btn-default" type="button">
-                                                Refresh Status
-                                            </button>
-                                            <button id="load_image_btn" class="submit btn btn-danger" type="button">
-                                                Load Image
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="nodes" class="col-xs-2 control-label">Testbed Nodes</label>
-                                <div class="col-xs-4">
-                                    <div id="nodes" class="ui-widget checkbox">
-                                        {% for row in node_list %}
-                                        <label >
-                                            <input data-id="node_{{ row.node_ref.vm_name }}" type="checkbox" name="node_group1" value="{{ row.node_ref.vm_name }}">
-                                            <span name="node_{{ row.node_ref.vm_name }}" class="text-warning"></span> {{row.node_ref}} </input>
-                                            <br>
-                                        </label>
-                                        {% endfor %}
-                                    </div>
-                                </div>
-                                <div class="col-xs-6">
-                                    <p class="form-hint">Select Target Testbed</p>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-xs-2 control-label">Image</label>
-                                <div class="col-xs-6">
-                                    <div class="ui-widget radio">
-                                        <label>
-                                            <input type="radio" name="image_type" value="base_image" checked>Base Image</input>
-                                        </label>
-                                        <select id="osimage" name="osimage" class="form-control" value="{{ image_id }}">
-                                            {% for row in image_list %}
-                                            <option value="{{ row.id }}" label="{{ row.image_name }}">
-                                                {{ row.image_name }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-                                    {% if user_image_list %}
-                                    <div class="ui-widget radio">
-                                        <label>
-                                            <input type="radio" name="image_type" value="user_image">User Image</input>
-                                        </label>
-                                        <select id="osimage_user" name="osimage_user" class="form-control"
-                                                value="{{ user_image_id }}">
-                                            {% for row in user_image_list %}
-                                            <option value="{{ row.id }}"
-                                                    label="{{ row.image_name }} :: Modified">{{ row.image_name }} :: Modified</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-                                    {% endif %}
-
-                                </div>
-                                <div class="col-xs-4">
-                                    <p class="form-hint">Select the Image</p>
-                                </div>
-                            </div>
-                             <div id="vnc" class="form-group" hidden>
-                                 <label class="col-xs-2 control-label">Access Link</label>
-                                 <div class="col-xs-6">
-                                    <div class="ui-widget">
-                                        <label class="control-label">
-                                            <a id="vnc_link" name="vnc_link"
-                                             href="{{ vnc_link_access }}" target="_blank">GNURadio Remote Access
-                                        </a>
-                                        </label>
-                                    </div>
-                                 </div>
-                             </div>
-
-                        </fieldset>
-                    </form>
-                </div>
-            </div>
-
-            <div role="tabpanel" class="tab-pane" id="saveimage">
-                <h4>Saving Image</h4>
-                <div class="well"> <!--control_save_image-->
-                    <form class="cmxform form-horizontal" id="save-image-form" method="post" action="control_save_image"
-                          enctype="multipart/form-data" role="form">
-                        <fieldset>
-                            {% csrf_token %}
-                            <div class="form-group">
-                                <div class="col-xs-12">
-                                    <div class="ui-widget btn-toolbar" role="group">
-                                        <div class="btn-group" role="group">
-                                            <button class="btn btn-default" type="reset">Clear Selection</button>
-                                            <button id="refresh_btn2" data-id="refresh" class="refresh_btn btn btn-default" type="button">
-                                                Refresh Status
-                                            </button>
-                                            <button id="save-image-btn" class="submit btn btn-danger" type="button">Save
-                                                Image
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="nodes" class="col-xs-2 control-label">Nodes</label>
-                                <div class="col-xs-4">
-                                    <div class="ui-widget radio">
-                                        {% for row in node_list %}
-                                        <label>
-                                            <input data-id="node_{{ row.node_ref.vm_name }}" type="radio" name="node_group2" value="{{ row.node_ref.vm_name }}">
-                                            <span name="node_{{ row.node_ref.vm_name }}" class="text-warning"></span> {{row.node_ref}} </input>
-                                            <br>
-                                        </label>
-                                        {% endfor %}
-                                    </div>
-                                </div>
-                                <div class="col-xs-6">
-                                    <p class="form-hint">Select Target Testbed</p>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="image_name" class="col-xs-2 control-label">Image Name</label>
-                                <div class="col-xs-4">
-                                    <div class="ui-widget">
-                                        <input id="image_name" class="form-control" type="text" name="image_name"
-                                               value="" required/>
-                                    </div>
-                                </div>
-                                <div class="col-xs-6">
-                                    <p class="form-hint">Enter the Image Name</p>
-                                </div>
-                            </div>
-                        </fieldset>
-                    </form>
-                </div>
-            </div>
-{% endif %}
-{% if allow_crt %}
-            <div role="tabpanel" class="tab-pane" id="remote">
-                <h4>Remote Control Machine</h4>
-                <div class="well"> <!--control_save_image-->
-                    <form class="cmxform form-horizontal" id="remote-image-form" method="post"
-                          action="control_remote_node" enctype="multipart/form-data" role="form">
-                        <fieldset>
-                            {% csrf_token %}
-                            <div class="form-group">
-                                <div class="col-xs-12">
-                                    <div class="ui-widget btn-toolbar" role="group">
-                                        <div class="btn-group" role="group">
-                                            <button class="btn btn-default" type="reset">Clear Selection</button>
-                                            <button id="refresh_btn3" data-id="refresh" class="refresh_btn btn btn-default" type="button">
-                                                Refresh Status
-                                            </button>
-                                            <button id="remote_start" name="b_start" class="btn btn-info" type="button">
-                                                Start
-                                            </button>
-                                            <button id="remote_restart" name="b_restart" class="btn btn-warning"
-                                                    type="button">
-                                                Restart
-                                            </button>
-                                            <button id="remote_shutdown" name="b_shutdown" class="btn btn-danger"
-                                                    type="button">
-                                                Shutdown
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="nodes" class="col-xs-2 control-label">Nodes</label>
-                                <div class="col-xs-4">
-                                    <div class="ui-widget radio">
-                                        {% for row in node_list %}
-                                        <label>
-                                            <input type="radio" name="node_group3" value="{{ row.node_ref.vm_name }}">
-                                            <span name="node_{{ row.node_ref.vm_name }}" class="text-warning"></span> {{row.node_ref}} </input>
-                                            <br>
-                                        </label>
-                                        {% endfor %}
-                                    </div>
-                                </div>
-                                <div class="col-xs-6">
-                                    <p class="form-hint">Select Target Node</p>
-                                </div>
-                            </div>
-                        </fieldset>
-                    </form>
-
-                </div>
-            </div>
-{% endif %}
-{% if stype == "omf" %}
-            <div role="tabpanel" class="tab-pane" id="manager">
-                <h4>Execute Script</h4>
-                <div class="well">
-                    <form name="exe-image-form" class="cmxform form-horizontal" id="exe-image-form" method="post"
-                          action="create_post" enctype="multipart/form-data" role="form" novalidate>
-                        <fieldset>
-                            {% csrf_token %}
-                            <div class="form-group">
-                                <div class="col-xs-12">
-                                    <div class="ui-widget btn-toolbar" role="group">
-                                        <div class="btn-group" role="group">
-                                            <button id="code_clear" class="btn btn-default" type="reset"
-                                                    name="code_clear">Clear
-                                            </button>
-                                            <button id="code_fullscreen" class="btn btn-default" name="code_fullscreen">
-                                                Fullscreen
-                                            </button>
-                                            <div class="btn-group" role="group">
-                                                <button type="button" class="btn btn-default dropdown-toggle"
-                                                        data-toggle="dropdown" aria-haspopup="true"
-                                                        aria-expanded="false">
-                                                    Sample Script
-                                                    <span class="caret"></span>
+                                <form name="exe-image-form" class="cmxform form-horizontal" id="exe-image-form"
+                                      method="post"
+                                      action="create_post" enctype="multipart/form-data" role="form" novalidate>
+                                    <fieldset>
+                                        {% csrf_token %}
+                                        <div class="form-group col-md-12 btn-toolbar" role="toolbar">
+                                            <div class="btn-group mr-2" role="group">
+                                                <button id="code_clear" class="btn btn-outline-dark" type="reset"
+                                                        name="code_clear">Clear
                                                 </button>
-                                                <ul class="dropdown-menu">
-                                                    <li><a id="sample-1" href="#">PING</a></li>
-                                                    <li><a id="sample-2" href="#">USRP</a></li>
-                                                </ul>
+                                                <button id="code_fullscreen" class="btn btn-outline-dark"
+                                                        name="code_fullscreen">
+                                                    Fullscreen
+                                                </button>
+                                                <div class="btn-group" role="group">
+                                                    <button id="btnGroupSample" type="button"
+                                                            class="btn btn-outline-dark dropdown-toggle"
+                                                            data-toggle="dropdown" aria-haspopup="true"
+                                                            aria-expanded="false">
+                                                        Sample Script
+                                                        <!--span class="caret"></span-->
+                                                    </button>
+                                                    <div class="dropdown-menu" aria-labelledby="btnGroupSample">
+                                                        <a class="dropdown-item" id="sample-1" href="#">PING</a>
+                                                        <a class="dropdown-item" id="sample-2" href="#">USRP</a>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div class="btn-group" role="group">
+                                                <button id="execute_script" class="submit btn btn-danger"
+                                                        type="button" name="execute_script">
+                                                    Execute/Run
+                                                </button>
+                                                <button id="abort_script" class="submit btn btn-danger"
+                                                        type="button" name="abort_script" style="display: none;"
+                                                        disabled>
+                                                    Abort
+                                                </button>
                                             </div>
                                         </div>
-                                        <div class="btn-group" role="group">
-                                            <button id="execute_script" class="submit btn btn-danger" type="button" name="execute_script">
-                                                Execute/Run
-                                            </button>
-                                            <button id="abort_script" class="submit btn btn-danger" type="button" name="abort_script" style="display: none;" disabled>
-                                                Abort
-                                            </button>
+                                        <div class="ui-widget" style="height: 10px;"></div>
+                                        <div style="width: auto; height:300px;">
+                                            <textarea id="code" name="code"
+                                                      placeholder="Past your script here" required></textarea>
                                         </div>
-                                    </div>
-                                    <div class="ui-widget" style="height: 10px;"></div>
-                                    <div style="width: 760px; height:300px;">
-                                    <textarea id="code" name="code"
-                                              placeholder="Past your script here" required></textarea>
-                                    </div>
-                                    <small>Press F11 when cursor is in the editor to toggle full screen editing. Esc can
-                                        also be used to exit full screen editing.
-                                    </small>
-                                </div>
-                                <div class="col-xs-12"><h5>Output terminal</h5>
-                                    <div class="">
-                                        <textarea id="output" readonly="readonly" style="height:200px; width:100%;" class="console">{{ output }}</textarea>
-                                    </div>
-                                </div>
-                            </div>
-                        </fieldset>
-                    </form>
-                </div>
-            </div>
-{% endif %}
-{% if allow_ssh %}
-            <div role="tabpanel" class="tab-pane" id="terminal">
-                <h4>Web Terminal</h4>
-                <div class="well"> <!--control_save_image-->
-                    <form class="cmxform form-horizontal" id="terminal-form" method="post"
-                          action="control_remote_node" enctype="multipart/form-data" role="form">
-                        <fieldset>
-                            {% csrf_token %}
-                            <div class="form-group">
-                                <div class="col-xs-12">
-                                    <div class="ui-widget btn-toolbar" role="group">
-                                        <div class="btn-group" role="group">
-                                            <button id="terminal_con" class="btn btn-info" type="button">Connect</button>
-                                        </div>
-                                    </div>
-                                    <iframe id="terminal_window" src=""
-                                            sandbox="allow-same-origin allow-scripts"
-                                            height="400px" scrolling="no" width="100%"
-                                            enabled="false" align="middle"
-                                            frameborder="1" marginwidth="100" class="console console2">
-                                        <p>Terminal cannot be shown because this browser doesnt support iframes.</p>
-                                    </iframe>
-                                </div>
-                            </div>
-                        </fieldset>
-                    </form>
+                                        <small>Press F11 when cursor is in the editor to toggle full screen editing.
+                                            Esc can also be used to exit full screen editing.
+                                        </small>
 
+                                        <div class="col-md-12"><h5>Output terminal</h5>
+                                            <div class="">
+                                                <textarea id="output" readonly="readonly"
+                                                          style="height:200px; width:100%;"
+                                                          class="console">{{ output }}</textarea>
+                                            </div>
+                                        </div>
+
+                                    </fieldset>
+                                </form>
+                            </div>
+
+                        </div>
+                    {% endif %}
+                    {% if allow_ssh %}
+                        <div role="tabpanel" class="tab-pane" id="terminal">
+                            <div class="card-body">
+                                <h5 class="card-title">Web Terminal</h5>
+                                <!--control_save_image-->
+                                <form class="cmxform form-horizontal" id="terminal-form" method="post"
+                                      action="control_remote_node" enctype="multipart/form-data" role="form">
+                                    <fieldset>
+                                        {% csrf_token %}
+                                        <div class="form-group btn-toolbar" role="toolbar">
+                                            <div class="btn-group mr-2" role="group">
+                                                <button id="terminal_con" class="btn btn-info"
+                                                        type="button">
+                                                    Connect
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <iframe id="terminal_window" src=""
+                                                sandbox="allow-same-origin allow-scripts"
+                                                height="400px" scrolling="no" width="100%"
+                                                enabled="false" align="middle"
+                                                frameborder="1" marginwidth="100" class="console console2">
+                                            <p>Terminal cannot be shown because this browser doesnt support
+                                                iframes.</p>
+                                        </iframe>
+
+                                    </fieldset>
+                                </form>
+
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+                <div id="fade"></div>
+                <div id="modal">
+                    <img id="loader" src="{{ STATIC_URL }}img/loading1.gif"/>
                 </div>
             </div>
-{% endif %}
         </div>
-        <div id="fade"></div>
-        <div id="modal">
-            <img id="loader" src="{{STATIC_URL}}img/loading1.gif"/>
+        <div class="col-md-3" style="padding:0">
+            <div id="clockdiv">
+                <div>
+                    <span>Remaining</span>
+                    <div class="smalltext">Slice Time</div>
+                </div>
+                <div>
+                    <span class="days"></span>
+                    <div class="smalltext">Days</div>
+                </div>
+                <div>
+                    <span class="hours"></span>
+                    <div class="smalltext">Hours</div>
+                </div>
+                <div>
+                    <span class="minutes"></span>
+                    <div class="smalltext">Minutes</div>
+                </div>
+                <div>
+                    <span class="seconds"></span>
+                    <div class="smalltext">Seconds</div>
+                </div>
+            </div>
+            <div id="activity_list">
+                <h6 class="text-md-center">Activity Log</h6>
+                <div id="activityList">
+                    <table id="activity_tbl" style="margin:0; padding:0"
+                           class="table table-sm table-condensed table-hover">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th>#</th>
+                            <th>Action</th>
+                            <th>Result</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody id="activity_content">
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <th colspan="2">
+                                <button id="clear_all_btn" class="btn btn-outline-dark btn-sm btn-block"
+                                        type="button">Clear list
+                                </button>
+                            </th>
+                            <th colspan="2">
+                                <button id="get_last_btn" class="btn btn-outline-dark btn-sm btn-block"
+                                        type="button">Restore last Session
+                                </button>
+                            </th>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div id="activity_list" class="col-xs-3" style="padding:0">
-        <ul class="nav nav-tabs nav-justified" role="tablist">
+    <script type="text/javascript" src="{{ STATIC_URL }}js/slice-control.js"></script>
 
-            <li role="presentation" class="active">
-                    <a href="#activityList" aria-controls="activityList" role="tab" data-toggle="tab">
-                    <span class="glyphicon glyphicon-list-alt"></span> Activity Log </a>
-                </li>
-        </ul>
-        <div id="table-wrapper" class="tab-content">
-            <div id="activityList" role="tabpanel" class="tab-pane active" >
-                <table id="activity_tbl" style="margin:0; padding:0" class="table table-condensed table-hover table-bordered">
-                    <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Action</th>
-                        <th>Result</th>
-                        <th></th>
-                    </tr>
-                    </thead>
-                    <tbody id="activity_content">
-                    </tbody>
-                    <tfoot>
-                    <tr>
-                        <th colspan="2">
-                            <button id="clear_all_btn" class="btn btn-default btn-xs btn-block" type="button">Clear list</button>
-                        </th> <th colspan="2">
-                            <button id="get_last_btn" class="btn btn-default btn-xs btn-block" type="button">Restore last Session </button>
-                        </th>
-                    </tr>
-                    </tfoot>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
-<script type="text/javascript" src="{{STATIC_URL}}js/slice-control.js"></script>
-<script type="text/javascript">
-var count = 0;
-var loading_List=[];
-var saving_List=[];
-var exe_List=[];
-var lab_list=[];
-var activityTable;
-var change_flag = false;
-var deadline = new Date("{{ deadline.isoformat }}");
-var show_warning = true;
+    <script type="text/javascript">
+        var count = 0;
+        var loading_List = [];
+        var saving_List = [];
+        var exe_List = [];
+        var lab_list = [];
+        var activityTable;
+        var change_flag = false;
+        var deadline = new Date("{{ deadline.isoformat }}");
+        var show_warning = true;
 
-$(document).ready(function(){
-    activityTable = document.getElementById("activity_tbl").getElementsByTagName('tbody')[0];
-    {% if stype == "omf" %}
-        editor.refresh();
-    {% endif %}
-    update_testbeds();
-    initializeClock('clockdiv', deadline);
-});
-/**************************************************************/
-$('#osimage').change(function(){
-   var selectImage = $("#osimage option:selected").text().trim();
-   if( selectImage == "GNURadio-VNC"){
-        document.getElementById("vnc").hidden = false;
-   }else{
-        document.getElementById("vnc").hidden = true;
-   }
-})
-/***************************************** Editor ************/
-{% if stype == "omf" %}
-    var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
-        lineNumbers: true, theme: "rubyblue",
-        mode: {name:"ruby", globalVars: true},
-        styleActiveLine: true, matchBrackets: true,
-        extraKeys: {
-            "F11": function(editor) { editor.setOption("fullScreen", !editor.getOption("fullScreen"));},
-            "Esc" : function(editor) { if(editor.getOption("fullScreen")){editor.setOption("fullScreen", false);}}
-        }});
-{% endif %}
-/*********************************************** Timer **/
-function myTimer() {
-    for (var a in loading_List) {
-        checking_status_image(loading_List[a][0], loading_List[a][1], a,loading_List, "control_check_load");
-    }
-    for (var a in saving_List) {
-        checking_status_image(saving_List[a][0], saving_List[a][1], a, saving_List,"control_check_save");
-    }
-    for (var a in exe_List) {
-        checking_status_exe(exe_List[a][0], exe_List[a][1], a, exe_List);
-    }
-    for( var a in lab_list){
-        checking_status_lab(lab_list[a][0], lab_list[a][1], a, lab_list);
-    }
-    if ( change_flag )
-    {
-        update_testbeds();
-        change_flag = false;
-    }
-};
-
-function getTimeRemaining(endtime) {
-    var t = Date.parse(endtime) - Date.parse(new Date());
-    var seconds = Math.floor((t / 1000) % 60);
-    var minutes = Math.floor((t / 1000 / 60) % 60);
-    var hours = Math.floor((t / (1000 * 60 * 60)) % 24);
-    var days = Math.floor(t / (1000 * 60 * 60 * 24));
-    return {
-        'total': t,'days': days,'hours': hours,'minutes': minutes,'seconds': seconds
-    };
-};
-
-function initializeClock(id, endtime) {
-    var clock = document.getElementById(id);
-    var daysSpan = clock.querySelector('.days');
-    var hoursSpan = clock.querySelector('.hours');
-    var minutesSpan = clock.querySelector('.minutes');
-    var secondsSpan = clock.querySelector('.seconds');
-
-    function updateClock() {
-        var t = getTimeRemaining(endtime);
-
-        daysSpan.innerHTML = t.days;
-        hoursSpan.innerHTML = ('0' + t.hours).slice(-2);
-        minutesSpan.innerHTML = ('0' + t.minutes).slice(-2);
-        secondsSpan.innerHTML = ('0' + t.seconds).slice(-2);
-
-        if (t.total <= 0) {
-          clearInterval(timeinterval);
-          document.location.href = '/portal/dashboard/';
-        }
-
-        if( (show_warning) && (t.total/1000/60)<=5 )
-        {
-            show_warning = false;
-            alert("Remaining time is less than 5 minutes, Save your image(s) if you want to keep your data.");
-        }
-    }
-    updateClock();
-    var timeinterval = setInterval(updateClock, 1000);
-    var timecheck = setInterval(myTimer, 5000);
-};
-
-/*********************************************** Remote Actions */
-
-$('#remote_start').on('click', function(event){
-    pre_remote("Start","node_group3");
-});
-
-$('#remote_restart').on('click', function(event){
-    pre_remote("Restart","node_group3");
-});
-
-$('#remote_shutdown').on('click', function(event){
-    pre_remote("Shutdown","node_group3");
-});
-
-function pre_remote(action,node_group_name){
-    //event.preventDefault();
-    node_name = $('input[name='+node_group_name+']:checked').val();
-    aid = add_activity(action+" "+node_name);
-    remote(action,node_name,aid);
-};
-
-function remote(action,node_name,aid) {
-    $("#"+aid).text(action + " ...");
-    openModal();
-    $.ajax({
-        url : "control_remote_node",
-        type : "POST",
-        data : {the_action : action, the_node: node_name, stype: '{{ stype }}' },
-        success : function(result) {
-            if(result=="eof")
-            {
-                document.location.href = '/portal/lab/current/';
-            }else{
-                print_recolor(aid,1,result);
-            }
-            change_flag = true;
-            closeModal();
-        },
-        error : function(xhr,errmsg,err) {
-            print_recolor(aid,3,"Unexpected Error, try again later");
-            closeModal();
-        }
-    });
-};
-
-/*********************************************** Execute Actions */
-{% if stype == "omf" %}
-
-$('#code_fullscreen').on('click', function(event){
-    event.preventDefault();
-    editor.setOption("fullScreen", true);
-});
-
-$('#code_clear').on('click', function(event){
-    event.preventDefault();
-    editor.setValue('');
-});
-
-$('#sample-1').on('click', function(event){
-    event.preventDefault();
-    aid = add_activity("Load PING Sample");
-    load_samples("sample-1",aid);
-});
-
-$('#sample-2').on('click', function(event){
-    event.preventDefault();
-    aid = add_activity("Load USRP Sample");
-    load_samples("sample-2",aid);
-});
-
-$('#execute_script').on('click', function(event){
-    if(editor.getValue() == "")
-    {
-        alert("No code to execute");
-        return;
-    }
-    event.preventDefault();
-    aid = add_activity("Running Script");
-    create_exe_post(aid);
-});
-
-$('#abort_script').on('click', function(event){
-    event.preventDefault();
-    //aid = add_activity("Cancel Script");
-    abort_script_exe(exe_List[0][0],exe_List[0][1],0,exe_List);
-});
-
-function exe_button(state)
-{
-    if( state == 0){  //Disable exe
-        $('#execute_script').attr("style","display: none;");
-        $('#execute_script').attr("disabled","disabled");
-        $('#abort_script').removeAttr("style");
-        $('#abort_script').removeAttr("disabled");
-    }
-    else if( state == 1)
-    {
-        $('#abort_script').attr("disabled","disabled");
-        $('#abort_script').attr("style","display: none;");
-        $('#execute_script').removeAttr("style");
-        $('#execute_script').removeAttr("disabled");
-    }
-};
-
-function load_samples(sample_no,aid) {
-    $("#"+aid).text("Download ...");
-    openModal();
-    $.ajax({
-        url : "load_samples",
-        type : "POST",
-        data : { the_post : sample_no},
-        success : function(json) {
-            editor.setValue(json['result']);
-            print_recolor(aid,1,"Success");
-            closeModal();
-        },
-        error : function(xhr,errmsg,err) {
-            print_recolor(aid,3,"Server not connected, try again later");
-            closeModal();
-        }
-    });
-};
-
-function create_exe_post(aid) {
-    openModal();
-    $.ajax({
-        url : "control_exe_script",
-        type : "POST",
-        data : { script_text : editor.getValue() },
-        success : function(json) {
-            $('#output').val("");
-            print_recolor(aid,2,"In progress");
-            exe_List.push([json['exp_id'],aid]);
-            closeModal();
-            exe_button(0);
-        },
-        error : function(xhr,errmsg,err) {
-            print_recolor(aid,3,"Server not connected, try again later");
-            closeModal();
-            exe_button(1);
-        }
-    });
-};
-
-function abort_script_exe(eid, aid, idx, a_list) {
-    $.ajax({
-        url  : "control_exe_abort",
-        type : "POST",
-        data : {the_eid: eid,},
-        success : function(result) {
-            if(result == "eof"){
-                document.location.href = '/portal/lab/current/';
-            } else {
-                if( result.startsWith("success")){
-                    print_recolor(aid, 1, result);
-                } else if ( result.startsWith("warning")){
-                    print_recolor(aid, 2, result);
-                } else {
-                    print_recolor(aid, 3, result);
-                }
-            }
-            a_list.splice(idx,1);
-            exe_button(1);
-        },
-        error : function(xhr,errmsg,err) {
-           console.log(err);
-           print_recolor(aid,3,"Server not connected, try again later");
-           exe_button(0);
-        }
-    });
-};
-
-function checking_status_exe(eid, aid, idx, a_list) {
-    $.ajax({
-        url  : "control_check_exe",
-        type : "POST",
-        data : {the_eid: eid,},
-        success : function(result) {
-            //console.log(result);
-            var is_done = result['done'];
-            if(is_done==false){
-                var log = result['log'];
-                var output ='';
-                for (txt in log){
-                    output += log[txt] + '\n';
-                }
-                $('#output').val(output);
-                $('#output').scrollTop($('#output')[0].scrollHeight);
-                print_recolor(aid,2,"In progress");
-            } else {
-                print_recolor(aid,1,"Complete");
-                a_list.splice(idx,1);
-                exe_button(1);
-            }
-        },
-        error : function(xhr,errmsg,err) {
-           console.log(err);
-           print_recolor(aid,3,"Server not connected, try again later");
-           a_list.splice(idx,1);
-        }
-    });
-};
-{% endif %}
-/******************************************** Loading & Save Actions ***/
-
-$('#load_image_btn').on('click', function(event){
-    event.preventDefault();
-    os_type = $('input[name="image_type"]:checked').val();
-    os_id   = $('#osimage option:selected').val();
-    if(os_type=="user_image"){
-        os_id   = $('#osimage_user option:selected').val();
-    }
-    var select_node_list = [];                      //
-    var aid_list         = [];                      //
-
-    $('input[name="node_group1"]:checked').each(function() {
-        select_node = $(this).val();
-        select_node_list.push(select_node);          //
-        aid     = add_activity("Loading Image on Node: " +select_node);
-        aid_list.push(aid);                          //
-        //loading_image(select_node,os_id,os_type, aid);
-    });
-    loading_image(select_node_list,os_id,os_type, aid_list);
-});
-
-$('#save-image-btn').on('click', function(event){
-    event.preventDefault();
-    image_name = $('input[name="image_name"]').val();
-    node_name  = $('input[name="node_group2"]:checked').val();
-    aid = add_activity("Saving Image on Node: " +node_name);
-    saving_image(node_name,image_name, aid);
-});
-
-function loading_image(node_name, os_id, os_type, aid) {
-    for( x in aid){
-        $("#"+aid[x]).text("loading ...");
-    }
-    openModal();
-    $.ajax({
-        url  : "control_load_image",
-        type : "POST",
-        data : {the_node: node_name, the_type:os_type ,the_os:os_id, stype: '{{ stype }}', },
-        success : function(result) {
-            if(result == "eof"){
-                document.location.href = '/portal/lab/current/';
-            } else {
-                if( result.startsWith("success")){
-                    for(var x in aid)
-                    {
-                        print_recolor(aid[x], 1, result);
-                        loading_List.push([node_name[x],aid[x]]);
+        $(document).ready(function () {
+            activityTable = document.getElementById("activity_tbl").getElementsByTagName('tbody')[0];
+            {% if stype == "omf" %}
+                editor.refresh();
+            {% endif %}
+            update_testbeds();
+            initializeClock('clockdiv', deadline);
+        });
+        /**************************************************************/
+        $('#osimage').change(function () {
+            var selectImage = $("#osimage option:selected").text().trim();
+            document.getElementById("vnc").hidden = selectImage !== "GNURadio-VNC";
+        });
+        /***************************************** Editor ************/
+            {% if stype == "omf" %}
+                var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+                lineNumbers: true, theme: "rubyblue",
+                mode: {name: "ruby", globalVars: true},
+                styleActiveLine: true, matchBrackets: true,
+                extraKeys: {
+                    "F11": function (editor) {
+                        editor.setOption("fullScreen", !editor.getOption("fullScreen"));
+                    },
+                    "Esc": function (editor) {
+                        if (editor.getOption("fullScreen")) {
+                            editor.setOption("fullScreen", false);
+                        }
                     }
-                } else if ( result.startsWith("warning")){
-                    print_recolor(aid, 2, result);
-                } else {
-                    print_recolor(aid, 3, result);
                 }
-            }
-            closeModal();
-        },
-        error : function(xhr,errmsg,err) {
-            for(x in aid)
-            {
-                print_recolor(aid[x],3,"Server Error, try again later");
-            }
-            closeModal();
-        }
-    });
-};
+            });
+            {% endif %}
 
-function saving_image(node_name,image_name, aid) {
-    $("#"+aid).text("Saving ...");
-    openModal();
-    $.ajax({
-        url  : "control_save_image",
-        type : "POST",
-        data : {the_node: node_name, the_image:image_name, stype: '{{ stype }}', },
-        success : function(result) {
-            if(result=="eof"){
-                document.location.href = '/portal/lab/current/';
-            }else{
-                if( result.startsWith("success")){
-                    print_recolor(aid,1,result);
-                    saving_List.push([node_name,aid]);
-                }else if( result.startsWith("warning")){
-                    print_recolor(aid,2,result);
-                }else{
-                    print_recolor(aid,3,result);
+        /*********************************************** Timer **/
+        function myTimer() {
+            var a;
+            for ( a in loading_List) {
+                checking_status_image(loading_List[a][0], loading_List[a][1], a, loading_List, "control_check_load");
+            }
+            for ( a in saving_List) {
+                checking_status_image(saving_List[a][0], saving_List[a][1], a, saving_List, "control_check_save");
+            }
+            for ( a in exe_List) {
+                checking_status_exe(exe_List[a][0], exe_List[a][1], a, exe_List);
+            }
+            for ( a in lab_list) {
+                checking_status_lab(lab_list[a][0], lab_list[a][1], a, lab_list);
+            }
+            if (change_flag) {
+                update_testbeds();
+                change_flag = false;
+            }
+        }
+
+        function getTimeRemaining(endtime) {
+            var t = Date.parse(endtime) - Date.parse(new Date());
+            var seconds = Math.floor((t / 1000) % 60);
+            var minutes = Math.floor((t / 1000 / 60) % 60);
+            var hours = Math.floor((t / (1000 * 60 * 60)) % 24);
+            var days = Math.floor(t / (1000 * 60 * 60 * 24));
+            return {
+                'total': t, 'days': days, 'hours': hours, 'minutes': minutes, 'seconds': seconds
+            };
+        }
+
+        function initializeClock(id, endtime) {
+            var clock = document.getElementById(id);
+            var daysSpan = clock.querySelector('.days');
+            var hoursSpan = clock.querySelector('.hours');
+            var minutesSpan = clock.querySelector('.minutes');
+            var secondsSpan = clock.querySelector('.seconds');
+
+            function updateClock() {
+                var t = getTimeRemaining(endtime);
+
+                daysSpan.innerHTML = t.days;
+                hoursSpan.innerHTML = ('0' + t.hours).slice(-2);
+                minutesSpan.innerHTML = ('0' + t.minutes).slice(-2);
+                secondsSpan.innerHTML = ('0' + t.seconds).slice(-2);
+
+                if (t.total <= 0) {
+                    clearInterval(timeinterval);
+                    document.location.href = '/portal/dashboard/';
+                }
+
+                if ((show_warning) && (t.total / 1000 / 60) <= 5) {
+                    show_warning = false;
+                    alert("Remaining time is less than 5 minutes, Save your image(s) if you want to keep your data.");
                 }
             }
-            closeModal();
-        },
-        error : function(xhr,errmsg,err) {
-            print_recolor(aid,3,"Server Error, try again later");
-            closeModal();
+            updateClock();
+            var timeinterval = setInterval(updateClock, 1000);
+            var timecheck = setInterval(myTimer, 5000);
         }
-    });
-};
+        /*********************************************** Remote Actions */
+        $('#remote_start').on('click', function (event) {
+            pre_remote("Start", "node_group3");
+        });
 
-function checking_status_image(node_name, aid, idx, a_list, a_url) {
-    $.ajax({
-        url  : a_url,
-        type : "POST",
-        data : {the_node: node_name, stype: '{{ stype }}',},
-        success : function(result) {
-            console.log(result);
-            var is_error = result['error'];
-            if(is_error==false){
-                if(result['done']==true)
-                {
-                    print_recolor(aid,1,"Done.");
-                    a_list.splice(idx,1);
-                }else if( parseInt(result['progress']) <100){
-                    print_recolor(aid,1,result['progress']+"%");
-                } else {
-                    print_recolor(aid,2,"In progress...");
+        $('#remote_restart').on('click', function (event) {
+            pre_remote("Restart", "node_group3");
+        });
+
+        $('#remote_shutdown').on('click', function (event) {
+            pre_remote("Shutdown", "node_group3");
+        });
+
+        function pre_remote(action, node_group_name) {
+            //event.preventDefault();
+            node_name = $('input[name=' + node_group_name + ']:checked').val();
+            aid = add_activity(action + " " + node_name);
+            remote(action, node_name, aid);
+        }
+
+        function remote(action, node_name, aid) {
+            $("#" + aid).text(action + " ...");
+            openModal();
+            $.ajax({
+                url: "control_remote_node",
+                type: "POST",
+                data: {the_action: action, the_node: node_name, stype: '{{ stype }}'},
+                success: function (result) {
+                    if (result === "eof") {
+                        document.location.href = '/portal/lab/current/';
+                    } else {
+                        print_recolor(aid, 1, result);
+                    }
+                    change_flag = true;
+                    closeModal();
+                },
+                error: function (xhr, errmsg, err) {
+                    print_recolor(aid, 3, "Unexpected Error, try again later");
+                    closeModal();
                 }
+            });
+        }
+
+        /*********************************************** Execute Actions ******/
+        {% if stype == "omf" %}
+
+            $('#code_fullscreen').on('click', function (event) {
+                event.preventDefault();
+                editor.setOption("fullScreen", true);
+            });
+
+            $('#code_clear').on('click', function (event) {
+                event.preventDefault();
+                editor.setValue('');
+            });
+
+            $('#sample-1').on('click', function (event) {
+                event.preventDefault();
+                var aid = add_activity("Load PING Sample");
+                load_samples("sample-1", aid);
+            });
+
+            $('#sample-2').on('click', function (event) {
+                event.preventDefault();
+                var aid = add_activity("Load USRP Sample");
+                load_samples("sample-2", aid);
+            });
+
+            $('#execute_script').on('click', function (event) {
+                if (editor.getValue() === "") {
+                    alert("No code to execute");
+                    return;
+                }
+                event.preventDefault();
+                aid = add_activity("Running Script");
+                create_exe_post(aid);
+            });
+
+            $('#abort_script').on('click', function (event) {
+                event.preventDefault();
+                //aid = add_activity("Cancel Script");
+                abort_script_exe(exe_List[0][0], exe_List[0][1], 0, exe_List);
+            });
+
+            function exe_button(state) {
+                if (state === 0) {  //Disable exe
+                    $('#execute_script').attr("style", "display: none;").attr("disabled", "disabled");
+                    $('#abort_script').removeAttr("style").removeAttr("disabled");
+                }
+                else if (state === 1) {
+                    $('#abort_script').attr("disabled", "disabled").attr("style", "display: none;");
+                    $('#execute_script').removeAttr("style").removeAttr("disabled");
+                }
+            }
+
+            function load_samples(sample_no, aid) {
+                $("#" + aid).text("Download ...");
+                openModal();
+                $.ajax({
+                    url: "load_samples",
+                    type: "POST",
+                    data: {the_post: sample_no},
+                    success: function (json) {
+                        editor.setValue(json['result']);
+                        print_recolor(aid, 1, "Success");
+                        closeModal();
+                    },
+                    error: function (xhr, errmsg, err) {
+                        print_recolor(aid, 3, "Server not connected, try again later");
+                        closeModal();
+                    }
+                });
+            }
+
+            function create_exe_post(aid) {
+                openModal();
+                $.ajax({
+                    url: "control_exe_script",
+                    type: "POST",
+                    data: {script_text: editor.getValue()},
+                    success: function (json) {
+                        $('#output').val("");
+                        print_recolor(aid, 2, "In progress");
+                        exe_List.push([json['exp_id'], aid]);
+                        closeModal();
+                        exe_button(0);
+                    },
+                    error: function (xhr, errmsg, err) {
+                        print_recolor(aid, 3, "Server not connected, try again later");
+                        closeModal();
+                        exe_button(1);
+                    }
+                });
+            }
+
+            function abort_script_exe(eid, aid, idx, a_list) {
+                $.ajax({
+                    url: "control_exe_abort",
+                    type: "POST",
+                    data: {the_eid: eid},
+                    success: function (result) {
+                        if (result === "eof") {
+                            document.location.href = '/portal/lab/current/';
+                        } else {
+                            if (result.startsWith("success")) {
+                                print_recolor(aid, 1, result);
+                            } else if (result.startsWith("warning")) {
+                                print_recolor(aid, 2, result);
+                            } else {
+                                print_recolor(aid, 3, result);
+                            }
+                        }
+                        a_list.splice(idx, 1);
+                        exe_button(1);
+                    },
+                    error: function (xhr, errmsg, err) {
+                        console.log(err);
+                        print_recolor(aid, 3, "Server not connected, try again later");
+                        exe_button(0);
+                    }
+                });
+            }
+
+            function checking_status_exe(eid, aid, idx, a_list) {
+                $.ajax({
+                    url: "control_check_exe",
+                    type: "POST",
+                    data: {the_eid: eid},
+                    success: function (result) {
+                        //console.log(result);
+                        var is_done = result['done'];
+                        if (is_done === false) {
+                            var log = result['log'];
+                            var output = '';
+                            for (var txt in log) {
+                                output += log[txt] + '\n';
+                            }
+                            $('#output').val(output);
+                            $('#output').scrollTop($('#output')[0].scrollHeight);
+                            print_recolor(aid, 2, "In progress");
+                        } else {
+                            print_recolor(aid, 1, "Complete");
+                            a_list.splice(idx, 1);
+                            exe_button(1);
+                        }
+                    },
+                    error: function (xhr, errmsg, err) {
+                        console.log(err);
+                        print_recolor(aid, 3, "Server not connected, try again later");
+                        a_list.splice(idx, 1);
+                    }
+                });
+            }
+        {% endif %}
+        /******************************************** Loading & Save Actions ***/
+
+        $('#load_image_btn').on('click', function (event) {
+            event.preventDefault();
+            var os_type = $('input[name="image_type"]:checked').val();
+            var os_id = $('#osimage option:selected').val();
+            if (os_type === "user_image") {
+                os_id = $('#osimage_user option:selected').val();
+            }
+            var select_node_list = [];                      //
+            var aid_list = [];                      //
+
+            $('input[name="node_group1"]:checked').each(function () {
+                var select_node = $(this).val();
+                select_node_list.push(select_node);          //
+                var aid = add_activity("Loading Image on Node: " + select_node);
+                aid_list.push(aid);                          //
+                /*loading_image(select_node,os_id,os_type, aid);*/
+            });
+            loading_image(select_node_list, os_id, os_type, aid_list);
+        });
+
+        $('#save-image-btn').on('click', function (event) {
+            event.preventDefault();
+            var image_name = $('input[name="image_name"]').val();
+            var node_name = $('input[name="node_group2"]:checked').val();
+            var aid = add_activity("Saving Image on Node: " + node_name);
+            saving_image(node_name, image_name, aid);
+        });
+
+        function loading_image(node_name, os_id, os_type, aid) {
+            for (var x in aid) {
+                $("#" + aid[x]).text("loading ...");
+            }
+            openModal();
+            $.ajax({
+                url: "control_load_image",
+                type: "POST",
+                data: {the_node: node_name, the_type: os_type, the_os: os_id, stype: '{{ stype }}'},
+                success: function (result) {
+                    if (result === "eof") {
+                        document.location.href = '/portal/lab/current/';
+                    } else {
+                        if (result.startsWith("success")) {
+                            for (var x in aid) {
+                                print_recolor(aid[x], 1, result);
+                                loading_List.push([node_name[x], aid[x]]);
+                            }
+                        } else if (result.startsWith("warning")) {
+                            print_recolor(aid, 2, result);
+                        } else {
+                            print_recolor(aid, 3, result);
+                        }
+                    }
+                    closeModal();
+                },
+                error: function (xhr, errmsg, err) {
+                    for (x in aid) {
+                        print_recolor(aid[x], 3, "Server Error, try again later");
+                    }
+                    closeModal();
+                }
+            });
+        }
+
+        function saving_image(node_name, image_name, aid) {
+            $("#" + aid).text("Saving ...");
+            openModal();
+            $.ajax({
+                url: "control_save_image",
+                type: "POST",
+                data: {the_node: node_name, the_image: image_name, stype: '{{ stype }}'},
+                success: function (result) {
+                    if (result === "eof") {
+                        document.location.href = '/portal/lab/current/';
+                    } else {
+                        if (result.startsWith("success")) {
+                            print_recolor(aid, 1, result);
+                            saving_List.push([node_name, aid]);
+                        } else if (result.startsWith("warning")) {
+                            print_recolor(aid, 2, result);
+                        } else {
+                            print_recolor(aid, 3, result);
+                        }
+                    }
+                    closeModal();
+                },
+                error: function (xhr, errmsg, err) {
+                    print_recolor(aid, 3, "Server Error, try again later");
+                    closeModal();
+                }
+            });
+        }
+
+        function checking_status_image(node_name, aid, idx, a_list, a_url) {
+            $.ajax({
+                url: a_url,
+                type: "POST",
+                data: {the_node: node_name, stype: '{{ stype }}'},
+                success: function (result) {
+                    console.log(result);
+                    var is_error = result['error'];
+                    if (is_error === false) {
+                        if (result['done'] === true) {
+                            print_recolor(aid, 1, "Done.");
+                            a_list.splice(idx, 1);
+                        } else if (parseInt(result['progress']) < 100) {
+                            print_recolor(aid, 1, result['progress'] + "%");
+                        } else {
+                            print_recolor(aid, 2, "In progress...");
+                        }
+                    } else {
+                        if (is_error === true) {
+                            print_recolor(aid, 3, "Server error");
+                        } else {
+                            print_recolor(aid, 3, "Failed");
+                        }
+                        a_list.splice(idx, 1);
+                    }
+                },
+                error: function (xhr, errmsg, err) {
+                    console.log(err);
+                    print_recolor(aid, 3, "Server not connected, try again later");
+                    a_list.splice(idx, 1);
+                }
+            });
+        }
+        /***** Terminal *****/
+
+        $("#terminal_con").on('click', function (event) {
+            connect_terminal();
+        });
+
+        function connect_terminal() {
+            var address = ("{{terminal_ip}}");
+            var element = document.getElementById("terminal_window");
+            //var url =  element.src;
+            element.src = address;
+        }
+
+        /*********************************************** ALL ***/
+        function add_activity(a_name) {
+            count++;
+            /*var table = activityTable;*/
+            var row = activityTable.insertRow();
+            var cell0 = row.insertCell(0);
+            var cell1 = row.insertCell(1);
+            var cell2 = row.insertCell(2);
+            var cell3 = row.insertCell(3);
+            cell2.id = "activity_" + count;
+            cell3.id = cell2.id + "_ico";
+            row.id = cell2.id + "_row";
+            cell0.innerHTML = count;
+            cell1.innerHTML = a_name;
+            cell2.innerHTML = "-";
+            cell3.innerHTML = "";
+
+            $('#activityList').scrollTop($('#activityList')[0].scrollHeight);
+            return cell2.id;
+        }
+
+        $("#clear_all_btn").on('click', function (event) {
+            $("#activity_content").empty();
+            count = 0;
+        });
+
+        $("#get_last_btn").on('click', function (event) {
+            {% for n in node_list %}
+                var node_id = '{{ n.node_ref.vm_name }}';
+                var l = '{{n.details}}';
+                if (l !== 'NA') {
+                    var node_name = '{{ n.node_ref.vm_name }}';
+                    var aid = add_activity(node_name + ', {{n.details}} image at {{n.last_action}}');
+
+                    if (l === "save")
+                        saving_List.push([node_name, aid]);
+                    else if (l === "load")
+                        loading_List.push([node_name, aid]);
+                }
+            {% endfor %}
+        });
+
+        function openModal() {
+            document.getElementById('modal').style.display = 'block';
+            document.getElementById('fade').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+            document.getElementById('fade').style.display = 'none';
+        }
+
+        function disableRefresh() {
+            $('button[data-id="refresh"]').text("Checking Status ...").attr("disabled", "disabled");
+        }
+
+        function enableRefresh() {
+            $('button[data-id="refresh"]').text("Refresh Status").removeAttr("disabled");
+        }
+
+        function print_recolor(aid, level, msg) {
+            /*$("#" + aid).text(msg);*/
+            if (level === 1) {
+                $("#" + aid).text(msg).attr('class', "text-success");
+                $("#" + aid + "_ico").attr('class', "fas fa-check-circle text-success");
+
+            } else if (level === 2) {
+                $("#" + aid).text(msg).attr('class', "text-warning");
+                $("#" + aid + "_ico").attr('class', "fas fa-exclamation-circle text-warning");
+
             } else {
-                if (is_error==true){
-                    print_recolor(aid,3,"Server error");
-                } else{
-                    print_recolor(aid,3,"Failed");
-                }
-                a_list.splice(idx,1);
+                $("#" + aid).text(msg).attr('class', "text-danger");
+                $("#" + aid + "_ico").attr('class', "fas fa-ban text-danger");
+
             }
-        },
-        error : function(xhr,errmsg,err) {
-           console.log(err);
-           print_recolor(aid,3,"Server not connected, try again later");
-           a_list.splice(idx,1);
         }
-    });
-};
-/********************************************* Terminal **/
+        /*********************************************** Refresh */
 
-$("#terminal_con").on('click', function(event){
-    connect_terminal();
-});
+        $("#refresh_btn3").on('click', function (event) {
+            event.preventDefault();
+            update_testbeds();
+        });
+        $("#refresh_btn2").on('click', function (event) {
+            event.preventDefault();
+            update_testbeds();
+        });
+        $("#refresh_btn1").on('click', function (event) {
+            event.preventDefault();
+            update_testbeds();
+        });
 
-function connect_terminal(){
-    var address  = ("{{terminal_ip}}");
-    var element  = document.getElementById("terminal_window");
-    //var url =  element.src;
-    element.src  = address;
-};
-/*********************************************** ALL ***/
-function add_activity(a_name) {
-    count++;
-    var table = activityTable;
-    var row = table.insertRow();
-    var cell0 = row.insertCell(0);
-    var cell1 = row.insertCell(1);
-    var cell2 = row.insertCell(2);
-    var cell3 = row.insertCell(3);
-    cell2.id = "activity_"+count;
-    cell3.id = cell2.id + "_ico";
-    row.id = cell2.id + "_row";
-    cell0.innerHTML = count;
-    cell1.innerHTML = a_name;
-    cell2.innerHTML = "-";
-    cell3.innerHTML = "";
-
-    $('#activityList').scrollTop($('#activityList')[0].scrollHeight);
-    return cell2.id;
-};
-
-$("#clear_all_btn").on('click', function(event){
-    $("#activity_content").empty();
-    count=0;
-});
-
-$("#get_last_btn").on('click', function(event){
-    {% for n in node_list %}
-        var node_id = '{{ n.node_ref.vm_name }}';
-        var l = '{{n.details}}';
-        if( l != 'NA')
-        {
-            var node_name = '{{ n.node_ref.vm_name }}';
-            aid = add_activity(node_name +', {{n.details}} image at {{n.last_action}}');
-
-            if(l=="save")
-                saving_List.push([node_name,aid]);
-            else if(l=="load")
-                loading_List.push([node_name,aid]);
+        function update_testbeds() {
+            disableRefresh();
+            {% for n in node_list %}
+                var node_id = '{{ n.node_ref.vm_name }}';
+                check_status(node_id);
+            {% endfor %}
+            enableRefresh();
         }
-    {% endfor %}
-});
 
-function openModal() {
-    document.getElementById('modal').style.display = 'block';
-    document.getElementById('fade').style.display = 'block';
-};
-
-function closeModal() {
-    document.getElementById('modal').style.display = 'none';
-    document.getElementById('fade').style.display = 'none';
-};
-
-function disableRefresh() {
-    $('button[data-id="refresh"]').text("Checking Status ...");
-    $('button[data-id="refresh"]').attr("disabled","disabled");
-
-    /*if( document.getElementById('refresh_btn1') !== null )
-    {
-        document.getElementById("refresh_btn1").innerHTML = "Checking Status ...";
-        document.getElementById("refresh_btn1").disabled = true;
-    }
-    if( document.getElementById('refresh_btn2') !== null )
-    {
-        document.getElementById("refresh_btn2").innerHTML = "Checking Status ...";
-        document.getElementById("refresh_btn2").disabled = true;
-    }
-    if( document.getElementById('refresh_btn3') !== null )
-    {
-        document.getElementById("refresh_btn3").innerHTML = "Checking Status ...";
-        document.getElementById("refresh_btn3").disabled = true;
-    }*/
-};
-
-function enableRefresh() {
-    $('button[data-id="refresh"]').text("Refresh Status");
-    $('button[data-id="refresh"]').removeAttr("disabled");
-
-    /*if( document.getElementById('refresh_btn1') !== null )
-    {
-        document.getElementById("refresh_btn1").innerHTML=
-        document.getElementById("refresh_btn1").disabled = false;
-    }
-    if( document.getElementById('refresh_btn2') !== null )
-    {
-        document.getElementById("refresh_btn2").innerHTML= "Refresh Status";
-        document.getElementById("refresh_btn2").disabled = false;
-    }
-    if( document.getElementById('refresh_btn3') !== null )
-    {
-        document.getElementById("refresh_btn3").innerHTML= "Refresh Status";
-        document.getElementById("refresh_btn3").disabled = false;
-    }*/
-};
-
-function print_recolor(aid, level, msg)
-{
-    $("#"+aid).text(msg);
-    if(level==1){
-        $("#"+aid).attr('class', "text-success");
-        $("#"+aid+"_ico").attr('class', "glyphicon glyphicon-ok text-success");
-    }else if( level ==2){
-        $("#"+aid).attr('class', "text-warning");
-        $("#"+aid+"_ico").attr('class', "glyphicon glyphicon-ban-circle text-warning");
-    }else{
-        $("#"+aid).attr('class', "text-danger");
-        $("#"+aid+"_ico").attr('class', "glyphicon glyphicon-remove text-danger");
-     }
-};
-/*********************************************** Refresh */
-
-$("#refresh_btn3").on('click', function(event){
-    event.preventDefault();
-    update_testbeds();
-});
-$("#refresh_btn2").on('click', function(event){
-    event.preventDefault();
-    update_testbeds();
-});
-$("#refresh_btn1").on('click', function(event){
-    event.preventDefault();
-    update_testbeds();
-});
-
-function update_testbeds(){
-    disableRefresh();
-    {% for n in node_list %}
-        var node_id = '{{ n.node_ref.vm_name }}';
-        check_status(node_id);
-    {% endfor %}
-    enableRefresh();
-};
-
-function update_node(node_id, status){
-    if(status == "on"){
-        $("span[name=node_"+node_id+"]").removeAttr('class').attr('class', "glyphicon glyphicon-play-circle text-success");
-        $("input[data-id=node_"+node_id+"]").removeAttr("disabled");
-    }else if(status =="off"){
-        $("span[name=node_"+node_id+"]").removeAttr('class').attr('class', "glyphicon glyphicon-off text-danger");
-        $("input[data-id=node_"+node_id+"]").attr("disabled","disabled");
-    }else {
-        $("span[name=node_"+node_id+"]").removeAttr('class').attr('class', "glyphicon glyphicon-exclamation-sign text-warning");
-        $("input[data-id=node_"+node_id+"]").attr("disabled","disabled");
-    };
-}
-function check_status(node_id) {
-    $.ajax({
-        url : "/portal/testbeds/map/check_status",
-        type : "POST",
-        data : { the_post : node_id },
-        success : function(json) {
-            var result = json['status'];
-            update_node(node_id, result);
-        },
-        error : function(xhr,errmsg,err) {
-            update_node(node_id, "error");
-        }
-    });
-};
-/****************Lab*************************************/
-{% if show_lab %}
-$('#run_exp_lab').on('click', function(event){
-    event.preventDefault();
-    aid = add_activity("Running Experiment");
-    $('#run_exp_lab').attr("disabled","disabled");
-    create_lab_post(aid);
-});
-
-function create_lab_post(aid,lparam) {
-    openModal();
-    $.ajax({
-        url : "control_lab_run",
-        type : "POST",
-        data : $("#run-lab-form").serialize() ,
-        success : function(json) {
-            $('#exp_output').val("");
-            print_recolor(aid,2,"In progress...");
-            lab_list.push([json['exp_id'],aid]);
-            closeModal();
-            $('#run_exp_lab').removeAttr("disabled");
-        },
-        error : function(xhr,errmsg,err) {
-            print_recolor(aid,3,"Server not connected, try again later");
-            closeModal();
-            $('#run_exp_lab').removeAttr("disabled");
-        }
-    });
-};
-
-function checking_result_lab(eid) {
-    $.ajax({
-        url  : "control_lab_result",
-        type : "POST",
-        data : {the_eid: eid,},
-        success : function(result) {
-             var video = document.getElementById('exp_result');
-             result  = result + "?t=" + new Date();
-             video.setAttribute("src", result);
-        },
-        error : function(xhr,errmsg,err) {
-        }
-    });
-};
-
-function checking_status_lab(eid, aid, idx, a_list) {
-    $.ajax({
-        url  : "control_lab_check",
-        type : "POST",
-        data : {the_eid: eid,},
-        success : function(result) {
-            //console.log(result);
-            var is_done = result['done'];
-
-            if(is_done==false){
-                var log = result['log'];
-                var output ='';
-                for (txt in log){
-                    output += log[txt] + '\n';
-                }
-
-                $('#exp_output').val(output);
-                $('#exp_output').scrollTop($('#exp_output')[0].scrollHeight);
-                print_recolor(aid,2,"In progress");
+        function update_node(node_id, status) {
+            if (status === "on") {
+                $("svg[name=node_" + node_id + "]")
+                    .removeAttr('class')
+                    .attr('class', 'text-success fas fa-running');
+                $("input[data-id=node_" + node_id + "]").removeAttr("disabled");
+            } else if (status === "off") {
+                $("svg[name=node_" + node_id + "]")
+                    .removeAttr('class')
+                    .attr('class', 'text-danger fas fa-power-off');
+                $("input[data-id=node_" + node_id + "]").attr("disabled", "disabled");
             } else {
-                var log = result['log'];
-                var output ='';
-                for (txt in log){
-                    output += log[txt] + '\n';
-                }
-
-                $('#exp_output').val(output);
-                $('#exp_output').scrollTop($('#exp_output')[0].scrollHeight);
-                print_recolor(aid,1,"Complete");
-                a_list.splice(idx,1);
-                checking_result_lab(eid);
+                $("svg[name=node_" + node_id + "]")
+                    .removeAttr('class')
+                    .attr('class', 'text-warning fas fa-exclamation-triangle');
+                $("input[data-id=node_" + node_id + "]").attr("disabled", "disabled");
             }
-        },
-        error : function(xhr,errmsg,err) {
-           console.log(err);
-           print_recolor(aid,3,"Server not connected, try again later");
-           a_list.splice(idx,1);
         }
-    });
-};
-{% endif %}
-</script>
+
+        function check_status(node_id) {
+            $.ajax({
+                url: "/portal/testbeds/map/check_status",
+                type: "POST",
+                data: {the_post: node_id},
+                success: function (json) {
+                    var result = json['status'];
+                    update_node(node_id, result);
+                },
+                error: function (xhr, errmsg, err) {
+                    update_node(node_id, "error");
+                }
+            });
+        };
+        /****************Lab*************************************/
+        {% if show_lab %}
+            $('#run_exp_lab').on('click', function (event) {
+                event.preventDefault();
+                aid = add_activity("Running Experiment");
+                $('#run_exp_lab').attr("disabled", "disabled");
+                create_lab_post(aid);
+            });
+
+            function create_lab_post(aid, lparam) {
+                openModal();
+                $.ajax({
+                    url: "control_lab_run",
+                    type: "POST",
+                    data: $("#run-lab-form").serialize(),
+                    success: function (json) {
+                        $('#exp_output').val("");
+                        print_recolor(aid, 2, "In progress...");
+                        lab_list.push([json['exp_id'], aid]);
+                        closeModal();
+                        $('#run_exp_lab').removeAttr("disabled");
+                    },
+                    error: function (xhr, errmsg, err) {
+                        print_recolor(aid, 3, "Server not connected, try again later");
+                        closeModal();
+                        $('#run_exp_lab').removeAttr("disabled");
+                    }
+                });
+            }
+
+            function checking_result_lab(eid) {
+                $.ajax({
+                    url: "control_lab_result",
+                    type: "POST",
+                    data: {the_eid: eid},
+                    success: function (result) {
+                        var video = document.getElementById('exp_result');
+                        result = result + "?t=" + new Date();
+                        video.setAttribute("src", result);
+                    },
+                    error: function (xhr, errmsg, err) {
+                    }
+                });
+            }
+
+            function checking_status_lab(eid, aid, idx, a_list) {
+                $.ajax({
+                    url: "control_lab_check",
+                    type: "POST",
+                    data: {the_eid: eid},
+                    success: function (result) {
+                        /*console.log(result);*/
+                        var is_done = result['done'];
+                        var log, output;
+                        if (is_done === false) {
+                            log = result['log'];
+                            output = '';
+                            for (var txt in log) {
+                                output += log[txt] + '\n';
+                            }
+
+                            $('#exp_output').val(output);
+                            $('#exp_output').scrollTop($('#exp_output')[0].scrollHeight);
+                            print_recolor(aid, 2, "In progress");
+                        } else {
+                            log = result['log'];
+                            output = '';
+                            for (txt in log) {
+                                output += log[txt] + '\n';
+                            }
+
+                            $('#exp_output').val(output);
+                            $('#exp_output').scrollTop($('#exp_output')[0].scrollHeight);
+                            print_recolor(aid, 1, "Complete");
+                            a_list.splice(idx, 1);
+                            checking_result_lab(eid);
+                        }
+                    },
+                    error: function (xhr, errmsg, err) {
+                        console.log(err);
+                        print_recolor(aid, 3, "Server not connected, try again later");
+                        a_list.splice(idx, 1);
+                    }
+                });
+            }
+        {% endif %}
+    </script>
 {% endblock %}

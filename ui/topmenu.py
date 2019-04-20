@@ -2,7 +2,7 @@
 
 def the_user(request):
     "retrieves logged in user's email, or empty string"
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         return ''
     else:
         return request.user.email
@@ -23,7 +23,7 @@ def the_user(request):
 
 # current: the beginning of the label in the menu that you want to outline
 def topmenu_items_static(current, request):
-    has_user = request.user.is_authenticated()
+    has_user = request.user.is_authenticated
     result = []
     print(request.user)
     if has_user:

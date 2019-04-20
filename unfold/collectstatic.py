@@ -74,7 +74,7 @@ class ThirdPartyFinder(BaseFinder):
                         matched_path = os.path.join(path, file)
                         if not all:
                             return matched_path
-                        print 'ThirdPartyFinder, adding',matched_path
+                        print ('ThirdPartyFinder, adding',matched_path)
                         matches.append(matched_path)
         return matches
 

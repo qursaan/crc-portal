@@ -4,6 +4,7 @@ import json
 from datetime import timedelta
 
 from dateutil import parser
+#from dateutil.parser import parse
 from django.db.models import Q
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
@@ -13,7 +14,7 @@ from portal.actions import utc_to_timezone
 from portal.models import SimReservation, VirtualNode, SimulationVM, \
     ReservationDetail
 from portal.user_access_profile import UserAccessProfile
-from reservation_status import ReservationStatus
+from .reservation_status import ReservationStatus
 from ui.topmenu import topmenu_items  # , the_user
 from unfold.loginrequired import LoginRequiredAutoLogoutView
 from unfold.page import Page
@@ -48,7 +49,7 @@ class SchedulerView(LoginRequiredAutoLogoutView):
         reserve_list = get_reservation_list(server_type, request_date)
 
         template_env = {
-            'topmenu_items': topmenu_items('Scheduler View', page.request),
+            #'topmenu_items': topmenu_items('Scheduler View', page.request),
             'username': usera.username,
             'server_type': request.POST.get('server_type', server_type),
             'errors': self.errors,

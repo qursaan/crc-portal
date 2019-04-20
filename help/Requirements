@@ -1,12 +1,18 @@
-Django			    = 1.8.4
-Pillow			    = 2.3.0
-South			    = 0.7.5
-django-filer		= 1.1.1
-django-mptt		    = 0.8.0
-django-polymorphic
-easy_thumbnails
-djanog-simple-captcha	= 0.5.1
-httplib2		    = 0.8
-pyparsing		    = 2.0.1
-python-dateutil		= 2.4.2
-pytz			    = 2015.7
+Django==2.1.1
+mysqlclient
+django-mptt
+django-polymorphic==2.0
+djangorestframework==3.9.0
+markdown
+mysql-connector-python
+applicationinsights
+pyparsing==2.2.1
+python-dateutil==2.7.3
+pycrypto==2.6.1
+django-filter
+Flask==1.0.0
+flask-mysql==1.4.0
+flask-crossdomain==0.1
+decorators
+schedule==0.5.0
+

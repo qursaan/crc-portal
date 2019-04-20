@@ -5,27 +5,26 @@
 {% endblock %}
 
 {% block fedbody %}
-    <h3>Servies Information</h3>
+    <h4>Servies Information</h4>
     <div class="form-horizontal">
-
         <div class="form-group">
-            <div class="col-xs-12">
-                <div class="ui-widget btn-toolbar" role="group">
+            <div class="col-md-12">
+                <div class="btn-toolbar" role="group">
                     <div class="btn-group" role="group">
 
-                        <button id="refresh_btn3" data-id="refresh" class="refresh_btn btn btn-default"
+                        <button id="refresh_btn3" data-id="refresh" class="refresh_btn btn btn-primary"
                                 type="button"
                                 onclick="location.href='/federation/'">
                             Refresh Status
                         </button>
 
-                        <button id="remote_start" name="b_start" class="btn btn-info" type="button"
+                        <button id="remote_start" name="b_start" class="btn btn-success" type="button"
                                 style="display: {% if fed_service != 0 %}none{% else %}block{% endif %}">
                             START
                         </button>
 
                         <button id="remote_shutdown" name="b_shutdown" class="btn btn-danger" type="button"
-                                style="display: {% if fed_service == 0 %} none {% else %} block {% endif %}">
+                                style="display: {% if fed_service == 0 %}none{% else %}block{% endif %}">
                             STOP
                         </button>
 
@@ -34,35 +33,35 @@
             </div>
         </div>
 
-        <div class="form-group">
-            <label for="fed_level" class="col-xs-3 control-label">Federation Level</label>
-            <div class="col-xs-3">
-                <div class="ui-widget">
-                    <select id="fed_level" name="fed_level" class="form-control user-input"
-                            value="-1" autocomplete="off">
-                        <option value="l0" selected="selected">Level 0</option>
-                        <option value="l1">Level 1</option>
-                        <!--option value="l2">Level 2</option>
-                        <option value="l3">Level 3</option>
-                        <option value="l4">Level 4</option-->
-                    </select>
+        <!--div class="form-group" >
+            <div class="input-group col-md-5">
+                <div class="input-group-append">
+                    <span class="input-group-text">Federation Level</span>
                 </div>
+                <select id="fed_level" name="fed_level" class="custom-select form-control user-input"
+                        value="-1" autocomplete="off">
+                    <option value="l0" selected="selected">Level 0</option>
+                    <option value="l1">Level 1</option>
+                    <option value="l2">Level 2</option>
+                    <option value="l3">Level 3</option>
+                    <option value="l4">Level 4</option>
+                </select>
             </div>
-            <div class="col-xs-6"></div>
-        </div>
+            <div class="col-md-5"></div>
+        </div-->
 
         <div class="form-group">
-            <div class="col-xs-6">
-                <table class="table table-hover">
-                    <thead>
-                    <th>#</th>
+            <div class="col-md-6">
+                <table class="table table-hover table-sm table-condensed">
+                    <thead class="thead-dark">
+                    <th>Stat.</th>
                     <th>Local</th>
                     <th>Remote</th>
                     </thead>
                     <tbody>
                     <tr>
                         <th scope="row">No of Sites</th>
-                        <td>X</td>
+                        <td></td>
                         <td>{{ n_remote_site }}</td>
                     </tr>
                     <tr>
@@ -73,7 +72,7 @@
                     <tr>
                         <th scope="row">No of Resources</th>
                         <td>{{ n_local_res }}</td>
-                        <td>X</td>
+                        <td>{{ n_remote_res }}</td>
                     </tr>
                     </tbody>
                 </table>

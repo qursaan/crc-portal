@@ -11,3 +11,6 @@ class MySiteAdmin(admin.ModelAdmin):
 @admin.register(Users)
 class MyUserAdmin(admin.ModelAdmin):
     list_display = ('id', 'username')
+
+
+    

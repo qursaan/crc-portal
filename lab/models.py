@@ -13,23 +13,23 @@ class InstalledLab(models.Model):
     title = models.CharField(max_length=64)
     requirement = models.CharField(max_length=256, null=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.title
 
 
 class LabsTemplate(models.Model):
     title = models.CharField(max_length=64)
-    lab_ref = models.ForeignKey(InstalledLab, null=True)
+    lab_ref = models.ForeignKey(InstalledLab, null=True, on_delete=models.CASCADE)
     exp_param = models.CharField(max_length=256, null=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.title
 
 
 class LabsParameter(models.Model):
     title = models.CharField(max_length=64)
     param_id = models.CharField(max_length=30, null=True)
-    lab_ref = models.ForeignKey(InstalledLab, null=False)
+    lab_ref = models.ForeignKey(InstalledLab, null=False, on_delete=models.CASCADE)
     type = models.CharField(max_length=64, null=True)
     def_value = models.CharField(max_length=64, null=True)
     values = models.CharField(max_length=256, null=True)
@@ -37,12 +37,12 @@ class LabsParameter(models.Model):
     def values_as_list(self):
         return self.values.split(',')
 
-    def __unicode__(self):
+    def __str__(self):
         return self.title
 
 
 class Course(models.Model):
-    instructor_ref = models.ForeignKey(MyUser, null=True)
+    instructor_ref = models.ForeignKey(MyUser, null=True, on_delete=models.CASCADE)
     title = models.CharField(max_length=64)
     code = models.CharField(max_length=32, null=True)
     key = models.CharField(max_length=30, null=False)
@@ -58,25 +58,25 @@ class Course(models.Model):
     # students = models.ManyToManyField(User)
     # experiments = models.ManyToManyField(ExperimentTemplate,through='Experiment')
 
-    def __unicode__(self):
+    def __str__(self):
         return self.title
 
 
 class StudentCourses(models.Model):
-    students_ref = models.ForeignKey(MyUser, null=True)
+    students_ref = models.ForeignKey(MyUser, null=True, on_delete=models.CASCADE)
     # students_email = models.CharField(null=True, max_length=64)
-    course_ref = models.ForeignKey(Course, null=True)
+    course_ref = models.ForeignKey(Course, null=True, on_delete=models.CASCADE)
     # 0-Unbinding, 1-Binding
     status = models.IntegerField(default=0)
     added = models.DateTimeField(default=timezone.now)
-    # def __unicode__(self):
+    # def __str__(self):
     # return self.students_ref.first_name + " @ " + self.course_ref
 
 
 class Experiments(models.Model):
     title = models.CharField(max_length=64)
-    course_ref = models.ForeignKey(Course, null=True)
-    instructor_ref = models.ForeignKey(MyUser, null=True)
+    course_ref = models.ForeignKey(Course, null=True, on_delete=models.CASCADE)
+    instructor_ref = models.ForeignKey(MyUser, null=True, on_delete=models.CASCADE)
     due_date = models.DateTimeField(null=True)
     description = models.TextField(null=True)
     created = models.DateTimeField(default=timezone.now)
@@ -84,8 +84,8 @@ class Experiments(models.Model):
     reservation_type = models.IntegerField(default=0, null=True)
     max_duration = models.IntegerField(default=1)
     server_type = models.CharField(max_length=16, null=True)
-    reservation_ref = models.ForeignKey(Reservation, null=True)
-    sim_reservation_ref = models.ForeignKey(SimReservation, null=True)
+    reservation_ref = models.ForeignKey(Reservation, null=True, on_delete=models.CASCADE)
+    sim_reservation_ref = models.ForeignKey(SimReservation, null=True, on_delete=models.CASCADE)
     # 0-Open, 1-Expired, 2-Deleted
     status = models.IntegerField(default=0)
     # controls
@@ -95,17 +95,17 @@ class Experiments(models.Model):
     # files
     sup_files = models.CharField(max_length=256, null=True)
     # existing labs
-    lab_template_ref = models.ForeignKey(LabsTemplate, null=True)
+    lab_template_ref = models.ForeignKey(LabsTemplate, null=True, on_delete=models.DO_NOTHING)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.title
 
 
 class StudentsExperiment(models.Model):
-    students_ref = models.ForeignKey(MyUser, null=True)
-    experiment_ref = models.ForeignKey(Experiments, null=True)
-    reservation_ref = models.ForeignKey(Reservation, null=True)
-    sim_reservation_ref = models.ForeignKey(SimReservation, null=True)
+    students_ref = models.ForeignKey(MyUser, null=True, on_delete=models.CASCADE)
+    experiment_ref = models.ForeignKey(Experiments, null=True, on_delete=models.CASCADE)
+    reservation_ref = models.ForeignKey(Reservation, null=True, on_delete=models.CASCADE)
+    sim_reservation_ref = models.ForeignKey(SimReservation, null=True, on_delete=models.CASCADE)
     start_time = models.DateTimeField('Start Time', null=True)
     end_time = models.DateTimeField('End Time', null=True)
     # 0-Reserved, 1-Finish, 2-Cancel
@@ -113,7 +113,7 @@ class StudentsExperiment(models.Model):
 
 
 class CustomLibrary(models.Model):
-    user_ref = models.ForeignKey(MyUser, null=True)
+    user_ref = models.ForeignKey(MyUser, null=True, on_delete=models.CASCADE)
     name = models.CharField(max_length=256, null=True)
     author = models.CharField(max_length=256, null=True)
     type = models.CharField(max_length=256, null=True)
@@ -123,7 +123,7 @@ class CustomLibrary(models.Model):
     file = models.TextField(null=True)
     created = models.DateTimeField(default=timezone.now)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
 '''

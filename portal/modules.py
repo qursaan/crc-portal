@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 
-from portal.models import MyUser, Account, Platform, Authority
+from portal.models import MyUser, Account, Platform, Authority, Quota
 from crc.settings import SUPPORT_EMAIL
 
 
@@ -66,15 +66,17 @@ class UserModules:
         # generate new key
         random_generator = Random.new().read
         private = RSA.generate(1024,random_generator)
-        private_key = json.dumps(private.exportKey())
         public = private.publickey()
-        pk = public.exportKey() #format='OpenSSH')
-        public_key = json.dumps(pk)
+        #private_key = json.dumps(private.exportKey())
+        #pk = public.exportKey() #format='OpenSSH')
+        #public_key = json.dumps(pk)
+        private_key = private.exportKey(format='PEM')
+        public_key = public.exportKey()
         return private_key, public_key
 
     @staticmethod
     def save_user_db(reg_email, reg_username, reg_password, reg_fname, reg_lname,
-                     reg_auth, account_config, user_hrn, reg_usertype, reg_supervisor):
+                     reg_auth, account_config, user_hrn, reg_usertype, reg_supervisor, reg_quota):
 
         # saves the user to django auth_user table [needed for password reset]
         web_user = User.objects.create_user(reg_username, reg_email, reg_password)
@@ -105,12 +107,14 @@ class UserModules:
         itf_user.save()
 
         itf_plf = Platform.objects.get(id=1)
+        itf_quota = Quota.objects.get(id=reg_quota)
         auth_type = 'managed'
         itf_acc = Account(
             user_ref=itf_user,
             platform_ref=itf_plf,
             auth_type=auth_type,
             config=account_config,
+            quota_ref=itf_quota
         )
         itf_acc.save()
 
@@ -141,7 +145,8 @@ class UserModules:
 
     @staticmethod
     def create_user_account(errors, reg_email, reg_username, reg_password,
-                            reg_fname, reg_lname, reg_auth, reg_usertype, reg_supervisor):
+                            reg_fname, reg_lname, reg_auth, reg_usertype,
+                            reg_supervisor, reg_quota):
         # (1)
         UserModules.is_user_valid(errors, reg_fname, reg_lname, reg_email, reg_username)
         UserModules.is_user_unique(errors, reg_email, reg_username)
@@ -160,16 +165,17 @@ class UserModules:
             user_hrn = reg_auth + '.' + split_email + str(randint(1, 1000000))
 
             # (5) prepare key for Saving in DB
-            account_config = '{"user_public_key":' + public_key + \
-                             ', "user_private_key":' + private_key + \
+            account_config = '{"user_public_key":' + str(public_key) + \
+                             ', "user_private_key":' + str(private_key) + \
                              ', "user_hrn":"' + user_hrn + '"}'
 
             # (6) prepare key for sending email: removing existing double qoute
-            public_key = public_key.replace('"', '')
+            public_key = str(public_key).replace('"', '')
 
             # (4) Saving user in DB
             UserModules.save_user_db(reg_email, reg_username, reg_password, reg_fname, reg_lname,
-                              reg_auth, account_config, user_hrn, reg_usertype, reg_supervisor)
+                              reg_auth, account_config, user_hrn, reg_usertype, reg_supervisor,
+                                     reg_quota)
 
             # (5) Send email
             UserModules.send_email_create_user(public_key, reg_auth, reg_email, reg_fname,
@@ -234,19 +240,11 @@ class UserModules:
         return q"""
 
 # CheckSliceTime
-
 # PrepareNodes
-
 # GetUserAccessLog
-
 # LoadImage
-
 # SaveImage
-
 # CleanNode
-
 # EndSession
-
 # ExecuteScript
-
 # UpdateSystem

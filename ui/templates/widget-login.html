@@ -1,0 +1,56 @@
+<div>
+    <link rel="stylesheet" type="text/css" href='{{ STATIC_URL }}css/login_t.css'/>
+    <div class="div-center content">
+        {% if state %}
+            <span class="help-block">{{ state }}</span>
+        {% endif %}
+        <h3 style="text-align: center">Account Login: Welcome back.</h3>
+        <hr/>
+        <form action="/login/" method="post" role="form">
+            {% csrf_token %}
+            {% if next %}
+                <input type="hidden" name="next" value="{{ next }}"/>
+            {% endif %}
+
+            <div class="form-group">
+                <label for="username" >Username</label>
+                <input id="username" type="email" class="form-control" name="username"
+                       placeholder="Enter Email Address" required>
+            </div>
+            <div class="form-group">
+                <label for="password" >Password</label>
+                <input id="password" type="password" class="form-control"
+                       name="password" placeholder="Password" required>
+            </div>
+            <div class="form-group">
+                <label for="login_as" >Access Via</label>
+                <select id="login_as" name="login_site" class="custom-select"
+                        value="1" autocomplete="off">
+                    {% if fed_status == 1 %}
+                        {% for row in site_list %}
+                            <option value="{{ row.id }}" label="{{ row }}">
+                                {% if row.id == 1 %}
+                                    Current Site
+                                {% else %}
+                                    {{ row.name }}
+                                {% endif %}
+                            </option>
+                        {% endfor %}
+                    {% else %}
+                        <option value="1" label="Current site">
+                            Current Site
+                        </option>
+                    {% endif %}
+                </select>
+            </div>
+
+            <!--div class="login-submit"-->
+            <input class="btn btn-dark btn-block" type="submit" value="Login">
+            <hr/>
+            <input type="button" class="btn btn-link"
+                   onclick="location.href='/portal/register'" value="Signup">
+            <input type="button" class="btn btn-link"
+                   onclick="location.href='/portal/pass_reset/'" value="Reset Password">
+        </form>
+    </div>
+</div>

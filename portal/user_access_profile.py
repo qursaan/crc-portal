@@ -9,7 +9,7 @@ class UserAccessProfile:
         self.user_obj = None
         self.user_type = -1
 
-        if request.user.is_authenticated():
+        if request.user.is_authenticated:
             self.username = request.user.email
             self.session_username = request.session.get('username', None)
             if 'FedUser' in self.username:
@@ -17,7 +17,6 @@ class UserAccessProfile:
 
 
         print("Session username:", self.username)
-
         if self.username:
             self.user_obj = get_user_by_email(self.username)
             self.user_type = get_user_type(self.user_obj)

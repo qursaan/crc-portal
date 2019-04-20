@@ -1,12 +1,6 @@
 /*****************************************************************
 Motivated from Geni clearing house (PORTAL)
 ********************/
-
-* {
-	margin: 0;
-	padding: 0;
-}
-
 fieldset, img {
 	border: 0;
 }
@@ -260,7 +254,7 @@ table.profile button {
   width: 80px;
   vertical-align: middle;
   float: right;
-  margin-right: 15px;
+  /*margin-right: 15px;*/
 }
 
 #delete {

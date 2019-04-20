@@ -176,7 +176,7 @@ class StudentReserveView(LoginRequiredAutoLogoutView):
                 se.save()
 
                 template_env = {
-                    'topmenu_items': topmenu_items('test_page', request),
+                    'topmenu_items': topmenu_items('Request Slice', request),
                     'username': usera.username,
                     'title': 'Request',
                 }

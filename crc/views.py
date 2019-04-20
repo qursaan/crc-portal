@@ -17,11 +17,4 @@ from django.template.loader import get_template
 # class HomeView():#FreeAccessView):
 
 
-def hello(request):
-    t = get_template('m1.html')
-    c = Context({'title': "HOME PAGE"})
-    html = t.render(c)
-    return HttpResponse(html)
-
-
 

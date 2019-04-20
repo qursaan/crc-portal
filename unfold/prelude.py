@@ -1,5 +1,5 @@
 #@MySlice
-from types import StringTypes, ListType
+#from types import StringTypes, ListType
 
 from django.template.loader import render_to_string
 
@@ -28,10 +28,10 @@ class Prelude:
 
     @staticmethod
     def _normalize(input):
-        if not input:                           return []
-        elif isinstance (input, ListType):      return input
-        elif isinstance (input, StringTypes):   return [ input ]
-        else:                                   return list (input)
+        if not input:                   return []
+        elif isinstance (input, list):  return input
+        elif isinstance (input, str):   return [ input ]
+        else:                           return list (input)
 
     def add_js_files (self, x):
         for i in Prelude._normalize (x):
@@ -56,7 +56,7 @@ class Prelude:
         return result
 
     def inspect (self,msg):
-        print self.inspect_string(msg)
+        print (self.inspect_string(msg))
 
     # first attempt was to use a simple dict like this
     #    env={}
@@ -89,9 +89,8 @@ class Prelude:
         env['all_js_chunks']= self.js_init_chunks + self.js_chunks
         env['css_chunks']   = self.css_chunks
         if debug:
-            print "prelude has %d js_files, %d css files, (%d+%d) js chunks and %d css_chunks"%\
-                (len(self.js_files),len(self.css_files),len(self.js_init_chunks),len(self.js_chunks),len(self.css_chunks),)
+            print ("prelude has %d js_files, %d css files, (%d+%d) js chunks and %d css_chunks"%\
+                (len(self.js_files),len(self.css_files),len(self.js_init_chunks),len(self.js_chunks),len(self.css_chunks),))
         # render this with prelude.html and put the result in header_prelude
         header_prelude = render_to_string('prelude.html', env)
         return {'header_prelude': header_prelude }
-

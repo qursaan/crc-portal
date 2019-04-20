@@ -37,17 +37,17 @@ authentication source like LDAP. Note that they won't receive any error message 
 More Detail: https://docs.djangoproject.com/en/dev/topics/auth/default/#topics-auth-creating-users
 """
 
-try:
-    from urllib.parse import urlparse, urlunparse
-except ImportError:  # Python 2
-    from urlparse import urlparse, urlunparse
+#try:
+from urllib.parse import urlparse, urlunparse
+#except ImportError:  # Python 2
+#    from urlparse import urlparse, urlunparse
 
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.contrib.auth.tokens import default_token_generator
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, resolve_url
 from django.template.response import TemplateResponse

@@ -14,7 +14,7 @@ import pyparsing as pp
 import operator, re
 
 from manifold.util.predicate import Predicate
-from types                 import StringTypes
+#from types                 import StringTypes
 
 # XXX When to use Keyword vs. Regex vs. CaselessLiteral
 # XXX capitalization ?
@@ -27,7 +27,7 @@ from types                 import StringTypes
 class Clause(object):
 
     def __new__(cls, *args, **kwargs):
-        if len(args) == 1 and isinstance(args[0], StringTypes):
+        if len(args) == 1 and isinstance(args[0], str):
             return ClauseStringParser().parse(args[0])
         return super(Clause, cls).__new__(cls, *args, **kwargs)
 
@@ -40,7 +40,7 @@ class Clause(object):
             self.operator = Predicate.operators[args[1]]
             self.operands = [args[0], args[2]]
         else:
-            raise Exception, "Clause can only be unary or binary"
+            raise Exception("Clause can only be unary or binary")
                 
     def opstr(self, operator):
         ops = [string for string, op in Predicate.operators.items() if op == operator]
@@ -99,5 +99,5 @@ class ClauseStringParser(object):
         return self.bnf.parseString(string,parseAll=True)
 
 if __name__ == "__main__":
-    print ClauseStringParser().parse('country == "Europe" || ts > "01-01-2007" && country == "France"')
-    print Clause('country == "Europe" || ts > "01-01-2007" && country == "France"')
+    print (ClauseStringParser().parse('country == "Europe" || ts > "01-01-2007" && country == "France"'))
+    print (Clause('country == "Europe" || ts > "01-01-2007" && country == "France"'))

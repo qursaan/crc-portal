@@ -1,4 +1,3 @@
-
 import json
 from datetime import datetime, timedelta
 
@@ -7,11 +6,11 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.utils import timezone
 
-from portal.backend_actions import create_backend_user, create_slice
+from portal.backend_actions import create_slice
 from portal.models import Authority, MyUser, PendingSlice, \
-    PendingAuthority, VirtualNode,  FrequencyRanges, \
+    PendingAuthority, VirtualNode, FrequencyRanges, \
     Reservation, ReservationDetail, SimReservation, SimulationVM, ReservationFrequency
-from reservation_status import ReservationStatus
+from .reservation_status import ReservationStatus
 
 
 # ************* Default Scheduling Slice ************** #
@@ -73,7 +72,8 @@ def schedule_auto_online(reserve_id, stype="omf", use_bulk=False, reserve_type="
         # overlap = None
         overlap_flag = False
         if stype == "omf":
-            overlap = Reservation.objects.filter(status__in=busy_list, start_time__lte=curr_start, end_time__gte=curr_end)
+            overlap = Reservation.objects.filter(status__in=busy_list, start_time__lte=curr_start,
+                                                 end_time__gte=curr_end)
             # check nodes
             for r in overlap:
                 details = ReservationDetail.objects.filter(reservation_ref=r, node_ref__in=new_list)
@@ -82,7 +82,8 @@ def schedule_auto_online(reserve_id, stype="omf", use_bulk=False, reserve_type="
                     break
 
         elif stype == "sim":
-            overlap = SimReservation.objects.filter(status__in=busy_list, start_time__lte=curr_start, end_time__gte=curr_end,
+            overlap = SimReservation.objects.filter(status__in=busy_list, start_time__lte=curr_start,
+                                                    end_time__gte=curr_end,
                                                     node_ref__in=new_list)
 
             if overlap.exists():
@@ -102,6 +103,7 @@ def schedule_auto_online(reserve_id, stype="omf", use_bulk=False, reserve_type="
             curr_slice.end_time = curr_slice.f_end_time
 
         curr_slice.approve_date = timezone.now()
+        # TODO: @qursaan Check for M type
         if reserve_type == "R":
             curr_slice.status = ReservationStatus.get_active()
         elif reserve_type == "I":
@@ -111,7 +113,8 @@ def schedule_auto_online(reserve_id, stype="omf", use_bulk=False, reserve_type="
         node_list = []
         for n in new_list:
             node_list.append(n.vm_name)
-        output = create_slice(curr_slice.user_ref.username, utc_to_timezone(curr_start), utc_to_timezone(curr_end), node_list)
+        output = create_slice(curr_slice.user_ref.username, utc_to_timezone(curr_start), utc_to_timezone(curr_end),
+                              node_list)
         if output == 1:
             return True
         else:
@@ -213,7 +216,6 @@ def schedule_checking_all(start_datetime, end_datetime, stype="omf"):
 
 
 def schedule_checking_freq(freq_list, start_datetime, end_datetime, use_bulk=False):
-
     new_list = []
     for n in freq_list:
         new_list.append(int(n))
@@ -334,10 +336,17 @@ def check_next_task_duration(task_id, stype):
     return True
 
 
-def get_count_active_slice(c_user,username):
+def get_count_requests():
+    pending_users = MyUser.objects.filter(status=1).all()
+    pending_slices = PendingSlice.objects.filter(status=1).all()
+    total_count = pending_users.count() + pending_slices.count()
+    return total_count
+
+
+def get_count_active_slice(c_user, username):
     busy_list = ReservationStatus.get_busy_list(allow_bulk=True, allow_pending=True)
-    active_list_1 = Reservation.objects.filter(user_ref=c_user,username=username, status__in=busy_list)
-    active_list_2 = SimReservation.objects.filter(user_ref=c_user,username=username, status__in=busy_list)
+    active_list_1 = Reservation.objects.filter(user_ref=c_user, username=username, status__in=busy_list)
+    active_list_2 = SimReservation.objects.filter(user_ref=c_user, username=username, status__in=busy_list)
     current_time = timezone.now()
     total_count = active_list_1.count() + active_list_2.count()
     # confirm active session
@@ -354,7 +363,6 @@ def get_count_active_slice(c_user,username):
             total_count -= 1
 
     return total_count
-
 
 
 # ************* Get Authority by User email *********** #
@@ -429,9 +437,6 @@ def make_request_authority(authority):
     request['site_url'] = authority.site_url
     request['site_authority'] = authority.site_authority
     request['site_abbreviated_name'] = authority.site_abbreviated_name
-    # request['address_line1']         = authority.address_line1
-    # request['address_line2']         = authority.address_line2
-    # request['address_line3']         = authority.address_line3
     request['address_city'] = authority.address_city
     request['address_postalcode'] = authority.address_postalcode
     request['address_state'] = authority.address_state
@@ -503,14 +508,16 @@ def portal_validate_request(wsgi_request, request_ids):
 
         request_status = {}
 
-        print "REQUEST", request
+        print("REQUEST", request)
         if request['type'] == 'user':
 
             try:
                 up_user = MyUser.objects.get(id=request['id'])
                 web_user = User.objects.get(id=up_user.id)
                 # TODO: Create user file here
-                result = create_backend_user(up_user.username, up_user.password)
+                # @qursaan : Activate user here
+                # result = create_backend_user(up_user.username, up_user.password)
+                result = 1
                 if result == 1:
                     up_user.status = 2
                     up_user.save()
@@ -521,7 +528,7 @@ def portal_validate_request(wsgi_request, request_ids):
                 else:
                     request_status['CRC user'] = {'status': False, 'description': 'Back Server Error'}
 
-            except Exception, e:
+            except Exception as e:
                 request_status['CRC user'] = {'status': False, 'description': str(e)}
 
         elif request['type'] == 'slice':
@@ -529,7 +536,7 @@ def portal_validate_request(wsgi_request, request_ids):
                 result = schedule_slice(request['id'])
                 request_status['CRC slice'] = {'status': result}
 
-            except Exception, e:
+            except Exception as e:
                 request_status['CRC slice'] = {'status': False, 'description': str(e)}
 
         status['%s__%s' % (request['type'], request['id'])] = request_status
@@ -538,7 +545,7 @@ def portal_validate_request(wsgi_request, request_ids):
 
 
 def validate_action(request, **kwargs):
-    ids = filter(None, kwargs['id'].split('/'))
+    ids = kwargs['id'].split('/')
     status = portal_validate_request(request, ids)
     json_answer = json.dumps(status)
     return HttpResponse(json_answer)  # , mimetype="application/json")

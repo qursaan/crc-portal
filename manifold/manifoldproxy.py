@@ -32,18 +32,18 @@ with the query passed using POST"""
     
     # expecting a POST
     if request.method != 'POST':
-        print "manifoldproxy.api: unexpected method %s -- exiting"%request.method
+        print ("manifoldproxy.api: unexpected method %s -- exiting"%request.method)
         return 
     # we only support json for now
     # if needed in the future we should probably cater for
     # format_in : how is the query encoded in POST
     # format_out: how to serve the results
     if format != 'json':
-        print "manifoldproxy.proxy: unexpected format %s -- exiting"%format
+        print ("manifoldproxy.proxy: unexpected format %s -- exiting"%format)
         return
     try:
         # translate incoming POST request into a query object
-        if debug: print 'manifoldproxy.proxy: request.POST',request.POST
+        if debug: print ('manifoldproxy.proxy: request.POST',request.POST)
         manifold_query = Query()
         #manifold_query = ManifoldQuery()
         manifold_query.fill_from_POST(request.POST)
@@ -55,17 +55,17 @@ with the query passed using POST"""
             admin_user, admin_password = ConfigEngine().manifold_admin_user_password()
             manifold_api_session_auth = {'AuthMethod': 'password', 'Username': admin_user, 'AuthString': admin_password}
         else:
-            print request.session['manifold']
+            print (request.session['manifold'])
             manifold_api_session_auth = request.session['manifold']['auth']
 
         if debug_empty and manifold_query.action.lower()=='get':
             json_answer=json.dumps({'code':0,'value':[]})
-            print "By-passing : debug_empty & 'get' request : returning a fake empty list"
+            print ("By-passing : debug_empty & 'get' request : returning a fake empty list")
             return HttpResponse (json_answer, mimetype="application/json")
                 
         # actually forward
         manifold_api= ManifoldAPI(auth=manifold_api_session_auth)
-        if debug: print '===> manifoldproxy.proxy: sending to backend', manifold_query
+        if debug: print ('===> manifoldproxy.proxy: sending to backend', manifold_query)
         # for the benefit of the python code, manifoldAPI raises an exception if something is wrong
         # however in this case we want to propagate the complete manifold result to the js world
 
@@ -80,8 +80,8 @@ with the query passed using POST"""
 
         return HttpResponse (json_answer, mimetype="application/json")
 
-    except Exception,e:
-        print "** PROXY ERROR **",e
+    except Exception as e:
+        print ("** PROXY ERROR **",e)
         import traceback
         traceback.print_exc()
 
@@ -91,5 +91,5 @@ with the query passed using POST"""
 # this however turns out disappointing/not very informative
 failure_answer=[ "csrf_failure" ]
 def csrf_failure(request, reason=""):
-    print "CSRF failure with reason '%s'"%reason
+    print ("CSRF failure with reason '%s'"%reason)
     return HttpResponseForbidden (json.dumps (failure_answer), mimetype="application/json")

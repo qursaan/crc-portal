@@ -16,17 +16,18 @@ class Site(models.Model):
     public_key = models.TextField(null=True)
     private_key = models.TextField(null=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name + " @ " + self.ip + " { " + self.url + " } "
 
 
 class Users(models.Model):
-    site_ref = models.ForeignKey(Site, null=True)
+    site_ref = models.ForeignKey(Site, null=True, on_delete=models.CASCADE)
     username = models.TextField(null=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.username + " @ " + self.site_ref.name
 
 
-class Resources(models.Model):
-    resource_uid = models.UUIDField(default=uuid.uuid4)
+#class Resources(models.Model):
+#    resource_uid = models.UUIDField(default=uuid.uuid4)
+

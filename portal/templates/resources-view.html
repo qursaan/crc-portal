@@ -1,0 +1,138 @@
+{% extends "layout-unfold1.html" %}
+{% block unfold_main %}
+
+    <div class="onelab-title">
+        <h2>Resources</h2>
+    </div>
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+
+    <form id="fedlist" class="form-horizontal" action="" method="post" role="form">
+        {% csrf_token %}
+        <div class="row">
+            <div id="tabs_list" class="col-md-12">
+                <ul class="nav nav-tabs nav-stacked" role="tablist">
+                    <li class="nav-item">
+                        <a href="#all" class="nav-link active" aria-controls="all" role="tab"
+                           data-toggle="tab">
+                            All Resources</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#local" class="nav-link" aria-controls="local" role="tab" data-toggle="tab">
+                            Local Resources</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#fed" class="nav-link" aria-controls="fed" role="tab" data-toggle="tab">
+                            Federation Resources</a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="all">
+                        <table class="table table-hover table-sm table-bordered">
+                            <thead class="thead-dark">
+                            <tr>
+                                <th>Resource Type</th>
+                                <th>Numbers</th>
+                                <th>Location</th>
+                                <th>Image</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                {% for row in local_resources %}
+                                    <tr class="table-success">
+                                        <td> {{ row.type }}</td>
+                                        <td> {{ row.count }}</td>
+                                        <td>
+                                            {{ site_name }}
+                                        </td>
+                                        <td>
+                                            <img style="width: 100px;" src="{{ STATIC_URL }}img/{{ row.type }}.png"
+                                                 class="img-circle img-thumbnail"/>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                {% for row in remote_resources %}
+                                    <tr class="table-info">
+                                        <td> {{ row.type }}</td>
+                                        <td> {{ row.count }}</td>
+                                        <td>
+                                            {{ row.site_name }}
+                                        </td>
+                                        <td>
+                                            <img style="width: 100px;" src="{{ STATIC_URL }}img/{{ row.type }}.png"
+                                                 class="img-circle img-thumbnail"/>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="local">
+                        <table class="table table-hover table-sm table-bordered">
+                            <thead class="thead-dark">
+                            <tr>
+                                <th>Resource Type</th>
+                                <th>Numbers</th>
+                                <th>Location</th>
+                                <th>Image</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for row in local_resources %}
+                                <tr class="table-success">
+                                    <td> {{ row.type }}</td>
+                                    <td> {{ row.count }}</td>
+                                    <td>
+                                        {{ site_name }}
+                                    </td>
+                                    <td>
+                                        <img style="width: 100px;" src="{{ STATIC_URL }}img/{{ row.type }}.png"
+                                             class="img-circle img-thumbnail"/>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                <div role="tabpanel" class="tab-pane" id="fed">
+                        <table class="table table-hover table-sm table-bordered">
+                            <thead class="thead-dark">
+                            <tr>
+                                <th>Resource Type</th>
+                                <th>Numbers</th>
+                                <th>Location</th>
+                                <th>Image</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                {% for row in remote_resources %}
+                                    <tr class="table-info">
+                                        <td>{{ row.type }}</td>
+                                        <td>{{ row.count }}</td>
+                                        <td>
+                                            {{ row.site_name }}
+                                        </td>
+                                        <td>
+                                            <img style="width: 100px;" src="{{ STATIC_URL }}img/{{ row.type }}.png"
+                                                 class="img-circle img-thumbnail"/>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </form>
+
+{% endblock %}

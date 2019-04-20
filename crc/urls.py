@@ -13,20 +13,20 @@ Including another URLconf
     1. Add an import:  from blog import urls as blog_urls
     2. Add a URL to urlpatterns:  url(r'^blog/', include(blog_urls))
 """
-
+from django.contrib.auth import views as auth_views
 from django.conf.urls import include, url
 from django.conf import settings
 from django.contrib import admin
 from django.conf.urls.static import static
 import portal.dashboardview
 import portal.homeview
-
+from django.urls import path,re_path
 # qursaan: removed
 # from filebrowser.sites import site
 
 # to enable insert_above stuff
-from django.template.base import add_to_builtins
-add_to_builtins('insert_above.templatetags.insert_tags')
+#from django.template.base import add_to_builtins
+#add_to_builtins('insert_above.templatetags.insert_tags')
 
 # import portal.platformsview
 home_view       = portal.homeview.HomeView.as_view()
@@ -40,33 +40,40 @@ the_after_login_view = dashboard_view
 the_login_view       = home_view
 # admin.autodiscover()
 
+
 urlpatterns = [
     # default view
-    url(r'^/?$', the_default_view),
+    path('', the_default_view),
     # Portal
-    url(r'^portal/', include('portal.urls')),
+    path('portal/', include('portal.urls')),
     # Lab
-    url(r'^lab/', include('lab.urls')),
+    path('lab/', include('lab.urls')),
     # Federation
-    url(r'^federation/', include('federate.urls')),
+    path('federation/', include('federate.urls')),
     # filer
-    # url(r'^filer/', include('filer.urls')),
+    #url(r'^filer/', include('filer.urls')),
 
     # File Browsers
     #url(r'^admin/filebrowser/', include(site.urls)),
     #url(r'^grappelli/', include('grappelli.urls')),
-    # Admin Pages
-    url(r'^admin/', include(admin.site.urls)),
-    # login / logout
-    url(r'^login-ok/?$', the_after_login_view, {'state': 'Welcome to CRC'}),
-    url(r'^login/?$', the_login_view),
-    url(r'^logout/?$', 'auth.views.logout_user'),
-    # seems to be what login_required uses to redirect ...
-    url(r'^accounts/login/$', the_login_view),
 
+    #url(r'^admin/', include(admin.site.urls)),
+    # login / logout
+    re_path(r'^login-ok/?$', the_after_login_view),
+    re_path(r'^login/?$',  the_login_view),
+    # @upgraded
+    # url(r'^logout/?$', 'auth.views.logout_user'),
+    re_path(r'^logout/$', auth_views.LogoutView.as_view()),
+    # seems to be what login_required uses to redirect ...
+    re_path(r'^accounts/login/$', the_login_view),
+    # Admin Pages
+    path('admin/', admin.site.urls),
     # captcha
-    url(r'^captcha/', include('captcha.urls')),
+    # url(r'^captcha/', include('captcha.urls')),
+
+    url(r'^api-auth/', include('rest_framework.urls')),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+

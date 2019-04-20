@@ -1,14 +1,5 @@
-/* 
-# Jquery for password matching and Affiliation list
-
-Authors:
-  Mohammed Yasin Rahman <mohammed-yasin.rahman@lip6.fr>
-Copyright 2013, UPMC Sorbonne Universités / LIP6
-
-*/
-jQuery(document).ready(function(){
-    
-    jQuery("#registrationForm").validate({
+/*$(document).ready(function(){
+    $("#registrationForm").validate({
         rules: {
           password: { 
                 required: true
@@ -19,37 +10,56 @@ jQuery(document).ready(function(){
         }
     });
     // upload button
-    jQuery("#key-policy").change(function(){
+    $("#key-policy").change(function(){
         if(this.value=="upload"){
             jQuery("#upload_key").show();
         }else{
             jQuery("#upload_key").hide();
         }
     });
- });
+ });*/
 
-jQuery(function() {
-    var availableTags = [
-      "iMinds",
-      "IT Innovation",
-      "UPMC",
-      "Fraunhofer",
-      "TUB",
-      "UEDIN",
-      "INRIA",
-      "NICTA",
-      "ATOS",
-      "UTH",
-      "NTUA",
-      "UNIVBRIS",
-      "i2CAT",
-      "EUR",
-      "DANTE Limited",
-      "UC",
-      "NIA"
-    ];
-    jQuery( "#aff_list" ).autocomplete({
-      source: availableTags
+$(document).ready(function() {
+    $('#super_group').hide();
+    $('#usertype').change(function() {
+        if ($(this).val() == "3") {
+            $('#super_group').show();
+        } else {
+            $('#super_group').hide();
+        }
     });
-  });
+    $(function () {
+        if ($('#usertype').val() == "3") {
+            $('#super_group').show();
+        } else {
+            $('#super_group').hide();
+        }
+        $('#usertype').val() == "-1";
+    });
+
+    $("#registrationForm").validate({
+        rules: {
+            password: {
+                required: true,
+                minlength: 5
+            },
+            confirmpassword: {
+                required: true, minlength: 5, equalTo: "#password"
+            }
+        },
+        messages: {
+            password: {
+                required: "Please provide a password",
+                minlength: "Your password must be at least 5 characters long"
+            },
+            confirmpassword: {
+                required: "Please provide a password",
+                minlength: "Your password must be at least 5 characters long",
+                equalTo: "Please enter the same password as above"
+            }
+        }
+    });
+});
+
+
 

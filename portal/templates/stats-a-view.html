@@ -1,0 +1,64 @@
+{% extends "layout-unfold1.html" %}
+
+{% block head %}
+    {{ wizard.form.media }}
+{% endblock %}
+
+{% block unfold_main %}
+    <script type="text/javascript" src="{{ STATIC_URL }}js/Chart.min.js"></script>
+    <div class="onelab-title">
+        <h2>Site Statistics</h2>
+    </div>
+
+    {% if errors %}
+        <ul>
+            {% for error in errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <div class="row d-flex justify-content-center mt-5">
+        <div class="col-md-10">
+            <h5>Total reservation</h5>
+        </div>
+        <div class="col-md-10">
+            <h5>Last Year</h5>
+            <canvas id="lineChart"></canvas>
+
+        </div>
+    </div>
+
+
+    <script>
+        window.onload = function () {
+            var ctxL = document.getElementById("lineChart").getContext('2d');
+            var gradientFill = ctxL.createLinearGradient(0, 0, 0, 290);
+            gradientFill.addColorStop(0, "rgba(173, 53, 186, 1)");
+            gradientFill.addColorStop(1, "rgba(173, 53, 186, 0.1)");
+            var myLineChart = new Chart(ctxL, {
+                type: 'line',
+                data: {
+                    labels: {{ year_l|safe }},
+                    datasets: [
+                        {
+                            label: "month usage",
+                            data: {{ year_v|safe }},
+                            backgroundColor: gradientFill,
+                            borderColor: [
+                                '#AD35BA',
+                            ],
+                            borderWidth: 2,
+                            pointBorderColor: "#fff",
+                            pointBackgroundColor: "rgba(173, 53, 186, 0.1)",
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true
+                }
+            });
+
+        }
+    </script>
+{% endblock %}

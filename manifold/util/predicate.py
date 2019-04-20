@@ -11,7 +11,7 @@
 #   Jordan Augé       <jordan.auge@lip6.fr>
 #   Marc-Olivier Buob <marc-olivier.buob@lip6.fr>
 
-from types                      import StringTypes
+#from types                      import StringTypes
 from manifold.util.type         import returns, accepts 
 
 from operator import (
@@ -72,14 +72,14 @@ class Predicate:
         elif len(args) == 1 and isinstance(args[0], Predicate):
             key, op, value = args[0].get_tuple()
         else:
-            raise Exception, "Bad initializer for Predicate (args = %r)" % args
+            raise Exception( "Bad initializer for Predicate (args = %r)" % args)
 
         assert not isinstance(value, (frozenset, dict, set)), "Invalid value type (type = %r)" % type(value)
         if isinstance(value, list):
             value = tuple(value)
 
         self.key = key
-        if isinstance(op, StringTypes):
+        if isinstance(op, str):
             op = op.upper()
         if op in self.operators.keys():
             self.op = self.operators[op]
@@ -93,7 +93,7 @@ class Predicate:
         else:
             self.value = value
 
-    @returns(StringTypes)
+    @returns(str)
     def __str__(self):
         """
         Returns:
@@ -105,7 +105,7 @@ class Predicate:
             value = "[%s]" % ", ".join(value)
         return "%s %s %r" % (key, op, value) 
 
-    @returns(StringTypes)
+    @returns(str)
     def __repr__(self):
         """
         Returns:
@@ -171,9 +171,9 @@ class Predicate:
 
     def match(self, dic, ignore_missing=False):
         if isinstance(self.key, tuple):
-            print "PREDICATE MATCH", self.key
-            print dic
-            print "-----------------------------"
+            print ("PREDICATE MATCH", self.key)
+            print (dic)
+            print ("-----------------------------")
         
         # Can we match ?
         if self.key not in dic:
@@ -190,24 +190,24 @@ class Predicate:
             else:
                 return (dic[self.key] != self.value) # array ?
         elif self.op == lt:
-            if isinstance(self.value, StringTypes):
+            if isinstance(self.value, str):
                 # prefix match
                 return dic[self.key].startswith('%s.' % self.value)
             else:
                 return (dic[self.key] < self.value)
         elif self.op == le:
-            if isinstance(self.value, StringTypes):
+            if isinstance(self.value, str):
                 return dic[self.key] == self.value or dic[self.key].startswith('%s.' % self.value)
             else:
                 return (dic[self.key] <= self.value)
         elif self.op == gt:
-            if isinstance(self.value, StringTypes):
+            if isinstance(self.value, str):
                 # prefix match
                 return self.value.startswith('%s.' % dic[self.key])
             else:
                 return (dic[self.key] > self.value)
         elif self.op == ge:
-            if isinstance(self.value, StringTypes):
+            if isinstance(self.value, str):
                 # prefix match
                 return dic[self.key] == self.value or self.value.startswith('%s.' % dic[self.key])
             else:
@@ -222,7 +222,7 @@ class Predicate:
         elif self.op == included:
             return dic[self.key] in self.value
         else:
-            raise Exception, "Unexpected table format: %r" % dic
+            raise Exception( "Unexpected table format: %r" % dic)
 
     def filter(self, dic):
         """
@@ -251,15 +251,15 @@ class Predicate:
                     dic[method] = subpred.filter(dic[method])
                     return dic
             else:
-                raise Exception, "Unexpected table format: %r", dic
+                raise Exception("Unexpected table format: %r", dic)
 
 
         else:
             # Individual field operations: this could be simplified, since we are now using operators_short !!
             # XXX match
-            print "current predicate", self
-            print "matching", dic
-            print "----"
+            print ("current predicate", self)
+            print ("matching", dic)
+            print ("----")
             return dic if self.match(dic) else None
 
     def get_field_names(self):

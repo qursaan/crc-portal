@@ -1,0 +1,29 @@
+{% extends "layout-unfold1.html" %}
+{% load i18n %}
+
+{% block head %}
+    {{ wizard.form.media }}
+{% endblock %}
+
+{% block unfold_main %}
+
+
+<!--div class="onelab-title well-sm"-->
+<div style="text-align:center" class="well-sm">
+    <h2>Broadcasting Message</h2>
+</div>
+
+{% if errors %}
+    <ul>
+        {% for error in errors %}
+            <li>{{ error }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+<div class='well'>
+
+</div>
+
+{% endblock %}
+

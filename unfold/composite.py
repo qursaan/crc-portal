@@ -19,8 +19,8 @@ if a valid active_domid is not provided
     def check_active_domid(self):
         matches= [ son for son in self.sons if son.domid==self.active_domid ]
         if len(matches)!=1: 
-            print "WARNING: %s has %d valid son(s) for being active - expecting 1, resetting"%\
-                (self,len(matches))
+            print ("WARNING: %s has %d valid son(s) for being active - expecting 1, resetting"%\
+                (self,len(matches)))
             self.active_domid=None
         
     def insert (self, plugin):

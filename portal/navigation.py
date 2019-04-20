@@ -13,13 +13,14 @@ from portal.actions import get_task_id, update_task_testbed, check_next_task_dur
 from portal.user_access_profile import UserAccessProfile
 from portal.backend_actions import load_images, save_images, vm_restart, vm_shutdown, vm_start, exe_script, exe_check, \
     check_load_images, check_save_images, exe_abort, commlab_exe, commlab_check, commlab_result
-from reservation_status import ReservationStatus
-
+from .reservation_status import ReservationStatus
+from unfold.page import Page
 
 #  ********** Non Completed Page ************* #
 def un_complete_page(request):
+    page = Page(request)
     return render(request, 'uncomplete.html', {
-        'topmenu_items': topmenu_items('test_page', request),
+        #'topmenu_items': topmenu_items('test_page', request),
         'title': 'TEST PAGE',
     })
 

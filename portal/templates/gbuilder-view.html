@@ -1,294 +1,287 @@
-{% extends "layout-unfold1.html" %}
+{% extends "layout-unfold3.html" %}
 {% block unfold_main %}
-<!--link rel="stylesheet" type="text/css" href='{{ STATIC_URL }}css/onelab.css' /-->
-<link rel="stylesheet" type="text/css" href='{{ STATIC_URL }}css/registration.css'/>
-<link rel="stylesheet" type="text/css" href='{{ STATIC_URL }}css/joint.min.css'/>
-<script type="text/javascript" src="{{STATIC_URL}}js/jquery.min.js"></script>
-<script type="text/javascript" src="{{STATIC_URL}}js/lodash.min.js"></script>
-<script type="text/javascript" src="{{STATIC_URL}}js/backbone-min.js"></script>
-<script type="text/javascript" src="{{STATIC_URL}}js/joint.min.js"></script>
-<style  type="text/css" >
-    #myPaperHolder{
-        width:auto;
-        min-width:300px;
-        height:400px;
-        border:solid 1px;
-    }
-</style>
-<div style="text-align:center" class="well-sm">
-    <h2>Graphic Builder Tools</h2>
-</div>
-{% if messages %}
-<ul class="messages">
-    {% for message in messages %}
-    <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
-    {% endfor %}
-</ul>
-{% endif %}
-
-<!--div id="home-dashboard">
-    <ul class="nav nav-tabs" role="tablist">
-      <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Instructions</a></li>
-      <li role="presentation" ><a id="map-form" href="#gbuilder" aria-controls="gbuilder" role="tab" data-toggle="tab">Graphic Builder</a></li>
-      </ul>
-    <div class="tab-content">
-        <div role="tabpanel"  class="tab-pane active"  id="home">
-        <h4>Instruction</h4>
-        <ol>
-            <li>Open <b><i>Build Graph </i></b> tab and Draw your own topology</li>
-        </ol>
+    <link rel="stylesheet" type="text/css" href='{{ STATIC_URL }}css/registration.css'/>
+    <link rel="stylesheet" type="text/css" href='{{ STATIC_URL }}css/joint.min.css'/>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/lodash.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/backbone-min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/joint.min.js"></script>
+    <style type="text/css">
+        #myPaperHolder {
+            width: auto;
+            min-width: 300px;
+            height: 400px;
+            border: solid 1px;
+        }
+    </style>
+    <div class="onelab-title">
+        <h2>Graphic Builder Tools</h2>
     </div>
-        <div role="tabpanel"  class="tab-pane" id="gbuilder"><!--class="tab-pane" -->
-<!--h4>Graphic Builder</h4-->
-<div class="well">
-    <form name="graph-form" class="cmxform form-horizontal" id="graph-form" method="post" enctype="multipart/form-data"
-          role="form">
-        <fieldset>
-            {% csrf_token %}
-            <div class="form-group">
-                <div class="col-xs-12">
-                    <div class="ui-widget btn-toolbar" role="group">
-                        <div class="btn-group" role="group">
-                            <button id="g_add_node" class="btn btn-default" name="g_add_node">Add Node</button>
-                            <button id="g_add_wlink" class="btn btn-default" name="g_add_wlink">Add Wireless Link</button>
-                            <button id="g_add_blink" class="btn btn-default" name="g_add_blink">Add USRP Link</button>
-                            <button id="g_add_glink" class="btn btn-default" name="g_add_glink">Add RTL  Link</button>
-                            <button id="g_reset" class="btn btn-warning" type="reset" name="g_reset">Reset</button>
-                            <button id="g_clear" class="btn btn-default" type="reset" name="g_clear">Clear All</button>
-                            <button id="g_load" class="btn btn-default" name="g_load">Load</button>
-                            <button id="g_save" class="btn btn-default" name="g_save">Save</button>
-                           
-                            <button id="g_check" class="btn btn-default" name="g_check">Check</button>
-                             
-                        </div>
-                        <div class="btn-group" role="group">
-                            <button class="submit btn btn-danger" type="submit" name="g_reserve">Reserve</button>
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
 
+    <div class="well">
+        <form name="graph-form" class="cmxform form-horizontal" id="graph-form" method="post"
+              enctype="multipart/form-data"
+              role="form">
+            <fieldset>
+                {% csrf_token %}
+                <div class="form-group">
+                    <div class="col-xs-12">
+                        <div class="ui-widget btn-toolbar" role="group">
+                            <div class="btn-group" role="group">
+                                <button id="g_add_node" class="btn btn-primary" name="g_add_node">Add Node</button>
+                                <button id="g_add_wlink" class="btn btn-primary" name="g_add_wlink">Add Wireless Link
+                                </button>
+                                <button id="g_add_blink" class="btn btn-primary" name="g_add_blink">Add USRP Link
+                                </button>
+                                <button id="g_add_glink" class="btn btn-primary" name="g_add_glink">Add RTL Link
+                                </button>
+                                <button id="g_reset" class="btn btn-warning" type="reset" name="g_reset">Reset</button>
+                                <button id="g_clear" class="btn btn-primary" type="reset" name="g_clear">Clear All
+                                </button>
+                                <button id="g_load" class="btn btn-primary" name="g_load">Load</button>
+                                <button id="g_save" class="btn btn-primary" name="g_save">Save</button>
+
+                                <button id="g_check" class="btn btn-primary" name="g_check">Check</button>
+
+                            </div>
+                            <div class="btn-group" role="group">
+                                <button class="submit btn btn-danger" type="submit" name="g_reserve">Reserve</button>
+
+                            </div>
                         </div>
+                        <div class="ui-widget" style="height: 10px;"></div>
+                        <div id="nodes_n">Nodes:0</div>
+
+                        <div id="link_w">Wireless Links:0</div>
+                        <div id="link_usrp">USRP Links:0</div>
+                        <div id="link_rtl">RTL Links:0</div>
                     </div>
-                    <div class="ui-widget" style="height: 10px;"></div>
-                    <div id="nodes_n">Nodes:0</div>
-                    
-                     <div id="link_w">Wireless Links:0 </div>
-                      <div id="link_usrp">USRP Links:0 </div>
-                       <div id="link_rtl">RTL Links:0 </div>
+                    <div class="col-xs-12">
+                        <h5>Graph Paper</h5>
+                        <div id="myPaperHolder"></div>
+                    </div>
                 </div>
-                <div class="col-xs-12">
-                    <h5>Graph Paper</h5>
-                    <div id="myPaperHolder"></div>
-                </div>
-            </div>
-        </fieldset>
-    </form>
+            </fieldset>
+        </form>
 
-</div>
-<!--/div>
-</div>
-</div-->
+    </div>
+    <!--/div>
+    </div>
+    </div-->
 
-<script type="text/javascript">
-var graph;
-var paper;
-var nodes = [];
-var links_w = [];
-var links_usrp = [];
-var links_rtl = [];
-var n_nodes=0;
-var n_links=0;
-jQuery(document).ready(function(){
-    graph = new joint.dia.Graph;
+    <script type="text/javascript">
+        var graph;
+        var paper;
+        var nodes = [];
+        var links_w = [];
+        var links_usrp = [];
+        var links_rtl = [];
+        var n_nodes = 0;
+        var n_links = 0;
+        jQuery(document).ready(function () {
+            graph = new joint.dia.Graph;
 
-    paper = new joint.dia.Paper({
-            el: $('#myPaperHolder'),
-            width: $('#myPaperHolder').width(),
-            height: $('#myPaperHolder').height(),
-            model: graph,
-            gridSize: 1,
-            perpendicularLinks: true,
-    
-    restrictTranslate: true
-    });
-    
-    //events
-    
-    //paper.on('render:done', function(easdvt, asdx, ay) { 
- //   alert('pointerdown on a blank area in the paper.')
+            paper = new joint.dia.Paper({
+                el: $('#myPaperHolder'),
+                width: $('#myPaperHolder').width(),
+                height: $('#myPaperHolder').height(),
+                model: graph,
+                gridSize: 1,
+                perpendicularLinks: true,
+
+                restrictTranslate: true
+            });
+
+            //events
+
+            //paper.on('render:done', function(easdvt, asdx, ay) {
+            //   alert('pointerdown on a blank area in the paper.')
 //})
 
-graph.on('add', function(cell) { 
-    //alert('New asdasdasdasd with id ' + cell.id + ' added to the graph.') 
-    updateData();
-})
+            graph.on('add', function (cell) {
+                //alert('New asdasdasdasd with id ' + cell.id + ' added to the graph.')
+                updateData();
+            })
 
-graph.on('remove', function(cell) { 
-   // alert('REEEEEEEEE s id ' + cell.id + ' added to.') 
-       updateData();
-})
-
-
+            graph.on('remove', function (cell) {
+                // alert('REEEEEEEEE s id ' + cell.id + ' added to.')
+                updateData();
+            })
 
 
-  //  drawBaseMap();
-});
+            //  drawBaseMap();
+        });
 
-$('#g_add_node').on('click', function(event){
-    n_nodes+=1;
-    var rect1 = new joint.shapes.basic.Circle({
-    position: { x: 100, y: 30 },
-    size: { width: 100, height: 30 },
-    attrs: {
-        rect: { fill: '#2C3E50', rx: 5, ry: 5, 'stroke-width': 2, stroke: 'black' },
-        text: { text: 'Node '+n_nodes, fill: '#3498DB', 'font-size': 18, 'font-weight': 'bold',
-            'font-variant': 'small-caps', 'text-transform': 'capitalize'}
-           }
-    });
-    nodes.push(rect1);
-    graph.addCells([rect1]);
-});
-
-//wirless
-$('#g_add_wlink').on('click', function(event){
-
-    n_links+=1;
-    var link = new joint.dia.Link({
-        source: { x: 100, y: 200  },
-        target: { x: 200, y: 250},
-        attrs:{},
-labels: [
-        { position: 0.5, attrs: { text: { text: 'wirless',fill: '#3498DB'} } }
-    ]
-    });
-
-    link.attr({
-        '.connection': { stroke: '#3498DB', 'stroke-width': 2, 'stroke-dasharray': '3  6' },
-        '.marker-source': { stroke: '#3498DB', d: 'M10 9c1.654 0 3.154 0.673 4.241 1.759l-1.414 1.414c-0.724-0.724-1.724-1.173-2.827-1.173s-2.103 0.449-2.827 1.173l-1.414-1.414c1.086-1.086 2.586-1.759 4.241-1.759zM2.929 7.929c1.889-1.889 4.4-2.929 7.071-2.929s5.182 1.040 7.071 2.929l-1.414 1.414c-1.511-1.511-3.52-2.343-5.657-2.343s-4.146 0.832-5.657 2.343l-1.414-1.414zM15.45 2.101c1.667 0.705 3.164 1.715 4.45 3v0l-1.414 1.414c-2.267-2.266-5.28-3.515-8.485-3.515s-6.219 1.248-8.485 3.515l-1.414-1.414c1.285-1.285 2.783-2.295 4.45-3 1.727-0.73 3.56-1.101 5.45-1.101s3.723 0.37 5.45 1.101zM9 14c0-0.552 0.448-1 1-1s1 0.448 1 1c0 0.552-0.448 1-1 1s-1-0.448-1-1z' },
-        '.marker-target': { stroke: '#3498DB', d: 'M 10 0 L 0 5 L 10 10 z' }
-        
-    
-
-    })
-
-     link.set('router', { name: 'orthogonal' });
-    link.set('smooth', true);
-   links_w.push(link);
-    graph.addCells([link]);
-});
-
-//usrp
-$('#g_add_blink').on('click', function(event){
-    n_links+=1;
-    var link = new joint.dia.Link({
-        source: { x: 100, y: 200  },
-        target: { x: 200, y: 250},
-        attrs:{},
-labels: [
-        { position: 0.5, attrs: { text: { text: 'USRP',fill: 'red'} } }
-    ]
-    });
-
-    
-    //event 
-    //link.on('transition:end', function() { alert('source of the link changed') })
-    link.attr({
-        '.connection': { stroke: 'red', 'stroke-width': 2 },
-        '.marker-source': { stroke: '#4b4a67', d: 'M 10 0 L 0 5 L 10 10 z' },
-        '.marker-target': { stroke: '#4b4a67', d: 'M 10 0 L 0 5 L 10 10 z' }
-        
-
-    })
-    link.set('router', { name: 'orthogonal' });
-    link.set('smooth', true);
-   links_usrp.push(link);
-    graph.addCells([link]);
-});
-
-//RTL
-$('#g_add_glink').on('click', function(event){
-    n_links+=1;
-    var link = new joint.dia.Link({
-        source: { x: 100, y: 200  },
-        target: { x: 200, y: 250},
-        attrs:{},
-labels: [
-        { position: 0.5, attrs: { text: { text: 'RTL',fill: 'green'} } }
-    ]
-    });
-
-
-    link.attr({
-        '.connection': { stroke: 'green', 'stroke-width': 2 },
-        '.marker-source': { stroke: 'green', d: 'M 10 0 L 0 5 L 10 10 z' },
-        '.marker-target': { stroke: 'green', d: 'M 10 0 L 0 5 L 10 10 z' }
-        
-
-    })
-
-    link.set('smooth', true);
-    link.set('router', { name: 'orthogonal' });
-   links_rtl.push(link);
-    graph.addCells([link]);
-});
-
-
-
-$('#g_clear').on('click', function(event){
-    clear();
-});
-$('#g_reset').on('click', function(event){
-    drawBaseMap();
-});
-$('#graph-form').on('submit', function(event){
-    event.preventDefault();
-});
-function clear(){
-    graph.clear();
-    n_nodes=0;
-    n_links=0;
-    nodes = [];
-    links_w = [];
-    links_usrp = [];
-    links_rtl = [];
-      updateData();
-};
-function drawBaseMap() {
-    clear();
-    for (i = 0; i < 8; i++)
-    {
-        n_nodes+=1;
-        var rect1 = new joint.shapes.basic.Circle({
-            position: { x: 100*n_nodes, y: 30*n_nodes },
-            size: { width: 100, height: 30 },
-            attrs: {
-                rect: { fill: '#2C3E50', rx: 5, ry: 5, 'stroke-width': 2, stroke: 'black' },
-                text: { text: 'Node '+n_nodes, fill: '#3498DB', 'font-size': 18, 'font-weight': 'bold',
-                    'font-variant': 'small-caps', 'text-transform': 'capitalize'}
-                   }
+        $('#g_add_node').on('click', function (event) {
+            n_nodes += 1;
+            var rect1 = new joint.shapes.basic.Circle({
+                position: {x: 100, y: 30},
+                size: {width: 100, height: 30},
+                attrs: {
+                    rect: {fill: '#2C3E50', rx: 5, ry: 5, 'stroke-width': 2, stroke: 'black'},
+                    text: {
+                        text: 'Node ' + n_nodes, fill: '#3498DB', 'font-size': 18, 'font-weight': 'bold',
+                        'font-variant': 'small-caps', 'text-transform': 'capitalize'
+                    }
+                }
             });
-        nodes.push(rect1);
-    }
-    graph.addCells(nodes);
-    for (i = 0; i < 8; i++){
-        for (j = i+1; j < 8; j++)
-        {
-            n_links+=1;
+            nodes.push(rect1);
+            graph.addCells([rect1]);
+        });
+
+        //wirless
+        $('#g_add_wlink').on('click', function (event) {
+
+            n_links += 1;
             var link = new joint.dia.Link({
-            source: { id: nodes[i].id },
-            target: { id: nodes[j].id }
+                source: {x: 100, y: 200},
+                target: {x: 200, y: 250},
+                attrs: {},
+                labels: [
+                    {position: 0.5, attrs: {text: {text: 'wirless', fill: '#3498DB'}}}
+                ]
             });
+
+            link.attr({
+                '.connection': {stroke: '#3498DB', 'stroke-width': 2, 'stroke-dasharray': '3  6'},
+                '.marker-source': {
+                    stroke: '#3498DB',
+                    d: 'M10 9c1.654 0 3.154 0.673 4.241 1.759l-1.414 1.414c-0.724-0.724-1.724-1.173-2.827-1.173s-2.103 0.449-2.827 1.173l-1.414-1.414c1.086-1.086 2.586-1.759 4.241-1.759zM2.929 7.929c1.889-1.889 4.4-2.929 7.071-2.929s5.182 1.040 7.071 2.929l-1.414 1.414c-1.511-1.511-3.52-2.343-5.657-2.343s-4.146 0.832-5.657 2.343l-1.414-1.414zM15.45 2.101c1.667 0.705 3.164 1.715 4.45 3v0l-1.414 1.414c-2.267-2.266-5.28-3.515-8.485-3.515s-6.219 1.248-8.485 3.515l-1.414-1.414c1.285-1.285 2.783-2.295 4.45-3 1.727-0.73 3.56-1.101 5.45-1.101s3.723 0.37 5.45 1.101zM9 14c0-0.552 0.448-1 1-1s1 0.448 1 1c0 0.552-0.448 1-1 1s-1-0.448-1-1z'
+                },
+                '.marker-target': {stroke: '#3498DB', d: 'M 10 0 L 0 5 L 10 10 z'}
+
+
+            })
+
+            link.set('router', {name: 'orthogonal'});
             link.set('smooth', true);
             links_w.push(link);
-        }
-    }
-    graph.addCells(links_w);
-};
+            graph.addCells([link]);
+        });
 
-function updateData(){
- document.getElementById('nodes_n').textContent= "Nodes:" + nodes.length;
-  document.getElementById('link_w').textContent= "Wireless Links:" + links_w.length;
-   document.getElementById('link_usrp').textContent= "USRP Links:" + links_usrp.length;
-     document.getElementById('link_rtl').textContent= "RTL Links:" + links_rtl.length;
-};
+        //usrp
+        $('#g_add_blink').on('click', function (event) {
+            n_links += 1;
+            var link = new joint.dia.Link({
+                source: {x: 100, y: 200},
+                target: {x: 200, y: 250},
+                attrs: {},
+                labels: [
+                    {position: 0.5, attrs: {text: {text: 'USRP', fill: 'red'}}}
+                ]
+            });
 
-</script>
+
+            //event
+            //link.on('transition:end', function() { alert('source of the link changed') })
+            link.attr({
+                '.connection': {stroke: 'red', 'stroke-width': 2},
+                '.marker-source': {stroke: '#4b4a67', d: 'M 10 0 L 0 5 L 10 10 z'},
+                '.marker-target': {stroke: '#4b4a67', d: 'M 10 0 L 0 5 L 10 10 z'}
+
+
+            })
+            link.set('router', {name: 'orthogonal'});
+            link.set('smooth', true);
+            links_usrp.push(link);
+            graph.addCells([link]);
+        });
+
+        //RTL
+        $('#g_add_glink').on('click', function (event) {
+            n_links += 1;
+            var link = new joint.dia.Link({
+                source: {x: 100, y: 200},
+                target: {x: 200, y: 250},
+                attrs: {},
+                labels: [
+                    {position: 0.5, attrs: {text: {text: 'RTL', fill: 'green'}}}
+                ]
+            });
+
+
+            link.attr({
+                '.connection': {stroke: 'green', 'stroke-width': 2},
+                '.marker-source': {stroke: 'green', d: 'M 10 0 L 0 5 L 10 10 z'},
+                '.marker-target': {stroke: 'green', d: 'M 10 0 L 0 5 L 10 10 z'}
+
+
+            })
+
+            link.set('smooth', true);
+            link.set('router', {name: 'orthogonal'});
+            links_rtl.push(link);
+            graph.addCells([link]);
+        });
+
+
+        $('#g_clear').on('click', function (event) {
+            clear();
+        });
+        $('#g_reset').on('click', function (event) {
+            drawBaseMap();
+        });
+        $('#graph-form').on('submit', function (event) {
+            event.preventDefault();
+        });
+
+        function clear() {
+            graph.clear();
+            n_nodes = 0;
+            n_links = 0;
+            nodes = [];
+            links_w = [];
+            links_usrp = [];
+            links_rtl = [];
+            updateData();
+        };
+
+        function drawBaseMap() {
+            clear();
+            for (i = 0; i < 8; i++) {
+                n_nodes += 1;
+                var rect1 = new joint.shapes.basic.Circle({
+                    position: {x: 100 * n_nodes, y: 30 * n_nodes},
+                    size: {width: 100, height: 30},
+                    attrs: {
+                        rect: {fill: '#2C3E50', rx: 5, ry: 5, 'stroke-width': 2, stroke: 'black'},
+                        text: {
+                            text: 'Node ' + n_nodes, fill: '#3498DB', 'font-size': 18, 'font-weight': 'bold',
+                            'font-variant': 'small-caps', 'text-transform': 'capitalize'
+                        }
+                    }
+                });
+                nodes.push(rect1);
+            }
+            graph.addCells(nodes);
+            for (i = 0; i < 8; i++) {
+                for (j = i + 1; j < 8; j++) {
+                    n_links += 1;
+                    var link = new joint.dia.Link({
+                        source: {id: nodes[i].id},
+                        target: {id: nodes[j].id}
+                    });
+                    link.set('smooth', true);
+                    links_w.push(link);
+                }
+            }
+            graph.addCells(links_w);
+        };
+
+        function updateData() {
+            document.getElementById('nodes_n').textContent = "Nodes:" + nodes.length;
+            document.getElementById('link_w').textContent = "Wireless Links:" + links_w.length;
+            document.getElementById('link_usrp').textContent = "USRP Links:" + links_usrp.length;
+            document.getElementById('link_rtl').textContent = "RTL Links:" + links_rtl.length;
+        };
+
+    </script>
 
 {% endblock %}

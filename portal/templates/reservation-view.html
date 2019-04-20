@@ -1,145 +1,131 @@
 {% extends "layout-unfold1.html" %}
 {% load i18n %}
 {% block head %}
-{{ wizard.form.media }}
+    {{ wizard.form.media }}
 {% endblock %}
 
 {% block unfold_main %}
-<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/jquery.timepicker.css"/>
-<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/bootstrap-datetimepicker.min.css"/>
-<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/themes/ui-lightness/jquery-ui.min.css"/>
-<script type="text/javascript" src="{{STATIC_URL}}js/moment.min.js"></script>
-<script type="text/javascript" src="{{STATIC_URL}}js/jquery.timepicker.js"></script>
-<script type="text/javascript" src="{{STATIC_URL}}js/bootstrap-datetimepicker.min.js"></script>
-<script type="text/javascript" src="{{STATIC_URL}}js/jquery.datepair.min.js"></script>
-<script type="text/javascript" src="{{STATIC_URL}}js/datepair.min.js"></script>
-<!--script type="text/javascript" src="{{STATIC_URL}}js/bootstrap-datepicker.min.js"></script>
-<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/bootstrap-datepicker.min.css" /-->
-<!--script type="text/javascript" src="{{STATIC_URL}}js/jquery-ui.js"></script-->
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/jquery.timepicker.css"/>
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/bootstrap-datetimepicker.min.css"/>
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/themes/ui-lightness/jquery-ui.min.css"/>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/moment.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.timepicker.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap-datetimepicker.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.datepair.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/datepair.min.js"></script>
 
-<link rel="stylesheet" type="text/css" href='{{STATIC_URL}}css/onelab.css'/>
-<link rel="stylesheet" type="text/css" href='{{STATIC_URL}}css/registration.css'/>
-<style>
-    .table td ,.table th {
-    text-align: center;
-    vertical-align: middle !important;
+    <link rel="stylesheet" type="text/css" href='{{ STATIC_URL }}css/registration.css'/>
+    <style>
+        .table td, .table th {
+            text-align: center;
+            vertical-align: middle !important;
+        }
+
+        .user-input, .checked {
+            color: #06921f;
+            font-weight: bold;
+        }
+    .img-thumbnail{
+        width: 50px !important;
+        max-width: none!important;
+        height: 50px !important;
     }
-    .user-input, .checked {
-    color:#06921f;
-    font-weight:bold;
+    .custom-control {
+        padding-left: 0px !important;
     }
-</style>
-<div style="text-align:center" class="well-sm">
-    <h1>Reservation System</h1>
+    </style>
+    <div class="onelab-title">
+        <h2>Reservation System</h2>
+    </div>
 
-</div>
+    {% if errors %}
+        <ul>
+            {% for error in errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
 
-{% if errors %}
-<ul>
-    {% for error in errors %}
-    <li>{{ error }}</li>
-    {% endfor %}
-</ul>
-{% endif %}
-{% block page_title %}
-<h3>Request a Slice</h3>
-{% endblock page_title %}
-<div class='well'>
-    <form id="commentForm" class="form-horizontal" enctype="multipart/form-data" action="" method="post" role="form" onsubmit="return(validate());">
-        {% csrf_token %}
-        {% block instructor_area %}
-        {% endblock instructor_area %}
-        <fieldset>
-            <legend>Reservation Details</legend>
-            <!--div class="form-group">
-                <label for="email" class="col-xs-2 control-label">Experimenter ID</label>
-                <div class="col-xs-5">
-                    <label id="email" class="col-xs-2 control-label" style="height:34px;">{{ email }}</label>
-                </div>
-            </div-->
+    {% block page_title %}
 
-            <div class="form-group">
-                <label for="slice_name" class="col-xs-2 control-label">Slice Name</label>
-                <div class="col-xs-5">
-                    <input id="slice_name" type="text" name="slice_name" class="form-control user-input" minlength="2"
-                           value="{{ slice_name }}" placeholder="Slice Name" required/>
-                </div>
-                <div class="col-xs-5"><p class="form-hint">The name of the slice you wish to create</p></div>
-            </div>
+    {% endblock page_title %}
+    <div class='well'>
+        <form id="commentForm" class="form-horizontal" enctype="multipart/form-data" action="" method="post" role="form"
+              onsubmit="return(validate());">
+            {% csrf_token %}
+            {% block instructor_area %}
+            {% endblock instructor_area %}
+            <fieldset>
+                <legend>Reservation Request Information</legend>
 
-            <div class="form-group">
-                <label for="server_type" class="col-xs-2 control-label">Hardware Type</label>
-                <div class="col-xs-5">
-                    <div class="ui-widget">
-                        <select id="server_type" name="server_type" class="form-control user-input"
-                                value="{{ server_type }}" autocomplete="off">
-                            <option value="omf" selected="selected">Testbed Nodes</option>
-                            {%  if sim_vm_list != None %}
-                                <option value="sim">Simulation Server</option>
-                            {%  endif %}
-                        </select>
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <div class="input-group">
+                            <div class="input-group-append">
+                                <span class="input-group-text">Slice Name</span>
+                            </div>
+
+                            <input id="slice_name" type="text" name="slice_name" class="form-control user-input"
+                                   minlength="2"
+                                   value="{{ slice_name }}" placeholder="Testing X" required/>
+                        </div>
+                        <small id="nameHelp" class="form-text text-muted">The name of the slice you wish to create
+                        </small>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <div class="input-group">
+                            <div class="input-group-append">
+                                <span class="input-group-text">Hardware Type</span>
+                            </div>
+                            <select id="server_type" name="server_type" class="custom-select form-control user-input"
+                                    value="{{ server_type }}" autocomplete="off">
+                                <option value="omf" selected="selected">Testbed Nodes</option>
+                                {% if sim_vm_list != None %}
+                                    <option value="sim">Simulation Server</option>
+                                {% endif %}
+                            </select>
+                        </div>
+                        <small id="srvHelp" class="form-text text-muted">
+                            Determine the Type of Experiment Server
+                        </small>
                     </div>
                 </div>
 
-                <div class="col-xs-5">
-                    <p class="form-hint">Determine the Type of Experiment Server</p>
-                </div>
-            </div>
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <div class="input-group">
+                            <div class="input-group-append">
+                                <span class="input-group-text">Request Plan</span>
+                            </div>
 
-            <div class="form-group">
-                <label for="request_type" class="col-xs-2 control-label">Request Plan</label>
-
-                <div class="col-xs-5">
-                    <div class="ui-widget">
-                        <select id="request_type" name="request_type" class="form-control user-input"
-                                value="{{ request_type }}"  >
-
-                            <option value="active_t">Normal (Scheduling)</option>
-                            {% if reserve_type == "R" %}
-                            <option value="lazy_t">Urgent (Same-Day)</option>
-                            {% endif %}
-                        </select>
+                            <select id="request_type" name="request_type" class="custom-select form-control user-input"
+                                    value="{{ request_type }}">
+                                <option value="active_t">Normal (Scheduling)</option>
+                                {% if reserve_type == "R" or reserve_type == "M"%}
+                                    <option value="lazy_t">Urgent (Same-Day)</option>
+                                {% endif %}
+                            </select>
+                        </div>
+                        <small id="planHelp" class="form-text text-muted">
+                            Determine the request plan type
+                        </small>
                     </div>
                 </div>
 
-                <div class="col-xs-5"><p class="form-hint">Determine the request plan type</p>
-                </div>
-            </div>
-
-            <!--div class="form-group">
-
-                <label for="request_date" class="col-xs-2 control-label">Expect Date & Time</label>
-
-                <div class="col-xs-4">
-                    <div class="ui-widget">
-                     <div class='input-group date' id='datetimepicker1'>
-                          <input id="request_date" name="request_date" type='text' placeholder="Expected Date" class="form-control" required />
-                          <span class="input-group-addon">
-                              <span class="glyphicon glyphicon-calendar"></span>
-                          </span>
-                      </div>
-                          <script type="text/javascript">
-                              $(function () {
-                                  $('#datetimepicker1').datetimepicker();
-                              });
-                          </script>
-                    </div>
-                    <h5>Current Server time: {{time_now}} Zone: (Africa/Cairo)</h5>
-                </div>
-
-                <div class="col-xs-6"><p class="form-hint">Expect datetime for your request</p></div>
-            </div-->
-
-            <div class="form-group">
-                <label for="active_time" class="col-xs-2 control-label">Flexible Date & Time</label>
-                <div class="col-xs-5">
-                    <div class="ui-widget">
-                        <div class="input-group" id="active_time">
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        <label for="active_time" class="control-label">Flexible Date & Time</label>
+                        <div id="active_time" class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">From</span>
+                            </div>
                             <input name="req_time_date1" type="text" class="form-control user-input date start"
                                    placeholder="Start date" required/>
                             <input name="req_time_time1" type="text" class="form-control user-input time start"
                                    placeholder="Start time" required/>
-                            <div class="input-group-addon">to</div>
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">To</span>
+                            </div>
                             <input name="req_time_date2" type="text" class="form-control user-input date end"
                                    placeholder="End date" required/>
                             <input name="req_time_time2" type="text" class="form-control user-input time end"
@@ -147,169 +133,211 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <!-- Duration @qursaan
 
-             -->
-            <div id="active_group">
-                <div class="form-group">
-                    <label for="slice_duration" class="col-xs-2 control-label">Slice duration (hr)</label>
-                    <div class="col-xs-5">
-                        <div class="ui-widget">
-                            <div class="input-group">
-                                <input type="text" class="form-control user-input" name="slice_duration"
-                                       id="slice_duration" readonly/>
-                                <div class="input-group-addon">hr</div>
+                <div class="row" id="active_group">
+                    <div class="form-group col-md-6">
+                        <div class="input-group">
+                            <div class="input-group-append">
+                                <span class="input-group-text">Slice duration (hr)</span>
                             </div>
-                            <div id="slider-range-min"></div>
+                            <input type="text" class="form-control user-input" name="slice_duration"
+                                   id="slice_duration" readonly/>
+                            <div class="input-group-append">
+                                <span class="input-group-text">hr</span>
+                            </div>
                         </div>
+                        <div id="slider-range-min"></div>
+                        <small id="duHelp" class="form-text text-muted">
+                            The expected duration of request slice
+                        </small>
                     </div>
-                    <div class="col-xs-5"><p class="form-hint">The expected duration of request slice</p></div>
-                </div>
-            </div>
-
-            <div id="lazy_group" hidden="hidden">
-
-            </div>
-
-            <div id="sim_group" hidden="hidden">
-                <div class="form-group">
-                    <label for="sim_vm" class="col-xs-2 control-label">Virtual Machine</label>
-                    <div class="col-xs-5">
-                        <div class="ui-widget">
-                            <select id="sim_vm" name="sim_vm" class="form-control user-input" value="{{ sim_vm }}">
-                                {% for row in sim_vm_list %}
-                                <option value="{{ row.id }}" label="{{ row.hv_name }} [{{ row.specification }}]">
-                                    {{ row.hv_name }} [{{ row.specification }}]
-                                </option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-xs-5"><p class="form-hint">The pre-defined operating system package</p></div>
                 </div>
 
-                <div class="form-group">
-                    <label for="sim_ram_size" class="col-xs-2 control-label">VM Ram Size (MB)</label>
-                    <div class="col-xs-5">
-                        <div class="ui-widget">
+                <div id="lazy_group" hidden="hidden">
+
+                </div>
+
+                {% if not maintenance %}
+                <div id="sim_group">
+                    <div class="row">
+                        <div class="form-group col-md-6">
                             <div class="input-group">
-                                <input type="text" class="form-control user-input" name="sim_ram_size" id="sim_ram_size"
-                                       readonly/>
-                                <div class="input-group-addon">MB</div>
+                                <div class="input-group-append">
+                                    <span class="input-group-text">Virtual Machine</span>
+                                </div>
+                                <select id="sim_vm" name="sim_vm" class="custom-select form-control user-input"
+                                        value="{{ sim_vm }}">
+                                    {% for row in sim_vm_list %}
+                                        <option value="{{ row.id }}"
+                                                label="{{ row.hv_name }} [{{ row.specification }}]">
+                                            {{ row.hv_name }} [{{ row.specification }}]
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <small id="simHelp" class="form-text text-muted">
+                                The virtual machine name
+                            </small>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <div class="input-group">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">RAM Size</span>
+                                </div>
+                                <input type="text" class="form-control user-input" name="sim_ram_size"
+                                       id="sim_ram_size" readonly/>
+                                <div class="input-group-append">
+                                    <span class="input-group-text">MB</span>
+                                </div>
                             </div>
                             <div id="ram-range-min"></div>
+                            <small id="memHelp" class="form-text text-muted">
+                                The maximum RAM size
+                            </small>
                         </div>
-                    </div>
-                    <div class="col-xs-5"><p class="form-hint">The maximum RAM size</p></div>
-                </div>
-
-                <div class="form-group">
-                    <label for="sim_no_proc" class="col-xs-2 control-label">No. of Processor</label>
-                    <div class="col-xs-5">
-                        <div class="ui-widget">
+                        <div class="form-group col-md-6">
                             <div class="input-group">
-                                <input type="text" class="form-control user-input" name="sim_no_proc" id="sim_no_proc"
+                                <div class="input-group-append">
+                                    <span class="input-group-text">No. of Processor</span>
+                                </div>
+                                <input type="text" class="form-control user-input" name="sim_no_proc"
+                                       id="sim_no_proc"
                                        readonly/>
-                                <div class="input-group-addon">Processor</div>
                             </div>
                             <div id="proc-range-min"></div>
-                        </div>
-                    </div>
-                    <div class="col-xs-5"><p class="form-hint">The maximum number of processor</p></div>
-                </div>
-
-                <div class="form-group">
-                    <label for="sim_img" class="col-xs-2 control-label">OS Version</label>
-                    <div class="col-xs-5">
-                        <div class="ui-widget">
-                            <select id="sim_img" name="sim_img" class="form-control user-input" value="{{ sim_img }}">
-                                {% for row in sim_img_list %}
-                                <option value="{{ row.id }}" label="{{ row.image_name }}::{{ row.image_type }}">
-                                    {{ row.image_name }}::{{ row.image_type }}
-                                </option>
-                                {% endfor %}
-                            </select>
+                            <small id="proHelp" class="form-text text-muted">
+                                The maximum number of processor
+                            </small>
 
                         </div>
                     </div>
-                    <div class="col-xs-5"><p class="form-hint">The pre-defined operating system package</p></div>
-                </div>
-            </div>
 
-            <div id="omf_group">
-                <div class="form-group">
-                    <label for="resources" class="col-xs-2 control-label">Resources</label>
-                    <div class="col-xs-10">
-                        <div class="ui-widget">
-                            <div id="resources" class="ui-widget">
-                                <table class="table table-bordered table-condensed table-striped" style="width:90%;">
-                                    <thead>
+                    <div class="row">
+                        <div class="form-group col-md-12">
+                            <div class="input-group">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">OS Image Version</span>
+                                </div>
+
+                                <select id="sim_img" name="sim_img" class="custom-select form-control user-input"
+                                        value="{{ sim_img }}">
+                                    {% for row in sim_img_list %}
+                                        <option value="{{ row.id }}"
+                                                label="{{ row.image_name }}::{{ row.image_type }}">
+                                            {{ row.image_name }}::{{ row.image_type }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <small class="form-text text-muted">
+                                The pre-defined operating system image
+                            </small>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+                <div id="omf_group">
+                    <div class="row">
+                        <div class="form-group col-md-12">
+                            <label for="resources" class="control-label">Resources</label>
+                            <div id="resources" class="table-responsive-sm">
+                                <table class="table table-hover table-condensed table-striped table-sm">
+                                    <thead class="thead-dark">
                                     <tr>
                                         <th>#</th>
+                                        <th></th>
                                         {% for row in node_list %}
-                                        <th>{{row}}</th>
+                                            <th>{{ row }}</th>
                                         {% endfor %}
                                     </tr>
                                     </thead>
                                     <tbody>
                                     {% for i in resource_info %}
-                                    <tr>
-                                        <th>VM {{i.id}}</th>
-                                        {% for n in node_list %}
-                                        <td>
-                                            {% for r in resource_list %}
-                                            {% if r.node_ref.id == n.id and r.device_ref.id == i.id %}
-                                            <label class="checkbox-inline">
-                                                <input type="checkbox" name="resource_group" value="{{r.id}}" node-id="{{n.id}}" device-id="{{i.id}}"
-                                                       title="{{ r.device_ref.type }}" autocomplete="off">{{ r.device_ref.type }}</input>
-                                            </label>
-                                            {% endif %}
+                                        <tr>
+                                            <th>VM {{ i.id }}</th>
+                                                <td>
+                                                    <img src="{{ STATIC_URL }}img/{{ i.type }}.png"
+                                                        class="img-thumbnail img-fluid"/>
+                                                </td>
+                                            {% for n in node_list %}
+                                                <td>
+                                                    {% for r in resource_list %}
+                                                        {% if r.node_ref.id == n.id and r.device_ref.id == i.id %}
+                                                            <div class="custom-control custom-checkbox form-inline">
+                                                                <label class="control-label" for="{{ r.id }}"/>
+                                                                    <input class="custom-checkbox form-control"
+                                                                           type="checkbox"
+                                                                           name="resource_group"
+                                                                           id="{{ r.id }}"
+                                                                           value="{{ r.id }}"
+                                                                           node-id="{{ n.id }}"
+                                                                           device-id="{{ i.id }}"
+                                                                           title="{{ r.device_ref.type }}"
+                                                                           autocomplete="off"/>
+                                                                    {{ r.device_ref.type }}
+                                                                </label>
+                                                            </div>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </td>
                                             {% endfor %}
-                                        </td>
-                                        {% endfor %}
-                                    </tr>
+                                        </tr>
+
                                     {% endfor %}
                                     </tbody>
                                 </table>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="n_nodes" class="col-xs-2 control-label">No. of Resources</label>
-                    <div class="col-xs-5">
-                        <div class="ui-widget">
-                            <input id="n_nodes" name="n_nodes" value="0" type="text" class="form-control user-input"
-                                   id="n_resources" readonly required/>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="omf_img" class="col-xs-2 control-label">Startup Image</label>
-                    <div class="col-xs-5">
-                        <div class="ui-widget">
-                            <select id="omf_img" name="omf_img" class="form-control user-input" value="{{ omf_img }}">
-                                {% for row in omf_img_list %}
-                                <option value="{{ row.id }}" label="{{ row.image_name }}::{{ row.image_type }}">
-                                    {{ row.image_name }}::{{ row.image_type }}
-                                </option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-xs-5"><p class="form-hint">The pre-defined operating system package</p></div>
-                </div>
-            </div>
+                        <div class="form-group col-md-12">
 
-            <div id="freq_group" hidden="hidden">
-                <div class="form-group">
-                    <label for="freq_range" class="col-xs-2 control-label">Frequency Ranges</label>
-                    <div class="col-xs-10">
-                        <div class="ui-widget">
-                            <div id="freq_range" class="ui-widget">
-                                <table class="table table-bordered table-condensed table-striped" style="width:90%;">
-                                    <thead>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <div class="input-group">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">No. of Resources: </span>
+                                </div>
+                                <input id="n_nodes" name="n_nodes" value="0" type="text"
+                                       class="form-control user-input"
+                                       id="n_resources" readonly required/>
+                            </div>
+                        </div>
+                    </div>
+                    {% if not maintenance %}
+                    <div class="row">
+                        <div class="form-group col-md-12">
+                            <div class="input-group">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">Startup Image</span>
+                                </div>
+                                <select id="omf_img" name="omf_img" class="custom-select form-control user-input"
+                                        value="{{ omf_img }}">
+                                    {% for row in omf_img_list %}
+                                        <option value="{{ row.id }}"
+                                                label="{{ row.image_name }}::{{ row.image_type }}">
+                                            {{ row.image_name }}::{{ row.image_type }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+
+            {% if not maintenance %}
+                <div id="freq_group">
+                    <div class="row">
+                        <div class="form-group col-md-12">
+                            <label for="freq_range" class="control-label">Frequency Ranges</label>
+                            <div id="freq_range" class="table-responsive-sm">
+                                <table class="table table-hover table-condensed table-striped table-sm">
+                                    <thead class="thead-dark">
                                     <tr>
                                         <th>#</th>
                                         <th>Range (MHZ)</th>
@@ -318,26 +346,28 @@
                                     <tbody>
                                     {% regroup freq_list by group_name as gfreq_list %}
                                     {% for gf in gfreq_list %}
-                                    <tr>
-                                        <th>{{ gf.grouper }}</th>
-                                        <td>
-                                            <table>
-                                                <tbody>
-                                                <tr>
-                                                    {% for n in gf.list %}
-                                                    <td>
-                                                        <label class="checkbox-inline">
-                                                            <input style="margin-left: 10px;" type="checkbox" name="freq_group" value="{{n.id}}">
-                                                            <br/>{{ n.freq_start }}<br/>{{ n.freq_end }}
-                                                            </input>
-                                                        </label>
-                                                    </td>
-                                                    {% endfor %}
-                                                </tr>
-                                                </tbody>
-                                            </table>
-                                        </td>
-                                    </tr>
+                                        <tr>
+                                            <th>{{ gf.grouper }}</th>
+                                            <td>
+                                                <table>
+                                                    <tbody>
+                                                    <tr>
+                                                        {% for n in gf.list %}
+                                                            <td>
+                                                                <label class="checkbox-inline">
+                                                                    <input style="margin-left: 10px;"
+                                                                           type="checkbox" name="freq_group"
+                                                                           value="{{ n.id }}">
+                                                                    <br/>{{ n.freq_start }}<br/>{{ n.freq_end }}
+                                                                    </input>
+                                                                </label>
+                                                            </td>
+                                                        {% endfor %}
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
                                     {% endfor %}
                                     </tbody>
                                 </table>
@@ -345,338 +375,342 @@
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="form-group">
-                <label for="purpose" class="col-xs-2 control-label">Experiment purpose</label>
-                <div class="col-xs-5">
-                    <div class="ui-widget">
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        <label for="purpose" class="control-label">Experiment purpose</label>
                         <textarea id="purpose" name="purpose" class="form-control" style="height:110px;"
-                                  placeholder="Purpose" required>{{ purpose }}</textarea>
+                                  placeholder="Purpose of your experiment" required>{{ purpose }}</textarea>
                     </div>
                 </div>
-                <div class="col-xs-5"><p class="form-hint">Purpose of your experiment</p></div>
-            </div>
-
-            <div class="form-group">
-                <div class="col-xs-2"></div>
-                <div class="col-xs-10">
-                    <div id="validation_error" class="" role="alert"></div>
+            {% endif %}
+                <div class="form-group">
+                    <div class="col-xs-2"></div>
+                    <div class="col-xs-10">
+                        <div id="validation_error" class="" role="alert"></div>
+                    </div>
                 </div>
-            </div>
-
-            <div class="form-group">
-                <div class="col-xs-2"></div>
-                <div class="col-xs-2">
-                    <button id="check_time_btn" class="btn btn-info form-control" type="button">Check</button>
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                            <div class="btn-group mr-2" role="group" aria-label="First group">
+                                <button id="check_time_btn" class="btn btn-info form-control" type="button">Check
+                                </button>
+                            </div>
+                            <div class="btn-group mr-2" role="group" aria-label="Second group">
+                                <button class="submit btn btn-danger form-control" type="submit">Request Slice
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-xs-2">
-                    <button class="submit btn btn-danger form-control" type="submit">Request Slice</button>
-                </div>
+            </fieldset>
+        </form>
+    </div>
 
-            </div>
+    <script>
+        /******************************************* Main ****************/
+        var max_duration = {{omf_max_duration}};
+        var curr_datetime = new Date("{{ time_now.isoformat }}");
+        var select_type = "omf";
+        var n_nodes = 0;
+        var v_range = 0;
+        var n_usrp = 0;
+        var maintenance = {% if maintenance %}true{% else %}false{% endif %};
 
-        </fieldset>
-    </form>
-</div>
+        $(document).ready(function () {
+            $('#sim_group').hide();
+            $('#freq_group').hide();
+            $("#proc-range-min").slider({
+                range: "min",
+                value: 1,
+                min: 1,
+                max: 32,
+                slide: function (event, ui) {
+                    $("#sim_no_proc").val(ui.value);
+                }
+            });
+            $("#ram-range-min").slider({
+                range: "min",
+                value: 1024,
+                min: 1024,
+                max: 131072,
+                slide: function (event, ui) {
+                    $("#sim_ram_size").val(ui.value);
+                }
+            });
+            $("#slider-range-min").slider({
+                range: "min",
+                value: 1,
+                min: 1,
+                max: max_duration,
+                slide: function (event, ui) {
+                    $("#slice_duration").val(ui.value);
+                }
+            });
+            $("#active_time .date").datepicker('option', 'maxDate', '1m');
+            $("#active_time .date").datepicker('option', 'minDate', '1d');
+            $("#sim_no_proc").val($("#proc-range-min").slider("value"));
+            $("#sim_ram_size").val($("#ram-range-min").slider("value"));
+            $("#slice_duration").val($("#slider-range-min").slider("value"));
 
-<script>
-/******************************************* Main ****************/
-var max_duration = {{omf_max_duration}};
-var curr_datetime = new Date("{{ time_now.isoformat }}");
-var select_type  = "omf";
-var n_nodes = 0;
-var v_range = 0;
-var n_usrp  = 0;
-
-$(document).ready(function(){
-
-    $( "#proc-range-min" ).slider({
-        range: "min",
-        value: 1,
-        min: 1,
-        max: 32,
-        slide: function( event, ui ) {
-            $( "#sim_no_proc" ).val(ui.value);
-        }
-    });
-    $( "#ram-range-min" ).slider({
-        range: "min",
-        value: 1024,
-        min: 1024,
-        max: 131072,
-        slide: function( event, ui ) {
-            $( "#sim_ram_size" ).val(ui.value);
-        }
-    });
-    $( "#slider-range-min" ).slider({
-        range: "min",
-        value: 1,
-        min: 1,
-        max: max_duration,
-        slide: function( event, ui ) {
-            $( "#slice_duration" ).val(ui.value);
-        }
-    });
-    $( "#sim_no_proc" ).val( $( "#proc-range-min" ).slider( "value" ) );
-    $( "#sim_ram_size" ).val( $( "#ram-range-min" ).slider( "value" ) );
-    $( "#slice_duration" ).val( $( "#slider-range-min" ).slider( "value" ) );
-
-    $( "#active_time" ).datepair();
-    /*$(":checkbox").each(function() {
-        if(this.checked)
-            n_nodes+=1;
-        $('#n_nodes').val(n_nodes);
-        set_validation(0,"...");
-        v_range = 0;
-    });*/
-});
-
-function set_validation(v_type, msg){
-    $('#validation_error').removeAttr('class');
-    $('#validation_error').html( msg ) ;
-    if(v_type == 1){
-        $('#validation_error').attr('class', "alert alert-success");
-    } else if (v_type == 2){
-        $('#validation_error').attr('class', "alert alert-danger");
-    } else if (v_type == 3){
-        $('#validation_error').attr('class', "alert alert-danger");
-    }
-};
-
-function validate(){
-    set_validation(0,"");
-    var milliseconds = $('#active_time').datepair('getTimeDiff');
-    var hrs=milliseconds/1000/60/60;
-    if (isNaN(hrs) || hrs <=0)
-    {
-        set_validation(2, "Time interval is not valid");
-        return false;
-    }
-
-    var slice_dur= $('input[name="slice_duration"]').val();
-    if(slice_dur>hrs)
-    {
-        set_validation(2, "Duration is large than time interval");
-        return false;
-    }
-
-    if( select_type  == "omf" ){          /*OMF Selection Validation*/
-        if(n_nodes==0){
-            set_validation(2, "Please select at least one node." );
-            return false;
-        }
-    }
-    else if (select_type  == "sim"){     /*SIM Selection Validation*/
-        //return true;
-    }
-
-    if(v_range==0){
-        set_validation(3, "Please check availability first before submit" );
-        return false;
-    }
-    return(true);
-};
-/*******************************************check availability*********/
-$("#check_time_btn").on('click', function(event){
-    set_validation(0, "..." );
-
-    d1 = $('input[name="req_time_date1"]').val();
-    d2 = $('input[name="req_time_date2"]').val();
-    t1 = $('input[name="req_time_time1"]').val();
-    t2 = $('input[name="req_time_time2"]').val();
-    if( d1=="" ||  d2=="" ||  t1=="" ||  t2=="" ){
-        set_validation(2, "Please select date and time range" );
-        return false;
-    }
-
-    if( select_type  == "omf" )
-    {
-        var select_node = [];
-        $('input[name="resource_group"]:checked').each(function() {
-            select_node.push( $(this).val() );
-        });
-
-        var select_freq = [];
-        $('input[name="freq_group"]:checked').each(function() {
-            select_freq.push( $(this).val() );
-        });
-
-        if( select_node.length == 0 )
-        {
-            set_validation(2, "Please select at least one node" );
-            return false;
-        }
-
-        if( n_usrp > 0 && select_freq.length == 0 )
-        {
-            set_validation(2, "Please select at least one frequency range" );
-            return false;
-        }
-
-        checking_availability(select_node,d1,d2,t1,t2,"omf",1,select_freq);
-    }
-    else if( select_type  == "sim" )
-    {
-        var slice_dur= $('input[name="slice_duration"]').val();
-        var select_node= $('#sim_vm option:selected').val();
-        checking_availability(select_node,d1,d2,t1,t2,"sim",slice_dur,[]);
-    }
-});
-
-function checking_availability(selected_node,d1,d2,t1,t2,type,duration,selected_freq) {
-    $.ajax({
-        url  : "check_availability",
-        type : "POST",
-        data : {the_nodes: selected_node, date1:d1, date2:d2, time1:t1, time2:t2, the_type:type, the_dur:duration, the_freq: selected_freq},
-        success : function(result) {
-            if(result['free']=="1") {
-                set_validation(1 ,  "<strong>Congratulation</strong>, its a Free Slot/Resources" );
-                v_range=1;
-            } else {
-                set_validation(3, "A <strong>Busy</strong> slot(s)" +result['msg'] +"for more details see <a href='/portal/testbeds/scheduler/'>Timeline</a>");
-                v_range=0;
+            $("#active_time").datepair();
+            /*$(":checkbox").each(function() {
+                if(this.checked)
+                    n_nodes+=1;
+                $('#n_nodes').val(n_nodes);
+                set_validation(0,"...");
+                v_range = 0;
+            });*/
+            if(maintenance){
+                $('#slice_name').attr("disabled","disabled");
             }
-        },
-        error : function(xhr,errmsg,err) {
-           console.log(err);
-           set_validation(2 ,"Server Error, try again later");
-        }
-    });
-};
-/*******************************************change server type*********/
-$('#server_type').change(function(){
-    if($(this).val()=="omf"){
-         $('#omf_group').show();
-         $('#sim_group').hide();
-         max_duration = {{omf_max_duration}};
-         select_type  = "omf";
-         if(n_usrp>=1)
-            $('#freq_group').show();
-    } else {
-         $('#sim_group').show();
-         $('#omf_group').hide();
-         $('#freq_group').hide();
-         max_duration = {{sim_max_duration}};
-         select_type  = "sim";
-    }
-    updateRanger();
-    v_range = 0;
-});
-/*******************************************change request type*********/
-$('#request_type').change(function(){
-    if($(this).val()=="active_t"){
-         $('#active_group').show();
-         $('#lazy_group').hide();
-         $( "#active_time .date" ).datepicker('option', 'maxDate' ,'4m');
-         $( "#active_time .date" ).datepicker('option', 'minDate' ,'1d');
-         //$( "#active_time .time .end" ).timepicker('option', 'maxTime' , (3600*23) );
-         //$( "#active_time .time" ).timepicker('option', 'durationTime' , 3600 );
-         $( "#active_time .date.start" ).removeAttr("disabled");
-         $( "#active_time .time" ).val('');
-    }else{
-         var d = curr_datetime;
-         var n = d.getHours();
-         var t = (n-1)*60*60; // to reserve the current hour ??
-         $('#lazy_group').show();
-         $('#active_group').hide();
-         $( "#active_time .date" ).datepicker('option', 'maxDate' ,'1w');
-         $( "#active_time .date" ).datepicker('option', 'minDate' ,'0d');
-         $( "#active_time .time" ).timepicker('option', 'minTime' , t );
-         //$( "#active_time .time" ).timepicker('option', 'maxTime' , (23*60*60) );
-         $( "#active_time .time" ).val('');
-         //$( "#active_time .date" ).val(moment.format('DD-MMMM-YYYY'));
-         $( "#active_time .date" ).datepicker('setDate', d);
-         $( "#active_time .date.start" ).attr("disabled","disabled");
-    }
-    v_range = 0;
-});
-/*******************************************Slider*********/
+        });
 
-/*******************************************change time action*********/
-$('#active_time .time').timepicker({
-    showDuration: true,
-    timeFormat  : 'g:iA',
-    step        : 60,
-    disableTextInput : true,
-    disableTouchKeyboard : true,
-});
-$('#active_time .date').datepicker({
-    dateFormat   : 'dd-MM-yy',
-    autoclose    : true,
-    disableTextInput : true,
-    disableTouchKeyboard : true,
-    minDate     : '1d',
-});
-$('#active_time').on('rangeSelected', function(){
-    updateRanger();
-});
-$('#active_time').datepair({
-    parseDate: function(input){
-        return $(input).datepicker('getDate');
-    },
-    updateDate: function(input, dateObj){
-        return $(input).datepicker('setDate', dateObj);
-    }
-});
-function updateRanger(){
-    var milliseconds = $('#active_time').datepair('getTimeDiff');
-    var hrs=milliseconds/1000/60/60;
+        function set_validation(v_type, msg) {
+            $('#validation_error').removeAttr('class');
+            $('#validation_error').html(msg);
+            if (v_type == 1) {
+                $('#validation_error').attr('class', "alert alert-success");
+            } else if (v_type == 2) {
+                $('#validation_error').attr('class', "alert alert-danger");
+            } else if (v_type == 3) {
+                $('#validation_error').attr('class', "alert alert-danger");
+            }
+        };
 
-    console.log(hrs);
-    if (isNaN(hrs))
-    {
-        $( "#slider-range-min" ).slider("option", "max" ,max_duration);
-    }
-    else if (hrs<max_duration)
-    {
-        $( "#slider-range-min" ).slider("option", "max" ,hrs);
-    }
-    else
-        $( "#slider-range-min" ).slider("option", "max" ,max_duration);
+        function validate() {
+            set_validation(0, "");
+            var milliseconds = $('#active_time').datepair('getTimeDiff');
+            var hrs = milliseconds / 1000 / 60 / 60;
+            if (isNaN(hrs) || hrs <= 0) {
+                set_validation(2, "Time interval is not valid");
+                return false;
+            }
 
-    $("#slice_duration" ).val( $( "#slider-range-min" ).slider( "value" ) );
+            var slice_dur = $('input[name="slice_duration"]').val();
+            if (slice_dur > hrs) {
+                set_validation(2, "Duration is large than time interval");
+                return false;
+            }
 
-    v_range = 0;
-    set_validation(0 , "..." );
-};
-/*******************************************ALL*********/
-$(":checkbox[name='resource_group']").on("change", function() {
-    $(this).parent().toggleClass("checked", this.checked);
-    if(this.checked)
-    {
-        n_nodes+=1;
-        if(this.title=="USRP")
-        {
-            n_usrp +=1;
-            if(n_usrp==1)
-                $('#freq_group').show();
-        }
-    }else{
-        n_nodes-=1;
-        if(this.title=="USRP")
-        {
-            n_usrp -=1;
-            if(n_usrp==0)
+            if (select_type == "omf") {          /*OMF Selection Validation*/
+                if (n_nodes == 0) {
+                    set_validation(2, "Please select at least one node.");
+                    return false;
+                }
+            }
+            else if (select_type == "sim") {     /*SIM Selection Validation*/
+                //return true;
+            }
+
+            if (v_range == 0) {
+                set_validation(3, "Please check availability first before submit");
+                return false;
+            }
+            return (true);
+        };
+        /*******************************************check availability*********/
+        $("#check_time_btn").on('click', function (event) {
+            set_validation(0, "...");
+
+            d1 = $('input[name="req_time_date1"]').val();
+            d2 = $('input[name="req_time_date2"]').val();
+            t1 = $('input[name="req_time_time1"]').val();
+            t2 = $('input[name="req_time_time2"]').val();
+            if (d1 == "" || d2 == "" || t1 == "" || t2 == "") {
+                set_validation(2, "Please select date and time range");
+                return false;
+            }
+
+            if (select_type == "omf") {
+                var select_node = [];
+                $('input[name="resource_group"]:checked').each(function () {
+                    select_node.push($(this).val());
+                });
+
+                var select_freq = [];
+                $('input[name="freq_group"]:checked').each(function () {
+                    select_freq.push($(this).val());
+                });
+
+                if (select_node.length == 0) {
+                    set_validation(2, "Please select at least one node");
+                    return false;
+                }
+
+                if (n_usrp > 0 && select_freq.length == 0 && !maintenance) {
+                    set_validation(2, "Please select at least one frequency range");
+                    return false;
+                }
+                 var slice_dur = $('input[name="slice_duration"]').val();
+
+                checking_availability(select_node, d1, d2, t1, t2, "omf", slice_dur, select_freq);
+            }
+            else if (select_type == "sim") {
+                var slice_dur = $('input[name="slice_duration"]').val();
+                var select_node = $('#sim_vm option:selected').val();
+                checking_availability(select_node, d1, d2, t1, t2, "sim", slice_dur, []);
+            }
+        });
+
+        function checking_availability(selected_node, d1, d2, t1, t2, type, duration, selected_freq) {
+            $.ajax({
+                url: "check_availability",
+                type: "POST",
+                data: {
+                    the_nodes: selected_node,
+                    date1: d1,
+                    date2: d2,
+                    time1: t1,
+                    time2: t2,
+                    the_type: type,
+                    the_dur: duration,
+                    the_freq: selected_freq
+                },
+                success: function (result) {
+                    if (result['free'] == "1") {
+                        set_validation(1, "<strong>Congratulation</strong>, its a Free Slot/Resources");
+                        v_range = 1;
+                    } else {
+                        set_validation(3, "A <strong>Busy</strong> slot(s)" + result['msg'] + "for more details see <a href='/portal/testbeds/scheduler/'>Timeline</a>");
+                        v_range = 0;
+                    }
+                },
+                error: function (xhr, errmsg, err) {
+                    console.log(err);
+                    set_validation(2, "Server Error, try again later");
+                }
+            });
+        };
+        /*******************************************change server type*********/
+        $('#server_type').change(function () {
+            if ($(this).val() == "omf") {
+                $('#omf_group').show();
+                $('#sim_group').hide();
+                max_duration = {{omf_max_duration}};
+                select_type = "omf";
+                if (n_usrp >= 1 && !maintenance)
+                    $('#freq_group').show();
+            } else {
+                $('#sim_group').show();
+                $('#omf_group').hide();
                 $('#freq_group').hide();
-        }
-    }
-    $('#n_nodes').val(n_nodes);
-    set_validation(0 , "..." );
-    v_range = 0;
-});
+                max_duration = {{sim_max_duration}};
+                select_type = "sim";
+            }
+            updateRanger();
+            v_range = 0;
+        });
+        /*******************************************change request type*********/
+        $('#request_type').change(function () {
+            if ($(this).val() == "active_t") {
+                $('#active_group').show();
+                $('#lazy_group').hide();
+                $("#active_time .date").datepicker('option', 'maxDate', '1m');
+                $("#active_time .date").datepicker('option', 'minDate', '1d');
+                //$( "#active_time .time .end" ).timepicker('option', 'maxTime' , (3600*23) );
+                //$( "#active_time .time" ).timepicker('option', 'durationTime' , 3600 );
+                $("#active_time .date.start").removeAttr("disabled");
+                $("#active_time .time").val('');
+            } else {
+                var d = curr_datetime;
+                var n = d.getHours();
+                var t = (n - 1) * 60 * 60; // to reserve the current hour ??
+                $('#lazy_group').show();
+                $('#active_group').hide();
+                $("#active_time .date").datepicker('option', 'maxDate', '1w');
+                $("#active_time .date").datepicker('option', 'minDate', '0d');
+                $("#active_time .time").timepicker('option', 'minTime', t);
+                //$( "#active_time .time" ).timepicker('option', 'maxTime' , (23*60*60) );
+                $("#active_time .time").val('');
+                //$( "#active_time .date" ).val(moment.format('DD-MMMM-YYYY'));
+                $("#active_time .date").datepicker('setDate', d);
+                $("#active_time .date.start").attr("disabled", "disabled");
+            }
+            v_range = 0;
+        });
+        /*******************************************Slider*********/
 
-$(":checkbox[name='freq_group']").on("change", function() {
-    $(this).parent().toggleClass("checked", this.checked);
-    if(this.checked)
-    {
+        /*******************************************change time action*********/
+        $('#active_time .time').timepicker({
+            showDuration: true,
+            timeFormat: 'g:iA',
+            step: 60,
+            disableTextInput: true,
+            disableTouchKeyboard: true,
+        });
+        $('#active_time .date').datepicker({
+            dateFormat: 'dd-MM-yy',
+            autoclose: true,
+            disableTextInput: true,
+            disableTouchKeyboard: true,
+            minDate: '1d',
+        });
+        $('#active_time').on('rangeSelected', function () {
+            updateRanger();
+        });
+        $('#active_time').datepair({
+            parseDate: function (input) {
+                return $(input).datepicker('getDate');
+            },
+            updateDate: function (input, dateObj) {
+                return $(input).datepicker('setDate', dateObj);
+            }
+        });
 
-    }else{
+        function updateRanger() {
+            var milliseconds = $('#active_time').datepair('getTimeDiff');
+            var hrs = milliseconds / 1000 / 60 / 60;
 
-    }
-    set_validation(0 , "..." );
-    v_range = 0;
-});
-</script>
+            //console.log(hrs);
+            if (isNaN(hrs)) {
+                $("#slider-range-min").slider("option", "max", max_duration);
+            }
+            else if (hrs < max_duration) {
+                $("#slider-range-min").slider("option", "max", hrs);
+            }
+            else
+                $("#slider-range-min").slider("option", "max", max_duration);
+
+            $("#slice_duration").val($("#slider-range-min").slider("value"));
+
+            v_range = 0;
+            set_validation(0, "...");
+        };
+        /*******************************************ALL*********/
+        $(":checkbox[name='resource_group']").on("change", function () {
+            $(this).parent().toggleClass("checked", this.checked);
+            if (this.checked) {
+                n_nodes += 1;
+                if (this.title == "USRP") {
+                    n_usrp += 1;
+                    if (n_usrp == 1 && !maintenance)
+                        $('#freq_group').show();
+                }
+            } else {
+                n_nodes -= 1;
+                if (this.title == "USRP") {
+                    n_usrp -= 1;
+                    if (n_usrp == 0)
+                        $('#freq_group').hide();
+                }
+            }
+            $('#n_nodes').val(n_nodes);
+            set_validation(0, "...");
+            v_range = 0;
+        });
+
+        $(":checkbox[name='freq_group']").on("change", function () {
+            $(this).parent().toggleClass("checked", this.checked);
+            if (this.checked) {
+
+            } else {
+
+            }
+            set_validation(0, "...");
+            v_range = 0;
+        });
+    </script>
 {% endblock %}
 

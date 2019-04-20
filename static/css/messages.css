@@ -30,5 +30,5 @@ li.error { background-color: Coral; }
 li.warning { background-color: Gold; }
 li.info { background-color: LightGreen; }
 li.debug { background-color: Azure; } 
-
+li.success{ background-color:Green;}
 

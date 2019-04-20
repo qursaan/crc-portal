@@ -3,11 +3,17 @@
 # portal/forms.py: forms for the portal application
 # This file is part of the Manifold project.
 #
-from captcha.fields import CaptchaField
+#from captcha.fields import CaptchaField
 from django import forms
 from django.contrib.auth import get_user_model  # authenticate,
 from django.contrib.auth.tokens import default_token_generator
-from django.contrib.sites.models import get_current_site
+#from django.contrib.sites.models import get_current_site
+
+try:
+    from django.contrib.sites.models import get_current_site
+except ImportError:
+    from django.contrib.sites.shortcuts import get_current_site
+
 from django.template import loader
 from django.utils.http import int_to_base36
 # from portal.models import PendingUser, PendingSlice
@@ -17,7 +23,7 @@ from django.utils.translation import ugettext_lazy as _
 
 
 class CaptchaTestForm(forms.Form):
-    captcha = CaptchaField()
+    captcha =0# CaptchaField()
 
 
 # TODO: Remove these automated forms and use html templates and views like any other page !
@@ -62,7 +68,7 @@ class ContactForm(forms.Form):
     email = forms.EmailField(widget=forms.TextInput(attrs={'class': 'form-control'}))
     subject = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'class': 'form-control'}))
     description = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control'}))
-    captcha = CaptchaField()
+    #captcha = CaptchaField()
     cc_myself = forms.BooleanField(required=False, widget=forms.CheckboxInput(attrs={'class': 'form-control'}))
 
 

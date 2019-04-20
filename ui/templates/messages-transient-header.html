@@ -15,7 +15,7 @@ jQuery(function ($){
 	$(document).ready(function(){
 		{% for message in messages %}
             $("#notifications").notify("create", {
-              title: 'Test Notification',
+              title: 'New Notification',
               text: '{{ message }}'
             },{
               expires: false,

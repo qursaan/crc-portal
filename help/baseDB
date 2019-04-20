@@ -16,8 +16,11 @@ INSERT INTO PORTAL.portal_myuser VALUES(1,'Mahmmoud','Mahdi','admin@qursaan.com'
 ;
 INSERT INTO PORTAL.portal_platform VALUES(1,'crc','CRC VT-Lab');
 ;
-INSERT INTO PORTAL.portal_account(id,user_ref_id,platform_ref_id,auth_type,config)
- VALUES(1,1,1,'managed',NULL);
+INSERT INTO PORTAL.portal_quota VALUES(1,'FREE', 10, 30);
+UPDATE PORTAL.portal_account set quota_ref_id = 1;
+;
+INSERT INTO PORTAL.portal_account(id,user_ref_id,platform_ref_id,auth_type,config,quota_ref)
+ VALUES(1,1,1,'managed',NULL,1);
 ;
 INSERT INTO PORTAL.portal_physicalnode VALUES(1,'Node 1','crc',0,3,3,0,'node1');
 INSERT INTO PORTAL.portal_physicalnode VALUES(2,'Node 2','crc',0,3,3,0,'node2');

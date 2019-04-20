@@ -1,21 +1,19 @@
 /* @override unfold/static/css/plugin.css */
-
-/*-------------------------------- MARKO'S STYLES -----*/
-
+/*------- MARKO'S STYLES -----*/
 /* GENERAL */
 
 .container {
-    padding: 0 ;
+    padding: 0;
     /*background-color:white;*/
     color: black;
     margin: 0;
     width: 100%;
     max-width: 100%;
-    min-height: 600px;
+    min-height: 500px;
     height: 100%;
 }
 
-div.plugin-outline-complete, 
+div.plugin-outline-complete,
 div.plugin-outline-body {
     border: 0px solid;
     border-radius: 0;
@@ -27,13 +25,14 @@ div.plugin-outline-body {
     padding: 20px;
     margin: 0;
 }
+
 /*
 div.plugin-outline-complete:hover, 
 div.plugin-outline-body:hover {
     padding: 80px 80px 120px 80px; 
 }
 */
-a.plugin-tooltip { 
+a.plugin-tooltip {
     font-size: 130%;
     font-style: normal;
     font-weight: bold;
@@ -43,30 +42,33 @@ a.plugin-tooltip {
     text-transform: uppercase;
 }
 
-a.plugin-tooltip:hover { 
-    color: #fff; 
+a.plugin-tooltip:hover {
+    color: #fff;
     text-decoration: none;
 }
 
-
+div.logo {
+    margin: 0 10px;
+}
 
 /* LIST VIEW */
 div.well-lg {
-    background-color: rgba(168, 32, 202, 0.5) ;
+    background-color: rgba(168, 32, 202, 0.5);
 }
+
 div.onelab-title {
-    background-color: rgba(168, 32, 202, 0.5) ;
+    /*background-color: rgba(168, 32, 202, 0.5);*/
 }
 
 h2.well.well-lg {
-    border-radius:0;
+    border-radius: 0;
     border: 0;
     font-family: Ubuntu, arial, sans-serif;
     /* text-transform: ; */
     font-weight: normal;
     font-size: 40px;
     color: #30196d;
-     /* color: white;*/
+    /* color: white;*/
     margin-bottom: 0px;
     margin-top: 0;
     padding: 40px;
@@ -76,28 +78,28 @@ h2.well.well-lg {
 }
 
 #complete-resources {
-/*    background-color: #92f79e ; */
-    background-color: #B8B2FF ;
+    /*    background-color: #92f79e ; */
+    background-color: #B8B2FF;
 }
 
 #complete-filters {
-/*    background-color: #4af25d; */
+    /*    background-color: #4af25d; */
     background-color: #add7ff;
 }
 
 #complete-users {
-/*    background-color: #ff7394 ; */
-    background-color: #add7ff ;
+    /*    background-color: #ff7394 ; */
+    background-color: #add7ff;
 }
+
 /*
 #complete-measurements {
     background-color: ;
 }
 */
 #complete-pending {
-/*    background-color: #add7ff ; */
-    background-color: #B8B2FF ;
-
+    /*    background-color: #add7ff ; */
+    background-color: #B8B2FF;
 }
 
 #complete-customize-resources {
@@ -108,9 +110,9 @@ h2.well.well-lg {
     background-color: #ccc;
 }
 
-#complete-resources, 
-#complete-filters, 
-#complete-users, 
+#complete-resources,
+#complete-filters,
+#complete-users,
 #complete-measurements,
 #complete-pending,
 #complete-customize-resources,
@@ -120,9 +122,9 @@ h2.well.well-lg {
     color: #333;
 }
 
-#complete-resources:hover, 
-#complete-filters:hover, 
-#complete-users:hover, 
+#complete-resources:hover,
+#complete-filters:hover,
+#complete-users:hover,
 #complete-measurements:hover,
 #complete-pending:hover,
 #complete-customize-resources:hover,
@@ -130,15 +132,12 @@ h2.well.well-lg {
     opacity: 1;
 }
 
-
-
-
 .navbar-nav li a:hover {
-    color: #572bc9 ;
+    color: #572bc9;
 }
 
 .navbar-nav li.active a {
-    background: #eee ;
+    background: #eee;
 }
 
 /* Thierry : turning this off
@@ -146,36 +145,34 @@ ul.logged-in {
     padding-top: 25px; 
 }
 Thierry */
-button.logged-in { 
+button.logged-in {
     font-size: 1em;
-    font-weight: bold; 
+    font-weight: bold;
     margin-left: 5px;
     margin-top: -5px;
     background: #572bc9;
     border: 2px solid #572bc9;
     color: #eee;
     padding: 5px 15px;
-    border-radius:5px;
+    border-radius: 5px;
 }
 
-button.logged-in:hover { 
+button.logged-in:hover {
     /* background: #4af25d; */
     background: #ff7394;
     border: 2px solid #ff7394;
     color: #333;
 }
+
 li.username {
     margin-bottom: 10px;
     font-size: 0.8em;
     text-transform: none;
-    font-weight: normal; 
+    font-weight: normal;
     color: #999;
 }
 
-
 /* BOOTSTRAP */
-
-
 ul.pagination li a {
     /* background: ; */
     color: #572bc9;
@@ -187,81 +184,69 @@ ul.pagination li.active a {
     border: 1px solid #572bc9;
 }
 
-
-
-div.dataTables_length label, 
+div.dataTables_length label,
 div.dataTables_filter label,
 div.dataTables_info {
-    font-family: Ubuntu, Arial, sans-serif ;
+    font-family: Ubuntu, Arial, sans-serif;
 }
 
-
-
-
 /* QUERYTABLE */
-
 div.QueryTable table.dataTable th {
     font: bold 12px/22px Ubuntu, Arial, sans-serif;
-    color: #333 ;
-    border-right: 0px solid #333 ;
-    border-bottom: 0px solid #C1DAD7 ;
-    border-top: 0px solid #C1DAD7 ;
+    color: #333;
+    border-right: 0px solid #333;
+    border-bottom: 0px solid #C1DAD7;
+    border-top: 0px solid #C1DAD7;
     letter-spacing: 1px;
     text-transform: uppercase;
     text-align: left;
     padding: 8px 12px 4px 20px;
-    vertical-align:middle;
-    background: url('../img/tablesort-header.png') no-repeat ; 
+    vertical-align: middle;
+    background: url('../img/tablesort-header.png') no-repeat;
 }
 
 div.QueryTable table.dataTable td, div.QueryTable table.dataTable textarea, div.QueryTable table.dataTable input [type="text"] {
     font: normal 12px Ubuntu, Arial, Helvetica, sans-serif;
-    border-right: 0px solid #fff ;
-    border-bottom: 1px solid #fff ;
+    border-right: 0px solid #fff;
+    border-bottom: 1px solid #fff;
 }
 
-div.QueryTable table.dataTable thead { 
-    background: url('../img/tablesort-header.png') repeat-x ;
+div.QueryTable table.dataTable thead {
+    background: url('../img/tablesort-header.png') repeat-x;
     background-color: #caebea;
 }
 
-div.QueryTable table.dataTable tfoot { 
-    background: url('../img/tablesort-header.png') repeat-x ;
+div.QueryTable table.dataTable tfoot {
+    background: url('../img/tablesort-header.png') repeat-x;
     /* background-color: # ; */
 }
 
-
 /* QUERY EDITOR */
-
 table.query-editor {
-    margin: 40px auto ;
+    margin: 40px auto;
     clear: both;
     /* width: 80%;*/
-    width: 100% ;
+    width: 100%;
     font-family: Ubuntu;
 }
 
 .query-editor-spacer,
-.plugin.QueryUpdater,
-/* Thierry : turning this off
-.plugin.Tabs 
-Thierry */
+.plugin.QueryUpdater /* Thierry : turning this off .plugin.Tabs Thierry */
 {
-    margin-top: 60px ;
+    margin-top: 60px;
 }
 
 table.query-editor td {
-    padding: 5px 5px ;
-    font: normal 12px Ubuntu, Arial, sans-serif ;
+    padding: 5px 5px;
+    font: normal 12px Ubuntu, Arial, sans-serif;
 }
 
-
-
 /* DASHBOARD */
-
+/*#ms-dashboard-support,
 #ms-dashboard-profile,
 #ms-dashboard-testbeds,
-#ms-dashboard-slices {
+#ms-dashboard-slices*/
+.ms-dashboard {
     -webkit-transition: all 50ms ease-out;
     -moz-transition: all 50ms ease-out;
     -o-transition: all 50ms ease-out;
@@ -272,14 +257,16 @@ table.query-editor td {
     /*color: #fff; @qursaan*/
     font-family: Ubuntu, Arial, sans-serif;
     text-align: center;
-	
+
 }
 
+/*#ms-dashboard-support:hover,
 #ms-dashboard-profile:hover,
 #ms-dashboard-testbeds:hover,
-#ms-dashboard-slices:hover {
+#ms-dashboard-slices:hover
+.ms-dashboard:hover {
     margin-top: 65px;
-}
+}*/
 
 #ms-dashboard-profile {
     background: url("../img/icon_users_color.png") top center no-repeat;
@@ -293,17 +280,26 @@ table.query-editor td {
     background: url("../img/icon_slices_color.png") top center no-repeat;
 }
 
+#ms-dashboard-support {
+    background: url("../img/icon_support.png") top center no-repeat;
+}
+
 .ms-dashboard-content ul {
-    list-style-type: none ;
+    list-style-type: none;
     padding-left: 0;
-    text-align: center ;
+    text-align: center;
 }
 
 .ms-dashboard-content {
-    padding: 0 ;
+    padding: 0;
 }
 
+.ms-dashboard > div.ms-dashboard-caption {
+    background: no-repeat url(#);
+    padding-left: 0;
+}
 
+/*
 #ms-dashboard-profile>div.ms-dashboard-caption {
     background: no-repeat url(#) ;
     padding-left: 0 ;
@@ -317,151 +313,224 @@ table.query-editor td {
 #ms-dashboard-slices>div.ms-dashboard-caption {
     background: no-repeat url(#) ;
     padding-left: 0 ;
-}   
-
-
-
-
-
-
-
-
+}   */
 
 /*** NEW CSS STYLES FOR ONLEAB ***/
 
 body {
-    background-color:white;
-    color:black;
+    background-color: white;
+    color: black;
 }
+
 div.wrapper {
-    width:980px;
-    margin:0 auto;
-    position:relative;
+    /*width:980px;*/
+    margin: 0 auto;
+    position: relative;
 }
+
 /* HEADER */
 div#header {
-    height:100px;
-    background-color:white;
+    height: 100px;
+    background-color: white;
 }
 
 div#secondary {
-    
+    float: right;
 }
 
 div#secondary ul {
-    position:absolute;
+    /*position:absolute;
     top:20px;
-    right:0;
+    right:0;*/
+    height: 40px;
+    display: flex;
+    /* flex-direction: column;*/
+    align-items: center;
+    padding-top: 20px;
 }
 
 div#secondary li {
-    font-size:10pt;
-    float:left;
-    list-style:none;
-    margin-right:30px;
+    font-size: 10pt;
+    float: left;
+    list-style: none;
+    margin-right: 30px;
 }
+
 div#secondary li a {
-    color:black;
+    color: black;
 }
+
 div#secondary li a:hover {
-    color:#270A5A;
-    text-decoration:none;
+    color: #270A5A;
+    text-decoration: none;
 }
+
 div#secondary li:last-child {
-    margin-right:0;
+    margin-right: 0;
 }
 
 div#navigation {
-    background-color:black;
-    width:100%;
-    height:40px;
+    background-color: black;
+    width: 100%;
+    height: 40px;
 }
+
 div#navigation div.wrapper {
-    text-align:center;
+    text-align: center;
 }
+
+nav.wrapper {
+    display: table;
+    margin: auto;
+}
+
 div#navigation ul {
-    margin:0;
-    padding:0;
+    margin: 0;
+    padding: 0;
     display: inline-block;
     list-style-type: none;
     white-space: nowrap;
 }
 
+.ms-dashboard .ms-dashboard-content ul li.nav-item {
+    margin: 5px ;
+}
+
+#menu {
+    text-transform: uppercase;
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    font-size: 13px;
+    /*background: #eee;*/
+    height: 40px;
+    width: auto;
+
+}
+
+#menu li {
+    float: left;
+    /*margin: 0;*/
+}
+
+#menu li a {
+    text-decoration: none;
+    display: block;
+    padding: 0 20px;
+    line-height: 40px;
+    color: #666;
+}
+
+#menu li a:hover,
+#menu li.active a {
+    background-color: #f5f5f5;
+    border-bottom: 2px solid #DDD;
+    color: #999;
+}
+
+#menu.black {
+    /*background: #333;*/
+}
+
+#menu.black a {
+    /*color: #CCC;*/
+}
+
+#menu.black li a:hover,
+#menu.black li.active a {
+    color: #999;
+    background: #555;
+    border-bottom: 2px solid #444;
+}
+
 div#navigation li {
-    color:white;
-    font-family:helvetica, sans-serif;
-    font-size:10pt ;
-    font-weight:normal;
-    line-height:0.8em;
-    letter-spacing:0.6pt;
-    list-style:none;
-    float:left;
-    padding:0;
-    margin:15px 50px 0 0;
+    color: white;
+    font-family: helvetica, sans-serif;
+    font-size: 10pt;
+    /*font-weight: normal;
+    line-height: 0.8em;*/
+    letter-spacing: 0.6pt;
+    list-style: none;
+    /*float: left;*/
+    padding: 0;
+    margin: 0 10px 0 0;
 }
+
 div#navigation li a {
-    color:white;
+    color: white;
 }
+
 div#navigation li a:hover {
-    text-decoration:none;
-    color:#B8B2FF;
+    text-decoration: none;
+    color: #B8B2FF;
 }
+
 div#navigation li:last-child {
-    margin-right:0;
+    margin-right: 0;
 }
 
 /* HOME DASHBOARD */
 div#home-dashboard {
-    color:black;
-    margin:25px 0;
+    color: black;
+    /*margin:25px 0;*/
 }
+
 div#home-dashboard table {
-    margin:25px;
-    width:100%;
+    margin: 25px;
+    width: 100%;
 }
+
 div#home-dashboard table td {
-    text-align:center;
-    padding:15px 0;
-    width:33%;
+    text-align: center;
+    padding: 15px 0;
+    width: 33%;
 }
+
 div#home-dashboard table tr:first-child td {
-    font-size:12pt;
-    font-weight:bold;
-    color:#270A5A;
+    font-size: 12pt;
+    font-weight: bold;
+    color: #270A5A;
 }
+
 div#home-dashboard table tr:last-child td {
-    text-align:left;
+    text-align: left;
 }
+
 div#home-dashboard table td.support {
-    font-size:14pt;
-    vertical-align:top;
-    padding-left:11%;
+    font-size: 14pt;
+    vertical-align: top;
+    padding-left: 11%;
 }
+
 div#home-dashboard table td.support a {
 }
-div#home-dashboard table td.support a:hover {
-    text-decoration:none;
-}
 
+div#home-dashboard table td.support a:hover {
+    text-decoration: none;
+}
 
 .login-submit {
-    vertical-align:middle;
-    padding:0;
+    vertical-align: middle;
+    padding: 0;
 }
+
 .lost-password {
-    font-size:10pt;
-    color:#CCCCCC;
-    text-align:right;
-    padding:0px;
+    font-size: 10pt;
+    color: #CCCCCC;
+    text-align: right;
+    padding: 0px;
 }
+
 .lost-password a {
 }
+
 .login-signup {
-    border-top:1px solid #CCCCCC;
-    text-align:center;
-    margin-top:15px;
-    padding:5px 0 0 0;
+    border-top: 1px solid #CCCCCC;
+    text-align: center;
+    margin-top: 15px;
+    padding: 5px 0 0 0;
 }
+
 /**/
 
 /* NAV TABS */
@@ -470,7 +539,6 @@ div#home-dashboard table td.support a:hover {
 }
 
 .nav.nav-tabs li.active a {
-   
 }
 
 .nav.nav-tabs li a {
@@ -483,6 +551,7 @@ div#home-dashboard table td.support a:hover {
 /* WELL */
 div.well {
 }
+
 /**/
 /* BUTTON */
 .btn.btn-default {
@@ -491,4 +560,39 @@ div.well {
 
 .btn.btn-default:hover {
     font-weight: bold;
+}
+
+label {
+    font-weight: 700;
+}
+
+.outer-wrapper {
+    display: table;
+    width: 80%;
+    height: 100%;
+}
+
+.inner-wrapper {
+    display: table-cell;
+    vertical-align: middle;
+    padding: 15px;
+}
+
+/* these in general are div.well */
+div.onelab-title {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+    /*border: 1px solid #61210B;
+    background-color: #e0f0f0;*/
+}
+
+/***** Notifications *****/
+.warning {
+    border: 1px solid red;
+    margin: 20px 60px;
+    padding: 10px 20px;
+    color: red;
+    background-color: #f2dbdb;
+    text-align: center;
 }

@@ -1,5 +1,5 @@
 import os.path
-from ConfigParser import RawConfigParser
+from configparser import RawConfigParser
 
 from crc.settings import ROOT
 # use a singleton instead of staticmethods

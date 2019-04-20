@@ -103,12 +103,12 @@ class Plugin:
         # what comes from subclasses
         for (k,v) in settings.iteritems():
             setattr(self,k,v)
-            if self.need_debug(): print "%s init - subclass setting %s"%(self.classname,k)
+            if self.need_debug(): print ("%s init - subclass setting %s"%(self.classname,k))
         # minimal debugging
         if self.need_debug():
-            print "%s init dbg .... BEG"%self.classname
-            for (k,v) in self.__dict__.items(): print "dbg %s:%s"%(k,v)
-            print "%s init dbg .... END"%self.classname
+            print ("%s init dbg .... BEG"%self.classname)
+            for (k,v) in self.__dict__.items(): print ("dbg %s:%s"%(k,v))
+            print ("%s init dbg .... END"%self.classname)
         # do this only once the structure is fine
         if self.page: # I assume we can have a None page (Jordan)
             self.page.record_plugin(self)
@@ -151,7 +151,7 @@ class Plugin:
     def settings_json(self):
         exposed_settings=self.json_settings_list()
         if 'query' in exposed_settings:
-            print "WARNING, cannot expose 'query' directly in json_settings_list, query_uuid is enough"
+            print ("WARNING, cannot expose 'query' directly in json_settings_list, query_uuid is enough")
         result = "{"
         result += ",".join([ self.setting_json(setting) for setting in self.json_settings_list() ])
         result += "}"
@@ -185,9 +185,9 @@ class Plugin:
             env.update({'persistent_toggle':False,'display_hide_button':True,
                         'display_show_button':False,'display_body':True})
         if self.need_debug(): 
-            print "rendering plugin.html with env keys %s"%env.keys()
+            print ("rendering plugin.html with env keys %s"%env.keys())
             for (k,v) in env.items(): 
-                if "display" in k or "persistent" in k: print k,'->',v
+                if "display" in k or "persistent" in k: print (k,'->',v)
         result = render_to_string ('plugin.html',env)
 
         # export this only for relevant plugins
@@ -216,15 +216,15 @@ class Plugin:
         # then the things explicitly defined in template_env()
         env.update(self.template_env(request))
         if not isinstance (env,dict):
-            raise Exception, "%s.template_env returns wrong type"%self.classname
+            raise Exception("%s.template_env returns wrong type"%self.classname)
         result=render_to_string (template, env)
         if self.need_debug():
-            print "%s.render_content: BEG --------------------"%self.classname
-            print "template=%s"%template
-            print "env.keys=%s"%env.keys()
+            print ("%s.render_content: BEG --------------------"%self.classname)
+            print ("template=%s"%template)
+            print ("env.keys=%s"%env.keys())
             #print "env=%s"%env
             #print result
-            print "%s.render_content: END --------------------"%self.classname
+            print ("%s.render_content: END --------------------"%self.classname)
         return result
 
     # or from the result of self.requirements()
@@ -233,7 +233,7 @@ class Plugin:
             d=self.requirements()
             for (k,v) in d.iteritems():
                 if self.need_debug():
-                    print "%s: handling requirement %s"%(self.classname,v)
+                    print ("%s: handling requirement %s"%(self.classname,v))
                 # e.g. js_files -> add_js_files
                 method_name='add_'+k
                 method=Page.__dict__[method_name]

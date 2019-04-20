@@ -20,9 +20,9 @@ from portal.actions import get_authority_by_user, get_authority_emails, \
     schedule_auto_online, schedule_checking, schedule_checking_freq  # schedule_sim_online, \
 from portal.models import SimReservation, Reservation, ReservationDetail, \
     SimulationImage, TestbedImage, ResourcesInfo, VirtualNode, PhysicalNode, SimulationVM, \
-    FrequencyRanges, ReservationFrequency, ResourceProfile
+    FrequencyRanges, ReservationFrequency  # , ResourceProfile
 from portal.user_access_profile import UserAccessProfile
-from reservation_status import ReservationStatus
+from .reservation_status import ReservationStatus
 from ui.topmenu import topmenu_items  # , the_user
 from unfold.loginrequired import LoginRequiredAutoLogoutView
 from unfold.page import Page
@@ -41,28 +41,33 @@ class ReservationView(LoginRequiredAutoLogoutView):
         return self.get_or_post(request, 'GET', url)
 
     def get_or_post(self, request, method, url):
+
         usera = UserAccessProfile(request)
         self.user_email = usera.username  # the_user(request)
         page = Page(request)
         reserve_type = None
         use_bulk = False
+        maintenance = False
 
         if url == "reservation":
             reserve_type = "R"
+        elif url == "reservation_a":
+            reserve_type = "M"
+            maintenance = True
         elif url == "bulk":
             reserve_type = "I"
             use_bulk = True
 
-        user_hrn = usera.username # the_user(request)
+        user_hrn = usera.username  # the_user(request)
         usera = UserAccessProfile(request)
-        user = usera.user_obj # get_user_by_email(user_hrn)
-        user_type = usera.user_type # get_user_type(user)
+        user = usera.user_obj  # get_user_by_email(user_hrn)
+        user_type = usera.user_type  # get_user_type(user)
 
         if user_type != 2 and reserve_type == "I":  # (user_type != 1 and reserve_type == "R")
             messages.error(page.request, 'Error: You have not permission to access this page.')
             return HttpResponseRedirect("/")
 
-        print "UT: ", reserve_type, "template: ", url
+        print("UT: ", reserve_type, "template: ", url)
 
         # Load System Parameters
         sim_max_duration = MAX_SIM_DURATION
@@ -71,6 +76,8 @@ class ReservationView(LoginRequiredAutoLogoutView):
 
         template_name = None
         courses_list = None
+        slice_name = ''
+        purpose = ''
         if reserve_type == "I":
             courses_list = Course.objects.filter(instructor_ref=user)
             labs_list = LabsTemplate.objects.all()
@@ -78,7 +85,10 @@ class ReservationView(LoginRequiredAutoLogoutView):
             omf_max_duration = sim_max_duration
         elif reserve_type == "R":
             template_name = "reservation-view.html"
-
+        elif reserve_type == "M":
+            template_name = "reservation-view.html"
+            slice_name = "Maintenance"
+            purpose = "HW Maintenance"
         s = None
 
         if method == 'POST':
@@ -120,21 +130,23 @@ class ReservationView(LoginRequiredAutoLogoutView):
                     self.errors.append('ex_due_date is mandatory')
 
             authority_hrn = get_authority_by_user(usera.username)
-            slice_name = request.POST.get('slice_name', None)
+            slice_name = request.POST.get('slice_name', slice_name)
             server_type = request.POST.get('server_type', '')
             request_type = request.POST.get('request_type', '')
 
             request_date = timezone.now()  # request.POST.get('request_date', '')
-
             resource_group = request.POST.getlist('resource_group', [])
-            freq_group = request.POST.getlist('freq_group', [])
-            sim_img = request.POST.get('sim_img', '1')
-            omf_img = request.POST.get('sim_img', '1')
-            sim_vm = request.POST.get('sim_vm', '1')
-            sim_no_proc = request.POST.get('sim_no_proc', '1')
-            sim_ram_size = request.POST.get('sim_ram_size', '1024')
 
-            purpose = request.POST.get('purpose', '')
+            if server_type == "omf":
+                omf_img = request.POST.get('omf_img', '1')
+                freq_group = request.POST.getlist('freq_group', [])
+            elif server_type == "sim":
+                sim_img = request.POST.get('sim_img', '1')
+                sim_vm = request.POST.get('sim_vm', '1')
+                sim_no_proc = request.POST.get('sim_no_proc', '1')
+                sim_ram_size = request.POST.get('sim_ram_size', '1024')
+
+            purpose = request.POST.get('purpose', purpose)
 
             # date
             start_date = request.POST.get('req_time_date1', '')
@@ -229,7 +241,7 @@ class ReservationView(LoginRequiredAutoLogoutView):
                     )
                     s.save()
                     # TODO: @qursaan
-                    if not schedule_auto_online(s.id, "sim",use_bulk,reserve_type):
+                    if not schedule_auto_online(s.id, "sim", use_bulk, reserve_type):
                         self.errors.append('Sorry, Time slot is not free')
                         s.delete()
 
@@ -299,16 +311,17 @@ class ReservationView(LoginRequiredAutoLogoutView):
 
         # Resources
         if usera.access_all:
-            profile_list = ResourceProfile.objects.all()
+            node_list = PhysicalNode.objects.filter(type=0)
             sim_vm_list = SimulationVM.objects.all()
             freq_list = FrequencyRanges.objects.all()
         else:
-            profile_list = ResourceProfile.objects.filter(shared=True)
+            # profile_list = ResourceProfile.objects.filter(shared=True)
+            shared_Only = True
+            node_list = PhysicalNode.objects.filter(shared=shared_Only, type=0)
             sim_vm_list = None
             freq_list = None
 
-        node_list = PhysicalNode.objects.filter(resource_profile_ref__in=profile_list, type=0)
-        resources_list = VirtualNode.objects.filter(node_ref__in=node_list)
+        resources_list = VirtualNode.objects.filter(node_ref__id__in=node_list)
         resources_info = ResourcesInfo.objects.all()
 
         # Images
@@ -319,7 +332,7 @@ class ReservationView(LoginRequiredAutoLogoutView):
             'topmenu_items': topmenu_items('Request a slice', page.request),
             'username': usera.username,
             'errors': self.errors,
-            'slice_name': request.POST.get('slice_name', ''),
+            'slice_name': request.POST.get('slice_name', slice_name),
             'server_type': request.POST.get('server_type', ''),
             'request_type': request.POST.get('request_type', ''),
 
@@ -357,6 +370,7 @@ class ReservationView(LoginRequiredAutoLogoutView):
 
             # General
             'reserve_type': reserve_type,
+            'maintenance' : maintenance,
         }
 
         if reserve_type == "I":

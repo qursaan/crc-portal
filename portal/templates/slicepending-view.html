@@ -1,162 +1,160 @@
-{% extends "layout-unfold1.html" %}
+{% extends "layout-unfold3.html" %}
 {% block unfold_main %}
-
-<div style="text-align:center" class="well-sm">
-    <h1>Reservation Panel</h1>
-</div>
-
-{% if messages %}
-<ul class="messages">
-    {% for message in messages %}
-    <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
-    {% endfor %}
-</ul>
-{% endif %}
-
-
-<form id="viewForm" method="POST" action="current_slice" enctype="multipart/form-data">
-
-    <h2>Active Process</h2>
-    <h3>
-        <small>Active requests.</small>
-    </h3>
-    <h5>Current time: {{time_now}}</h5>
-    <div id="middle3" align="center">
-        <div class="well">
-            <table class="table table-bordered table-striped table-hover mytable">
-                <thead>
-                <tr>
-                    <th>Slice Name</th>
-                    <th>Authority</th>
-                    <th>Server Type</th>
-                    <th>Requested At</th>
-                    <th>Approved At</th>
-                    <th>Start Time</th>
-                    <th>End Time</th>
-                    <th>Action</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for row in active_list_1 %}
-                <tr class="border_bottom">
-                    <td> {{ row.slice_name }}</td>
-                    <td> {{ row.authority_hrn }}</td>
-                    <td> Testbed Server</td>
-                    <td> {{ row.created }}</td>
-                    <td> {{ row.approve_date }}</td>
-                    <td> {{ row.start_time }}</td>
-                    <td> {{ row.end_time }}</td>
-                    <td>
-                        {% if row.end_time < time_now %}
-                        *Expired*
-                        {% elif row.end_time > time_now and row.start_time > time_now %}
-                            Waiting...
-                        <a href='/portal/lab/current/slice_o_cancel/{{ row.id }}' class="btn btn-default">
-                            Cancel
-                            <span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span>
-                        </a>
-                        {% else %}
-                        <a href='/portal/lab/current/slice_o_process/{{ row.id }}' class="btn btn-default">
-                            Control
-                            <span class="glyphicon glyphicon-expand" aria-hidden="true"></span>
-                        </a>
-                        <a href='/portal/lab/current/slice_o_cancel/{{ row.id }}' class="btn btn-default">
-                            Release
-                            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-                        </a>
-                        {% endif %}
-                    </td>
-                </tr>
-                {% endfor %}
-                {% for row in active_list_2 %}
-                <tr class="border_bottom">
-                    <td> {{ row.slice_name }}</td>
-                    <td> {{ row.authority_hrn }}</td>
-                    <td> Simulation Server</td>
-                    <td> {{ row.created }}</td>
-                    <td> {{ row.approve_date }}</td>
-                    <td> {{ row.start_time }}</td>
-                    <td> {{ row.end_time }}</td>
-                    <td>
-                        {% if row.end_time < time_now %}
-                        *Expired*
-                        {% elif row.end_time > time_now and row.start_time > time_now %}
-                        Waiting...
-                        <a href='/portal/lab/current/slice_s_cancel/{{ row.id }}' class="btn btn-default">
-                            Cancel
-                            <span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span>
-                        </a>
-                        {% else %}
-                        <a href='/portal/lab/current/slice_s_process/{{ row.id }}' class="btn btn-default">
-                            Control
-                            <span class="glyphicon glyphicon-expand" aria-hidden="true"></span>
-                        </a>
-                        <a href='/portal/lab/current/slice_s_cancel/{{ row.id }}' class="btn btn-default">
-                            Release
-                            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-                        </a>
-                        {% endif %}
-                    </td>
-                </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
+    <div class="onelab-title">
+        <h2>Reservation Panel</h2>
     </div>
 
-    <h2>Pending Process</h2>
-    <h3>
-        <small>Current pending requests.</small>
-    </h3>
-    <div id="middle" align="center">
-        <div class="well">
-            <table class="table table-bordered table-striped table-hover mytable">
-                <thead><tr>
-                    <th>Slice Name</th>
-                    <th>Authority</th>
-                    <th>Request Time</th>
-                    <th>Server Type</th>
-                    <th>Est. Start Time</th>
-                    <th>Est. End Time</th>
-                    <th>Action</th>
-                </tr></thead>
-                <tbody>
-                {% for row in current_list_1 %}
-                <tr class="border_bottom">
-                    <td> {{ row.slice_name }}</td>
-                    <td> {{ row.authority_hrn }}</td>
-                    <td> {{ row.created }}</td>
-                    <td> Testbed Server</td>
-                    <td> {{ row.f_start_time }}</td>
-                    <td> {{ row.f_end_time }}</td>
-                    <td><a href='/portal/lab/current/slice_o_cancel/{{ row.id }}' class="btn btn-default">
-                        Cancel
-                            <span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span>
-                        </a>
-                    </td>
-                </tr>
-                {% endfor %}
-                {% for row in current_list_2 %}
-                <tr class="border_bottom">
-                    <td> {{ row.slice_name }}</td>
-                    <td> {{ row.authority_hrn }}</td>
-                    <td> {{ row.created }}</td>
-                    <td> Simulation Server</td>
-                    <td> {{ row.f_start_time }}</td>
-                    <td> {{ row.f_end_time }}</td>
-                    <td>
-                        <a href='/portal/lab/current/slice_s_cancel/{{ row.id }}' class="btn btn-default">
-                        Cancel
-                            <span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span>
-                        </a>
-                    </td>
-                </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <form id="viewForm" method="POST" action="#" enctype="multipart/form-data">
+        <h3>Active Process</h3>
+        <h4>
+            <small>Active requests.</small>
+        </h4>
+        <h5>Current time: {{ time_now }}</h5>
+        <div id="middle3" align="center">
+            <div class="well">
+                <table class="table table-bordered table-striped table-hover">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th>Slice Name</th>
+                        <th>Authority</th>
+                        <th>Server Type</th>
+                        <th>Requested At</th>
+                        <th>Approved At</th>
+                        <th>Start Time</th>
+                        <th>End Time</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for row in active_list_1 %}
+                        <tr class="border_bottom">
+                            <td> {{ row.slice_name }}</td>
+                            <td> {{ row.authority_hrn }}</td>
+                            <td> Testbed Server</td>
+                            <td> {{ row.created }}</td>
+                            <td> {{ row.approve_date }}</td>
+                            <td> {{ row.start_time }}</td>
+                            <td> {{ row.end_time }}</td>
+                            <td>
+                                {% if row.end_time < time_now %}
+                                    *Expired*
+                                {% elif row.end_time > time_now and row.start_time > time_now %}
+                                    Waiting...
+                                    <button class="btn btn-danger btn-block" type="button"
+                                            onclick="location.href='/portal/lab/current/slice_o_cancel/{{ row.id }}'">
+                                        Cancel
+                                    </button>
+                                {% else %}
+                                    <button class="btn btn-success btn-block" type="button"
+                                            onclick="location.href='/portal/lab/current/slice_o_process/{{ row.id }}'">
+                                        Control
+                                    </button>
+                                    <button class="btn btn-warning btn-block" type="button"
+                                            onclick="location.href='/portal/lab/current/slice_o_cancel/{{ row.id }}'">
+                                        Release
+                                    </button>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    {% for row in active_list_2 %}
+                        <tr class="border_bottom">
+                            <td> {{ row.slice_name }}</td>
+                            <td> {{ row.authority_hrn }}</td>
+                            <td> Simulation Server</td>
+                            <td> {{ row.created }}</td>
+                            <td> {{ row.approve_date }}</td>
+                            <td> {{ row.start_time }}</td>
+                            <td> {{ row.end_time }}</td>
+                            <td>
+                                {% if row.end_time < time_now %}
+                                    *Expired*
+                                {% elif row.end_time > time_now and row.start_time > time_now %}
+                                    Waiting...
+                                    <button class="btn btn-danger btn-block" type="button"
+                                            onclick="location.href='/portal/lab/current/slice_s_cancel/{{ row.id }}'">
+                                        Cancel
+                                    </button>
+                                {% else %}
+                                    <button class="btn btn-success btn-block" type="button"
+                                            onclick="location.href='/portal/lab/current/slice_s_process/{{ row.id }}'">
+                                        Control
+                                    </button>
+                                    <button class="btn btn-warning btn-block" type="button"
+                                            onclick="location.href='/portal/lab/current/slice_s_cancel/{{ row.id }}'">
+                                        Release
+                                    </button>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </div>
 
-</form>
-
+        <h3>Pending Process</h3>
+        <h4>
+            <small>Current pending requests.</small>
+        </h4>
+        <div id="middle" align="center">
+            <div class="well">
+                <table class="table table-bordered table-striped table-hover">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th>Slice Name</th>
+                        <th>Authority</th>
+                        <th>Request Time</th>
+                        <th>Server Type</th>
+                        <th>Est. Start Time</th>
+                        <th>Est. End Time</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for row in current_list_1 %}
+                        <tr class="border_bottom">
+                            <td> {{ row.slice_name }}</td>
+                            <td> {{ row.authority_hrn }}</td>
+                            <td> {{ row.created }}</td>
+                            <td> Testbed Server</td>
+                            <td> {{ row.f_start_time }}</td>
+                            <td> {{ row.f_end_time }}</td>
+                            <td>
+                                <a href='/portal/lab/current/slice_o_cancel/{{ row.id }}' class="btn btn-danger">
+                                    Cancel
+                                    <span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span>
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    {% for row in current_list_2 %}
+                        <tr class="border_bottom">
+                            <td> {{ row.slice_name }}</td>
+                            <td> {{ row.authority_hrn }}</td>
+                            <td> {{ row.created }}</td>
+                            <td> Simulation Server</td>
+                            <td> {{ row.f_start_time }}</td>
+                            <td> {{ row.f_end_time }}</td>
+                            <td>
+                                <a href='/portal/lab/current/slice_s_cancel/{{ row.id }}' class="btn btn-danger">
+                                    Cancel
+                                    <span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span>
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </form>
 {% endblock %}

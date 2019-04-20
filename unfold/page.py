@@ -106,7 +106,7 @@ class Page:
 
         # if cached, use it
         if 'metadata' in manifold and isinstance(manifold['metadata'],MetaData):
-            if debug: print "Page.get_metadata: return cached value"
+            if debug: print ("Page.get_metadata: return cached value")
             return manifold['metadata']
 
         metadata_auth = {'AuthMethod':'anonymous'}
@@ -115,7 +115,7 @@ class Page:
         metadata.fetch(self.request)
         # store it for next time
         manifold['metadata']=metadata
-        if debug: print "Page.get_metadata: return new value"
+        if debug: print ("Page.get_metadata: return new value")
         return metadata
 
     def expose_js_metadata(self):

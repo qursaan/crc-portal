@@ -13,7 +13,7 @@ from unfold.page import Page
 
 # @qursaan
 from portal.forms import CaptchaTestForm
-# from portal.models import Authority, MyUser, Account, Platform
+from portal.models import Authority, MyUser, Account, Platform, Quota
 from portal.modules import *
 
 
@@ -42,12 +42,15 @@ class RegistrationView(FreeAccessView):
         # get all supervisors
         supervisors = MyUser.objects.filter(user_type=2)
 
+        # get all quotas
+        quotas = Quota.objects.all()
+
         # @qursaan: change to user table
         # user_details = User.objects.all()  # execute_admin_query(self.request, user_query)
 
         page = Page(request)
-        page.add_js_files(["js/jquery.validate.js", "js/my_account.register.js", ])
-        page.add_css_files(["css/onelab.css", "css/registration.css", ])
+        page.add_js_files(["js/jquery-1.11.1.js", "js/my_account.register.js", ])
+        page.add_css_files(["css/registration.css", ])
 
         if method == 'POST':
             # @qursaan: get post values
@@ -60,6 +63,7 @@ class RegistrationView(FreeAccessView):
             reg_password = request.POST.get('password', '')  # request.POST['password']
             reg_usertype = request.POST.get('usertype', '')
             reg_supervisor = request.POST.get('supervisor', '')
+            reg_quota = request.POST.get('quota', '')
 
             form = CaptchaTestForm(request.POST)
             if not form.is_valid():
@@ -67,7 +71,8 @@ class RegistrationView(FreeAccessView):
 
             if not errors:
                 errors = UserModules.create_user_account(errors, reg_email, reg_username, reg_password,
-                                                         reg_fname, reg_lname, reg_auth, reg_usertype, reg_supervisor)
+                                                         reg_fname, reg_lname, reg_auth, reg_usertype,
+                                                         reg_supervisor, reg_quota)
 
             if not errors:
                 return render(request, 'user_register_complete.html')
@@ -75,7 +80,7 @@ class RegistrationView(FreeAccessView):
 
         # Error or Get
         template_env = {
-            'topmenu_items': topmenu_items('Register', page.request),
+            #'topmenu_items': topmenu_items('Register', page.request),
             'errors': errors,
             'firstname': request.POST.get('firstname', ''),
             'lastname': request.POST.get('lastname', ''),
@@ -86,6 +91,7 @@ class RegistrationView(FreeAccessView):
             'usertype': request.POST.get('usertype', ''),
             'authorities': authorities,
             'supervisors': supervisors,
+            'quotas': quotas,
             'title': 'Registration',
             'form': CaptchaTestForm(),
         }

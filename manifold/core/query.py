@@ -9,7 +9,7 @@
 #   Marc-Olivier Buob   <marc-olivier.buob@lip6.fr>
 #   Thierry Parmentelat <thierry.parmentelat@inria.fr>
 
-from types                      import StringTypes
+#from types                      import StringTypes
 from manifold.core.filter       import Filter, Predicate
 from manifold.util.frozendict   import frozendict
 from manifold.util.type         import returns, accepts
@@ -25,7 +25,7 @@ def uniqid ():
 debug=False
 #debug=True
 
-class ParameterError(StandardError): pass
+class ParameterError(Exception): pass
 
 class Query(object):
     """
@@ -80,7 +80,7 @@ class Query(object):
                 self.action = kwargs["action"]
                 del kwargs["action"]
             else:
-                print "W: defaulting to get action"
+                print ("W: defaulting to get action")
                 self.action = "get"
 
 
@@ -113,7 +113,7 @@ class Query(object):
                 self.timestamp = "now" 
 
             if kwargs:
-                raise ParameterError, "Invalid parameter(s) : %r" % kwargs.keys()
+                raise ParameterError( "Invalid parameter(s) : %r" % kwargs.keys())
         #else:
         #        raise ParameterError, "No valid constructor found for %s : args = %r" % (self.__class__.__name__, args)
 
@@ -138,7 +138,7 @@ class Query(object):
             self.fields = set(self.fields)
 
         for field in self.fields:
-            if not isinstance(field, StringTypes):
+            if not isinstance(field, str):
                 raise TypeError("Invalid field name %s (string expected, got %s)" % (field, type(field)))
 
     #--------------------------------------------------------------------------- 
@@ -177,11 +177,11 @@ class Query(object):
 
         return strmap[self.action] % locals()
 
-    @returns(StringTypes)
+    @returns(str)
     def __str__(self):
         return self.to_sql(multiline=True)
 
-    @returns(StringTypes)
+    @returns(str)
     def __repr__(self):
         return self.to_sql()
 
@@ -223,7 +223,7 @@ class Query(object):
         sq="{}"
         
         result= """ new ManifoldQuery('%(a)s', '%(o)s', '%(t)s', %(f)s, %(p)s, %(c)s, %(unique)s, '%(query_uuid)s', %(aq)s, %(sq)s)"""%locals()
-        if debug: print 'ManifoldQuery.to_json:',result
+        if debug: print ( 'ManifoldQuery.to_json:',result)
         return result
     
     # this builds a ManifoldQuery object from a dict as received from javascript through its ajax request 
@@ -237,7 +237,7 @@ class Query(object):
             for (k,v) in dict.iteritems(): 
                 setattr(self,k,v)
         except:
-            print "Could not decode incoming ajax request as a Query, POST=",POST_dict
+            print ("Could not decode incoming ajax request as a Query, POST=",POST_dict)
             if (debug):
                 import traceback
                 traceback.print_exc()
@@ -247,7 +247,7 @@ class Query(object):
     # Accessors
     #--------------------------------------------------------------------------- 
 
-    @returns(StringTypes)
+    @returns(str)
     def get_action(self):
         return self.action
 
@@ -255,7 +255,7 @@ class Query(object):
     def get_select(self):
         return frozenset(self.fields)
 
-    @returns(StringTypes)
+    @returns(str)
     def get_from(self):
         return self.object
 
@@ -267,7 +267,7 @@ class Query(object):
     def get_params(self):
         return self.params
 
-    @returns(StringTypes)
+    @returns(str)
     def get_timestamp(self):
         return self.timestamp
 
@@ -397,7 +397,7 @@ class Query(object):
             predicate = Predicate(*args)
             self.filters.add(predicate)
         else:
-            raise Exception, 'Invalid expression for filter'
+            raise Exception( 'Invalid expression for filter')
         return self
             
     def select(self, *fields):
@@ -461,7 +461,7 @@ class AnalyzedQuery(Query):
         else:
             self.query_uuid = uniqid()
 
-    @returns(StringTypes)
+    @returns(str)
     def __str__(self):
         out = []
         fields = self.get_select()
@@ -489,7 +489,7 @@ class AnalyzedQuery(Query):
             analyzed_query.action = self.action
             try:
                 type = self.metadata.get_field_type(self.object, method)
-            except ValueError ,e: # backwards 1..N
+            except ValueError as e: # backwards 1..N
                 type = method
             analyzed_query.object = type
             self._subqueries[method] = analyzed_query
@@ -581,5 +581,5 @@ class AnalyzedQuery(Query):
         sq="{%s}"%sq
         
         result= """ new ManifoldQuery('%(a)s', '%(o)s', '%(t)s', %(f)s, %(p)s, %(c)s, %(unique)s, '%(query_uuid)s', %(aq)s, %(sq)s)"""%locals()
-        if debug: print 'ManifoldQuery.to_json:',result
+        if debug: print ('ManifoldQuery.to_json:',result)
         return result

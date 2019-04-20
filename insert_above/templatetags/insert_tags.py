@@ -9,13 +9,13 @@ http://sam.zoy.org/wtfpl/COPYING for more details.
 from django import template
 from django.conf import settings
 from django.template import loader_tags
-from django.utils.encoding import force_unicode
+from django.utils.encoding import force_text # force_unicode
 from django.utils.safestring import mark_safe
 import time
 from django.template.base import Variable
 from django import forms
 from collections import OrderedDict
-#from django.utils.datastructures import SortedDict
+
 register = template.Library()
 
 try:
@@ -78,7 +78,7 @@ def get_render_time(context):
 
 def consider_time(f):
     """
-    Decorator used to calculate
+    Decorator used to calculate 
     how much time was spent on rendering
     "insert_above" tags.
     """
@@ -147,7 +147,7 @@ class InsertHandlerNode(template.Node):
             bits[node.index] = nodelist.render_node(node, context)
         if DEBUG:
             log.debug("spent {0:.6f} ms on insert_tags".format(get_render_time(context)))
-        return mark_safe(''.join([force_unicode(b) for b in bits]))
+        return mark_safe(''.join([force_text(b) for b in bits]))
 
     def render(self, context):
         if loader_tags.BLOCK_CONTEXT_KEY not in context.render_context:
@@ -162,8 +162,8 @@ class InsertHandlerNode(template.Node):
 class InsertNode(template.Node):
     def __init__(self, container_name, insert_string = None, subnodes = None, *args, **kwargs):
         """
-        Note: `self.container_name, self.insert_line, self.subnodes` must not be changed during
-        `render()` call. Method `render()` may be called multiple times.
+        Note: `self.container_name, self.insert_line, self.subnodes` must not be changed during 
+        `render()` call. Method `render()` may be called multiple times. 
         """
         super(InsertNode, self).__init__(*args, **kwargs)
         self.container_name, self.insert_line, self.subnodes = container_name, insert_string, subnodes
@@ -174,7 +174,7 @@ class InsertNode(template.Node):
         return "<Media Require Node: %s>" % (self.insert_line)
 
     def push_media(self, context):
-        if self.prev_context_hash == context.__hash__():
+        if self.prev_context_hash == context.__hash__:
             if DEBUG:
                 log.debug('same context: {0} == {1}'.format(self.prev_context_hash, context.__hash__()))
             return
@@ -222,12 +222,12 @@ def media_tag(url, **kwargs):
     """
     Usage: {{ url|media_tag }}
     Simply wraps media url into appropriate HTML tag.
-
-    Example: {{ "js/ga.js"|media_tag }}
+    
+    Example: {{ "js/ga.js"|media_tag }} 
     The result will be <script type='text/javascript' src='/static/js/ga.js'></script>
-
-    Last 3 characters of url define which
-    format string from MEDIA_EXTENSION_FORMAT_MAP will be used.
+    
+    Last 3 characters of url define which 
+    format string from MEDIA_EXTENSION_FORMAT_MAP will be used.  
     """
 
     url = url.split('\n')[0].strip()
@@ -269,7 +269,7 @@ class MediaContainerNode(ContainerNode):
             return ''
         items = reqset
         items.sort()
-        url_set = OrderedDict() # @qursaan: replaced SortedDict
+        url_set = OrderedDict()
         for obj in items:
             fetch_urls(obj.item, url_set)
         result = [media_tag(key) for key, value in url_set.items()]
@@ -280,13 +280,13 @@ class MediaContainerNode(ContainerNode):
 @register.tag
 def insert_handler(parser, token):
     """
-    This is required tag for using insert_above tags. It must be
+    This is required tag for using insert_above tags. It must be 
     specified in the very "base" template and at the very beginning.
-
+    
     Simply, this tag controls the rendering of all tags after it. Note
     that if any container node goes before this tag it won't be rendered
     properly.
-
+    
     {% insert_handler %}
     """
     bits = token.split_contents()
@@ -302,13 +302,13 @@ def container(parser, token):
     """
     This tag specifies some named block where items will be inserted
     from all over the template.
-
+    
     {% container js %}
-
+    
     js - here is name of container
-
+    
     It's set while inserting string
-
+     
     {% insert_str js "<script src='js/jquery.js' type=...></script>" %}
     """
     bits = token.split_contents()
@@ -320,22 +320,22 @@ def container(parser, token):
 def media_container(parser, token):
     """
     This tag is an example of how ContainerNode might be overriden.
-
+    
     {% media_container js %}
-
+    
     js - here is name of container
-
+    
     It's set while inserting string
-
+     
     {% insert_str js "js/jquery.js" %}
     {% insert_str js "css/style.css" %}
-
+    
     Here only media urls are set. MediaContainerNode will identify
     by last 3 characters and render on appropriate template.
-
+    
     By default only '.js' and 'css' files are rendered. It can be extended
     by setting MEDIA_EXTENSION_FORMAT_MAP variable in settings.
-
+    
     """
     bits = token.split_contents()
     if len(bits) != 2:
@@ -346,11 +346,11 @@ def media_container(parser, token):
 def insert_str(parser, token):
     """
     This tag inserts specified string in containers.
-
+    
     Usage:     {% insert_str container_name string_to_insert %}
-
+    
     Example: {% insert_str js "<script src="media/js/jquery.js"></script>" %}
-
+    
     """
     bits = token.split_contents()
     if len(bits) != 3:
@@ -361,11 +361,11 @@ def insert_str(parser, token):
 def insert_form(parser, token):
     """
     This tag inserts specified string in containers.
-
+    
     Usage:     {% insert_str container_name form %}
-
+    
     Example: {% insert_form js form %}
-
+    
     """
     bits = token.split_contents()
     if len(bits) != 3:
@@ -377,7 +377,7 @@ def insert_form(parser, token):
 def insert(parser, token):
     """
     This tag with end token allows to insert not only one string.
-
+    
     {% insert js %}
     <script>
     $(document).ready(function(){

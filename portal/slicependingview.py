@@ -26,9 +26,7 @@ class SliceHistoryView(LoginRequiredAutoLogoutView):
     def get_context_data(self, **kwargs):
         page = Page(self.request)
         page.add_js_files(["js/jquery.validate.js", "js/my_account.register.js", "js/my_account.edit_profile.js"])
-        page.add_css_files(["css/onelab.css",
-                            # "css/account_view.css",
-                            "css/plugin.css"])
+        page.add_css_files(["css/plugin.css"])
 
         usera = UserAccessProfile(self.request)
 
@@ -58,8 +56,7 @@ class SliceCurrentView(LoginRequiredAutoLogoutView):
     def get_context_data(self, **kwargs):
         page = Page(self.request)
         page.add_js_files(["js/jquery.validate.js", "js/my_account.register.js", "js/my_account.edit_profile.js"])
-        page.add_css_files(["css/onelab.css",
-                            "css/plugin.css"])
+        page.add_css_files(["css/plugin.css"])
         usera = UserAccessProfile(self.request)
         c_user = usera.user_obj # get_user_by_email(the_user(self.request))
         get_count_active_slice(c_user=c_user,username=usera.session_username)

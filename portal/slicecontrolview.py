@@ -32,7 +32,8 @@ class SliceControlView(LoginRequiredAutoLogoutView):
     def get_or_post(self, request, method):
         template_name = "slice-control-view.html"
         page = Page(self.request)
-        page.add_js_files(["js/jquery.validate.js", "js/my_account.register.js", "js/my_account.edit_profile.js"])
+
+        page.add_js_files(["js/jquery-1.11.1.js", "js/my_account.register.js", "js/my_account.edit_profile.js"])
         page.add_css_files(["css/plugin.css"])  # "css/onelab.css"
 
         image_list = None

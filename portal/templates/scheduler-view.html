@@ -1,195 +1,199 @@
-{% extends "layout-unfold1.html" %}
+{% extends "layout-unfold3.html" %}
 {% block unfold_main %}
-<link rel="stylesheet" href="{{STATIC_URL}}css/fade.css"/>
-<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/jquery.timepicker.css" />
-<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/bootstrap-datetimepicker.min.css" />
-<!--link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/bootstrap-datepicker.css" /-->
-<script type="text/javascript" src="{{STATIC_URL}}js/moment.min.js"></script>
-<script type="text/javascript" src="{{STATIC_URL}}js/jquery.timepicker.min.js"></script>
-<script type="text/javascript" src="{{STATIC_URL}}js/bootstrap-datetimepicker.min.js"></script>
-<!--script type="text/javascript" src="{{STATIC_URL}}js/bootstrap-datepicker.js"></script-->
-<!--link rel="stylesheet" type="text/css" href='{{ STATIC_URL }}css/registration.css' /-->
-<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/scheduler.css"/>
-<script type="text/javascript"  src="{{ STATIC_URL }}js/hogan-3.0.2.min.js"></script>
-<script type="text/javascript"  src="{{ STATIC_URL }}js/scheduler.js"></script>
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/fade.css"/>
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/jquery.timepicker.css"/>
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/bootstrap-datetimepicker.min.css"/>
+    <!--link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/bootstrap-datepicker.css" /-->
+    <script type="text/javascript" src="{{ STATIC_URL }}js/moment.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.timepicker.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap-datetimepicker.min.js"></script>
+    <!--script type="text/javascript" src="{{STATIC_URL}}js/bootstrap-datepicker.js"></script-->
+    <!--link rel="stylesheet" type="text/css" href='{{ STATIC_URL }}css/registration.css' /-->
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/scheduler.css"/>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/hogan-3.0.2.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/scheduler.js"></script>
 
-<style>
-    .center{float:none;margin-left:auto;margin-right:auto;}
+    <style>
+        .center {
+            float: none;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
 
-</style>
+    <div class="onelab-title">
+        <h2>Testbeds Status Timeline</h2>
+    </div>
 
-<div style="text-align:center" class="well-sm">
-    <h2>Testbeds Status Timeline</h2>
-</div>
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
 
-{% if messages %}
-<ul class="messages">
-    {% for message in messages %}
-    <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
-    {% endfor %}
-</ul>
-{% endif %}
-
-
-<div class='well'>
-    <form name ="omf-form" id="omf-form" role="form" class="form-horizontal" method="post">
-        <!--class="cmxform form-horizontal" id="exe-image-form"
-     action="create_post"  enctype="multipart/form-data" -->
-        <fieldset>
-            {% csrf_token %}
-            <div class="form-group">
-                <label for="server_type" class="col-xs-4 control-label">Hardware Type</label>
-                <div class="col-xs-4">
-                    <div class="ui-widget">
-                        <select id="server_type" name="server_type" class="form-control"
-                        value="{{ server_type }}" >
-                            <option value="omf" label="Testbed Nodes" >Testbed Nodes</option>
-                            <option value="sim" label="Simulation Server" >Simulation Server</option>
+    <div class='well'>
+        <form name="omf-form" id="omf-form" role="form" method="post">
+            <!--class="cmxform form-horizontal" id="exe-image-form"
+         action="create_post"  enctype="multipart/form-data" -->
+            <fieldset>
+                {% csrf_token %}
+                <div class="form-row">
+                    <div class="form-group col-md-5 mb-5">
+                        <label for="server_type" class="control-label">Hardware Type</label>
+                        <select id="server_type" name="server_type" class="custom-select form-control"
+                                value="{{ server_type }}">
+                            <option value="omf" label="Testbed Nodes">Testbed Nodes</option>
+                            <option value="sim" label="Simulation Server">Simulation Server</option>
                         </select>
                     </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="request_date" class="col-xs-4 control-label">Date</label>
-                <div class="col-xs-4">
-                    <div  class="ui-widget">
+                    <div class="form-group col-md-5 mb-5">
+                        <label for="request_date" class=" control-label">Date</label>
                         <div id='active_time' data-provide="datepicker">
                             <input id="request_date" name="request_date" type="text" class="form-control date"
                                    placeholder="Timeline Date" required/>
-                      </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-2 mb-2">
+                        <label for="request_date" class=" control-label">&nbsp</label>
+                        <button id="g_reserve" class="form-control btn btn-info" type="button" name="g_reserve">View
+                        </button>
                     </div>
                 </div>
-                <div class="col-xs-4">
-                    <button id="g_reserve" class="btn btn-info" type="button" name="g_reserve">View</button>
-                </div>
-            </div>
-            <div class="form-group">
-                <div id="scheduler"></div>
-                <!--div id="fade"></div-->
-                <div id="modal">
-                    <img id="loader" src="{{STATIC_URL}}img/loading1.gif"/>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-xs-1"></div>
-                <div class="col-xs-8">
-                    <div class="legend">
-                        <ol>
-                            <li class="free">free</li>
-                            <li class="expired">expired</li>
-                            <li class="canceled">canceled</li>
-                            <li class="closed">reserved</li>
-                            <li class="bulk">bulk reserve</li>
-                        </ol>
+                <div class="form-group">
+                    <div id="scheduler"></div>
+                    <!--div id="fade"></div-->
+                    <div id="modal">
+                        <img id="loader" src="{{ STATIC_URL }}img/loading1.gif"/>
                     </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <div class="col-xs-8">
-                    <button id="toggle-selector-button" class="btn btn-default" type="button">Toggle Selector</button>
-                    <!--button id="gettime" class="btn btn-danger">Reserve selected times</button-->
+                <div class="form-group">
+                    <div class="col-xs-1"></div>
+                    <div class="col-xs-8">
+                        <div class="legend">
+                            <ol>
+                                <li class="free">free</li>
+                                <li class="expired">expired</li>
+                                <li class="canceled">canceled</li>
+                                <li class="closed">reserved</li>
+                                <li class="bulk">bulk reserve</li>
+                            </ol>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </fieldset>
-        <!--div id="times"></div-->
-    </form>
+                <div class="form-group">
+                    <div class="col-xs-8">
+                        <button id="toggle-selector-button" class="btn btn-default" type="button">Toggle Selector
+                        </button>
+                        <!--button id="gettime" class="btn btn-danger">Reserve selected times</button-->
+                    </div>
+                </div>
+            </fieldset>
+            <!--div id="times"></div-->
+        </form>
 
-</div>
+    </div>
 
-<script type="text/javascript">
-var $scheduler ;
+    <script type="text/javascript">
+        var $scheduler;
 
-$('#server_type').change(function(){
-    if($(this).val()=="omf"){
-         $('#omf_group').show();
-         $('#sim_group').hide();
-    } else {
-         $('#sim_group').show();
-         $('#omf_group').hide();
-    }
-});
 
-$('#request_date').datepicker({
-    dateFormat   : 'dd-MM-yy',
-    todayBtn: 'linked',
-    orientation: 'top',
-    forceParse: false,
-    disableTextInput : true,
-    disableTouchKeyboard : true,
-    minDate  : '0',
-    autoclose: true,
-});
+        function update_timeline(stype, sdate) {
+            openModal();
+            $.ajax({
+                url: "check_scheduler",
+                type: "POST",
+                data: {the_date: sdate, the_type: stype,},
+                success: function (result) {
+                    $scheduler.schedulerjs('update', result);
+                    closeModal();
+                },
+                error: function (xhr, errmsg, err) {
+                    $scheduler.schedulerjs('update', []);
+                    closeModal();
+                }
+            });
+        };
 
-$("#g_reserve").on('click', function(event){
-    stype  = $('#server_type').val();
-    d1     = $('input[name="request_date"]').val();
-    update_timeline(stype,d1);
-});
+        $(document).ready(function () {
+            $('#server_type').change(function () {
+                if ($(this).val() == "omf") {
+                    $('#omf_group').show();
+                    $('#sim_group').hide();
+                } else {
+                    $('#sim_group').show();
+                    $('#omf_group').hide();
+                }
+            });
 
-function update_timeline(stype, sdate) {
-    openModal();
-    $.ajax({
-        url  : "check_scheduler",
-        type : "POST",
-        data : {the_date: sdate, the_type: stype, },
-        success : function(result) {
-            $scheduler.schedulerjs('update', result);
-            closeModal();},
-        error : function(xhr,errmsg,err) {
-            $scheduler.schedulerjs('update' ,[]);
-            closeModal();
-        }});
-};
+            $('#request_date').datepicker({
+                dateFormat: 'dd-MM-yy',
+                todayBtn: 'linked',
+                orientation: 'top',
+                forceParse: false,
+                disableTextInput: true,
+                disableTouchKeyboard: true,
+                minDate: '0',
+                autoclose: true,
+            });
 
-$(document).ready(function(){
-    $('#request_date').val('{{request_date|date:"d-F-Y"}}'); //moment().format('DD-MMMM-YYYY')); //
-    $('#request_date').datepicker({'format':'dd-mm-yyyy'});
+            $("#g_reserve").on('click', function (event) {
+                stype = $('#server_type').val();
+                d1 = $('input[name="request_date"]').val();
+                update_timeline(stype, d1);
+            });
 
-    scheduler_prepare();
+            $('#request_date').val('{{request_date|date:"d-F-Y"}}'); //moment().format('DD-MMMM-YYYY')); //
+            $('#request_date').datepicker({'format': 'dd-mm-yyyy'});
 
-    $("#gettime").click(function(){
-        var times = $scheduler.schedulerjs('selected');
-        $("#times").html(times.start + ' - ' + times.end);
-    });
-    $("#toggle-selector-button").click(function(){
-        $scheduler.schedulerjs('toggleSelector');
-    });
-});
+            scheduler_prepare();
 
-function scheduler_prepare(){
-    var list = {{ reserve_list|safe }};
-    var steps = [];
-    for(i=0; i<10;i++)
-        steps.push('0'+i+':00');
-    for(i=10; i<24;i++)
-        steps.push(i+':00');
-    steps.push('23:59');
+            $("#gettime").click(function () {
+                var times = $scheduler.schedulerjs('selected');
+                $("#times").html(times.start + ' - ' + times.end);
+            });
+            $("#toggle-selector-button").click(function () {
+                $scheduler.schedulerjs('toggleSelector');
+            });
+        });
 
-    var snapTo = 30;
-    var pixelsPerHour = 60;
-    var headName = 'Resource Names';
-    var defaultStartTime = '09:00';
-    var defaultEndTime = '10:00';
-    var onClickAppointment = function(payload){};
-    $scheduler = $("#scheduler").schedulerjs({
-        'list': list,
-        'steps': steps,
-        'snapTo': snapTo,
-        'pixelsPerHour': pixelsPerHour,
-        'start': defaultStartTime,
-        'end': defaultEndTime,
-        'headName': headName,
-        'onClickAppointment': onClickAppointment
-    });
-    $scheduler.schedulerjs('toggleSelector');
-};
+        function scheduler_prepare() {
+            var list = {{ reserve_list|safe }};
+            var steps = [];
+            for (i = 0; i < 10; i++)
+                steps.push('0' + i + ':00');
+            for (i = 10; i < 24; i++)
+                steps.push(i + ':00');
+            steps.push('23:59');
 
-function openModal() {
-    document.getElementById('modal').style.display = 'block';
-};
+            var snapTo = 30;
+            var pixelsPerHour = 60;
+            var headName = 'Resource Names';
+            var defaultStartTime = '09:00';
+            var defaultEndTime = '10:00';
+            var onClickAppointment = function (payload) {
+            };
+            $scheduler = $("#scheduler").schedulerjs({
+                'list': list,
+                'steps': steps,
+                'snapTo': snapTo,
+                'pixelsPerHour': pixelsPerHour,
+                'start': defaultStartTime,
+                'end': defaultEndTime,
+                'headName': headName,
+                'onClickAppointment': onClickAppointment
+            });
+            $scheduler.schedulerjs('toggleSelector');
+        };
 
-function closeModal() {
-    document.getElementById('modal').style.display = 'none';
-};
-</script>
+        function openModal() {
+            document.getElementById('modal').style.display = 'block';
+        };
+
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+        };
+    </script>
 {% endblock %}

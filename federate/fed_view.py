@@ -1,16 +1,13 @@
 import json
-import urllib2
+import urllib
 
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseRedirect
 
-from crc.settings import FED_PASS, FED_RUN
-from federate.fed_backend import fed_start, fed_stop
+from federate.actions import getFedStatus, setFedStatus
+# from federate.fed_backend import fed_start, fed_stop
 from federate.models import Users, Site
-from portal.backend_actions import create_backend_user
-from portal.models import MyUser, ResourceProfile
-from portal.modules import UserModules
+from portal.models import MyUser, PhysicalNode
 from portal.user_access_profile import UserAccessProfile
 from ui.topmenu import topmenu_items  # , the_user
 from unfold.loginrequired import LoginRequiredAutoLogoutView
@@ -26,16 +23,18 @@ class FedView(LoginRequiredAutoLogoutView):
     def get_context_data(self, **kwargs):
         page = Page(self.request)
         n_local_user = MyUser.objects.filter().count()
-        n_remote_user = Users.objects.filter().count()
-        n_remote_site = Site.objects.filter().count()  # - 1
-        n_local_resources = ResourceProfile.objects.filter(shared__exact=True).count()
+        n_remote_user = '#'  # 'Users.objects.filter().count()
+        n_remote_site = Site.objects.filter().count() - 1
+        n_local_resources = PhysicalNode.objects.filter().count()
+        n_remote_resources = '#'
 
         context = super(FedView, self).get_context_data(**kwargs)
-        context['fed_service'] = FED_RUN
+        context['fed_service'] = getFedStatus()
         context['n_local_user'] = n_local_user
         context['n_remote_user'] = n_remote_user
         context['n_remote_site'] = n_remote_site
         context['n_local_res'] = n_local_resources
+        context['n_remote_res'] = n_remote_resources
         context['username'] = UserAccessProfile(self.request).username  # the_user(self.request)
         context['topmenu_items'] = topmenu_items('Testbed View', page.request)
         prelude_env = page.prelude_env()
@@ -57,7 +56,7 @@ def get_n_local_users(request):
 def federate_status(request):
     if request.method != 'GET':
         return HttpResponseRedirect("/")
-    n = FED_RUN
+    n = getFedStatus()
     if n is not None:
         return HttpResponse(n, content_type="text/plain")
     return HttpResponse('error', content_type="text/plain")
@@ -70,12 +69,13 @@ def control_running_federate(request):
     is_running = request.POST.get('is_running', None)
     if is_running is None:
         return HttpResponse("error: Please go back and try again", content_type="text/plain")
+    # site_conf = SiteConfig.objects.get(id=1)
 
     issuccess = 0
-    global FED_RUN
+    # global FED_RUN
     print("Running: ", is_running)
     if is_running == "1":
-        print "##### START Federation #####"
+        print("##### START Federation #####")
 
         # Check the service is running and try to start if not
         '''try:
@@ -88,10 +88,10 @@ def control_running_federate(request):
             # exe file
             # v = os.system("& python "+os.path.dirname(os.path.abspath("fed_service.py"))+"/federate/fed_service.py")
             Popen(["python", os.path.dirname(os.path.abspath("fed_service.py"))+"/federate/fed_service.py"])
-'''
+        '''
         try:
             # check again
-            curr_state = fed_start()
+            '''curr_state = fed_start()
             if curr_state == 1:
 
                 # CREATE DUMMY FED USER
@@ -111,29 +111,29 @@ def control_running_federate(request):
                     # u = MyUser.objects.filter(username__iexact="feduser")
 
                 # get_site_users()
-
-                issuccess = 1
-                FED_RUN = 1  # Run service flag
+                '''
+            setFedStatus(True)
+            issuccess = 1
+            ##FED_RUN = 1  # Run service flag
         except:
-            print "ERROR READING"
+            print("ERROR READING")
             issuccess = 0
-            FED_RUN = 0
+            ## FED_RUN = 0
 
     else:
-        print "##### STOP Federation #####"
+        print("##### STOP Federation #####")
         try:
-            fed_stop()
+            setFedStatus(False)
             issuccess = 1
         except:
-            print "CANNOT STOP: Server not response"
+            print("CANNOT STOP: Server not response")
 
-        FED_RUN = 0
-
+        # FED_RUN = 0
     if issuccess == 1:
         return HttpResponse('success', content_type="text/plain")
     return HttpResponse('error', content_type="text/plain")
 
-
+'''
 def get_site_users(request):
     try:
 
@@ -141,27 +141,27 @@ def get_site_users(request):
 
         for s in sites:
             if s.status != 2:
-                print "SITE: ", s.name, " DISABLED"
+                print("SITE: ", s.name, " DISABLED")
                 continue
 
             if s.id == 1:  # Current SITE
                 continue
 
             # READ REMOTE SITE
-            print "READ USERS FROM ", s.name
+            print("READ USERS FROM ", s.name)
             try:
-                response_data = urllib2.urlopen(s.url + 'federation/fed/getUsers/')
+                response_data = urllib.request.urlopen(s.url + 'federation/fed/getUsers/')
             except:
-                print "ERROR CONNECT TO SITE ", s.name
+                print("ERROR CONNECT TO SITE ", s.name)
                 response_data = None
 
             if response_data:
                 readd = response_data.read()
                 loadd = json.loads(json.loads(readd).encode("ascii", "replace"))
 
-                print "DATA: "
+                print("DATA: ")
                 for x in loadd:
-                    print x['fields']['username']
+                    print(x['fields']['username'])
                     reg_username = x['fields']['username']
 
                     # INSERT DATA INTO TABLES
@@ -173,8 +173,10 @@ def get_site_users(request):
                         )
                         # SAVE USER
                         luser.save()
-                        print "SAVED ", reg_username
-        print "Finished save all users"
+                        print("SAVED ", reg_username)
+        print("Finished save all users")
         return HttpResponse('success', content_type="text/plain")
     except:
         return HttpResponse('error', content_type="text/plain")
+
+'''

@@ -1,39 +1,28 @@
-{% insert_str prelude "js/bootstrap.min.js" %}
-{% insert_str prelude "css/bootstrap.min.css" %}
-{% insert_str prelude "css/topmenu.css" %}
-{% insert_str prelude "js/logout.js" %}
+<header id="header">
+    <div class="wrapper">
+        <div class="logo">
+            <a href="/"><img src="{{ STATIC_URL }}img/crc-portal.png" alt="CRC - Communication and Networking Testbeds"/></a>
+        </div>
+    </div>
 
-<div id="header">
-	<div class="wrapper">
-		<div class="logo">
-			<a href="/"><img src="{{ STATIC_URL }}img/crc-portal.png" alt="CRC - Communication and Networking Testbeds" /></a>
-		</div>
-		<div id="secondary">
-			<ul>
-				<li>News</li>
-				<li>About</li>
-				<li><a target="_blank" href="http://smartci.alexu.edu.eg/crc/doku.php?id=start">Public Website</a></li>
-				<li>Intranet</li>
-			</ul>
-		</div>
-	</div>
+    <div id="navigation">
+        <nav class="wrapper">
+            <ul id="menu" class="black">
+                <li><a href="/portal/dashboard/">DASHBOARD</a></li>
+                <li><a href="/portal/tguide/">TEACH GUIDE</a></li>
+                <li><a href="/portal/guide/">GUIDE</a></li>
+                <li><a href="/portal/support/">SUPPORT</a></li>
+                {% if username %}
+                    <li><a href="/portal/account/">{{ username }}</a></li>
+                    <li><a href="#" id="logout" data-username='{{ username }}'>LOGOUT</a></li>
+                {% else %}
+                    <li><a href="/login" id="login">LOGIN</a></li>
+                {% endif %}
+                <li><a target="_blank" href="http://smartci.alexu.edu.eg/crc/doku.php?id=start">ABOUT</a>
 
-	<div id="navigation">
-		<div class="wrapper">
-			{% if username %}
-			<ul>
-				<li><a href="/portal/dashboard/">DASHBOARD</a></li>
-				<li><a href="/portal/tguide/">TEACH GUIDE</a></li>
-				<li><a href="/portal/guide/">GUIDE</a></li>
-				<li><a href="/portal/support/">SUPPORT</a></li>
-				<li>|</li>
-				<li>{{ username }}</li>
-				<li><a href="#" id="logout" data-username='{{ username }}'>LOGOUT</a></li>
-			</ul>
-			{% else %}
-			{% endif %}
-		</div>
-	</div>
-</div>
+            </ul>
 
+        </nav>
+    </div>
+</header>
 

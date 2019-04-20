@@ -1,0 +1,50 @@
+apt-get install software-properties-common
+apt-get install python-pip python-dev libmysqlclient-dev
+
+yum install python27
+yum install python-devel
+yum install libjpeg-devel
+python2.7 -m pip install Django==1.8.4
+python2.7 -m pip install django-filer
+python2.7 -m pip install Pillow
+python2.7 -m pip install django-mptt
+python2.7 -m pip install django-polymorphic
+python2.7 -m pip install easy_thumbnails
+python2.7 -m pip install python-django-south
+python2.7 -m pip install django-south
+python2.7 -m pip install django-simple-captcha
+python2.7 -m pip install urllib2
+python2.7 -m pip install MySQL-python
+easy_install pyparsing
+easy_install python-dateutil
+easy_install --upgrade pytz
+
+
+sudo python2.7 -m pip uninstall Pillow
+sudo yum install freetype-devel
+sudo python2.7 -m pip install Pillow
+sudo python2.7 -m pip install pycrypto
+
+
+
+python manage.py makemigrations
+python manage.py migrate
+python manage.py createsuperuser --email admin@qursaan.com --username admin
+
+
+# Django's auth system
+# username:admin, admin@qursaan.com, password:admin //on server admin@crc!
+
+
+python manage.py runserver 193.227.16.199:8000
+
+
+
+# Migration and intial setup
+python manage.py migrate
+python manage.py makemigrations
+python manage.py syncdb
+
+
+
+

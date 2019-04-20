@@ -1,10 +1,10 @@
 from django.contrib import admin
 
-from portal.models import MyUser, Platform, Account, ResourceProfile, \
+from portal.models import MyUser, Platform, Account,  \
     PhysicalNode, ResourcesInfo, VirtualNode, NodeConnection, SimulationVM, FrequencyRanges, \
     UserImage, TestbedImage, SimulationImage, \
-    Authority, PendingSlice, \
-    Reservation, SimReservation, ReservationFrequency #,ReservationDetail
+    Authority, PendingSlice, SiteConfig, \
+    Reservation, SimReservation, ReservationFrequency, Quota #,ReservationDetail
 
 
 @admin.register(Platform)
@@ -24,9 +24,14 @@ class MyUserAdmin(admin.ModelAdmin):
     list_display = ('id', 'first_name', 'last_name', 'username', 'email', 'authority_hrn', 'supervisor_id', 'active_email', 'status', 'user_type', 'created')
 
 
+@admin.register(Quota)
+class QuotaAdmin(admin.ModelAdmin):
+    list_display = ('id', 'quota_title', 'quota_size', 'quota_duration' )
+
+
 @admin.register(Account)
 class AccountAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user_ref', 'platform_ref', 'auth_type', 'config')
+    list_display = ('id', 'user_ref', 'platform_ref','quota_ref' ,'auth_type', 'config')
 
 
 @admin.register(Authority)
@@ -35,9 +40,9 @@ class AuthorityAdmin(admin.ModelAdmin):
 
 
 # Resources ****************************************************
-@admin.register(ResourceProfile)
-class ResourceProfileAdmin(admin.ModelAdmin):
-    list_display = ('id', 'uid', 'name', 'shared')
+#@admin.register(ResourceProfile)
+#class ResourceProfileAdmin(admin.ModelAdmin):
+#    list_display = ('id', 'uid', 'public_name', 'shared', 'resource_ref')
 
 
 @admin.register(ResourcesInfo)
@@ -117,3 +122,8 @@ class PendingSliceAdmin(admin.ModelAdmin):
     list_display = (
         'id', 'slice_name', 'user_hrn', 'authority_hrn', 'server_type', 'request_type', 'start_time', 'end_time',
         'status',)
+
+
+@admin.register(SiteConfig)
+class SiteConfigAdmin(admin.ModelAdmin):
+    list_display = ('id', 'fed_status')

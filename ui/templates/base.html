@@ -1,14 +1,12 @@
 <!DOCTYPE html>
-{# This is required by insert_above #}{% insert_handler %}
+{# This is required by insert_above{% insert_handler %}#}
 <html lang="en">
-
 <head>
-
-    <title>CRC Portal :: {{ title }}</title>
+    <title>CRC PORTAL :: {{ title }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="/static/img/crc-icon.png">
     {% media_container prelude %}
-    {% include 'messages-transient-header.html' %}
+
     <script type="text/javascript">
         {% container prelude_js %}
     </script>
@@ -16,26 +14,53 @@
         {% container prelude_css %}
     </style>
     {{ header_prelude }}
-    {% block head %}{% endblock head %}
-    {% spaceless %}
-        {% insert_str prelude "css/layout-unfold.css" %}
-        {% insert_str prelude "css/manifold.css" %}
-        {% insert_str prelude "css/plugin.css" %}
-        {% insert_str prelude "css/onelab_marko.css" %}
-        {% insert_str prelude "css/themes/ui-lightness/jquery-ui.min.css" %}
-        {% insert_str prelude "js/jquery-2.2.0.min.js" %}
-        <!-- insert_str prelude "js/jquery-ui.min.js" -->
-        {% insert_str prelude "js/topmenu.js" %}
-        {% insert_str prelude "js/jquery.html5storage.min.js" %}
-        {% insert_str prelude "js/messages-runtime.js" %}
-        {% insert_str prelude "js/class.js" %}
-        {% insert_str prelude "js/plugin-helper.js" %}
-        {% insert_str prelude "js/mustache.js" %}
-        {% insert_str prelude "js/plugin.js" %}
-        {% insert_str prelude "js/manifold.js" %}
-    {% endspaceless %}
-    </head>
 
+    {% spaceless %}
+        {# insert_str prelude "css/layout-unfold.css" #}
+        <link rel="stylesheet" type="text/css" href="{% static 'css/layout-unfold.css' %}" />
+        {# insert_str prelude "css/manifold.css" #}
+        <link rel="stylesheet" type="text/css" href="{% static 'css/manifold.css' %}" />
+        {# insert_str prelude "css/plugin.css" #}
+        <link rel="stylesheet" type="text/css" href="{% static 'css/plugin.css' %}" />
+        {# insert_str prelude "css/onelab_marko.css" #}
+        <link rel="stylesheet" type="text/css" href="{% static 'css/onelab_marko.css' %}" />
+        {# insert_str prelude "css/themes/ui-lightness/jquery-ui.min.css" #}
+        <link rel="stylesheet" type="text/css" href="{% static 'css/themes/ui-lightness/jquery-ui.min.css' %}" />
+
+        {# insert_str prelude "css/bootstrap.min.css" #}
+        <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}" />
+        {# insert_str prelude "css/topmenu.css" #}
+        <link rel="stylesheet" type="text/css" href="{% static 'css/topmenu.css' %}" />
+
+        {# insert_str prelude "js/jquery-2.2.0.min.js" #}
+        <script type="text/javascript" src="{% static 'js/jquery-2.2.0.min.js' %}"></script>
+        <!-- insert_str prelude "js/jquery-ui.min.js" -->
+        {# insert_str prelude "js/topmenu.js" #}
+        <script type="text/javascript" src="{% static 'js/topmenu.js' %}"></script>
+        {# insert_str prelude "js/jquery.html5storage.min.js" #}
+        <script type="text/javascript" src="{% static 'js/jquery.html5storage.min.js' %}"></script>
+        {# insert_str prelude "js/messages-runtime.js" #}
+        <script type="text/javascript" src="{% static 'js/messages-runtime.js' %}"></script>
+        {# insert_str prelude "js/class.js" #}
+        <script type="text/javascript" src="{% static 'js/class.js' %}"></script>
+        {# insert_str prelude "js/plugin-helper.js" #}
+        <script type="text/javascript" src="{% static 'js/plugin-helper.js' %}"></script>
+        {# insert_str prelude "js/mustache.js" #}
+        <script type="text/javascript" src="{% static 'js/mustache.js' %}"></script>
+        {# insert_str prelude "js/plugin.js" #}
+        <script type="text/javascript" src="{% static 'js/plugin.js' %}"></script>
+        {# insert_str prelude "js/manifold.js" #}
+        <script type="text/javascript" src="{% static 'js/manifold.js' %}"></script>
+        {# insert_str prelude "js/bootstrap.min.js" #}
+        <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/bootstrap.bundle.min.js'%}"></script>
+        <script type="text/javascript" src="{% static 'js/all.js'%}" ></script>
+        {# insert_str prelude "js/logout.js" #}
+        <script type="text/javascript" src="{% static 'js/logout.js' %}"></script>
+    {% endspaceless %}
+    {% include 'messages-transient-header.html' %}
+    {% block head %}{% endblock head %}
+    </head>
     <body>
         {% spaceless %}
             {% block container %}
@@ -43,11 +68,16 @@
                     {% include 'widget-topmenu.html' %}
                 {% endblock topmenu %}
                 {% include 'messages-transient.html' %}
-                <div class="container"> <div class="row">
-                  {% block base_content%}{% endblock %}
-                </div></div>
+
+                <section class="container">
+                    <div class="row">
+                    {% block base_content%}{% endblock %}
+                    </div>
+                </section>
+                {% block footer %}
+                    {% include 'widget-footer.html' %}
+                {% endblock footer %}
             {% endblock container %}
         {% endspaceless %}
     </body>
-
 </html>
