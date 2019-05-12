@@ -13,6 +13,7 @@ class Site(models.Model):
     # status 0-disabled, 1-pending, 2-active, 3-expired, 4-canceled
     status = models.IntegerField(default=0)
     created = models.DateTimeField(default=timezone.now)
+    credits = models.IntegerField(default=0)
     public_key = models.TextField(null=True)
     private_key = models.TextField(null=True)
 

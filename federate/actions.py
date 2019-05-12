@@ -2,7 +2,9 @@ from portal.models import SiteConfig
 
 
 def getFedStatus():
-    return SiteConfig.objects.get(id=1).fed_status
+    if SiteConfig.objects.count()>0:
+        return  SiteConfig.objects.get(id=1).fed_status
+    return 0
 
 
 def setFedStatus(enabled):

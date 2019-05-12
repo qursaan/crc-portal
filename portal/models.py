@@ -69,7 +69,7 @@ class Quota(models.Model):
     quota_duration = models.IntegerField(null=True, default=30)
 
     def __str__(self):
-        return self.quota_title + " [" + str(self.quota_size) + "] hr  per [" + str(self.quota_duration) + "] days";
+        return self.quota_title + " [" + str(self.quota_size) + "] credit  per [" + str(self.quota_duration) + "] days";
 
 
 class MyUser(models.Model):
@@ -171,6 +171,8 @@ class AccessHistory(models.Model):
 class ResourcesInfo(models.Model):
     type = models.TextField(default='NA')
     description = models.TextField(default='NA')
+    # credit value
+    credit_value = models.IntegerField(default=1)
 
     def __str__(self):
         return self.type
@@ -279,6 +281,9 @@ class SimulationImage(models.Model):
 # Reservations *******************************************************
 class Reservation(models.Model):
     user_ref = models.ForeignKey(MyUser, null=True, on_delete=models.CASCADE)
+    # reservation from federation sites
+    fed_site_ref = models.IntegerField('Site Name', default=None, null=True)
+
     username = models.TextField(default=None, null=True)
     authority_hrn = models.TextField(null=True)
     start_time = models.DateTimeField('Actual Start Time', null=True)
