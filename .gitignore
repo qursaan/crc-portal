@@ -2,3 +2,4 @@
 portal/migrations/
 lab/migrations/
 federate/migrations/
+.idea/
