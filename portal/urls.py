@@ -10,7 +10,7 @@ from portal.graphicview import GraphicBuilderView
 from portal.homeview import HomeView
 # from portal.documentationview import DocumentationView
 from portal.navigation import *
-from portal.statview import StatsView, StatsAdminView
+from portal.statview import StatsView, StatsAdminView, stat_report
 from portal.accountview import AccountView
 from portal.registrationview import RegistrationView
 from portal.reservationview import ReservationView, check_availability
@@ -84,6 +84,7 @@ urlpatterns = [
     re_path(r'^history/?$', un_complete_page),
     re_path(r'^stats/?$' , StatsView.as_view(), name="Statistics"),
     re_path(r'^stats_site/?$' , StatsAdminView.as_view(), name="Statistics"),
+    re_path(r'^stats_site/stat_report?$', stat_report),
 
     # Dashboard
     path('', DashboardView.as_view(), {'state': 'Welcome'}),

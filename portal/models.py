@@ -109,7 +109,7 @@ class PendingSlice(models.Model):
     base_image = models.TextField(default='NA')
     purpose = models.TextField(default='NA')
     created = models.DateTimeField(default=timezone.now)
-    slice_duration = models.TextField(default='1')
+    slice_duration = models.IntegerField(default=1)
     # status 0-disabled, 1-pending, 2-waiting, 3-active, 4-expired, 5-canceled, 6-bulk
     status = models.IntegerField(default=0)
     start_time = models.DateTimeField(null=True)
@@ -173,6 +173,7 @@ class ResourcesInfo(models.Model):
     description = models.TextField(default='NA')
     # credit value
     credit_value = models.IntegerField(default=1)
+    image_name = models.TextField(default='NA')
 
     def __str__(self):
         return self.type
@@ -291,7 +292,7 @@ class Reservation(models.Model):
     f_start_time = models.DateTimeField('Estimate Start Time', null=True)
     f_end_time = models.DateTimeField('Estimate End Time', null=True)
     slice_name = models.TextField(null=True)
-    slice_duration = models.TextField(default='1')
+    slice_duration = models.IntegerField(default=1)
     approve_date = models.DateTimeField(null=True)
     request_date = models.DateTimeField(default=timezone.now)
     request_type = models.TextField(default='NA')  # 1=schedule 2=ontime
@@ -327,7 +328,7 @@ class SimReservation(models.Model):
     f_start_time = models.DateTimeField(null=True)
     f_end_time = models.DateTimeField(null=True)
     slice_name = models.TextField(null=True)
-    slice_duration = models.TextField(default='1')
+    slice_duration = models.IntegerField(default=1)
     approve_date = models.DateTimeField(null=True)
     request_date = models.DateTimeField(default=timezone.now)
     request_type = models.TextField(default='NA')  # 1=schedule 2=onday

@@ -7,189 +7,194 @@
 
 {% block unfold_main %}
 
-<script type="text/javascript" src='{{STATIC_URL}}js/moment.min.js'></script>
-<script type="text/javascript" src='{{STATIC_URL}}js/bootstrap-datetimepicker.min.js'></script>
+    <script type="text/javascript" src='{{ STATIC_URL }}js/moment.min.js'></script>
+    <script type="text/javascript" src='{{ STATIC_URL }}js/bootstrap-datetimepicker.min.js'></script>
 
-<link rel="stylesheet" type="text/css" href='{{STATIC_URL}}css/jquery-ui.css' />
-<link rel="stylesheet" type="text/css" href='{{STATIC_URL}}css/bootstrap-datetimepicker.min.css' />
-<link rel="stylesheet" type="text/css" href='{{STATIC_URL}}css/registration.css' />
+    <link rel="stylesheet" type="text/css" href='{{ STATIC_URL }}css/jquery-ui.css'/>
+    <link rel="stylesheet" type="text/css" href='{{ STATIC_URL }}css/bootstrap-datetimepicker.min.css'/>
+    <link rel="stylesheet" type="text/css" href='{{ STATIC_URL }}css/registration.css'/>
 
-<!--div class="onelab-title well-sm"-->
-<div style="text-align:center" class="well-sm">
-    <h2>Request a Slice</h2>
-</div>
+    <!--div class="onelab-title well-sm"-->
+    <div style="text-align:center" class="well-sm">
+        <h2>Request a Slice</h2>
+    </div>
 
-{% if errors %}
-    <ul>
-        {% for error in errors %}
-            <li>{{ error }}</li>
-        {% endfor %}
-    </ul>
-{% endif %}
+    {% if errors %}
+        <ul>
+            {% for error in errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
 
-<div class='well'>
-    <form id="commentForm" class="form-horizontal" action="" method="post" role="form">
-      {% csrf_token %}
-      <fieldset>
-          <div class="form-group">
-              <label for="email" class="col-xs-2 control-label">Experimenter ID</label>
-              <div class="col-xs-4">
-                  <label id="email" class="col-xs-2 control-label" style="height:34px;">{{ email }}</label>
-              </div>
-              <div class="col-xs-6"> <p class="form-hint">Experimenter requesting a Slice</p> </div>
-          </div>
+    <div class='well'>
+        <form id="commentForm" class="form-horizontal" action="" method="post" role="form">
+            {% csrf_token %}
+            <fieldset>
+                <div class="form-group">
+                    <label for="email" class="col-xs-2 control-label">Experimenter ID</label>
+                    <div class="col-xs-4">
+                        <label id="email" class="col-xs-2 control-label" style="height:34px;">{{ email }}</label>
+                    </div>
+                    <div class="col-xs-6"><p class="form-hint">Experimenter requesting a Slice</p></div>
+                </div>
 
-          <div class="form-group">
-              <label for="slice_name" class="col-xs-2 control-label">Slice Name</label>
-              <div class="col-xs-4">
-                  <input id="slice_name" type="text" name="slice_name" class="form-control" minlength="2" value="{{ slice_name }}" placeholder="Slice Name" required />
-              </div>
-              <div class="col-xs-6"> <p class="form-hint">The name of the slice you wish to create</p> </div>
-          </div>
+                <div class="form-group">
+                    <label for="slice_name" class="col-xs-2 control-label">Slice Name</label>
+                    <div class="col-xs-4">
+                        <input id="slice_name" type="text" name="slice_name" class="form-control" minlength="2"
+                               value="{{ slice_name }}" placeholder="Slice Name" required/>
+                    </div>
+                    <div class="col-xs-6"><p class="form-hint">The name of the slice you wish to create</p></div>
+                </div>
 
-          <div class="form-group">
-              <label for="server_type" class="col-xs-2 control-label">Server</label>
-              <div class="col-xs-4">
-                  <div class="ui-widget">
-                      <select id="server_type" name="server_type"
-                              class="form-control" value="{{ server_type }}" >
-                          <option value="omf" label="Controller Server" ></option>
-                          <option value="sim" label="Simulation Server" ></option>
-                      </select>
-                  </div>
-              </div>
+                <div class="form-group">
+                    <label for="server_type" class="col-xs-2 control-label">Server</label>
+                    <div class="col-xs-4">
+                        <div class="ui-widget">
+                            <select id="server_type" name="server_type"
+                                    class="form-control" value="{{ server_type }}">
+                                <option value="omf" label="Controller Server"></option>
+                                <option value="sim" label="Simulation Server"></option>
+                            </select>
+                        </div>
+                    </div>
 
-              <script type="text/javascript">
-                   $('#server_type').change(function(){
-                        if($(this).val()=="omf"){
-                             $('#omf_group').show();
-                             $('#sim_group').hide();
-                        } else {
-                             $('#sim_group').show();
-                             $('#omf_group').hide();
-                        }
-                   });
-              </script>
-              <div class="col-xs-6">
-                  <p class="form-hint">Determine the Type of Experiment Server</p>
-              </div>
-          </div>
+                    <script type="text/javascript">
+                        $('#server_type').change(function () {
+                            if ($(this).val() == "omf") {
+                                $('#omf_group').show();
+                                $('#sim_group').hide();
+                            } else {
+                                $('#sim_group').show();
+                                $('#omf_group').hide();
+                            }
+                        });
+                    </script>
+                    <div class="col-xs-6">
+                        <p class="form-hint">Determine the Type of Experiment Server</p>
+                    </div>
+                </div>
 
-          <div class="form-group">
-              <label for="request_type" class="col-xs-2 control-label">Request Plan</label>
-              <div class="col-xs-4">
-                  <div class="ui-widget">
-                      <select id="request_type" name="request_type" class="form-control"
-                        value="{{ request_type }}" >
-                            <option value="active_t" label="Active (Schedule)" ></option>
-                            <option value="lazy_t"   label="Lazy (OnTime)" ></option>
-                      </select>
-                  </div>
-              </div>
-              <script type="text/javascript">
-                   $('#request_type').change(function(){
-                        if($(this).val()=="active_t"){
-                             $('#active_group').show();
-                             $('#lazy_group').hide();
-                        }
-                        else{
-                             $('#lazy_group').show();
-                             $('#active_group').hide();
-                        }
-                    });
-               </script>
-              <div class="col-xs-6">
-                  <p class="form-hint">Determine the request plan type</p>
-              </div>
-          </div>
+                <div class="form-group">
+                    <label for="request_type" class="col-xs-2 control-label">Request Plan</label>
+                    <div class="col-xs-4">
+                        <div class="ui-widget">
+                            <select id="request_type" name="request_type" class="form-control"
+                                    value="{{ request_type }}">
+                                <option value="active_t" label="Active (Schedule)"></option>
+                                <option value="lazy_t" label="Lazy (OnTime)"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <script type="text/javascript">
+                        $('#request_type').change(function () {
+                            if ($(this).val() == "active_t") {
+                                $('#active_group').show();
+                                $('#lazy_group').hide();
+                            } else {
+                                $('#lazy_group').show();
+                                $('#active_group').hide();
+                            }
+                        });
+                    </script>
+                    <div class="col-xs-6">
+                        <p class="form-hint">Determine the request plan type</p>
+                    </div>
+                </div>
 
-          <div class="form-group">
-              <label for="request_date" class="col-xs-2 control-label">Expect Date & Time</label>
-              <div class="col-xs-4">
-                  <div class="ui-widget">
-                   <div class='input-group date' id='datetimepicker1'>
-                        <input id="request_date" name="request_date" type='text' placeholder="Expected Date" class="form-control" required />
-                        <span class="input-group-addon">
+                <div class="form-group">
+                    <label for="request_date" class="col-xs-2 control-label">Expect Date & Time</label>
+                    <div class="col-xs-4">
+                        <div class="ui-widget">
+                            <div class='input-group date' id='datetimepicker1'>
+                                <input id="request_date" name="request_date" type='text' placeholder="Expected Date"
+                                       class="form-control" required/>
+                                <span class="input-group-addon">
                             <span class="glyphicon glyphicon-calendar"></span>
                         </span>
-                    </div>
-                        <script type="text/javascript">
-                            $(function () {
-                                $('#datetimepicker1').datetimepicker();
-                            });
-                        </script>
-                  </div>
-                  <h5>Current Server time: {{time_now}} Zone: (Africa/Cairo)</h5>
-              </div>
-              <div class="col-xs-6"><p class="form-hint">Expect datetime for your test</p></div>
-          </div>
-
-          <div id="sim_group" hidden="hidden">
-               <div class="form-group">
-                    <label for="sim_os" class="col-xs-2 control-label">OS Version</label>
-                    <div class="col-xs-4">
-                        <div class="ui-widget">
-                           <select id="sim_os" name="sim_os" class="form-control" value="{{ sim_os }}" >
-                           {% for row in sim_os_list %}
-                                <option value="{{ row }}" label="{{ row }}" ></option>
-                           {% endfor %}
-                           </select>
+                            </div>
+                            <script type="text/javascript">
+                                $(function () {
+                                    $('#datetimepicker1').datetimepicker();
+                                });
+                            </script>
                         </div>
+                        <h5>Current Server time: {{ time_now }} Zone: (Africa/Cairo)</h5>
                     </div>
-                    <div class="col-xs-6"><p class="form-hint">The pre-defined operating system package</p></div>
-               </div>
-               <div class="form-group">
-                    <label for="sim_duration" class="col-xs-2 control-label">Slice duration (hr)</label>
-                    <div class="col-xs-4">
-                        <div class="ui-widget">
-                           <select id="sim_duration" name="sim_duration" class="form-control" value="{{ sim_duration }}" >
-                           {% for row in duration_list %}
-                                <option value="{{ row }}" label="{{ row }}" ></option>
-                           {% endfor %}
-                           </select>
-                        </div>
-                    </div>
-                    <div class="col-xs-6"><p class="form-hint">The expected duration of request slice</p></div>
-               </div>
-          </div>
+                    <div class="col-xs-6"><p class="form-hint">Expect datetime for your test</p></div>
+                </div>
 
-          <div id="omf_group">
-              <div class="form-group">
-                    <label for="resources" class="col-xs-2 control-label">Resources</label>
-                    <div class="col-xs-10">
-                        <div class="ui-widget">
-                            <div id="resources" class="ui-widget">
-                                <table class="table table-bordered table-condensed" style="width:90%">
-                                    <tr><thead>
-                                    <th>#</th>
-                                    {% for row in node_list %}
-                                        <th>{{row}}</th>
+                <div id="sim_group" hidden="hidden">
+                    <div class="form-group">
+                        <label for="sim_os" class="col-xs-2 control-label">OS Version</label>
+                        <div class="col-xs-4">
+                            <div class="ui-widget">
+                                <select id="sim_os" name="sim_os" class="form-control" value="{{ sim_os }}">
+                                    {% for row in sim_os_list %}
+                                        <option value="{{ row }}" label="{{ row }}"></option>
                                     {% endfor %}
-                                    </thead></tr>
-                                    <tbody>
-                                    {% for i in resource_info %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-xs-6"><p class="form-hint">The pre-defined operating system package</p></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="sim_duration" class="col-xs-2 control-label">Slice duration (hr)</label>
+                        <div class="col-xs-4">
+                            <div class="ui-widget">
+                                <select id="sim_duration" name="sim_duration" class="form-control"
+                                        value="{{ sim_duration }}">
+                                    {% for row in duration_list %}
+                                        <option value="{{ row }}" label="{{ row }}"></option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-xs-6"><p class="form-hint">The expected duration of request slice</p></div>
+                    </div>
+                </div>
+
+                <div id="omf_group">
+                    <div class="form-group">
+                        <label for="resources" class="col-xs-2 control-label">Resources</label>
+                        <div class="col-xs-10">
+                            <div class="ui-widget">
+                                <div id="resources" class="ui-widget">
+                                    <table class="table table-bordered table-condensed" style="width:90%">
                                         <tr>
-                                            <th>{{i.type}}</th>
-                                            {% for n in node_list %}
-                                                <td>
-                                                    {% for r in resource_list %}
-                                                        {% if r.node_id.id == n.id and r.device_id.id == i.id %}
-                                                            <label class="checkbox-inline">
-                                                                <input type="checkbox" name="resource_group" value="{{r.device_id.id}}">{{ r.device_id.type }}</input>
-                                                            </label>
-                                                        {% endif %}
-                                                    {% endfor %}
-                                                </td>
+                                            <thead>
+                                            <th>#</th>
+                                            {% for row in node_list %}
+                                                <th>{{ row }}</th>
                                             {% endfor %}
+                                            </thead>
                                         </tr>
-                                    {% endfor %}
-                                    </tbody>
-                                </table>
+                                        <tbody>
+                                        {% for i in resource_info %}
+                                            <tr>
+                                                <th>{{ i.type }}</th>
+                                                {% for n in node_list %}
+                                                    <td>
+                                                        {% for r in resource_list %}
+                                                            {% if r.node_id.id == n.id and r.device_id.id == i.id %}
+                                                                <label class="checkbox-inline">
+                                                                    <input type="checkbox" name="resource_group"
+                                                                           value="{{ r.device_id.id }}">{{ r.device_id.type }}</input>
+                                                                </label>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    </td>
+                                                {% endfor %}
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
-              </div>
-               <!--div class="form-group">
+                    <!--div class="form-group">
                     <label for="number_of_nodes" class="col-xs-2 control-label">Number of nodes</label>
                     <div class="col-xs-4">
                         <div class="ui-widget">
@@ -202,45 +207,45 @@
                     </div>
                     <div class="col-xs-6"><p class="form-hint">Number of nodes you expect to request (informative)</p></div>
                </div-->
-          </div>
+                </div>
 
-          <div id="active_group">
-              <div class="form-group">
-                  <!--label for="active_time" class="col-xs-2 control-label">Timeline</label-->
-                  <div class="col-xs-10">
-                      <!--<div class="ui-widget">
+                <div id="active_group">
+                    <div class="form-group">
+                        <!--label for="active_time" class="col-xs-2 control-label">Timeline</label-->
+                        <div class="col-xs-10">
+                            <!--<div class="ui-widget">
                            <select id="lazy_time" name="lazy_times" class="form-control" value="{{ lazy_time }}" >
                            {% for row in sim_os_list %}
                                 <option value="{{ row }}" label="{{ row }}" ></option>
                            {% endfor %}
                            </select>
                       </div>-->
-                  </div>
-                  <!--div class="col-xs-6">
-                    <p class="form-hint">The pre-defined operating system package</p>
-                  </div-->
-              </div>
-          </div>
+                        </div>
+                        <!--div class="col-xs-6">
+                          <p class="form-hint">The pre-defined operating system package</p>
+                        </div-->
+                    </div>
+                </div>
 
-          <div id="lazy_group" hidden="hidden">
-              <div class="form-group">
-                  <!--label for="lazy_time" class="col-xs-2 control-label">Timeline</label-->
-                  <div class="col-xs-10">
-                      <!--<div class="ui-widget">
+                <div id="lazy_group" hidden="hidden">
+                    <div class="form-group">
+                        <!--label for="lazy_time" class="col-xs-2 control-label">Timeline</label-->
+                        <div class="col-xs-10">
+                            <!--<div class="ui-widget">
                            <select id="lazy_time" name="lazy_times" class="form-control" value="{{ lazy_time }}" >
                            {% for row in sim_os_list %}
                                 <option value="{{ row }}" label="{{ row }}" ></option>
                            {% endfor %}
                            </select>
                       </div>-->
-                  </div>
-                    <!--div class="col-xs-6">
-                        <p class="form-hint">The pre-defined operating system package</p>
-                    </div-->
-              </div>
-          </div>
+                        </div>
+                        <!--div class="col-xs-6">
+                            <p class="form-hint">The pre-defined operating system package</p>
+                        </div-->
+                    </div>
+                </div>
 
-          <!--div class="form-group">
+                <!--div class="form-group">
             <label for="authority_hrn" class="col-xs-2 control-label">Authority</label>
                 <div class="col-xs-4">
                     <div class="ui-widget">
@@ -250,22 +255,23 @@
             <div class="col-xs-6"><p class="form-hint">An authority responsible for vetting your slice</p></div>
         </div-->
 
-          <div class="form-group">
-              <label for="purpose" class="col-xs-2 control-label">Experiment purpose</label>
-              <div class="col-xs-4">
-                  <div class="ui-widget">
-                      <textarea id="purpose" name="purpose" class="form-control" style="height:110px;" placeholder="Purpose" required>{{ purpose }}</textarea>
-                  </div>
-              </div>
-              <div class="col-xs-6"><p class="form-hint">Purpose of your experiment (informative)</p></div>
-          </div>
+                <div class="form-group">
+                    <label for="purpose" class="col-xs-2 control-label">Experiment purpose</label>
+                    <div class="col-xs-4">
+                        <div class="ui-widget">
+                            <textarea id="purpose" name="purpose" class="form-control" style="height:110px;"
+                                      placeholder="Purpose" required>{{ purpose }}</textarea>
+                        </div>
+                    </div>
+                    <div class="col-xs-6"><p class="form-hint">Purpose of your experiment (informative)</p></div>
+                </div>
 
-          <button class="submit btn btn-default col-xs-12" type="submit">Request Slice</button>
-      </fieldset>
-    </form>
-</div>
+                <button class="submit btn btn-default col-xs-12" type="submit">Request Slice</button>
+            </fieldset>
+        </form>
+    </div>
 
-<!--script>
+    <!--script>
 jQuery(document).ready(function(){
     var availableTags = [
      {% if authorities %}

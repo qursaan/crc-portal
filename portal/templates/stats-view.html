@@ -22,12 +22,13 @@
         <div class="col col-md-6">
             <h4>Personal Stats</h4>
             <h5>Plan: {{ user_plan }} ({{ user_quota_size }} hr/month)</h5>
-            Reservation usage: <span class="pull-right strong">{{ user_usage }}hr </span>
+            Reservation usage current month: <span class="pull-right strong">{{ user_usage }}hr</span>
         </div>
     </div>
     <div class="row d-flex justify-content-center mt-5">
         <div class="col-md-10">
             <h5>Current Month: ({{ curr_start }} : {{ curr_end }})</h5>
+            <h6>Used: {{ user_usage_p }}%</h6>
             <canvas id="pieChart"></canvas>
         </div>
         <div class="col-md-10">
@@ -41,24 +42,52 @@
     <script>
         window.onload = function () {
             var ctxL = document.getElementById("lineChart").getContext('2d');
-            var gradientFill = ctxL.createLinearGradient(0, 0, 0, 290);
-            gradientFill.addColorStop(0, "rgba(173, 53, 186, 1)");
-            gradientFill.addColorStop(1, "rgba(173, 53, 186, 0.1)");
+            var gradientFill1 = ctxL.createLinearGradient(0, 0, 0, 290);
+            gradientFill1.addColorStop(0, "rgba(173, 53, 186, 1)");
+            gradientFill1.addColorStop(1, "rgba(173, 53, 186, 0.1)");
+            var gradientFill2 = ctxL.createLinearGradient(0, 0, 0, 290);
+            gradientFill2.addColorStop(0, "rgba(13, 53, 188, 1)");
+            gradientFill2.addColorStop(1, "rgba(13, 53, 188, 0.1)");
+            var gradientFill3 = ctxL.createLinearGradient(0, 0, 0, 290);
+            gradientFill3.addColorStop(0, "rgba(188, 53, 34, 1)");
+            gradientFill3.addColorStop(1, "rgba(188, 53, 34, 0.1)");
             var myLineChart = new Chart(ctxL, {
                 type: 'line',
                 data: {
                     labels: {{ year_l|safe }},
                     datasets: [
                         {
-                            label: "month usage",
+                            label: "Total (hr)",
                             data: {{ year_v|safe }},
-                            backgroundColor: gradientFill,
+                            backgroundColor: gradientFill1,
                             borderColor: [
                                 '#AD35BA',
                             ],
                             borderWidth: 2,
                             pointBorderColor: "#fff",
                             pointBackgroundColor: "rgba(173, 53, 186, 0.1)",
+                        },
+                        {
+                            label: "Nodes (hr)",
+                            data: {{ year_vv|safe }},
+                            backgroundColor: gradientFill2,
+                            borderColor: [
+                                '#0D35BC',
+                            ],
+                            borderWidth: 2,
+                            pointBorderColor: "#fff",
+                            pointBackgroundColor: "rgba(13, 53, 188, 0.1)",
+                        },
+                        {
+                            label: "Simulation (hr)",
+                            data: {{ year_sv|safe }},
+                            backgroundColor: gradientFill3,
+                            borderColor: [
+                                '#bc3522',
+                            ],
+                            borderWidth: 2,
+                            pointBorderColor: "#fff",
+                            pointBackgroundColor: "rgba(188, 53, 34, 0.1)",
                         }
                     ]
                 },

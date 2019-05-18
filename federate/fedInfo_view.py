@@ -54,7 +54,6 @@ class FedInfoView(LoginRequiredAutoLogoutView):
             self.errors = []
             site_name = request.POST.get('site_name', None)
             site_url = request.POST.get('site_url', None)
-            #site_ip = request.POST.get('site_ip', None)
             site_ip = request.POST.get('site_url', None)
             site_location = request.POST.get('site_location', None)
             site_contact = request.POST.get('site_contact', None)

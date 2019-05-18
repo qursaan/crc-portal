@@ -7,7 +7,7 @@
 {% block unfold_main %}
     <script type="text/javascript" src="{{ STATIC_URL }}js/Chart.min.js"></script>
     <div class="onelab-title">
-        <h2>Site Statistics</h2>
+        <h2>Statistics Report</h2>
     </div>
 
     {% if errors %}
@@ -18,39 +18,136 @@
         </ul>
     {% endif %}
 
-    <div class="row d-flex justify-content-center mt-5">
-        <div class="col-md-10">
-            <h5>Total reservation</h5>
-        </div>
-        <div class="col-md-10">
-            <h5>Last Year</h5>
-            <canvas id="lineChart"></canvas>
+    <nav>
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+            <a class="nav-item nav-link active" id="nav-g1-tab" data-toggle="tab"
+               href="#nav-g1" role="tab"
+               aria-controls="nav-contact" aria-selected="true">Total Reservations</a>
 
+            <a class="nav-item nav-link " id="nav-g2-tab" data-toggle="tab"
+               href="#nav-g2" role="tab"
+               aria-controls="nav-home" aria-selected="false">Report Query</a>
+
+            <a class="nav-item nav-link " id="nav-g3-tab" data-toggle="tab"
+               href="#nav-g3" role="tab"
+               aria-controls="nav-home" aria-selected="false">Resource Usage (%)</a>
+        </div>
+    </nav>
+    <div class="tab-content" id="nav-tabContent">
+        <div class="tab-pane fade  text-center" id="nav-g2" role="tabpanel" aria-labelledby="nav-g2-tab">
+            <br>
+            <form name="report-form" id="r-form" role="form" method="post">
+                <div class="form-row">
+                    <div class="form-group col-md-2 ">
+                        <label class="control-label" for="input_group">Group By</label>
+                        <select class="custom-select" id="input_group">
+                            <!--option selected>Choose...</option-->
+                            <option value="1">Users</option>
+                            <option value="2">Sites</option>
+                            <option value="3">Resources</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-3 ">
+                        <label class="control-label" for="input_sort">Order</label>
+                        <select class="custom-select" id="input_sort">
+                            <option value="1">Ascending</option>
+                            <option value="2">Descending</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label class="control-label" for="input_date">Duration</label>
+                        <select class="custom-select" id="input_date">
+                            <option value="a">All</option>
+                            <option value="m">Last Month</option>
+                            <option value="y">Last Year</option>
+                            <option value="b">Between...</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label class="control-label" for="input_type">Type</label>
+                        <select class="custom-select" id="input_type">
+                            <option value="h">Hours</option>
+                            <option value="c">Credits</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-2 ">
+                        <label for="g_view" class=" control-label">&nbsp</label>
+                        <button id="g_view" class="form-control btn btn-primary" type="button" name="g_reserve">View
+                        </button>
+                    </div>
+                </div>
+            </form>
+            <div class="form-group">
+                <div id="report"></div>
+                <!--div id="fade"></div-->
+                <div id="modal">
+                    <img id="loader" src="{{ STATIC_URL }}img/loading1.gif"/>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-pane fade show active text-center" id="nav-g1" role="tabpanel" aria-labelledby="nav-g1-tab">
+            <br>
+            <h5>Year Graph</h5>
+            <canvas id="lineChart"></canvas>
+        </div>
+
+        <div class="tab-pane fade text-center" id="nav-g3" role="tabpanel" aria-labelledby="nav-g3-tab">
+            <br>
+            <h5>Resources Usage</h5>
+            <canvas id="pieChart"></canvas>
         </div>
     </div>
-
 
     <script>
         window.onload = function () {
             var ctxL = document.getElementById("lineChart").getContext('2d');
-            var gradientFill = ctxL.createLinearGradient(0, 0, 0, 290);
-            gradientFill.addColorStop(0, "rgba(173, 53, 186, 1)");
-            gradientFill.addColorStop(1, "rgba(173, 53, 186, 0.1)");
+            var gradientFill1 = ctxL.createLinearGradient(0, 0, 0, 290);
+            gradientFill1.addColorStop(0, "rgba(173, 53, 186, 1)");
+            gradientFill1.addColorStop(1, "rgba(173, 53, 186, 0.1)");
+            var gradientFill2 = ctxL.createLinearGradient(0, 0, 0, 290);
+            gradientFill2.addColorStop(0, "rgba(13, 53, 188, 1)");
+            gradientFill2.addColorStop(1, "rgba(13, 53, 188, 0.1)");
+            var gradientFill3 = ctxL.createLinearGradient(0, 0, 0, 290);
+            gradientFill3.addColorStop(0, "rgba(188, 53, 34, 1)");
+            gradientFill3.addColorStop(1, "rgba(188, 53, 34, 0.1)");
             var myLineChart = new Chart(ctxL, {
                 type: 'line',
                 data: {
                     labels: {{ year_l|safe }},
                     datasets: [
                         {
-                            label: "month usage",
+                            label: "Total (hr)",
                             data: {{ year_v|safe }},
-                            backgroundColor: gradientFill,
+                            backgroundColor: gradientFill1,
                             borderColor: [
                                 '#AD35BA',
                             ],
                             borderWidth: 2,
                             pointBorderColor: "#fff",
                             pointBackgroundColor: "rgba(173, 53, 186, 0.1)",
+                        },
+                        {
+                            label: "Nodes (hr)",
+                            data: {{ year_vv|safe }},
+                            backgroundColor: gradientFill2,
+                            borderColor: [
+                                '#0D35BC',
+                            ],
+                            borderWidth: 2,
+                            pointBorderColor: "#fff",
+                            pointBackgroundColor: "rgba(13, 53, 188, 0.1)",
+                        },
+                        {
+                            label: "Simulation (hr)",
+                            data: {{ year_sv|safe }},
+                            backgroundColor: gradientFill3,
+                            borderColor: [
+                                '#bc3522',
+                            ],
+                            borderWidth: 2,
+                            pointBorderColor: "#fff",
+                            pointBackgroundColor: "rgba(188, 53, 34, 0.1)",
                         }
                     ]
                 },
@@ -59,6 +156,59 @@
                 }
             });
 
-        }
+            var ctxP = document.getElementById("pieChart").getContext('2d');
+            var myPieChart = new Chart(ctxP, {
+                type: 'pie',
+                data: {
+                    labels: {{ res_l|safe }},
+                    datasets: [{
+                        data: {{ res_v|safe }},
+                        backgroundColor: {{res_c|safe }},
+                        hoverBackgroundColor: {{res_c|safe }},
+                    }]
+                },
+                options: {
+                    responsive: true
+                }
+            });
+        };
+
+        $(document).ready(function () {
+            $("#g_view").on('click', function (event) {
+                g1 = $('#input_group').val();
+                o1 = $('#input_sort').val();
+                d1 = $('#input_date').val();
+                t1 = $('#input_type').val();
+                update_report(g1, o1, d1, t1);
+            });
+            closeModal();
+        });
+
+        function update_report(gv, ov, dv, tv) {
+            openModal();
+            $.ajax({
+                url: "stat_report",
+                type: "POST",
+                data: {the_group: gv, the_order: ov, the_date: dv, the_type: tv},
+                success: function (result) {
+                    //$scheduler.schedulerjs('update', result);
+                    document.getElementById('report').innerHTML = result;
+                    closeModal();
+                },
+                error: function (xhr, errmsg, err) {
+                    //$scheduler.schedulerjs('update', []);
+                    closeModal();
+                },
+                dataType: 'html'
+            });
+        };
+
+        function openModal() {
+            document.getElementById('modal').style.display = 'block';
+        };
+
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+        };
     </script>
 {% endblock %}

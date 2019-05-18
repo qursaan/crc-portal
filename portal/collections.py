@@ -1,12 +1,11 @@
-from django.db.models import Count
-from django.db.models import F
+from django.db.models import Count,  F
 
 from federate.actions import getFedStatus
 from portal.models import VirtualNode
 
 
 def getLocalResources():
-    resources = VirtualNode.objects.annotate(type=F('device_ref__type')).values('type').annotate(count=Count('type'))
+    resources = VirtualNode.objects.values('device_ref__type', 'device_ref__image_name').annotate(count=Count('device_ref__type'))
     return resources
 
 

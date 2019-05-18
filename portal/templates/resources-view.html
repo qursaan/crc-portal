@@ -44,32 +44,33 @@
                             </tr>
                             </thead>
                             <tbody>
-                                {% for row in local_resources %}
-                                    <tr class="table-success">
-                                        <td> {{ row.type }}</td>
-                                        <td> {{ row.count }}</td>
-                                        <td>
-                                            {{ site_name }}
-                                        </td>
-                                        <td>
-                                            <img style="width: 100px;" src="{{ STATIC_URL }}img/{{ row.type }}.png"
-                                                 class="img-circle img-thumbnail"/>
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                                {% for row in remote_resources %}
-                                    <tr class="table-info">
-                                        <td> {{ row.type }}</td>
-                                        <td> {{ row.count }}</td>
-                                        <td>
-                                            {{ row.site_name }}
-                                        </td>
-                                        <td>
-                                            <img style="width: 100px;" src="{{ STATIC_URL }}img/{{ row.type }}.png"
-                                                 class="img-circle img-thumbnail"/>
-                                        </td>
-                                    </tr>
-                                {% endfor %}
+                            {% for row in local_resources %}
+                                <tr class="table-success">
+                                    <td> {{ row.device_ref__type }}</td>
+                                    <td> {{ row.count }}</td>
+                                    <td>
+                                        {{ site_name }}
+                                    </td>
+                                    <td>
+                                        <img style="width: 100px;"
+                                             src="{{ STATIC_URL }}img/{{ row.device_ref__image_name }}"
+                                             class="img-circle img-thumbnail"/>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            {% for row in remote_resources %}
+                                <tr class="table-info">
+                                    <td> {{ row.device_ref__type }}</td>
+                                    <td> {{ row.count }}</td>
+                                    <td>
+                                        {{ row.site_name }}
+                                    </td>
+                                    <td>
+                                        <img style="width: 100px;" src="{{ STATIC_URL }}img/{{ row.type }}.png"
+                                             class="img-circle img-thumbnail"/>
+                                    </td>
+                                </tr>
+                            {% endfor %}
 
                             </tbody>
                         </table>
@@ -87,13 +88,14 @@
                             <tbody>
                             {% for row in local_resources %}
                                 <tr class="table-success">
-                                    <td> {{ row.type }}</td>
+                                    <td> {{ row.device_ref__type }}</td>
                                     <td> {{ row.count }}</td>
                                     <td>
                                         {{ site_name }}
                                     </td>
                                     <td>
-                                        <img style="width: 100px;" src="{{ STATIC_URL }}img/{{ row.type }}.png"
+                                        <img style="width: 100px;"
+                                             src="{{ STATIC_URL }}img/{{ row.device_ref__image_name }}"
                                              class="img-circle img-thumbnail"/>
                                     </td>
                                 </tr>
@@ -101,7 +103,7 @@
                             </tbody>
                         </table>
                     </div>
-                <div role="tabpanel" class="tab-pane" id="fed">
+                    <div role="tabpanel" class="tab-pane" id="fed">
                         <table class="table table-hover table-sm table-bordered">
                             <thead class="thead-dark">
                             <tr>
@@ -112,19 +114,19 @@
                             </tr>
                             </thead>
                             <tbody>
-                                {% for row in remote_resources %}
-                                    <tr class="table-info">
-                                        <td>{{ row.type }}</td>
-                                        <td>{{ row.count }}</td>
-                                        <td>
-                                            {{ row.site_name }}
-                                        </td>
-                                        <td>
-                                            <img style="width: 100px;" src="{{ STATIC_URL }}img/{{ row.type }}.png"
-                                                 class="img-circle img-thumbnail"/>
-                                        </td>
-                                    </tr>
-                                {% endfor %}
+                            {% for row in remote_resources %}
+                                <tr class="table-info">
+                                    <td>{{ row.type }}</td>
+                                    <td>{{ row.count }}</td>
+                                    <td>
+                                        {{ row.site_name }}
+                                    </td>
+                                    <td>
+                                        <img style="width: 100px;" src="{{ STATIC_URL }}img/{{ row.type }}.png"
+                                             class="img-circle img-thumbnail"/>
+                                    </td>
+                                </tr>
+                            {% endfor %}
 
                             </tbody>
                         </table>

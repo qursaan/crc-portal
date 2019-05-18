@@ -33,6 +33,7 @@
                     <th>Site Name</th>
                     <th>IP</th>
                     <th>Created</th>
+                    <th>Credit</th>
                     <th>Status</th>
                     <th>Action</th>
                 </tr>
@@ -43,6 +44,7 @@
                         <td> {{ row.name }} {% if row.id == 1 %} [this site]{% endif %}</td>
                         <td> {{ row.ip }}</td>
                         <td> {{ row.created }}</td>
+                        <td>{{ row.credits }}</td>
                         <td>
                             {% if row.status == 0 %}Disabled
                             {% elif row.status == 1 %}Pending
@@ -56,21 +58,30 @@
                             <div class="btn-group">
                                 {% if row.status == 2 %}
                                     <button type="button" onclick="location.href='/federation/site/d/{{ row.id }}'"
-                                        class="btn btn-sm  btn-dark">
+                                            class="btn btn-sm  btn-dark">
                                         <span class="fas fa-stop" aria-hidden="true"></span>
                                     </button>
                                 {% else %}
                                     <button type="button"
                                             onclick="location.href='/federation/site/e/{{ row.id }}'"
-                                                    class="btn btn-sm btn-dark">
+                                            class="btn btn-sm btn-dark">
                                         <span class="fas fa-play" aria-hidden="true"></span>
                                     </button>
                                 {% endif %}
-                                <!--button type="button"
-                                onclick="location.href='/federation/site/d/{#{ row.id }#}'"
+                                {% if row.id != 1 %}
+                                    <button type="button"
+                                            onclick="location.href='/federation/add/{{ row.id }}'"
+                                            class="btn btn-sm btn-dark">
+                                        <span class="fas fa-edit" aria-hidden="true"></span>
+                                    </button>
+                                {% endif %}
+                                <!--{#% if row.id != 1 %#}
+                                <button type="button"
+                                onclick="location.href='/federation/site/d/{# row.id #}'"
                                         class="btn btn-sm  btn-dark">
                                     <span class="fas fa-trash" aria-hidden="true"></span>
-                                </button-->
+                                </button>
+                            {#% endif %#}-->
                             </div>
                         </td>
                     </tr>

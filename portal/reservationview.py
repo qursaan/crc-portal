@@ -22,6 +22,7 @@ from portal.models import SimReservation, Reservation, ReservationDetail, \
     SimulationImage, TestbedImage, ResourcesInfo, VirtualNode, PhysicalNode, SimulationVM, \
     FrequencyRanges, ReservationFrequency  # , ResourceProfile
 from portal.user_access_profile import UserAccessProfile
+from portal.statview import check_user_reserve
 from .reservation_status import ReservationStatus
 from ui.topmenu import topmenu_items  # , the_user
 from unfold.loginrequired import LoginRequiredAutoLogoutView
@@ -370,7 +371,7 @@ class ReservationView(LoginRequiredAutoLogoutView):
 
             # General
             'reserve_type': reserve_type,
-            'maintenance' : maintenance,
+            'maintenance': maintenance,
         }
 
         if reserve_type == "I":
@@ -430,6 +431,11 @@ def check_availability(request):
         msg = schedule_checking(the_nodes, start_datetime, end_datetime, "sim")
         # busy_list = schedule_checking_all(start_datetime, end_datetime, "sim")
         # msg = checking_sim_time(the_nodes, start_datetime, end_datetime, the_dur)
+
+    usera = UserAccessProfile(request)
+    user_used, user_size = check_user_reserve(usera.user_obj)
+    if (user_size - user_used) < 0:
+        msg += "Sorry, Your have not credit to reserve new slot. (" + user_used + " used out of " + user_size + ")"
 
     free = "0"
     if not msg:

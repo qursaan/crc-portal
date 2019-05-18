@@ -33,16 +33,7 @@
                     </div>
                 </div>
             </div>
-                <!--div class="form-group">
-                    <div class="input-group">
-                        <div class="input-group-append">
-                            <span class="input-group-text">Federation IP URL</span>
-                        </div>
-                        <input id="site_ip" type="text" name="site_ip" class="form-control"
-                               minlength="2" value="{# if site_ip != None #}{#{ site_ip }#}{# endif #}"
-                               placeholder="Federation IP URL" required/>
-                    </div>
-                </div-->
+
             <div class="row">
                 <div class="form-group col-md-6">
                     <div class="input-group">
@@ -65,7 +56,18 @@
                     </div>
                 </div>
             </div>
-                <div class="form-group">
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <div class="input-group">
+                        <div class="input-group-append">
+                            <span class="input-group-text">Credit (per month)</span>
+                        </div>
+                        <input id="site_ip" type="number" name="site_credit" class="form-control"
+                               minlength="2" value="30"
+                               placeholder="Federation Credit Value per month" required/>
+                    </div>
+                </div>
+                <div class="form-group col-md-6">
                     <div class="input-group">
                         <div class="input-group-append">
                             <span class="input-group-text">Public Key</span>
@@ -75,38 +77,39 @@
                                   {% else %}required {% endif %}placeholder="Public Key">{{ site_pkey }}</textarea>
                     </div>
                 </div>
-                <br/>
+            </div>
+            <br/>
 
-                <div class="form-group">
-                    <div class="col-md-2"></div>
-                    <div class="col-md-10">
-                        <div id="validation_error" class="" role="alert"></div>
-                    </div>
+            <div class="form-group">
+                <div class="col-md-2"></div>
+                <div class="col-md-10">
+                    <div id="validation_error" class="" role="alert"></div>
                 </div>
-                <div class="form-group">
-                    <div class="col-md-2"></div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-2"></div>
 
-                    <div class="btn-toolbar col-xs-10" role="group">
+                <div class="btn-toolbar col-xs-10" role="group">
+                    <div class="btn-group" role="group">
+                        <button id="back" name="s_back" class="btn btn-danger" type="button"
+                                onclick="location.href='/federation/list/'">
+                            Back
+                        </button>
+                    </div>
+                    {% if site_info == 0 %}
                         <div class="btn-group" role="group">
-                            <button id="back" name="s_back" class="btn btn-danger" type="button"
-                                    onclick="location.href='/federation/list/'">
-                                Back
+                            <button id="validation" name="s_validate" class="btn btn-warning" type="button">
+                                Validate
                             </button>
                         </div>
-                        {% if site_info == 0 %}
-                            <div class="btn-group" role="group">
-                                <button id="validation" name="s_validate" class="btn btn-warning" type="button">
-                                    Validate
-                                </button>
-                            </div>
-                        {% endif %}
-                        <div class="btn-group" role="group">
-                            <button id="save_info" name="s_save" class="submit btn btn-success" type="submit">
-                                Save
-                            </button>
-                        </div>
+                    {% endif %}
+                    <div class="btn-group" role="group">
+                        <button id="save_info" name="s_save" class="submit btn btn-success" type="submit">
+                            Save
+                        </button>
                     </div>
                 </div>
+            </div>
 
 
         </fieldset>
