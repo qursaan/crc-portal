@@ -3,7 +3,7 @@ __author__ = 'pirate'
 import base64
 import json
 import urllib
-from crc.settings import BACKENDIP
+from crc.settings import BACKENDIP, BACKEND_RUN
 
 # USER_HOME = "/home/crc-users/"
 
@@ -12,6 +12,8 @@ BACKEND_IP = BACKENDIP #"193.227.16.199"
 
 # User Management ####################################################
 def create_backend_user(username, password):
+    if not BACKEND_RUN:
+        return 1
     post_data = {
         "username": username,
         "password": password
@@ -58,7 +60,8 @@ def vm_shutdown(vm_name):
 # Slicing ############################################################
 def create_slice(username, start_time, end_time, node_list):
     # TODO: Remove and update backend services to pass user ontime
-    return 1
+    if not BACKEND_RUN :
+        return 1
     post_data = {
         'username': username,
         'nodes_list': node_list,

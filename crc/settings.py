@@ -103,7 +103,7 @@ MAX_SIM_DURATION = 24 * 7
 MAX_BUK_DURATION = 24 * 7
 # @upgraded
 SITE_ID = 1
-
+BACKEND_RUN = False
 # File Browser Default Directory
 # FILEBROWSER_DIRECTORY = "uploads/"
 THUMBNAIL_HIGH_RESOLUTION = True
