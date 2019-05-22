@@ -67,7 +67,7 @@
 
                             <input id="slice_name" type="text" name="slice_name" class="form-control user-input"
                                    minlength="2"
-                                   value="{{ slice_name }}" placeholder="Testing X" required/>
+                                   value="{{ slice_name }}" placeholder="" required/>
                         </div>
                         <small id="nameHelp" class="form-text text-muted">The name of the slice you wish to create
                         </small>
@@ -614,7 +614,7 @@
                 $("#active_time .date").datepicker('option', 'minDate', '1d');
                 //$( "#active_time .time .end" ).timepicker('option', 'maxTime' , (3600*23) );
                 //$( "#active_time .time" ).timepicker('option', 'durationTime' , 3600 );
-                $("#active_time .date.start").removeAttr("disabled");
+                $("#active_time .date.start").removeAttr("readonly");
                 $("#active_time .time").val('');
             } else {
                 var d = curr_datetime;
@@ -629,7 +629,8 @@
                 $("#active_time .time").val('');
                 //$( "#active_time .date" ).val(moment.format('DD-MMMM-YYYY'));
                 $("#active_time .date").datepicker('setDate', d);
-                $("#active_time .date.start").attr("disabled", "disabled");
+                //$("#active_time .date").val(d);
+                $("#active_time .date.start").attr("readonly", "readonly");
             }
             v_range = 0;
         });
