@@ -40,7 +40,8 @@ apt-get install -y postfix
 echo ""
 echo "--------------------------------------------------------------"
 echo "############## 4 # install python 3.5           ##############"
-echo "--------------------------------------------------------------"wget https://www.python.org/ftp/python/3.5.0/Python-3.5.0.tgz
+echo "--------------------------------------------------------------"
+wget https://www.python.org/ftp/python/3.5.0/Python-3.5.0.tgz
 tar xzvf Python-3.5.0.tgz
 (cd Python-3.5.0 && ./configure)
 (cd Python-3.5.0 && make)

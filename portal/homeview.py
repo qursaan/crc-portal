@@ -10,7 +10,7 @@ from django.template import RequestContext
 # from django.template.loader    import get_template
 # from django.template           import Context
 # from portal.models             import PendingUser
-from portal.models import SiteConfig
+from portal.models import SiteSettings
 from federate.models import Site
 from crc import settings
 from crc.configengine import ConfigEngine
@@ -76,9 +76,9 @@ class HomeView(FreeAccessView):
     # login-ok sets state="Welcome to CRC" in urls.py
     def get(self, request, state=None):
         try:
-            site_conf = SiteConfig.objects.get(id=1)
-        except SiteConfig.DoesNotExist:
-            site_conf = SiteConfig(id=1)
+            site_conf = SiteSettings.objects.get(id=1)
+        except SiteSettings.DoesNotExist:
+            site_conf = SiteSettings(id=1)
             site_conf.fed_status = 0
             site_conf.save()
 

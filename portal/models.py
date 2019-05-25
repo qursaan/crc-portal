@@ -344,7 +344,7 @@ class SimReservation(models.Model):
     details = models.TextField(default='NA')
 
 
-class SiteConfig(models.Model):
+class SiteSettings(models.Model):
     # federation services 0-disabled 1-enabled
     fed_status = models.IntegerField(default=0)
 
