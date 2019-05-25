@@ -3,7 +3,7 @@ from django.contrib import admin
 from portal.models import MyUser, Platform, Account, \
     PhysicalNode, ResourcesInfo, VirtualNode, NodeConnection, SimulationVM, FrequencyRanges, \
     UserImage, TestbedImage, SimulationImage, \
-    Authority, PendingSlice, SiteSettings, \
+    Authority, PendingSlice, \
     Reservation, SimReservation, ReservationFrequency, Quota , ReservationDetail
 
 
@@ -126,6 +126,6 @@ class PendingSliceAdmin(admin.ModelAdmin):
         'status',)
 
 
-@admin.register(SiteSettings)
-class SiteConfigAdmin(admin.ModelAdmin):
-    list_display = ('id', 'fed_status')
+#@admin.register(SiteConf)
+#class SiteConfigAdmin(admin.ModelAdmin):
+#    list_display = ('id', 'fed_status')

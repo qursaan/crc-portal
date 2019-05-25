@@ -4,7 +4,7 @@ import urllib
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 
-from federate.actions import getFedStatus, setFedStatus
+from portal.actions import get_fed_status, set_fed_status
 # from federate.fed_backend import fed_start, fed_stop
 from federate.models import Users, Site
 from portal.models import MyUser, PhysicalNode
@@ -29,7 +29,7 @@ class FedView(LoginRequiredAutoLogoutView):
         n_remote_resources = '#'
 
         context = super(FedView, self).get_context_data(**kwargs)
-        context['fed_service'] = getFedStatus()
+        context['fed_service'] = get_fed_status()
         context['n_local_user'] = n_local_user
         context['n_remote_user'] = n_remote_user
         context['n_remote_site'] = n_remote_site
@@ -56,7 +56,7 @@ def get_n_local_users(request):
 def federate_status(request):
     if request.method != 'GET':
         return HttpResponseRedirect("/")
-    n = getFedStatus()
+    n = get_fed_status()
     if n is not None:
         return HttpResponse(n, content_type="text/plain")
     return HttpResponse('error', content_type="text/plain")
@@ -112,7 +112,7 @@ def control_running_federate(request):
 
                 # get_site_users()
                 '''
-            setFedStatus(True)
+            set_fed_status(True)
             issuccess = 1
             ##FED_RUN = 1  # Run service flag
         except:
@@ -123,7 +123,7 @@ def control_running_federate(request):
     else:
         print("##### STOP Federation #####")
         try:
-            setFedStatus(False)
+            set_fed_status(False)
             issuccess = 1
         except:
             print("CANNOT STOP: Server not response")

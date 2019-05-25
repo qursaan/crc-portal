@@ -11,6 +11,24 @@ from portal.models import Authority, MyUser, PendingSlice, \
     PendingAuthority, VirtualNode, FrequencyRanges, \
     Reservation, ReservationDetail, SimReservation, SimulationVM, ReservationFrequency
 from .reservation_status import ReservationStatus
+from portal.models import SiteConf
+
+
+# ************* federation services ************** #
+def get_fed_status():
+    if SiteConf.objects.count()>0:
+        return  SiteConf.objects.get(id=1).fed_status
+    return 0
+
+
+def set_fed_status(enabled):
+    newStatus = 0
+    if enabled:
+        newStatus = 1
+    site_conf = SiteConf.objects.get(id=1)
+    site_conf.fed_status = newStatus
+    site_conf.save()
+    return site_conf.fed_status
 
 
 # ************* Default Scheduling Slice ************** #

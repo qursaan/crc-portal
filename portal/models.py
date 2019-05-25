@@ -5,6 +5,12 @@ from django.utils import timezone
 SHA1_RE = re.compile('^[a-f0-9]{40}$')
 
 
+class SiteConf(models.Model):
+    # federation services 0-disabled 1-enabled
+    fed_status = models.IntegerField(default=0)
+    created = models.DateTimeField(default=timezone.now)
+
+
 class PendingUser(models.Model):
     # NOTE We might consider migrating the fields to CharField, which would
     # simplify form creation in forms.py
@@ -342,11 +348,6 @@ class SimReservation(models.Model):
     created = models.DateTimeField(default=timezone.now)
     last_action = models.DateTimeField(null=True)
     details = models.TextField(default='NA')
-
-
-class SiteSettings(models.Model):
-    # federation services 0-disabled 1-enabled
-    fed_status = models.IntegerField(default=0)
 
 
 class SharingPolicy(models.Model):
