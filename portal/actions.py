@@ -17,7 +17,7 @@ from portal.models import SiteConf
 # ************* federation services ************** #
 def get_fed_status():
     if SiteConf.objects.count()>0:
-        return  SiteConf.objects.get(id=1).fed_status
+        return SiteConf.objects.get(id=1).fed_status
     return 0
 
 

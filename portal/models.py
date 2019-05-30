@@ -6,9 +6,12 @@ SHA1_RE = re.compile('^[a-f0-9]{40}$')
 
 
 class SiteConf(models.Model):
-    # federation services 0-disabled 1-enabled
+#    # federation services 0-disabled 1-enabled
     fed_status = models.IntegerField(default=0)
     created = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return self.fed_status
 
 
 class PendingUser(models.Model):

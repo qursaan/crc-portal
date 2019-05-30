@@ -7,7 +7,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from portal.actions import get_fed_status, set_fed_status
 # from federate.fed_backend import fed_start, fed_stop
 from federate.models import Users, Site
-from portal.models import MyUser, PhysicalNode
+from portal.models import MyUser, PhysicalNode, SiteConf
 from portal.user_access_profile import UserAccessProfile
 from ui.topmenu import topmenu_items  # , the_user
 from unfold.loginrequired import LoginRequiredAutoLogoutView
@@ -69,7 +69,7 @@ def control_running_federate(request):
     is_running = request.POST.get('is_running', None)
     if is_running is None:
         return HttpResponse("error: Please go back and try again", content_type="text/plain")
-    # site_conf = SiteConfig.objects.get(id=1)
+    # site_conf = SiteConf.objects.get(id=1)
 
     issuccess = 0
     # global FED_RUN
@@ -115,8 +115,8 @@ def control_running_federate(request):
             set_fed_status(True)
             issuccess = 1
             ##FED_RUN = 1  # Run service flag
-        except:
-            print("ERROR READING")
+        except Exception as es:
+            print("ERROR READING" , "ERROR FED SERVICE:", es.message)
             issuccess = 0
             ## FED_RUN = 0
 
