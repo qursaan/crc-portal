@@ -1,6 +1,6 @@
 from django.db.models import Count, F
 
-from portal.actions import get_fed_status
+#from portal.actions import get_fed_status
 from portal.models import VirtualNode
 
 
@@ -11,7 +11,7 @@ def getLocalResources():
 
 
 def getSharedResources():
-    resources = VirtualNode.objects.none()
+    #resources = VirtualNode.objects.none()
     #if get_fed_status() == 1:
     resources = VirtualNode.objects.filter(node_ref__shared=False).annotate(type=F('device_ref__type')) \
         .values('type').annotate(count=Count('type'))
