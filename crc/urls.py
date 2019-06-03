@@ -21,6 +21,7 @@ from django.conf.urls.static import static
 import portal.dashboardview
 import portal.homeview
 from django.urls import path,re_path
+from rest_framework.authtoken.views import obtain_auth_token
 # qursaan: removed
 # from filebrowser.sites import site
 
@@ -71,7 +72,7 @@ urlpatterns = [
     # captcha
     # url(r'^captcha/', include('captcha.urls')),
 
-    url(r'^api-auth/', include('rest_framework.urls')),
+    url(r'^api-auth/', obtain_auth_token),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 if settings.DEBUG:

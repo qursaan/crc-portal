@@ -6,7 +6,7 @@ GRANT ALL PRIVILEGES ON PORTAL.* TO 'portaluser'@'localhost';
 GRANT ALL PRIVILEGES ON *.* TO 'portaluser'@'localhost';
 FLUSH PRIVILEGES;
 
-BEGIN TRANSACTION;
+START TRANSACTION;
 ;
 INSERT INTO PORTAL.portal_authority
 (id,site_name, site_authority, site_abbreviated_name,site_url,address_city,address_state,address_country,authority_hrn,created,email)
@@ -19,7 +19,7 @@ INSERT INTO PORTAL.portal_platform VALUES(1,'crc','CRC VT-Lab');
 INSERT INTO PORTAL.portal_quota VALUES(1,'FREE', 10, 30);
 UPDATE PORTAL.portal_account set quota_ref_id = 1;
 ;
-INSERT INTO PORTAL.portal_account(id,user_ref_id,platform_ref_id,auth_type,config,quota_ref)
+INSERT INTO PORTAL.portal_account(id,user_ref_id,platform_ref_id,auth_type,config,quota_ref_id)
  VALUES(1,1,1,'managed',NULL,1);
 ;
 INSERT INTO PORTAL.portal_physicalnode VALUES(1,'Node 1','crc',0,3,3,0,'node1');

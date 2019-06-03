@@ -23,11 +23,11 @@ read -p "Install MySQL (Y/N): " -n 1 -r
 echo    # (optional) move to a new line
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-    #wget https://dev.mysql.com/get/mysql-apt-config_0.8.9-1_all.deb
-    #dpkg -i mysql-apt-config_0.8.9-1_all.deb
-    #apt-get update
+    wget https://dev.mysql.com/get/mysql-apt-config_0.8.9-1_all.deb
+    dpkg -i mysql-apt-config_0.8.9-1_all.deb
+    apt-get update
     apt-get install -y mysql-server
-    #apt-get install -y libsqlite3-dev
+    apt-get install -y libsqlite3-dev
     apt-get install -y libmysqlclient-dev
 fi
 echo ""
@@ -109,9 +109,9 @@ echo "--------------------------------------------------------------"
 echo "############## Finish installing all requirements ############"
 echo "--------------------------------------------------------------"
 echo ""
-
-## solve common error
-## apt-get autoclean
-## apt-get update
-##apt-get upgrade
-##apt-get install -f
+echo "* Do the following:"
+echo "1. install DB see baseDB file"
+echo "2. grap the source: git clone https://github.com/qursaan/crc-portal.git"
+echo "3. build using rebuild.sh"
+echo "4. solve any error appear"
+echo "5. run: python manage.py runserver 0:8888"
