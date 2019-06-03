@@ -329,10 +329,13 @@ class ReservationView(LoginRequiredAutoLogoutView):
         sim_img_list = SimulationImage.objects.all()
         omf_img_list = TestbedImage.objects.all()
 
+        user_used, user_size = check_user_reserve(usera.user_obj)
+
         template_env = {
             'topmenu_items': topmenu_items('Request a slice', page.request),
             'username': usera.username,
             'errors': self.errors,
+
             'slice_name': request.POST.get('slice_name', slice_name),
             'server_type': request.POST.get('server_type', ''),
             'request_type': request.POST.get('request_type', ''),
@@ -364,6 +367,10 @@ class ReservationView(LoginRequiredAutoLogoutView):
             'purpose': request.POST.get('purpose', ''),
             'email': self.user_email,
             'user_hrn': user_hrn,
+            'user_size': user_size,
+            'user_used': user_used,
+            'user_free': user_size-user_used,
+
             # 'login'         : user.username,
             # 'cc_myself'     : True,
             'time_now': timezone.now(),
@@ -432,10 +439,6 @@ def check_availability(request):
         # busy_list = schedule_checking_all(start_datetime, end_datetime, "sim")
         # msg = checking_sim_time(the_nodes, start_datetime, end_datetime, the_dur)
 
-    usera = UserAccessProfile(request)
-    user_used, user_size = check_user_reserve(usera.user_obj)
-    if (user_size - user_used) < 0:
-        msg += "Sorry, Your have not credit to reserve new slot. (" + user_used + " used out of " + user_size + ")"
 
     free = "0"
     if not msg:

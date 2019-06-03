@@ -279,6 +279,7 @@
                                                                            node-id="{{ n.id }}"
                                                                            device-id="{{ i.id }}"
                                                                            title="{{ r.device_ref.type }}"
+                                                                           credit="{{ i.credit_value }}"
                                                                            autocomplete="off"/>
                                                                     {{ r.device_ref.type }}
                                                                 </label>
@@ -305,9 +306,20 @@
                                     <span class="input-group-text">No. of Resources: </span>
                                 </div>
                                 <input id="n_nodes" name="n_nodes" value="0" type="text"
-                                       class="form-control user-input"
-                                       id="n_resources" readonly required/>
+                                       class="form-control user-input" readonly required/>
                             </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <div class="input-group">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">Total Credit: </span>
+                                </div>
+                                <input id="n_credits" name="n_credits" value="0" type="text"
+                                       class="form-control user-input" readonly/>
+                            </div>
+                            <small class="form-text text-muted">
+                                    {{ user_used }} used out of {{ user_size}}.
+                                </small>
                         </div>
                     </div>
                     {% if not maintenance %}
@@ -420,10 +432,14 @@
         var select_type = "omf";
         var n_nodes = 0;
         var v_range = 0;
+        var n_credits = 0;
         var n_usrp = 0;
         var maintenance = {% if maintenance %}true{% else %}false{% endif %};
+        var user_free = {{ user_free }};
 
         $(document).ready(function () {
+            $('#n_nodes').val(n_nodes);
+            $('#n_credits').val(n_credits);
             $('#sim_group').hide();
             $('#freq_group').hide();
             $("#proc-range-min").slider({
@@ -480,7 +496,7 @@
             } else if (v_type == 2) {
                 $('#validation_error').attr('class', "alert alert-danger");
             } else if (v_type == 3) {
-                $('#validation_error').attr('class', "alert alert-danger");
+                $('#validation_error').attr('class', "alert alert-warning");
             }
         };
 
@@ -513,6 +529,8 @@
                 set_validation(3, "Please check availability first before submit");
                 return false;
             }
+
+
             return (true);
         };
         /*******************************************check availability*********/
@@ -527,6 +545,14 @@
                 set_validation(2, "Please select date and time range");
                 return false;
             }
+
+            if(n_credits>user_free){
+                set_validation(2, "Out of Credits!. " +
+                    "You still have ({{ user_free }} Credit out of {{  user_size }}). " +
+                "This reservation required "+ n_credits +" Credits.");
+                return false;
+            }
+
 
             if (select_type == "omf") {
                 var select_node = [];
@@ -687,8 +713,11 @@
         /*******************************************ALL*********/
         $(":checkbox[name='resource_group']").on("change", function () {
             $(this).parent().toggleClass("checked", this.checked);
+            curr_credit = Number( $(this).attr('credit'));
             if (this.checked) {
                 n_nodes += 1;
+                n_credits += curr_credit;
+
                 if (this.title == "USRP") {
                     n_usrp += 1;
                     if (n_usrp == 1 && !maintenance)
@@ -696,6 +725,8 @@
                 }
             } else {
                 n_nodes -= 1;
+                n_credits -= curr_credit;
+
                 if (this.title == "USRP") {
                     n_usrp -= 1;
                     if (n_usrp == 0)
@@ -703,6 +734,7 @@
                 }
             }
             $('#n_nodes').val(n_nodes);
+            $('#n_credits').val(n_credits);
             set_validation(0, "...");
             v_range = 0;
         });
