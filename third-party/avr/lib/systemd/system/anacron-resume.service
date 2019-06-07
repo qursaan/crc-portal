@@ -1,0 +1,14 @@
+[Unit]
+Description=Run anacron jobs at resume
+After=suspend.target
+After=hibernate.target
+After=hybrid-sleep.target
+
+[Service]
+ExecStart=/bin/systemctl --no-block --fail start anacron.service
+
+[Install]
+WantedBy=suspend.target
+WantedBy=hibernate.target
+WantedBy=hybrid-sleep.target
+

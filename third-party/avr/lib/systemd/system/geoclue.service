@@ -1,0 +1,8 @@
+[Unit]
+Description=Location Lookup Service
+
+[Service]
+Type=dbus
+BusName=org.freedesktop.GeoClue2
+User=geoclue
+ExecStart=/usr/lib/geoclue-2.0/geoclue -t 5
