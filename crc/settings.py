@@ -170,7 +170,7 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [os.path.join(HTTPROOT, "templates"),
                  os.path.join(AUTHROOT, "templates"), ],
-        #'APP_DIRS': True,
+        # 'APP_DIRS': True,
         'OPTIONS': {
             'debug': DEBUG,
             # 'builtins': ['insert_above.templatetags.insert_tags', ],
