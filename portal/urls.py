@@ -34,7 +34,8 @@ from portal.experimentview import ExperimentView
 # from django.conf.urls import url, include
 # from rest_framework import routers
 # from portal import views
-
+from portal.assuitcontrolview import simple_upload, manage_variables,\
+    manage_variables_user
 # router = routers.DefaultRouter()
 # router.register(r'users', views.UserViewSet)
 # router.register(r'groups', views.GroupViewSet)
@@ -107,7 +108,6 @@ urlpatterns = [
     re_path(r'^lab/current/slice_o_cancel/(\d{1,10})/?$', slice_o_pending_cancel),
     re_path(r'^lab/current/slice_s_cancel/(\d{1,10})/?$', slice_s_pending_cancel),
     re_path(r'^lab/control/?$', SliceControlView.as_view(), name="slice_control"),
-    re_path(r'^lab/control/gen_access_token/?$', control_access_token),
     re_path(r'^lab/control/control_load_image/?$', control_load_image),
     re_path(r'^lab/control/control_save_image/?$', control_save_image),
     re_path(r'^lab/control/control_check_load/?$', control_check_load),
@@ -128,6 +128,10 @@ urlpatterns = [
     re_path(r'^lab/reservation/check_availability?$', check_availability),
     re_path(r'^lab/reservation_a/check_availability?$', check_availability),
 
+    # Profile
+    re_path(r'^upload/?$', simple_upload, name='account'),
+    re_path(r'^Manage_Varaibles/?$', manage_variables, name='account'),
+    re_path(r'^Manage_Varaibles_user/?$', manage_variables_user, name='account'),
     # Others
     # url(r'/?$', un_complete_page),
     # url(r'^reservation/new/?$', uncomplete),

@@ -1,0 +1,12 @@
+# usbmuxd ("Apple Mobile Device" muxer listening on /var/run/usbmuxd)
+
+# Check for systemd running as pid 1
+TEST=="/run/systemd/system/", ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="05ac", ATTR{idProduct}=="12[9a][0-9a-f]", ENV{USBMUX_SUPPORTED}="1", ATTR{bConfigurationValue}="0", OWNER="usbmux", TAG+="systemd", ENV{SYSTEMD_WANTS}="usbmuxd.service", RUN+="/usr/bin/pkill -x -SIGUSR2 usbmux" GOTO="usbmuxd_systemd_end"
+
+# Legacy udev
+ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="05ac", ATTR{idProduct}=="12[9a][0-9a-f]", ENV{USBMUX_SUPPORTED}="1", ATTR{bConfigurationValue}="0", OWNER="usbmux", RUN+="/usr/sbin/usbmuxd -u -U usbmux"
+
+LABEL="usbmuxd_systemd_end"
+
+# Exit usbmuxd when the last device is removed
+ACTION=="remove", SUBSYSTEM=="usb", ENV{PRODUCT}=="5ac/12[9a][0-9a-f]/*", ENV{INTERFACE}=="255/*", RUN+="/usr/sbin/usbmuxd -x"
