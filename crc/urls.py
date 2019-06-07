@@ -51,6 +51,8 @@ urlpatterns = [
     path('lab/', include('lab.urls')),
     # Federation
     path('federation/', include('federate.urls')),
+    # assiut
+    path('assiut/', include('howdy.urls')),
     # filer
     #url(r'^filer/', include('filer.urls')),
 

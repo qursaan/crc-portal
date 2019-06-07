@@ -44,6 +44,7 @@ class AccountView(LoginRequiredAutoLogoutView):
         user_fname = '?'
         user_lname = '?'
         user_authu = 'Unknown Authority'
+        user_ID = '_'
 
         # for user_detail in user_details:
         if user_detail:
@@ -60,6 +61,7 @@ class AccountView(LoginRequiredAutoLogoutView):
             user_fname = user_detail.first_name
             user_lname = user_detail.last_name
             user_authu = user_detail.authority_hrn
+            user_ID = user_detail.id
 
         context = super(AccountView, self).get_context_data(**kwargs)
         # context['principal_acc'] = principal_acc_list
@@ -68,6 +70,7 @@ class AccountView(LoginRequiredAutoLogoutView):
         # context['my_users'] = my_users
         # context['my_slices'] = my_slices
         # context['my_auths'] = my_auths
+        context['id'] = user_ID
         context['user_status'] = user_status
         context['person'] = self.request.user
         context['firstname'] = user_fname  # config.get('firstname',"?")

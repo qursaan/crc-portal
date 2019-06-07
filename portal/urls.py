@@ -31,6 +31,8 @@ from portal.supportview import GuideView, TGuideView  # SupportView,
 from portal.testbedview import TestbedView, check_status
 from portal.validationview import ValidatePendingView
 
+from portal.assuitcontrolview import simple_upload, manage_variables,\
+    manage_variables_user
 # from django.conf.urls import url
 
 # from django.conf.urls import url
@@ -131,6 +133,10 @@ urlpatterns = [
     re_path(r'^lab/reservation/check_availability?$', check_availability),
     re_path(r'^lab/reservation_a/check_availability?$', check_availability),
 
+    # Profile
+    re_path(r'^upload/?$', simple_upload, name='account'),
+    re_path(r'^Manage_Varaibles/?$', manage_variables, name='account'),
+    re_path(r'^Manage_Varaibles_user/?$', manage_variables_user, name='account'),
     # Others
     # url(r'/?$', un_complete_page),
     # url(r'^reservation/new/?$', uncomplete),
