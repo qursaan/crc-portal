@@ -35,6 +35,8 @@ from portal.experimentview import ExperimentView
 # from rest_framework import routers
 # from portal import views
 
+from portal.assuitcontrolview import simple_upload, manage_variables,\
+    manage_variables_user
 # router = routers.DefaultRouter()
 # router.register(r'users', views.UserViewSet)
 # router.register(r'groups', views.GroupViewSet)
@@ -128,6 +130,10 @@ urlpatterns = [
     re_path(r'^lab/reservation/check_availability?$', check_availability),
     re_path(r'^lab/reservation_a/check_availability?$', check_availability),
 
+    # Profile
+    re_path(r'^upload/?$', simple_upload, name='account'),
+    re_path(r'^Manage_Varaibles/?$', manage_variables, name='account'),
+    re_path(r'^Manage_Varaibles_user/?$', manage_variables_user, name='account'),
     # Others
     # url(r'/?$', un_complete_page),
     # url(r'^reservation/new/?$', uncomplete),

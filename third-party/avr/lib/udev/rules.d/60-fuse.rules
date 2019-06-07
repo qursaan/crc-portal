@@ -1,0 +1,7 @@
+KERNEL=="fuse", MODE="0666", OPTIONS+="static_node=fuse"
+ACTION=="add", SUBSYSTEM=="module", KERNEL=="fuse", RUN+="/bin/mount -t fusectl fusectl /sys/fs/fuse/connections"
+
+# 0600 is the default mode set by udev
+# don't let non-root users access it or you risk memory rw attack on
+# processes using this device
+#KERNEL=="cuse", MODE="0600", OPTIONS+="static_node=cuse"

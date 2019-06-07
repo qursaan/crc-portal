@@ -1,0 +1,158 @@
+<!--
+ #howdy/templates/index.html
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Howdy!</title>
+    </head>
+    <body>
+        <h1>Welcome in CRC Assiut</h1>
+
+      <a href="/assiut/upload/">Upload Hex File</a> &
+     <a href="/assiut/about/">About Me</a>
+    </body>
+</html>-->
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head><title>
+    Home Page
+</title>
+    <link href="{{ MEDIA_URL }}Styles/Site.css" rel="stylesheet" type="text/css"/>
+    <style type="text/css">
+    .style1
+    {
+        text-align: justify;
+        font-family: Verdana;
+        color: #000000;
+    }
+    .style2
+    {
+        color: #000000;
+            width: 124px;
+        }
+
+
+
+
+
+
+
+
+    </style>
+    <style type="text/css">
+        .style1
+        {
+            text-align: center;
+        }
+        .menu
+        {
+            text-align: center;
+        }
+        .menu
+        {
+            text-align: center;
+        }
+        .menu
+        {
+            text-align: center;
+        }
+        .menu
+        {
+            text-align: center;
+        }
+        .style2
+        {
+            width: 124px;
+        }
+        .style3
+        {
+            width: 123px;
+        }
+
+
+
+
+
+
+
+
+    </style>
+</head>
+<body>
+
+
+<div class="page">
+    <div class="header">
+        <div class="title">
+            <table width=100%>
+                <tr>
+                    <td class="style2">
+                        <img id="Image1" src="{{ MEDIA_URL }}Picture1.jpg" style="height:114px;width:123px;"/>
+
+
+                    </td>
+                    <td align=center class="style3"><img id="Image2" src="{{ MEDIA_URL }}Picture2.png"
+                                                         style="height:114px;width:123px;"/></td>
+                    <td>
+                        <h1>
+                            IoT Testbed for Interdisciplinary Research - Assiut University</h1></td>
+                </tr>
+            </table>
+        </div>
+        <div class="clear hideSkiplink" style="background-color:white">
+            <table  width="65%">
+                <tr>
+                    <td class="style1" align="center">
+                        <table width="80%">
+
+                            <tr>
+                                <td class="style1" align="center">
+
+                            <tr>
+                                <td><a class="level1" href="/assiut">Home</a></td>
+                                <td><a class="level1" href="/assiut/upload/">Upload HexFile</a></td>
+                               <td><a class="level1" href="/assiut/viewdevices/">View Devices</a></td>
+                                <td><a class="level1" href="Reserver.aspx">View Reservations</a></td>
+                                <td><a class="level1" href="/assiut/about/">About</a></td>
+                            </tr>
+
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <hr/>
+    <div class="main">
+
+        <h3>
+            Welcome to Assiut IoT Testbed</h3>
+
+        <p class="style1">
+
+        </p>
+        <p class="style1" style="text-align:justify">
+            The main goal of <strong>Assiut IoT Testbed</strong> is to aid students/researchers to create and
+            monitor experiments related to IoT via a remotely configurable IoT test bed that
+            is consists of different types of cores (Arduino, Atmega16 uc, STM ARM,
+            Raspberry PI and NodeMCU) with different communication capabilities (LTE, 3G,
+            WIFI, Zigbee....). Also, each node will be equipped by the commonly used sensors
+            (Temperature, humidity, ...etc) The nodes are remotely accessible, after central
+            reservation, via the, in-site, server that is connected to the different nodes
+            core. User (researcher or student) will be able to reserve some of the available
+            nodes for a certain time then access the cores of the reserved nodes (Arduino
+            for example) and load his firmware to build his desired topology.</p>
+
+
+    </div>
+</div>
+<div class="footer">
+
+    <strong>Assiut University</strong></div>
+
+
+</body>
+</html>
