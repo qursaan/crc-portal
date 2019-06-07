@@ -1,0 +1,9 @@
+[Unit]
+Description=iOS USB multiplexing daemon
+
+[Service]
+Type=simple
+GuessMainPID=false
+PIDFile=/var/run/usbmuxd.pid
+ExecStart=/usr/sbin/usbmuxd -f -u -U usbmux
+ExecStop=/usr/sbin/usbmuxd -X

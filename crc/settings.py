@@ -141,6 +141,7 @@ INSTALLED_APPS = (
     'portal',
     'lab',
     'federate',
+    'howdy',
     'rest_framework',
 )
 
@@ -342,3 +343,13 @@ REST_FRAMEWORK = {
         #'rest_framework.authentication.SessionAuthentication',
     ]
 }
+
+
+BOWER_COMPONENTS_ROOT = os.path.join(BASE_DIR, 'third-party')
+
+BOWER_PATH = '/usr/local/bin/bower'
+
+BOWER_INSTALLED_APPS = (
+    'd3#3.5.5',
+    'nvd3#1.7.1',
+)

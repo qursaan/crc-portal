@@ -10,23 +10,23 @@
     <h2>Testbeds Status</h2>
 </div>
 
-<div id="middle1" align="center">
+<!--div id="middle1" align="center">
     <h3>Building Map</h3>
     <div class="well">
         <img src="{{STATIC_URL}}img/topology.svg" width="700px"/>
     </div>
-</div>
+</div-->
 
 <div id="middle2" align="center">
     <h3>Nodes Information</h3>
     <div class="well">
         <form name="refresh-form" class="cmxform form-horizontal" id="refresh_form" enctype="multipart/form-data" method="post" action="" role="form" novalidate>
             <fieldset>{% csrf_token %}
-            <div id="refresh_pnl" class="btn-group" role="group">
+            <!--div id="refresh_pnl" class="btn-group" role="group">
                 <p>Last update: <span id="update_time">{{last_update}}</span>
                 <button id="refresh" class="submit btn btn-danger" type="submit" name="update_nodes">Refresh</button>
                 </p>
-            </div>
+            </div-->
 
             <table id="testbed_table" class="table table-striped table-bordered table-hover" style="border-collapse:collapse;">
                  <thead>
@@ -34,6 +34,9 @@
                         <th>Physical Node Name </th>
                         <th># Interfaces </th>
                         <th># Virtual Machine </th>
+                        <th># Control Buttons</th>
+                        <th># Variables</th>
+                        <th># Upload Hex File</th>
                     </tr>
                  </thead>
                  <tbody>
@@ -47,6 +50,56 @@
                             </td>
                             <td>{{ r.num_interface }}</td>
                             <td>{{ r.num_virtual }}</td>
+                            <td>
+                                <!-- Rounded switch -->
+                                     <form method="POST" action="" id="to_LEDS">
+                                        <label class="switch">
+                                            <input type="checkbox" checked="checked" value = "1" name="LED1" >
+                                            <span class="slider round"></span>
+                                        </label>
+                                        <br>
+                                        <!-- Rounded switch -->
+                                        <label class="switch">
+                                            <input type="checkbox" checked="checked" value = "1" name="LED2" >
+                                            <span class="slider round"></span>
+                                        </label>
+
+                                        <button class="btn btn-default btn-xs" type="submit"  class="btn btn-default"
+                                               value="{{r.id}}" name="submit_LEds"> Control
+                                        </button>
+                                    </form>
+                                </td>
+                                <td>
+                                <form method="POST" action="" id="to_vars">
+
+                                    {% for ni in var_list %}
+                                    {% if ni.deviceID_id == r.id %}
+
+
+                                    <button class="btn btn-default btn-xs" type="submit" class="btn btn-default"
+                                            value="{{ ni.varName}}_{{r.id}}" name="var_name"> {{ni.varName}}
+                                    </button>
+
+                                    {% endif %}
+                                    {% endfor %}
+                                    <hr/>
+                                    <button class="btn btn-default btn-xs" type="submit" class="btn btn-default"
+                                            value="{{r.id}}" name="node_id_for_vars"><span
+                                            class="glyphicon glyphicon-edit"></span>Manage Node{{r.id}} vars.
+                                    </button>
+                                </form>
+                            </td>
+                            <td>
+                                <form method="POST" action="" id="to_upload">
+
+                                    <button class="submit btn btn-danger" type="submit" class="btn btn-default"
+                                            value="{{ r.id }}"
+                                            name="upload_nodes">Upload Hex to {{r.node_name}}
+                                    </button>
+                                </form>
+
+
+                            </td>
                         </tr>
                         <tr>
                             <td colspan="4" class="hiddenRow">
@@ -85,6 +138,15 @@
                     {% endfor %}
                 </tbody>
             </table>
+
+            <div id="refresh_pnl" class="btn-group" role="group">
+                <p>
+                    <button id="refresh" class="submit btn btn-danger" type="submit" name="update_nodes"
+                            onclick="location.href='/portal/testbeds/map/'">Refresh
+                    </button>
+                </p>
+            </div>
+
             </fieldset>
             <div id="results"></div>
         </form>
@@ -92,6 +154,7 @@
 </div>
 
 <script type="text/javascript">
+/***
 update_testbeds();
 
 $('#refresh_form').on('submit', function(event){
@@ -144,7 +207,7 @@ function check_status(node_id) {
         }
     });
 };
-
+**/
 function disableRefresh() {
     document.getElementById('refresh').innerHTML = "Checking Status ...";
     document.getElementById('refresh').disabled = true;
