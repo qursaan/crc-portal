@@ -733,6 +733,11 @@
                         $('#freq_group').hide();
                 }
             }
+            if(n_credits>user_free){
+                $('#n_credits').attr('class', "text-center text-danger");
+            }else{
+                $('#n_credits').attr('class', "text-center text-success");
+            }
             $('#n_nodes').val(n_nodes);
             $('#n_credits').val(n_credits);
             set_validation(0, "...");
