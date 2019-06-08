@@ -85,6 +85,9 @@
                                 {% if sim_vm_list != None %}
                                     <option value="sim">Simulation Server</option>
                                 {% endif %}
+                                {% if reserve_type != "M" %}
+                                    <option value="emu">Node Emulations</option>
+                                {% endif %}
                             </select>
                         </div>
                         <small id="srvHelp" class="form-text text-muted">
@@ -233,6 +236,43 @@
                             <small class="form-text text-muted">
                                 The pre-defined operating system image
                             </small>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="emu_group">
+                    <div class="row">
+                        <div class="form-group col-md-12">
+                            <div class="input-group">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">XML File</span>
+                                </div>
+                                <input type="file" id="emu_file"  class="file-upload"/>
+
+                            </div>
+                            <small class="form-text text-muted">
+                                Use The GUI tools to generate your XML <a href="{{ STATIC_URL }}files/GUI_tool.tar.xz">download</a>
+                            </small>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <div class="input-group form-check">
+                                <label for="emu_topology" class="form-check-label">Use Topology Mapping
+                                </label>
+                                <input class="form-check-input" type="checkbox"
+                                        name="emu_topology" id="emu_topology" value=""
+                                        title="Topology Mapping" autocomplete="off"/>
+                            </div>
+                            <small class="form-text text-muted">
+                                *
+                            </small>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <div class="input-group">
+                                <button id="check_emu" class="btn btn-info form-control" type="button">Validate
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -438,6 +478,7 @@
             $('#n_credits').val(n_credits);
             $('#sim_group').hide();
             $('#freq_group').hide();
+            $('#emu_group').hide();
             $("#proc-range-min").slider({
                 range: "min",
                 value: 1,
@@ -570,6 +611,16 @@
                 select_node = $('#sim_vm option:selected').val();
                 checking_availability(select_node, d1, d2, t1, t2, "sim", slice_dur, []);
             }
+            else if (select_type === "emu") {          /*Emulation Selection Validation*/
+                if(!$("#emu_file").val()){
+                    set_validation(2, "Please upload a valid XML file");
+                    return false;
+                }
+                if (n_nodes == 0) {
+                    set_validation(2, "Please run validate to upload and selected resources");
+                    return false;
+                }
+            }
         });
 
         function checking_availability(selected_node, d1, d2, t1, t2, type, duration, selected_freq) {
@@ -606,16 +657,27 @@
             if ($(this).val() === "omf") {
                 $('#omf_group').show();
                 $('#sim_group').hide();
+                $('#emu_group').hide();
                 max_duration = {{omf_max_duration}};
                 select_type = "omf";
                 if (n_usrp >= 1 && !maintenance)
                     $('#freq_group').show();
-            } else {
+            } else if ($(this).val() == "sim") {
+                $('#emu_group').hide();
                 $('#sim_group').show();
                 $('#omf_group').hide();
                 $('#freq_group').hide();
                 max_duration = {{sim_max_duration}};
                 select_type = "sim";
+            } else if ($(this).val() == "emu") {
+                $('#emu_group').show();
+                $('#sim_group').hide();
+                $('#omf_group').show();
+                $('#freq_group').hide();
+                $(":checkbox[name='resource_group']").attr("checked",  false);
+                $(":checkbox[name='resource_group']").parent().toggleClass("checked",false);
+                max_duration = 1;
+                select_type = "emu";
             }
             updateRanger();
             v_range = 0;
@@ -693,6 +755,11 @@
             set_validation(0, "...");
         }
         /*******************************************ALL*********/
+        $(":checkbox[name='resource_group']").on("click", function () {
+            if (select_type === "emu") {
+                return false;
+            }
+        });
         $(":checkbox[name='resource_group']").on("change", function () {
             $(this).parent().toggleClass("checked", this.checked);
             let curr_credit = Number( $(this).attr('credit'));
