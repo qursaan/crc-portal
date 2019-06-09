@@ -13,15 +13,17 @@ Including another URLconf
     1. Add an import:  from blog import urls as blog_urls
     2. Add a URL to urlpatterns:  url(r'^blog/', include(blog_urls))
 """
-from django.contrib.auth import views as auth_views
-from django.conf.urls import include, url
 from django.conf import settings
-from django.contrib import admin
+from django.conf.urls import  url
 from django.conf.urls.static import static
+from django.contrib import admin
+from django.contrib.auth import views as auth_views
+from django.urls import path, re_path, include
+from rest_framework.authtoken.views import obtain_auth_token
+
 import portal.dashboardview
 import portal.homeview
-from django.urls import path,re_path
-from rest_framework.authtoken.views import obtain_auth_token
+
 # qursaan: removed
 # from filebrowser.sites import site
 
@@ -43,6 +45,8 @@ the_login_view       = home_view
 
 
 urlpatterns = [
+
+
     # default view
     path('', the_default_view),
     # Portal
@@ -71,7 +75,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     # captcha
     # url(r'^captcha/', include('captcha.urls')),
-
+    path('accounts/', include('django.contrib.auth.urls')),
     url(r'^api-auth/', obtain_auth_token),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

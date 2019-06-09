@@ -1,7 +1,8 @@
 # from django.views.generic      import TemplateView
 # from django.views              import generic
-from django.urls import path, re_path  # patterns
+from django.urls import path, re_path, include  # patterns
 
+from portal.accountview import AccountView
 from portal.actions import validate_action
 from portal.contactview import ContactView
 from portal.dashboardview import DashboardView
@@ -10,8 +11,6 @@ from portal.graphicview import GraphicBuilderView
 from portal.homeview import HomeView
 # from portal.documentationview import DocumentationView
 from portal.navigation import *
-from portal.statview import StatsView, StatsAdminView, stat_report
-from portal.accountview import AccountView
 from portal.registrationview import RegistrationView
 from portal.reservationview import ReservationView, check_availability
 from portal.resourcesview import ResourcesView
@@ -20,21 +19,18 @@ from portal.schedulerview import SchedulerView, check_scheduler
 from portal.slicecontrolview import SliceControlView, \
     control_load_image, control_save_image, \
     control_check_load, control_check_save, \
-    control_remote_node, \
+    control_remote_node, control_access_token, \
     control_exe_script, control_check_exe, control_exe_abort, \
     control_lab_run, control_lab_check, control_lab_result
 from portal.slicependingview import SliceCurrentView, SliceHistoryView, \
     slice_o_pending_process, slice_s_pending_process, \
     slice_o_pending_cancel, slice_s_pending_cancel
+from portal.statview import StatsView, StatsAdminView, stat_report
 from portal.supportview import GuideView, TGuideView  # SupportView,
 # from portal.sliceview import SliceView
 from portal.testbedview import TestbedView, check_status
 from portal.validationview import ValidatePendingView
-
-# from django.conf.urls import url
-
-# from django.conf.urls import url
-
+from portal.experimentview import ExperimentView
 # from django.conf.urls import url, include
 # from rest_framework import routers
 # from portal import views
@@ -56,13 +52,13 @@ urlpatterns = [
     #    name='user_register_complete'),
 
     # password management
-    # url(r'^pass_reset/$', 'portal.django_passresetview.password_reset',
+    #re_path(r'^pass_reset/$', 'portal.django_passresetview.password_reset',
     #    {'post_reset_redirect': '/portal/password/reset/done/'}),
-    # url(r'^password/reset/done/$', 'portal.django_passresetview.password_reset_done'),
-    # url(r'^password/reset/(?P<uidb36>[0-9A-Za-z]+)-(?P<token>.+)/$',
+    #re_path(r'^password/reset/done/$', 'portal.django_passresetview.password_reset_done'),
+    #re_path(r'^password/reset/(?P<uidb36>[0-9A-Za-z]+)-(?P<token>.+)/$',
     #    'portal.django_passresetview.password_reset_confirm',
     #    {'post_reset_redirect': '/portal/password/done/'}),
-    # url(r'^password/done/$', 'portal.django_passresetview.password_reset_complete'),
+    #re_path(r'^password/done/$', 'portal.django_passresetview.password_reset_complete'),
 
     # Profile
     re_path(r'^account/?$', AccountView.as_view()),
@@ -74,7 +70,7 @@ urlpatterns = [
     path('guide/', GuideView.as_view(), name='guide'),
     path('tguide/', TGuideView.as_view(), name='teach guide'),
     path('support/documentation/', GuideView.as_view(), name='guide'),  # DocumentationView.as_view(), name='FAQ'),
-    # url(r'^experiment?$', ExperimentView.as_view(), name='experiment'),
+    path('experiment/', ExperimentView.as_view(), name='experiment'),
 
     # Validate pending requests
     re_path(r'^validate/?$', ValidatePendingView.as_view()),
@@ -111,6 +107,7 @@ urlpatterns = [
     re_path(r'^lab/current/slice_o_cancel/(\d{1,10})/?$', slice_o_pending_cancel),
     re_path(r'^lab/current/slice_s_cancel/(\d{1,10})/?$', slice_s_pending_cancel),
     re_path(r'^lab/control/?$', SliceControlView.as_view(), name="slice_control"),
+    re_path(r'^lab/control/gen_access_token/?$', control_access_token),
     re_path(r'^lab/control/control_load_image/?$', control_load_image),
     re_path(r'^lab/control/control_save_image/?$', control_save_image),
     re_path(r'^lab/control/control_check_load/?$', control_check_load),

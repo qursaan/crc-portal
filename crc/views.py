@@ -4,10 +4,7 @@
 # from django.template import RequestContext
 # from django.shortcuts import render_to_response
 
-from django.http import HttpResponse
-from django.template import Context
 # Http404,
-from django.template.loader import get_template
 
 
 # from unfold.loginrequired import FreeAccessView

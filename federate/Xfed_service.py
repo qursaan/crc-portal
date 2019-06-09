@@ -11,7 +11,6 @@ logging.basicConfig(
 
 import json, urllib
 from flask import Flask, jsonify, abort, request
-from flask_crossdomain import crossdomain
 # from flaskext.basicauth import BasicAuth
 from flaskext.mysql import MySQL
 
@@ -19,7 +18,8 @@ from flaskext.mysql import MySQL
 # from paramiko import AutoAddPolicy
 # from subprocess import call, Popen
 # import threading, os, random, string, portalocker , signal,base64
-import time, _thread, schedule, threading
+import schedule
+
 # from decorators import *
 
 app = Flask(__name__)

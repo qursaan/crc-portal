@@ -109,7 +109,7 @@
                 {% regroup labs_list by lab_ref as glab_list %}
                 {% for gf in glab_list %}
                     <!--value="{{gf.grouper.id}}"
-                    {% if forloop.counter0 = 0 %} checked="checked" {% endif %}-->
+                    {% if forloop.counter0 == 0 %} checked="checked" {% endif %}-->
                     <label><input type="radio" name="pre_exp" value="{{forloop.counter0}}"
                     data="{{gf.grouper.requirement}}">{{gf.grouper}}</input></label>
                     <div>
@@ -194,7 +194,9 @@ $(":radio[name='pre_exp']").on("change", function() {
             else if( di[0]=="devices" )
             {
                 if(di[1] =="all")
-                    continue;
+                {
+
+                }
                 else{
                     var devices = di[1].split(",");
                     for (d in devices)

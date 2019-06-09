@@ -1,18 +1,19 @@
 __author__ = 'qursaan'
 
 from django.contrib import messages
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from portal.user_access_profile import UserAccessProfile
+
 from portal.collections import getLocalResources
-#from portal.actions import get_user_by_email, get_user_type
-#from portal.modules import UserModules
-from ui.topmenu import topmenu_items#, the_user
+from portal.user_access_profile import UserAccessProfile
+# from portal.actions import get_user_by_email, get_user_type
+# from portal.modules import UserModules
+from ui.topmenu import topmenu_items  # , the_user
 from unfold.loginrequired import LoginRequiredAutoLogoutView
 from unfold.page import Page
+
+
 #from federate.rest_objects import GetLocalResources
-from portal.models import ResourcesInfo
-import json
 
 
 # TODO: @qursaan

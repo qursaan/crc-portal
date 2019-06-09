@@ -1,9 +1,5 @@
-from django.shortcuts import render
-
 # Create your views here.
-from django.contrib.auth.models import User, Group
 #from rest_framework import viewsets
-from portal.serializers import UserSerializer, GroupSerializer
 from django.views.defaults import page_not_found
 
 #class UserViewSet(viewsets.ModelViewSet):

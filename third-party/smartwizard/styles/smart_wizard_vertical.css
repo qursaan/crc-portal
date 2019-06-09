@@ -11,7 +11,7 @@
   display:block;
   margin:0;
   padding:0;
-  border: 0px solid #CCC;
+  border: 0 solid #CCC;
   overflow:visible;
   float:left;
   width:980px;/* */
@@ -21,7 +21,7 @@
   position: relative;
   margin: 0;
   padding:0;    
-  border: 0px solid #CCC;    
+  border: 0 solid #CCC;
   overflow:hidden;
   clear:right;
   height:300px;
@@ -87,9 +87,9 @@
   display:block;
   float:left;
   list-style: none;
-  padding: 0px;  
+  padding: 0;
   margin: 5px 10px 0 0;
-  border: 0px solid #CCCCCC;    
+  border: 0 solid #CCCCCC;
   background: transparent; /*#EEEEEE */
 }
 .swMain ul.anchor li{ 
@@ -99,7 +99,7 @@
   padding: 0; 
   padding-top:3px;
   padding-bottom: 3px;
-  border: 0px solid #E0E0E0;      
+  border: 0 solid #E0E0E0;
   float: left;
   clear:both;
 }
@@ -284,7 +284,7 @@
 }
 .swMain .msgBox .content {
   font: normal 12px Verdana,Arial,Helvetica,sans-serif;
-  padding: 0px;
+  padding: 0;
   float:left;
 }
 .swMain .msgBox .close {

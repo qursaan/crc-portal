@@ -1,13 +1,10 @@
-import json
-import urllib
-
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 
-from portal.actions import get_fed_status, set_fed_status
 # from federate.fed_backend import fed_start, fed_stop
-from federate.models import Users, Site
-from portal.models import MyUser, PhysicalNode, SiteConf
+from federate.models import Site
+from portal.actions import get_fed_status, set_fed_status
+from portal.models import MyUser, PhysicalNode
 from portal.user_access_profile import UserAccessProfile
 from ui.topmenu import topmenu_items  # , the_user
 from unfold.loginrequired import LoginRequiredAutoLogoutView

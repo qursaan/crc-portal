@@ -16,7 +16,7 @@ body {
 	/* font-family: "Segoe UI", "Lucida Grande", "Helvetica" , sans-serif;
 	font-size: 12pt; */
 	min-width: 1000px; /* ADDED July 2012 */
-	margin: 0px auto; /* ADDED Aug 14, 2012 */
+	margin: 0 auto; /* ADDED Aug 14, 2012 */
 }
 
 ol {
@@ -225,7 +225,7 @@ h1 {
 
 ul.errorlist li {
 	font-size: 12pt;
-  padding: 0px;
+    padding: 0;
 }
 
 /* ADDED July 27, 2012 to fix the table collapsing on itself when the browser is below a certain size */
@@ -246,7 +246,7 @@ table.profile tr td.key {
 }
 
 table.profile tr td.value {
-  padding-left: 20px;   
+  padding-left: 20px;
     min-width: 500px; /* ADDED July 27, 2012 */
 }
 
@@ -289,7 +289,7 @@ table.profile form{
   border: 2px solid #666;
   background-color: #fff;
   padding: 10px;
-  margin-right: 0px;
+  margin-right: 0;
   text-align: center;
   font-weight: bold;
 }
@@ -361,7 +361,7 @@ img.help {
 }
 
 #id_email {
-  width: 200px; 
+  width: 200px;
 }
 
 #aff_list {

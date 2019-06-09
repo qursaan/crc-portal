@@ -42,8 +42,7 @@
                 <div class="form-row">
                     <div class="form-group col-md-5 mb-5">
                         <label for="server_type" class="control-label">Hardware Type</label>
-                        <select id="server_type" name="server_type" class="custom-select form-control"
-                                value="{{ server_type }}">
+                        <select id="server_type" name="server_type" class="custom-select form-control">
                             <option value="omf" label="Testbed Nodes">Testbed Nodes</option>
                             <option value="sim" label="Simulation Server">Simulation Server</option>
                         </select>
@@ -66,7 +65,7 @@
                     <div id="scheduler"></div>
                     <!--div id="fade"></div-->
                     <div id="modal">
-                        <img id="loader" src="{{ STATIC_URL }}img/loading1.gif"/>
+                        <img id="loader" src="{{ STATIC_URL }}img/loading1.gif" alt="Loading ..."/>
                     </div>
                 </div>
                 <div class="form-group">
@@ -97,7 +96,7 @@
     </div>
 
     <script type="text/javascript">
-        var $scheduler;
+        let $scheduler;
 
 
         function update_timeline(stype, sdate) {
@@ -115,11 +114,11 @@
                     closeModal();
                 }
             });
-        };
+        }
 
         $(document).ready(function () {
             $('#server_type').change(function () {
-                if ($(this).val() == "omf") {
+                if ($(this).val() === "omf") {
                     $('#omf_group').show();
                     $('#sim_group').hide();
                 } else {
@@ -140,8 +139,8 @@
             });
 
             $("#g_reserve").on('click', function (event) {
-                stype = $('#server_type').val();
-                d1 = $('input[name="request_date"]').val();
+                const stype = $('#server_type').val();
+                const d1 = $('input[name="request_date"]').val();
                 update_timeline(stype, d1);
             });
 
@@ -151,7 +150,7 @@
             scheduler_prepare();
 
             $("#gettime").click(function () {
-                var times = $scheduler.schedulerjs('selected');
+                let times = $scheduler.schedulerjs('selected');
                 $("#times").html(times.start + ' - ' + times.end);
             });
             $("#toggle-selector-button").click(function () {
@@ -160,20 +159,20 @@
         });
 
         function scheduler_prepare() {
-            var list = {{ reserve_list|safe }};
-            var steps = [];
-            for (i = 0; i < 10; i++)
+            let list = {{ reserve_list|safe }};
+            let steps = [];
+            for (let i = 0; i < 10; i++)
                 steps.push('0' + i + ':00');
-            for (i = 10; i < 24; i++)
+            for (let i = 10; i < 24; i++)
                 steps.push(i + ':00');
             steps.push('23:59');
 
-            var snapTo = 30;
-            var pixelsPerHour = 60;
-            var headName = 'Resource Names';
-            var defaultStartTime = '09:00';
-            var defaultEndTime = '10:00';
-            var onClickAppointment = function (payload) {};
+            const snapTo = 30;
+            const pixelsPerHour = 60;
+            const headName = 'Resource Names';
+            const defaultStartTime = '09:00';
+            const defaultEndTime = '10:00';
+            let onClickAppointment = function (payload) {};
             $scheduler = $("#scheduler").schedulerjs({
                 'list': list,
                 'steps': steps,
@@ -185,14 +184,14 @@
                 'onClickAppointment': onClickAppointment
             });
             $scheduler.schedulerjs('toggleSelector');
-        };
+        }
 
         function openModal() {
             document.getElementById('modal').style.display = 'block';
-        };
+        }
 
         function closeModal() {
             document.getElementById('modal').style.display = 'none';
-        };
+        }
     </script>
 {% endblock %}

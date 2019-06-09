@@ -1,19 +1,18 @@
 #from django.conf.urls import url  # patterns
-from django.urls import path, re_path  # patterns
+from django.urls import re_path  # patterns
 
-from lab.Ins_coursesview import CoursesView
 from lab.Ins_addcourse import AddCourseView
+from lab.Ins_coursesview import CoursesView
 from lab.Ins_experimentsview import ExperimentsView, experiments_cancel
-from lab.ins_validationview import ValidatePendingView
 from lab.ins_manage_std import ManageStudentView, student_disable, student_enable
-from lab.std_courseview import StudentCoursesView, student_course_cancel
-from lab.std_addcourse import StudentAddCourseView
-from lab.std_experimentsview import StudentExperimentsView
-from lab.std_reserve import StudentReserveView, check_availability_bulk
+from lab.ins_validationview import ValidatePendingView
 from lab.library_addview import AddLibraryView
 from lab.library_view import LibraryView, download
+from lab.std_addcourse import StudentAddCourseView
+from lab.std_courseview import StudentCoursesView, student_course_cancel
+from lab.std_experimentsview import StudentExperimentsView
+from lab.std_reserve import StudentReserveView, check_availability_bulk
 from portal.reservationview import ReservationView, check_availability
-
 
 urlpatterns = [
     # Instructors

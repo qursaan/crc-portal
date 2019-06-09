@@ -28,132 +28,37 @@
                         <td class="key">Email</td>
                         <td class="value">
                             <span id="emailval" class="value">{{ person.email }}</span>
-                            <!--button-- class="btn btn-dark" type="button" id="edit_email"
-                                    onclick="editAlert()"
-                                    title="To change your affiliation please contact the administrator">
-                                <span class="glyphicon glyphicon-question-sign"></span> Edit
-                            </button-->
+
                         </td>
                     </tr>
                     <tr class="odd">
                         <td class="key">Password</td>
                         <td class="value">
-                            <!--button class="btn btn-dark" type="button" title="Password" name="edit_pass"
-                                    id="edit_pass">
-                                <span class="glyphicon glyphicon-edit"></span> Edit
-                            </button-->
+
                             <span id="passval" class="value">******** </span>
-                            <!--span class="hide_this" id="span_pass">
-		    				<button type="button" class="btn btn-default btn-xs" title="Cancel" id="cancel_pass_change"> Cancel </button>
-		    				<div style='display:none;' id="pass_form">
-		    					<input type='hidden' value=''/>
-							</div>
-		    				<table id="edit_password">
-		      					<tr>
-									<td>Enter password: </td>
-									<td class="field"> <input type="password" name="password" id="password"/> </td>
-		      						</tr>
-		      						<tr>
-									<td>Confirm password: </td>
-									<td class="field"> 
-			  							<input type="password" name="confirmpassword" id="confirmpassword"/>
-			  							<input type="submit" class="btn btn-default btn-xs" name="submit_pass"
-                                               value="Save"/>
-									</td>
-		      					</tr>
-		    				</table>
-		  				    </span-->
+
                         </td>
                     </tr>
                     <tr class="even">
                         <td class="key">Full Name</td>
                         <td class="value">
                             <span id="nameval" class="value">{{ fullname }} </span>
-                            <!--span class="hide_this" id="span_name">
-		    				<button type="button" class="btn btn-default btn-xs" title="Cancel" id="cancel_name_change"> Cancel </button>
-		    				<div style='display:none;'><input type='hidden' name='nameform'/></div>
-		    				<input id="fname" type="text" name="fname" class="required" maxlength="200"
-                                   value="{{ firstname }}"/>
-		    				<input id="lname" type="text" name="lname" class="required" maxlength="200"
-                                   value="{{ lastname }}"/>
-		    				<input type="submit" class="btn btn-default btn-xs" name="submit_name" value="Save"/>
-		  				    </span>
-                            <button class="btn btn-dark" type="button" title="Full Name" id="edit_name">
-                                <span class="glyphicon glyphicon-edit"></span> Edit
-                            </button-->
+
                         </td>
                     </tr>
                     <tr class="odd">
                         <td class="key">Authority</td>
                         <td class="value">
                             <span id="affval" class="value">{{ authority }}</span>
-                            <!--button class="btn btn-dark" type="button" id="edit_auth"
-                                    onclick="editAlert()"
-                                    title="To change your authority please contact the administrator">
-                                <span class="glyphicon glyphicon-question-sign"></span> Edit
-                            </button-->
+
                         </td>
                     </tr>
-                    <!--tr class="even">
-                          <td class="key">Generate Keys</td>
-                          <td>
-                            <input type="submit" name="generate" class="btn btn-danger btn-xs" value="Generate a new Key Pair" id="generate_keypair"
-                                   onclick="return confirm('Are you sure? If you do so, your current credentials will be overwritten.');"
-                                   title="It will generate a new key Pair and your current credentials will be overwritten."/>
-                          </td>
-                    </tr-->
-                    <!--tr class="odd">
-                          <td class="key">Public Key</td>
-                          <td class="value">
-                            <span id="keyval" class="value">******** </span>
-                            <span class="hide_this" id="span_upload">
-                                  <button type="button" class="btn btn-default btn-xs" title="Cancel" id="cancel_upload"> Cancel </button>
-                                  <div style='display:none;'>
-                                      <input type='hidden'  name='upload'  /></div>
-                                      <input type="file" name="pubkey" class="required" id="pubkey"/>
-                                      <input class="btn btn-default btn-xs" name="upload_key" id="upload_key"  type="submit" title="Upload your public key" value="Upload"
-                                       onclick="return confirm('Are you sure? It will overwrite your current credentials and you have delegate it manually.');"/>
-                            </span>
-                            <div style='display:none;'> <input type='hidden'  name='dload'  /> </div>
-                            <button type="submit" name="dl_pubkey" class="btn btn-default btn-xs" title="Download your public key" id="dl_file">
-                                <span class="glyphicon glyphicon-download"></span> Download
-                            </button>
-                            <button class="btn btn-default btn-xs" id="upload_file" type="button" title="Upload a public key">
-                                <span class="glyphicon glyphicon-upload"></span> Upload
-                            </button>
-                          </td>
-                    </tr-->
-                    <!--tr class="even" id="pkey_row">
-				 	{%if 'N/A' not in user_private_key%}
-	      				<td class="key">Private Key </td> <!--Hide if priv_key doesn't exist in myslice platform--
-						<td class="value">********<a href="#">
-							<button type="submit" name="dl_pkey" class="btn btn-default btn-xs" title="Download your privaye key" id="dl_pkey">
-								<span class="glyphicon glyphicon-download"></span> Download
-							</button>
-							<input class="btn btn-danger btn-xs" id="delete"
-								   name="delete" type="submit"  value="Delete"
-								   title="Delete your private key"
-								   onclick="return confirm('Are you sure? If you do so, you have to delegate your credentials manually.');" />
-	    				</td>
-				 	{%else%}
-						<td class="key">Private Key </td> <!-- Hide if priv_key doesn't exist in myslice platform   --
-						<td class="value">********<a href="#">
-							<button type="submit" name="dl_pkey" class="btn btn-default btn-xs disabled" title="Download your privaye key" id="dl_pkey">
-								<span class="glyphicon glyphicon-download"></span> Download
-							</button>
-							<input class="btn btn-danger btn-xs disabled" id="delete" name="delete" type="submit" title="Delete your private key"
-									value="Delete"	/>
-						</td>
-				 	{%endif%}
-	  			</tr-->
-                    <!--tr class="odd">
-                      <td colspan="2">
-                            <p class="message" id="pkey_del_msg"><b> Tradeoff:</b> Ease-of-use vs Security.<br>
-                              <b>Ease-of-use:</b> Automatic account delegation. Don't delete private key.<br>
-                              <b>Security:</b> Manual account delegation. Download & Delete private key.
-                          </p>
-                      </td>
-                    </tr-->
+
+                    {% if 'N/A' not in user_private_key %}
+
+                    {% else %}
+
+                    {% endif %}
                 </table>
             </fieldset>
         </form>

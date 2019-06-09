@@ -4,17 +4,16 @@
 # from django.contrib.auth.models import User
 # from django.core.mail           import send_mail
 from django.shortcuts import render
-# from django.template.loader     import render_to_string
-
-# from crc.settings               import SUPPORT_EMAIL
-from ui.topmenu import topmenu_items
-from unfold.loginrequired import FreeAccessView
-from unfold.page import Page
 
 # @qursaan
 from portal.forms import CaptchaTestForm
-from portal.models import Authority, MyUser, Account, Platform, Quota
 from portal.modules import *
+# from crc.settings               import SUPPORT_EMAIL
+from unfold.loginrequired import FreeAccessView
+from unfold.page import Page
+
+
+# from django.template.loader     import render_to_string
 
 
 # @qursaan: comment

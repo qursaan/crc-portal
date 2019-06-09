@@ -31,7 +31,7 @@
         height: 50px !important;
     }
     .custom-control {
-        padding-left: 0px !important;
+        padding-left: 0 !important;
     }
     </style>
     <div class="onelab-title">
@@ -80,7 +80,7 @@
                                 <span class="input-group-text">Hardware Type</span>
                             </div>
                             <select id="server_type" name="server_type" class="custom-select form-control user-input"
-                                    value="{{ server_type }}" autocomplete="off">
+                                   autocomplete="off">
                                 <option value="omf" selected="selected">Testbed Nodes</option>
                                 {% if sim_vm_list != None %}
                                     <option value="sim">Simulation Server</option>
@@ -91,17 +91,14 @@
                             Determine the Type of Experiment Server
                         </small>
                     </div>
-                </div>
 
-                <div class="row">
                     <div class="form-group col-md-6">
                         <div class="input-group">
                             <div class="input-group-append">
                                 <span class="input-group-text">Request Plan</span>
                             </div>
 
-                            <select id="request_type" name="request_type" class="custom-select form-control user-input"
-                                    value="{{ request_type }}">
+                            <select id="request_type" name="request_type" class="custom-select form-control user-input">
                                 <option value="active_t">Normal (Scheduling)</option>
                                 {% if reserve_type == "R" or reserve_type == "M"%}
                                     <option value="lazy_t">Urgent (Same-Day)</option>
@@ -167,8 +164,7 @@
                                 <div class="input-group-append">
                                     <span class="input-group-text">Virtual Machine</span>
                                 </div>
-                                <select id="sim_vm" name="sim_vm" class="custom-select form-control user-input"
-                                        value="{{ sim_vm }}">
+                                <select id="sim_vm" name="sim_vm" class="custom-select form-control user-input">
                                     {% for row in sim_vm_list %}
                                         <option value="{{ row.id }}"
                                                 label="{{ row.hv_name }} [{{ row.specification }}]">
@@ -224,8 +220,8 @@
                                     <span class="input-group-text">OS Image Version</span>
                                 </div>
 
-                                <select id="sim_img" name="sim_img" class="custom-select form-control user-input"
-                                        value="{{ sim_img }}">
+                                <select id="sim_img" name="sim_img"
+                                        class="custom-select form-control user-input">
                                     {% for row in sim_img_list %}
                                         <option value="{{ row.id }}"
                                                 label="{{ row.image_name }}::{{ row.image_type }}">
@@ -263,7 +259,7 @@
                                             <th>VM {{ i.id }}</th>
                                                 <td>
                                                     <img src="{{ STATIC_URL }}img/{{ i.type }}.png"
-                                                        class="img-thumbnail img-fluid"/>
+                                                        class="img-thumbnail img-fluid" alt="."/>
                                                 </td>
                                             {% for n in node_list %}
                                                 <td>
@@ -329,8 +325,8 @@
                                 <div class="input-group-append">
                                     <span class="input-group-text">Startup Image</span>
                                 </div>
-                                <select id="omf_img" name="omf_img" class="custom-select form-control user-input"
-                                        value="{{ omf_img }}">
+                                <select id="omf_img" name="omf_img"
+                                        class="custom-select form-control user-input">
                                     {% for row in omf_img_list %}
                                         <option value="{{ row.id }}"
                                                 label="{{ row.image_name }}::{{ row.image_type }}">
@@ -427,15 +423,15 @@
 
     <script>
         /******************************************* Main ****************/
-        var max_duration = {{omf_max_duration}};
-        var curr_datetime = new Date("{{ time_now.isoformat }}");
-        var select_type = "omf";
-        var n_nodes = 0;
-        var v_range = 0;
-        var n_credits = 0;
-        var n_usrp = 0;
-        var maintenance = {% if maintenance %}true{% else %}false{% endif %};
-        var user_free = {{ user_free }};
+        let max_duration = {{omf_max_duration}};
+        let curr_datetime = new Date("{{ time_now.isoformat }}");
+        let select_type = "omf";
+        let n_nodes = 0;
+        let v_range = 0;
+        let n_credits = 0;
+        let n_usrp = 0;
+        let maintenance = {% if maintenance %}true{% else %}false{% endif %};
+        let user_free = {{ user_free }};
 
         $(document).ready(function () {
             $('#n_nodes').val(n_nodes);
@@ -476,72 +472,66 @@
             $("#slice_duration").val($("#slider-range-min").slider("value"));
 
             $("#active_time").datepair();
-            /*$(":checkbox").each(function() {
-                if(this.checked)
-                    n_nodes+=1;
-                $('#n_nodes').val(n_nodes);
-                set_validation(0,"...");
-                v_range = 0;
-            });*/
             if(maintenance){
                 $('#slice_name').attr("disabled","disabled");
             }
         });
 
         function set_validation(v_type, msg) {
-            $('#validation_error').removeAttr('class');
-            $('#validation_error').html(msg);
-            if (v_type == 1) {
+            $('#validation_error').removeAttr('class').html(msg);
+            let e_num = Number(v_type);
+            if (e_num === 1) {
                 $('#validation_error').attr('class', "alert alert-success");
-            } else if (v_type == 2) {
+            } else if (e_num === 2) {
                 $('#validation_error').attr('class', "alert alert-danger");
-            } else if (v_type == 3) {
+            } else if (e_num === 3) {
                 $('#validation_error').attr('class', "alert alert-warning");
             }
-        };
+        }
 
         function validate() {
             set_validation(0, "");
-            var milliseconds = $('#active_time').datepair('getTimeDiff');
-            var hrs = milliseconds / 1000 / 60 / 60;
+            const milliseconds = $('#active_time').datepair('getTimeDiff');
+            const hrs = milliseconds / 1000 / 60 / 60;
             if (isNaN(hrs) || hrs <= 0) {
                 set_validation(2, "Time interval is not valid");
                 return false;
             }
 
-            var slice_dur = $('input[name="slice_duration"]').val();
+            const slice_dur = $('input[name="slice_duration"]').val();
             if (slice_dur > hrs) {
                 set_validation(2, "Duration is large than time interval");
                 return false;
             }
 
-            if (select_type == "omf") {          /*OMF Selection Validation*/
-                if (n_nodes == 0) {
+            if (select_type === "omf") {          /*OMF Selection Validation*/
+                if (n_nodes === 0) {
                     set_validation(2, "Please select at least one node.");
                     return false;
                 }
             }
-            else if (select_type == "sim") {     /*SIM Selection Validation*/
+            else if (select_type === "sim") {     /*SIM Selection Validation*/
                 //return true;
             }
 
-            if (v_range == 0) {
+            if (v_range === 0) {
                 set_validation(3, "Please check availability first before submit");
                 return false;
             }
 
-
             return (true);
-        };
+        }
         /*******************************************check availability*********/
         $("#check_time_btn").on('click', function (event) {
             set_validation(0, "...");
-
-            d1 = $('input[name="req_time_date1"]').val();
-            d2 = $('input[name="req_time_date2"]').val();
-            t1 = $('input[name="req_time_time1"]').val();
-            t2 = $('input[name="req_time_time2"]').val();
-            if (d1 == "" || d2 == "" || t1 == "" || t2 == "") {
+            let select_node = [];
+            let select_freq = [];
+            let slice_dur ;
+            const d1 = $('input[name="req_time_date1"]').val();
+            const d2 = $('input[name="req_time_date2"]').val();
+            const t1 = $('input[name="req_time_time1"]').val();
+            const t2 = $('input[name="req_time_time2"]').val();
+            if (d1 === "" || d2 === "" || t1 === "" || t2 === "") {
                 set_validation(2, "Please select date and time range");
                 return false;
             }
@@ -553,34 +543,31 @@
                 return false;
             }
 
-
-            if (select_type == "omf") {
-                var select_node = [];
+            if (select_type === "omf") {
                 $('input[name="resource_group"]:checked').each(function () {
                     select_node.push($(this).val());
                 });
 
-                var select_freq = [];
                 $('input[name="freq_group"]:checked').each(function () {
                     select_freq.push($(this).val());
                 });
 
-                if (select_node.length == 0) {
+                if (select_node.length === 0) {
                     set_validation(2, "Please select at least one node");
                     return false;
                 }
 
-                if (n_usrp > 0 && select_freq.length == 0 && !maintenance) {
+                if (n_usrp > 0 && select_freq.length === 0 && !maintenance) {
                     set_validation(2, "Please select at least one frequency range");
                     return false;
                 }
-                 var slice_dur = $('input[name="slice_duration"]').val();
+                slice_dur = $('input[name="slice_duration"]').val();
 
                 checking_availability(select_node, d1, d2, t1, t2, "omf", slice_dur, select_freq);
             }
-            else if (select_type == "sim") {
-                var slice_dur = $('input[name="slice_duration"]').val();
-                var select_node = $('#sim_vm option:selected').val();
+            else if (select_type === "sim") {
+                slice_dur = $('input[name="slice_duration"]').val();
+                select_node = $('#sim_vm option:selected').val();
                 checking_availability(select_node, d1, d2, t1, t2, "sim", slice_dur, []);
             }
         });
@@ -600,7 +587,7 @@
                     the_freq: selected_freq
                 },
                 success: function (result) {
-                    if (result['free'] == "1") {
+                    if (result['free'] === "1") {
                         set_validation(1, "<strong>Congratulation</strong>, its a Free Slot/Resources");
                         v_range = 1;
                     } else {
@@ -613,10 +600,10 @@
                     set_validation(2, "Server Error, try again later");
                 }
             });
-        };
+        }
         /*******************************************change server type*********/
         $('#server_type').change(function () {
-            if ($(this).val() == "omf") {
+            if ($(this).val() === "omf") {
                 $('#omf_group').show();
                 $('#sim_group').hide();
                 max_duration = {{omf_max_duration}};
@@ -635,29 +622,24 @@
         });
         /*******************************************change request type*********/
         $('#request_type').change(function () {
-            if ($(this).val() == "active_t") {
+            if ($(this).val() === "active_t") {
                 $('#active_group').show();
                 $('#lazy_group').hide();
                 $("#active_time .date").datepicker('option', 'maxDate', '1m');
                 $("#active_time .date").datepicker('option', 'minDate', '1d');
-                //$( "#active_time .time .end" ).timepicker('option', 'maxTime' , (3600*23) );
-                //$( "#active_time .time" ).timepicker('option', 'durationTime' , 3600 );
                 $("#active_time .date.start").removeAttr("readonly");
                 $("#active_time .time").val('');
             } else {
-                var d = curr_datetime;
-                var n = d.getHours();
-                var t = (n - 1) * 60 * 60; // to reserve the current hour ??
+                const d = curr_datetime;
+                const n = d.getHours();
+                const t = (n - 1) * 60 * 60; // to reserve the current hour ??
                 $('#lazy_group').show();
                 $('#active_group').hide();
                 $("#active_time .date").datepicker('option', 'maxDate', '1w');
                 $("#active_time .date").datepicker('option', 'minDate', '0d');
                 $("#active_time .time").timepicker('option', 'minTime', t);
-                //$( "#active_time .time" ).timepicker('option', 'maxTime' , (23*60*60) );
                 $("#active_time .time").val('');
-                //$( "#active_time .date" ).val(moment.format('DD-MMMM-YYYY'));
                 $("#active_time .date").datepicker('setDate', d);
-                //$("#active_time .date").val(d);
                 $("#active_time .date.start").attr("readonly", "readonly");
             }
             v_range = 0;
@@ -692,8 +674,8 @@
         });
 
         function updateRanger() {
-            var milliseconds = $('#active_time').datepair('getTimeDiff');
-            var hrs = milliseconds / 1000 / 60 / 60;
+            const milliseconds = $('#active_time').datepair('getTimeDiff');
+            const hrs = milliseconds / 1000 / 60 / 60;
 
             //console.log(hrs);
             if (isNaN(hrs)) {
@@ -709,27 +691,27 @@
 
             v_range = 0;
             set_validation(0, "...");
-        };
+        }
         /*******************************************ALL*********/
         $(":checkbox[name='resource_group']").on("change", function () {
             $(this).parent().toggleClass("checked", this.checked);
-            curr_credit = Number( $(this).attr('credit'));
+            let curr_credit = Number( $(this).attr('credit'));
             if (this.checked) {
                 n_nodes += 1;
                 n_credits += curr_credit;
 
-                if (this.title == "USRP") {
+                if (this.title === "USRP") {
                     n_usrp += 1;
-                    if (n_usrp == 1 && !maintenance)
+                    if (n_usrp === 1 && !maintenance)
                         $('#freq_group').show();
                 }
             } else {
                 n_nodes -= 1;
                 n_credits -= curr_credit;
 
-                if (this.title == "USRP") {
+                if (this.title === "USRP") {
                     n_usrp -= 1;
-                    if (n_usrp == 0)
+                    if (n_usrp === 0)
                         $('#freq_group').hide();
                 }
             }

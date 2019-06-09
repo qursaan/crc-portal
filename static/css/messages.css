@@ -1,5 +1,5 @@
 /* the buttons area */
-div.messages-buttons { padding: 0px 20px 8px 50px; }
+div.messages-buttons { padding: 0 20px 8px 50px; }
 div.messages-buttons>input { margin: 3px 10px 3px 20px ; }
 div.messages-buttons>span { font-weight: bold; }
 
@@ -11,11 +11,11 @@ ul.messages {
     text-indent: -280px;
 
 }
-span.messages-date { 
+span.messages-date {
     font-size: 75%;
     width: 200px ;
     float: left;
-    padding: 0px 10px 0px 10px;
+    padding: 0 10px 0 10px;
 }
 
 span.messages-level {

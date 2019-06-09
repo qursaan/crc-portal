@@ -1217,7 +1217,7 @@ body .ui-tooltip {
 }
 .ui-widget-shadow {
 	margin: 6px 0 0 6px;
-	padding: 0px;
+	padding: 0;
 	background: #e69700 url("images/ui-bg_flat_0_e69700_40x100.png") 50% 50% repeat-x;
 	opacity: .2;
 	filter: Alpha(Opacity=20); /* support: IE8 */

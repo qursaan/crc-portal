@@ -4,7 +4,7 @@ import json
 from datetime import timedelta
 
 from dateutil import parser
-#from dateutil.parser import parse
+# from dateutil.parser import parse
 from django.db.models import Q
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
@@ -14,10 +14,9 @@ from portal.actions import utc_to_timezone
 from portal.models import SimReservation, VirtualNode, SimulationVM, \
     ReservationDetail
 from portal.user_access_profile import UserAccessProfile
-from .reservation_status import ReservationStatus
-from ui.topmenu import topmenu_items  # , the_user
 from unfold.loginrequired import LoginRequiredAutoLogoutView
 from unfold.page import Page
+from .reservation_status import ReservationStatus
 
 
 class SchedulerView(LoginRequiredAutoLogoutView):

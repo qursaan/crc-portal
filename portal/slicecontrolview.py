@@ -6,20 +6,20 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.template.loader import render_to_string
 
+from crc.settings import BACKENDIP
 from lab.actions import get_control_options
 #
 from portal.models import Reservation, ReservationDetail, SimReservation, \
     TestbedImage, UserImage, SimulationImage, ReservationFrequency
 from portal.navigation import action_load_save_image, omf_exe, remote_node, \
     check_task_progress, check_exe_progress, slice_on_time, abort_exe_progress, \
-    lab_run, lab_check, lab_result
+    lab_run, lab_check, lab_result, access_token_gen
 # from portal.actions import get_user_by_email, get_user_type
 #
 from portal.user_access_profile import UserAccessProfile
 from ui.topmenu import topmenu_items  # , the_user
 from unfold.loginrequired import LoginRequiredAutoLogoutView
 from unfold.page import Page
-from crc.settings import BACKENDIP
 
 
 class SliceControlView(LoginRequiredAutoLogoutView):
@@ -48,16 +48,16 @@ class SliceControlView(LoginRequiredAutoLogoutView):
         show_lab = False
         lab_ref = None
         lab_param_list = []
-       # vnc_link_access = None
-       # vnc = False
+        # vnc_link_access = None
+        # vnc = False
         usera = UserAccessProfile(self.request)
-        user = usera.user_obj # get_user_by_email(the_user(self.request))
+        user = usera.user_obj  # get_user_by_email(the_user(self.request))
         if usera.access_all is False:
-            user_image_list = UserImage.objects.filter(user_ref=user,username=usera.session_username).all()
+            user_image_list = UserImage.objects.filter(user_ref=user, username=usera.session_username).all()
         elif user:
             user_image_list = UserImage.objects.filter(user_ref=user).all()
 
-        user_type = usera.user_type # get_user_type(user)
+        user_type = usera.user_type  # get_user_type(user)
 
         slice_id = page.request.session.get('slice_id', None)
         stype = page.request.session.get('stype', None)
@@ -85,7 +85,8 @@ class SliceControlView(LoginRequiredAutoLogoutView):
             return HttpResponseRedirect("/portal/lab/current/")
 
         if user_type == 3:
-            allow_crt, allow_img, allow_ssh, supp_file, lab_ref, lab_param_list = get_control_options(stype, current_slice)
+            allow_crt, allow_img, allow_ssh, supp_file, lab_ref, lab_param_list = get_control_options(stype,
+                                                                                                      current_slice)
             if lab_ref:
                 show_lab = True
 
@@ -101,7 +102,7 @@ class SliceControlView(LoginRequiredAutoLogoutView):
             'node_list': node_list,
             'freq_list': freq_list,
             'output': output_script,
-            'username': usera.username, # the_user(self.request),
+            'username': usera.username,  # the_user(self.request),
             'user_id': user.id,
             'title': t,
             'stype': stype,
@@ -112,12 +113,20 @@ class SliceControlView(LoginRequiredAutoLogoutView):
             'show_lab': show_lab,
             'lab_ref': lab_ref,
             'lab_param_list': lab_param_list,
-            'vnc_link_access': "http://"+BACKENDIP+":6080/vnc.html",
-            'terminal_ip': "https://"+BACKENDIP+":4200/"
-            #'vnc' :vnc,
+            'vnc_link_access': "http://" + BACKENDIP + ":6080/vnc.html",
+            'terminal_ip': "https://" + BACKENDIP + ":4200/"
+            # 'vnc' :vnc,
         }
         template_env.update(page.prelude_env())
         return render(request, template_name, template_env)
+
+
+
+@login_required
+def control_access_token(request):
+    if request.method != 'POST':
+        return HttpResponseRedirect("/")
+    return access_token_gen(request)
 
 
 @login_required
@@ -214,3 +223,4 @@ def control_lab_result(request):
     if request.method != 'POST':
         return HttpResponseRedirect("/")
     return lab_result(request)
+

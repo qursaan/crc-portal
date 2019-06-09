@@ -65,12 +65,12 @@ def topmenu_items (current, request):
     # print "WARNING -- please now use topmenu_items_live (label, page) toplevel_items is deprecated -- WARNING"
     return topmenu_items_static(current, request)
 
-# integrated helper function for an animated menu
-from unfold.page import Page
-from portal.models import PendingUser
 # @qursaan
 # from manifold.core.query import Query
 from plugins.topmenuvalidation import TopmenuValidation
+# integrated helper function for an animated menu
+from portal.models import PendingUser
+
 
 ### this is now the 'live' version, that has plugins
 # for asynchronous management of topmenu

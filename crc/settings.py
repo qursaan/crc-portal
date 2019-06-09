@@ -139,16 +139,6 @@ INSTALLED_APPS = (
     'portal',
     'lab',
     'federate',
-    # 'djcelery',
-    # qursaan: file manager
-    # 'grappelli',
-    # 'filebrowser',
-    # filer
-    # 'filer',
-    #'mptt',
-    #'easy_thumbnails',
-    # captcha
-    #'captcha',
     'rest_framework',
 )
 
@@ -177,7 +167,7 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [os.path.join(HTTPROOT, "templates"),
                  os.path.join(AUTHROOT, "templates"), ],
-        # 'APP_DIRS': True,
+        #'APP_DIRS': True,
         'OPTIONS': {
             'debug': DEBUG,
             # 'builtins': ['insert_above.templatetags.insert_tags', ],

@@ -1,7 +1,7 @@
 
 /* focal point */
 #image_container { position: relative; } 
-#image_container img, #image_container svg { margin: 0px; position: absolute; top: 0; left: 0;}
+#image_container img, #image_container svg { margin: 0; position: absolute; top: 0; left: 0;}
 
 /* Tile pattern as background for transparent images: */
 .transpTiling {

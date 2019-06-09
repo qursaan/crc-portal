@@ -12,6 +12,14 @@ from portal.models import Authority, MyUser, PendingSlice, \
     Reservation, ReservationDetail, SimReservation, SimulationVM, ReservationFrequency
 from .reservation_status import ReservationStatus
 from portal.models import SiteConf
+import random
+import string
+
+# ************* federation services ************** #
+def randomStringDigits(stringLength=6):
+    """Generate a random string of letters and digits """
+    lettersAndDigits = string.ascii_letters + string.digits
+    return ''.join(random.choice(lettersAndDigits) for i in range(stringLength))
 
 
 # ************* federation services ************** #

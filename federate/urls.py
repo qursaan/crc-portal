@@ -1,15 +1,14 @@
-from django.urls import path, re_path  # patterns
-from federate.fed_view import FedView, control_running_federate, federate_status
-from federate.fedInfo_view import FedInfoView, SiteAddView, check_site
-from federate.fedlist_view import FedListView, site_enable,site_disable
-from federate.fedresource_view import FedResourceView, resource_disable, resource_enable
-from federate.fed_tasks import federate_getUsers, federate_getAuth
-from federate.fed_backend import api_fed_valid_key
 from django.conf.urls import include, url
-
+from django.urls import path, re_path  # patterns
 from rest_framework import routers
-from federate.rest_objects import UserViewSet, SharedResourcesViewSet
 
+from federate.fedInfo_view import FedInfoView, SiteAddView, check_site
+from federate.fed_backend import api_fed_valid_key
+from federate.fed_tasks import federate_getAuth
+from federate.fed_view import FedView, control_running_federate, federate_status
+from federate.fedlist_view import FedListView, site_enable, site_disable
+from federate.fedresource_view import FedResourceView, resource_disable, resource_enable
+from federate.rest_objects import UserViewSet, SharedResourcesViewSet
 
 # Routers provide an easy way of automatically determining the URL conf.
 router = routers.DefaultRouter()

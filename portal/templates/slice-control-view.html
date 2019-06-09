@@ -1,15 +1,15 @@
 {% extends "layout-unfold3.html" %}
 {% block unfold_main %}
     <link rel="stylesheet" type="text/css" href='{{ STATIC_URL }}css/registration.css'/>
-    <link rel="stylesheet" href="{{ STATIC_URL }}css/codemirror.css"/>
-    <link rel="stylesheet" href="{{ STATIC_URL }}css/rubyblue.css"/>
-    <link rel="stylesheet" href="{{ STATIC_URL }}css/fullscreen.css"/>
-    <link rel="stylesheet" href="{{ STATIC_URL }}css/fade.css"/>
+    <link rel="stylesheet" href='{{ STATIC_URL }}css/codemirror.css'/>
+    <link rel="stylesheet" href='{{ STATIC_URL }}css/rubyblue.css'/>
+    <link rel="stylesheet" href='{{ STATIC_URL }}css/fullscreen.css'/>
+    <link rel="stylesheet" href='{{ STATIC_URL }}css/fade.css'/>
     <script type="text/javascript" src='{{ STATIC_URL }}js/jquery.validate.1.14.js'></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}js/codemirror.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}js/placeholder.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}js/ruby.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}js/fullscreen.js"></script>
+    <script type="text/javascript" src='{{ STATIC_URL }}js/codemirror.js'></script>
+    <script type="text/javascript" src='{{ STATIC_URL }}js/placeholder.js'></script>
+    <script type="text/javascript" src='{{ STATIC_URL }}js/ruby.js'></script>
+    <script type="text/javascript" src='{{ STATIC_URL }}js/fullscreen.js'></script>
 
     <style type="text/css">
         #activity_tbl.table > tbody > tr > td {
@@ -52,10 +52,10 @@
             font-size: 10px;
         }
 
-        .headclock {
+        /*.headclock {
             padding: 0;
             font-size: 10px;
-        }
+        }*/
 
         .console {
             font-family: Courier, serif;
@@ -90,7 +90,7 @@
         pre {
             color: #CCCCCC !important;
             background: #000000 !important;
-            font-family: Courier !important;
+            font-family: Courier, serif !important;
         }
     </style>
 
@@ -163,58 +163,60 @@
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane active" id="home">
                         <div class="card-body">
-                            <h5 class="card-title">Instruction</h5>
-                            <p class="card-text">
-                            <ol>
-                                {% if allow_img %}
-                                    <li>Open <b><i>Load Image</i></b> tab and load image</li>
-                                    <li>Wait <b>Loading</b> process finish</li>
-                                {% endif %}
-                                {% if stype == "omf" %}
-                                    <li>In <b><i>Execute Manager</i></b> tab and past your script <b>or</b> edit from
-                                        existing
-                                        template
+                            <!--h5 class="card-title"></h5-->
+                            <div class="card-text">
+                                <ol>
+                                    {% if allow_img %}
+                                        <li>Open <b><i>Load Image</i></b> tab and load image</li>
+                                        <li>Wait <b>Loading</b> process finish</li>
+                                    {% endif %}
+                                    {% if stype == "omf" %}
+                                        <li>In <b><i>Execute Manager</i></b> tab and past your script <b>or</b> edit
+                                            from
+                                            existing
+                                            template
+                                        </li>
+                                    {% else %}
+                                        <li> To access the controller server use console
+                                            ssh <b>crc-am@193.227.16.199</b> with pa$$word <b>?</b>
+                                        </li>
+                                        <li> To access the any virtual node use
+                                            ssh <b>crc</b> with no pa$$w0rd <!--b>crc123</b-->
+                                        </li>
+                                        <li>
+                                            To use GNURadio toolkit remotly:
+                                            <ul>
+                                                <li>press <b>GNURadio Remote Access</b> from Access Link</li>
+                                                <li>password: gnu123</li>
+                                            </ul>
+                                        </li>
+                                    {% endif %}
+                                    <li>Execute script remotely using <b>or</b> use <a href="/portal/experiment">external
+                                        tools</a>
                                     </li>
+                                    {% if allow_img %}
+                                        <li>Open <b><i>Save Image</i></b> tab to save your image if you want to save
+                                            your
+                                            work
+                                        </li>
+
+                                    {% endif %}
+                                </ol>
+                                {% if supp_file %}
+                                    <a class="btn btn-outline-dark" href="{{ supp_file }}">View Supplement files</a>
+
                                 {% else %}
-                                    <li> To access the controller server use console
-                                        ssh <b>crc-am@193.227.16.199</b> with pa$$word <b>?</b>
-                                    </li>
-                                    <li> To access the any virtual node use
-                                        ssh <b>crc</b> with no pa$$w0rd <!--b>crc123</b-->
-                                    </li>
-                                    <li>
-                                        To use GNURadio toolkit remotly:
-                                        <ul>
-                                            <li>press <b>GNURadio Remote Access</b> from Access Link</li>
-                                            <li>password: gnu123</li>
-                                        </ul>
-                                    </li>
+                                    <a class="btn btn-outline-dark" href="/portal/experiment">
+                                        See how to use external tools</a>
                                 {% endif %}
-                                <li>Execute script remotely using <b>or</b> use <a href="/portal/experiment">external
-                                    tools</a>
-                                </li>
-                                {% if allow_img %}
-                                    <li>Open <b><i>Save Image</i></b> tab to save your image if you want to save your
-                                        work
-                                    </li>
-
-                                {% endif %}
-                            </ol>
-                            {% if supp_file %}
-                                <a class="btn btn-outline-dark" href="{{ supp_file }}">View Supplement files</a>
-
-                            {% else %}
-                                <a class="btn btn-outline-dark" href="/portal/experiment">
-                                    See how to use external tools</a>
-                            {% endif %}
-                            </p>
+                            </div>
                         </div>
-
+                        <div class="card-footer text-center text-muted">Instructions</div>
                     </div>
                     {% if show_lab %}
                         <div role="tabpanel" class="tab-pane" id="lab">
                             <div class="card-body">
-                                <h5 class="card-title">Experiment Lab</h5>
+                                <!--h5 class="card-title">Experiment Lab</h5-->
                                 <!--run lab-->
                                 <form class="cmxform form-horizontal" id="run-lab-form" method="post"
                                       action="run_lab" role="form">
@@ -238,7 +240,8 @@
                                         <div class="form-group col-md-12">
                                             {% for p in lab_param_list %}
                                                 <div class="form-group">
-                                                    <label class="col-xs-2 control-label">{{ p }}</label>
+                                                    <label for="{{ p.param_id }}"
+                                                           class="col-xs-2 control-label">{{ p }}</label>
                                                     <div class="col-xs-4">
                                                         <div class="ui-widget">
                                                             {% if p.type == "range" %}
@@ -251,8 +254,8 @@
                                                                 </div>
                                                                 <div id="slider-{{ p.param_id }}"></div>
                                                                 <script>
-                                                                    var xrange = Number("{{p.values}}".split(',')[0]);
-                                                                    var yrange = Number("{{p.values}}".split(',')[1]);
+                                                                    let xrange = Number("{{p.values}}".split(',')[0]);
+                                                                    let yrange = Number("{{p.values}}".split(',')[1]);
                                                                     $(document).ready(function () {
                                                                         $("#slider-{{p.param_id}}").slider({
                                                                             range: "min",
@@ -280,7 +283,7 @@
                                                             {% elif p.type == "nodes" %}
                                                                 <select id="{{ p.param_id }}" data-id="lab_param"
                                                                         name="{{ p.param_id }}"
-                                                                        class="form-control user-input" value="">
+                                                                        class="form-control user-input" >
                                                                     {% for row in node_list %}
                                                                         <option value="{{ row.node_ref.vm_name }}"
                                                                                 label="{{ row.node_ref }}">
@@ -291,7 +294,7 @@
                                                             {% elif p.type == "frequency" %}
                                                                 <select id="{{ p.param_id }}" data-id="lab_param"
                                                                         name="{{ p.param_id }}"
-                                                                        class="form-control user-input" value="">
+                                                                        class="form-control user-input" >
                                                                     {% for row in freq_list %}
                                                                         <option value="{{ row.frequency_ref.frequency_value }}"
                                                                                 label="{{ row.frequency_ref.frequency_value }}">
@@ -315,29 +318,27 @@
                                         </div>
                                         <div class="form-group col-md-12">
                                             <h5>Output terminal</h5>
-                                            <div class="">
+                                            <div>
                                                 <textarea id="exp_output" readonly="readonly"
                                                           style="height:200px; width:100%;"
                                                           class="console">{{ output }}</textarea>
                                             </div>
-
                                         </div>
                                         <div class="form-group col-md-12">
                                             <h5>Results</h5>
                                             <video id="exp_result" alt="result" width="640" class="console"
-                                                   src=""
-                                                   type="video/mp4" controls></video>
-
+                                                   src="" type="video/mp4" controls></video>
                                         </div>
                                     </fieldset>
                                 </form>
                             </div>
+                            <div class="card-footer text-center text-muted">Experiment Lab</div>
                         </div>
                     {% endif %}
                     {% if allow_img %}
                         <div role="tabpanel" class="tab-pane" id="loadimage">
                             <div class="card-body">
-                                <h5 class="card-title">Loading Image</h5>
+                                <!--h5 class="card-title text-center ">Loading Image</h5-->
                                 <form class="cmxform form-horizontal" id="load-image-form" method="post"
                                       action="control_load_image" enctype="multipart/form-data" role="form">
                                     <fieldset>
@@ -356,63 +357,66 @@
                                                 </button>
                                             </div>
                                         </div>
-                                        <div class="form-group col-md-12">
-                                            <h6 class="card-subtitle mb-2">Testbed Nodes</h6>
+                                        <div class="form-group">
+                                            <div class="card-body">
+                                                <h6 class="card-subtitle mb-2">Testbed Nodes</h6>
 
-                                            <div id="nodes">
-                                                {% for row in node_list %}
-                                                    <div class="form-check">
-                                                        <input id="i_node_{{ row.id }}"
-                                                               data-id="node_{{ row.node_ref.vm_name }}"
-                                                               type="checkbox" class="form-check-input"
-                                                               name="node_group1"
-                                                               value="{{ row.node_ref.vm_name }}">
-                                                        <label for="i_node_{{ row.id }}" class="form-check-label">
-                                                            <span name="node_{{ row.node_ref.vm_name }}"
-                                                                  class="fas fa-power-off text-danger"></span> {{ row.node_ref }}
-                                                        </label>
-                                                    </div>
-                                                {% endfor %}
-                                            </div>
-                                            <small class="form-text text-muted">Select Target Testbed</small>
-
-                                        </div>
-                                        <div class="form-group col-md-12">
-                                            <h6 class="card-subtitle mb-2">Image</h6>
-                                            <div class="radio">
-                                                <label>
-                                                    <input type="radio" name="image_type" value="base_image"
-                                                           checked/>Base Image
-                                                </label>
-                                                <select id="osimage" name="osimage"
-                                                        class="custom-select form-control"
-                                                        value="{{ image_id }}">
-                                                    {% for row in image_list %}
-                                                        <option value="{{ row.id }}" label="{{ row.image_name }}">
-                                                            {{ row.image_name }}</option>
+                                                <div id="nodes">
+                                                    {% for row in node_list %}
+                                                        <div class="form-check">
+                                                            <input id="i_node_{{ row.id }}"
+                                                                   data-id="node_{{ row.node_ref.vm_name }}"
+                                                                   type="checkbox" class="form-check-input"
+                                                                   name="node_group1"
+                                                                   value="{{ row.node_ref.vm_name }}">
+                                                            <label for="i_node_{{ row.id }}" class="form-check-label">
+                                                                <span name="node_{{ row.node_ref.vm_name }}"
+                                                                      class="fas fa-power-off text-danger"></span> {{ row.node_ref }}
+                                                            </label>
+                                                        </div>
                                                     {% endfor %}
-                                                </select>
-                                            </div>
-                                            {% if user_image_list %}
-                                                <div class="radio">
-                                                    <label>
-                                                        <input type="radio" name="image_type" value="user_image"/>
-                                                        User Image
-                                                    </label>
-                                                    <select id="osimage_user" name="osimage_user"
-                                                            class="custom-select form-control"
-                                                            value="{{ user_image_id }}">
-                                                        {% for row in user_image_list %}
-                                                            <option value="{{ row.id }}"
-                                                                    label="{{ row.image_name }} :: Modified">{{ row.image_name }}
-                                                                :: Modified
-                                                            </option>
-                                                        {% endfor %}
-                                                    </select>
                                                 </div>
-                                            {% endif %}
-                                            <small class="form-text text-muted">Select the Image</small>
+                                                <small class="form-text text-muted">Select Target Testbed</small>
+                                            </div>
 
+                                            <div class="card-body">
+                                                <h6 class="card-subtitle mb-2">Image</h6>
+                                                <div class="form-group">
+                                                    <div class="form-check form-check-inline col-md-10">
+                                                        <input class="form-check-input" type="radio" id="image_type0" name="image_type" value="base_image" checked/>
+                                                        <label class="form-check-label col-md-3" for="image_type0">Base Image
+                                                        </label>
+
+                                                        <select id="osimage" name="osimage"
+                                                                class="custom-select form-control col-md-9"
+                                                                value="{{ image_id }}">
+                                                            {% for row in image_list %}
+                                                                <option value="{{ row.id }}" label="{{ row.image_name }}">
+                                                                    {{ row.image_name }}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+
+                                                    {% if user_image_list %}
+                                                    <div class="form-check form-check-inline col-md-10">
+                                                        <input class="form-check-input" type="radio" id="image_type1" name="image_type" value="user_image"/>
+                                                        <label class="form-check-label col-md-3" for="image_type1" >User Image
+                                                        </label>
+                                                        <select id="osimage_user" name="osimage_user"
+                                                                class="custom-select form-control  col-md-9"
+                                                                value="{{ user_image_id }}">
+                                                            {% for row in user_image_list %}
+                                                                <option value="{{ row.id }}"
+                                                                        label="{{ row.image_name }} :: Modified">{{ row.image_name }}
+                                                                    :: Modified
+                                                                </option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+                                                    {% endif %}
+                                                    <small class="form-text text-muted">Select the target image to be loaded</small>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div id="vnc" class="form-group col-md-12" hidden>
                                             <label class="col-md-2 control-label">Access Link</label>
@@ -431,13 +435,12 @@
                                     </fieldset>
                                 </form>
                             </div>
-
+                            <div class="card-footer text-center text-muted">Loading Image</div>
                         </div>
 
                         <div role="tabpanel" class="tab-pane" id="saveimage">
-
                             <div class="card-body">
-                                <h5 class="card-title">Saving Image</h5>
+                                <!--h5 class="card-title text-center">Saving Image</h5-->
                                 <!--control_save_image-->
                                 <form class="cmxform form-horizontal" id="save-image-form" method="post"
                                       action="control_save_image"
@@ -458,11 +461,11 @@
                                                 </button>
                                             </div>
                                         </div>
+                                        <div class="form-group">
+                                            <div class="card-body">
+                                                <h6 class="card-subtitle mb-2">Testbed Nodes</h6>
 
-                                        <div class="form-group col-md-12">
-                                            <h6 class="card-subtitle mb-2">Testbed Nodes</h6>
-
-                                            {% for row in node_list %}
+                                                {% for row in node_list %}
                                                 <div class="form-check">
 
                                                     <input id="s_node_{{ row.id }}"
@@ -476,36 +479,36 @@
                                                               class="fas fa-power-off text-danger"></span> {{ row.node_ref }}
                                                     </label>
                                                 </div>
-                                            {% endfor %}
+                                                {% endfor %}
 
-
-                                            <small class="form-text text-muted">Select Target Testbed Node</small>
-                                        </div>
-
-                                        <div class="form-group col-md-6">
-                                            <div class="input-group">
-                                                <div class="input-group-append">
-                                                    <span class="input-group-text">Image Name</span>
-                                                </div>
-                                                <input id="image_name" class="form-control" type="text"
-                                                       name="image_name"
-                                                       value="" required/>
+                                                <small class="form-text text-muted">Select Target Testbed Node</small>
                                             </div>
-                                            <small class="form-text text-muted">
-                                                Enter the Image Name
-                                            </small>
 
+                                            <div class="card-body">
+                                                <div class="input-group">
+                                                    <div class="input-group-append">
+                                                        <span class="input-group-text">Image Name</span>
+                                                    </div>
+                                                    <input id="image_name" class="form-control" type="text"
+                                                           name="image_name"
+                                                           value="" required/>
+                                                </div>
+                                                <small class="form-text text-muted">
+                                                    Enter the Image Name
+                                                </small>
+                                            </div>
                                         </div>
                                     </fieldset>
                                 </form>
-                            </div>
 
+                            </div>
+                            <div class="card-footer text-center text-muted">Saving Image</div>
                         </div>
                     {% endif %}
                     {% if allow_crt %}
                         <div role="tabpanel" class="tab-pane" id="remote">
                             <div class="card-body">
-                                <h5 class="card-title">Remote Control Machine</h5>
+                                <!--h5 class="card-title">Remote Control Machine</h5-->
                                 <!--control_save_image-->
                                 <form class="cmxform form-horizontal" id="remote-image-form" method="post"
                                       action="control_remote_node" enctype="multipart/form-data" role="form">
@@ -557,14 +560,13 @@
                                     </fieldset>
                                 </form>
                             </div>
+                            <div class="card-footer text-center text-muted">Remote Control Machine</div>
                         </div>
                     {% endif %}
                     {% if stype == "omf" %}
                         <div role="tabpanel" class="tab-pane" id="manager">
-
                             <div class="card-body">
-                                <h5 class="card-title">Execute Script</h5>
-
+                                <!--h5 class="card-title">Execute Script</h5-->
                                 <form name="exe-image-form" class="cmxform form-horizontal" id="exe-image-form"
                                       method="post"
                                       action="create_post" enctype="multipart/form-data" role="form" novalidate>
@@ -626,13 +628,13 @@
                                     </fieldset>
                                 </form>
                             </div>
-
+                            <div class="card-footer text-center text-muted">Execute Script</div>
                         </div>
                     {% endif %}
                     {% if allow_ssh %}
                         <div role="tabpanel" class="tab-pane" id="terminal">
                             <div class="card-body">
-                                <h5 class="card-title">Web Terminal</h5>
+                                <!--h5 class="card-title">Web Terminal</h5-->
                                 <!--control_save_image-->
                                 <form class="cmxform form-horizontal" id="terminal-form" method="post"
                                       action="control_remote_node" enctype="multipart/form-data" role="form">
@@ -643,6 +645,10 @@
                                                 <button id="terminal_con" class="btn btn-info"
                                                         type="button">
                                                     Connect
+                                                </button>
+                                                <button id="terminal_access" class="btn btn-outline-danger"
+                                                        name="access_token">
+                                                    Send Access Token
                                                 </button>
                                             </div>
                                         </div>
@@ -658,14 +664,14 @@
 
                                     </fieldset>
                                 </form>
-
                             </div>
+                            <div class="card-footer text-center text-muted">Terminal</div>
                         </div>
                     {% endif %}
                 </div>
                 <div id="fade"></div>
                 <div id="modal">
-                    <img id="loader" src="{{ STATIC_URL }}img/loading1.gif"/>
+                    <img id="loader" src="{{ STATIC_URL }}img/loading1.gif" alt="Loading..."/>
                 </div>
             </div>
         </div>
@@ -730,15 +736,16 @@
     <script type="text/javascript" src="{{ STATIC_URL }}js/slice-control.js"></script>
 
     <script type="text/javascript">
-        var count = 0;
-        var loading_List = [];
-        var saving_List = [];
-        var exe_List = [];
-        var lab_list = [];
-        var activityTable;
-        var change_flag = false;
-        var deadline = new Date("{{ deadline.isoformat }}");
-        var show_warning = true;
+        let count = 0;
+        let loadingList = [];
+        let savingList = [];
+        let exeList = [];
+        let labList = [];
+        let activityTable;
+        let changeFlag = false;
+        let deadline = new Date("{{ deadline.isoformat }}");
+        let showWarning = true;
+        const ms = 1000, mm = 60, mh=24;
 
         $(document).ready(function () {
             activityTable = document.getElementById("activity_tbl").getElementsByTagName('tbody')[0];
@@ -750,12 +757,12 @@
         });
         /**************************************************************/
         $('#osimage').change(function () {
-            var selectImage = $("#osimage option:selected").text().trim();
+            const selectImage = $("#osimage option:selected").text().trim();
             document.getElementById("vnc").hidden = selectImage !== "GNURadio-VNC";
         });
         /***************************************** Editor ************/
             {% if stype == "omf" %}
-                var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+                const editor = CodeMirror.fromTextArea(document.getElementById("code"), {
                 lineNumbers: true, theme: "rubyblue",
                 mode: {name: "ruby", globalVars: true},
                 styleActiveLine: true, matchBrackets: true,
@@ -774,47 +781,47 @@
 
         /*********************************************** Timer **/
         function myTimer() {
-            var a;
-            for (a in loading_List) {
-                checking_status_image(loading_List[a][0], loading_List[a][1], a, loading_List, "control_check_load");
+            let a;
+            for (a in loadingList) {
+                checking_status_image(loadingList[a][0], loadingList[a][1], a, loadingList, "control_check_load");
             }
-            for (a in saving_List) {
-                checking_status_image(saving_List[a][0], saving_List[a][1], a, saving_List, "control_check_save");
+            for (a in savingList) {
+                checking_status_image(savingList[a][0], savingList[a][1], a, savingList, "control_check_save");
             }
-            for (a in exe_List) {
-                checking_status_exe(exe_List[a][0], exe_List[a][1], a, exe_List);
+            for (a in exeList) {
+                checking_status_exe(exeList[a][0], exeList[a][1], a, exeList);
             }
-            for (a in lab_list) {
-                checking_status_lab(lab_list[a][0], lab_list[a][1], a, lab_list);
+            for (a in labList) {
+                checking_status_lab(labList[a][0], labList[a][1], a, labList);
             }
-            if (change_flag) {
+            if (changeFlag) {
                 update_testbeds();
-                change_flag = false;
+                changeFlag = false;
             }
         }
 
         function getTimeRemaining(endtime) {
-            var t = Date.parse(endtime) - Date.parse(new Date());
-            var seconds = Math.floor((t / 1000) % 60);
-            var minutes = Math.floor((t / 1000 / 60) % 60);
-            var hours = Math.floor((t / (1000 * 60 * 60)) % 24);
-            var days = Math.floor(t / (1000 * 60 * 60 * 24));
+            const t = Date.parse(endtime) - Date.parse(new Date());
+            const seconds = Math.floor((t / ms) % mm);
+            const minutes = Math.floor((t / ms / mm) % mm);
+            const hours = Math.floor((t / (ms * mm * mm)) % mh);
+            const days = Math.floor(t / (ms * mm * mm * mh));
             return {
                 'total': t, 'days': days, 'hours': hours, 'minutes': minutes, 'seconds': seconds
             };
         }
 
         function initializeClock(id, endtime) {
-            var clock = document.getElementById(id);
-            var daysSpan = clock.querySelector('.days');
-            var hoursSpan = clock.querySelector('.hours');
-            var minutesSpan = clock.querySelector('.minutes');
-            var secondsSpan = clock.querySelector('.seconds');
+            const clock = document.getElementById(id);
+            const daysSpan = clock.querySelector('.days');
+            const hoursSpan = clock.querySelector('.hours');
+            const minutesSpan = clock.querySelector('.minutes');
+            const secondsSpan = clock.querySelector('.seconds');
 
             function updateClock() {
-                var t = getTimeRemaining(endtime);
+                const t = getTimeRemaining(endtime);
 
-                daysSpan.innerHTML = t.days;
+                daysSpan.innerHTML = String(t.days);
                 hoursSpan.innerHTML = ('0' + t.hours).slice(-2);
                 minutesSpan.innerHTML = ('0' + t.minutes).slice(-2);
                 secondsSpan.innerHTML = ('0' + t.seconds).slice(-2);
@@ -824,15 +831,15 @@
                     document.location.href = '/portal/dashboard/';
                 }
 
-                if ((show_warning) && (t.total / 1000 / 60) <= 5) {
-                    show_warning = false;
+                if ((showWarning) && (t.total / ms / mm) <= 5) {
+                    showWarning = false;
                     alert("Remaining time is less than 5 minutes, Save your image(s) if you want to keep your data.");
                 }
             }
 
             updateClock();
-            var timeinterval = setInterval(updateClock, 1000);
-            var timecheck = setInterval(myTimer, 5000);
+            setInterval(updateClock, ms);
+            setInterval(myTimer, ms*5);
         }
 
         /*********************************************** Remote Actions */
@@ -850,8 +857,8 @@
 
         function pre_remote(action, node_group_name) {
             //event.preventDefault();
-            node_name = $('input[name=' + node_group_name + ']:checked').val();
-            aid = add_activity(action + " " + node_name);
+            const node_name = $('input[name=' + node_group_name + ']:checked').val();
+            const aid = add_activity(action + " " + node_name);
             remote(action, node_name, aid);
         }
 
@@ -868,7 +875,7 @@
                     } else {
                         print_recolor(aid, 1, result);
                     }
-                    change_flag = true;
+                    changeFlag = true;
                     closeModal();
                 },
                 error: function (xhr, errmsg, err) {
@@ -892,14 +899,14 @@
             });
 
             $('#sample-1').on('click', function (event) {
+                const aid = add_activity("Load PING Sample");
                 event.preventDefault();
-                var aid = add_activity("Load PING Sample");
                 load_samples("sample-1", aid);
             });
 
             $('#sample-2').on('click', function (event) {
+                const aid = add_activity("Load USRP Sample");
                 event.preventDefault();
-                var aid = add_activity("Load USRP Sample");
                 load_samples("sample-2", aid);
             });
 
@@ -908,15 +915,15 @@
                     alert("No code to execute");
                     return;
                 }
+                const aid = add_activity("Running Script");
                 event.preventDefault();
-                aid = add_activity("Running Script");
                 create_exe_post(aid);
             });
 
             $('#abort_script').on('click', function (event) {
                 event.preventDefault();
                 //aid = add_activity("Cancel Script");
-                abort_script_exe(exe_List[0][0], exe_List[0][1], 0, exe_List);
+                abort_script_exe(exeList[0][0], exeList[0][1], 0, exeList);
             });
 
             function exe_button(state) {
@@ -957,7 +964,7 @@
                     success: function (json) {
                         $('#output').val("");
                         print_recolor(aid, 2, "In progress");
-                        exe_List.push([json['exp_id'], aid]);
+                        exeList.push([json['exp_id'], aid]);
                         closeModal();
                         exe_button(0);
                     },
@@ -1004,11 +1011,11 @@
                     data: {the_eid: eid},
                     success: function (result) {
                         //console.log(result);
-                        var is_done = result['done'];
+                        const is_done = result['done'];
                         if (is_done === false) {
-                            var log = result['log'];
-                            var output = '';
-                            for (var txt in log) {
+                            const log = result['log'];
+                            let output = '';
+                            for (let txt in log) {
                                 output += log[txt] + '\n';
                             }
                             $('#output').val(output);
@@ -1032,18 +1039,18 @@
 
         $('#load_image_btn').on('click', function (event) {
             event.preventDefault();
-            var os_type = $('input[name="image_type"]:checked').val();
-            var os_id = $('#osimage option:selected').val();
+            const os_type = $('input[name="image_type"]:checked').val();
+            let os_id = $('#osimage option:selected').val();
             if (os_type === "user_image") {
                 os_id = $('#osimage_user option:selected').val();
             }
-            var select_node_list = [];                      //
-            var aid_list = [];                      //
+            let select_node_list = [];                      //
+            let aid_list = [];                      //
 
             $('input[name="node_group1"]:checked').each(function () {
-                var select_node = $(this).val();
+                const select_node = $(this).val();
                 select_node_list.push(select_node);          //
-                var aid = add_activity("Loading Image on Node: " + select_node);
+                const aid = add_activity("Loading Image on Node: " + select_node);
                 aid_list.push(aid);                          //
                 /*loading_image(select_node,os_id,os_type, aid);*/
             });
@@ -1052,14 +1059,14 @@
 
         $('#save-image-btn').on('click', function (event) {
             event.preventDefault();
-            var image_name = $('input[name="image_name"]').val();
-            var node_name = $('input[name="node_group2"]:checked').val();
-            var aid = add_activity("Saving Image on Node: " + node_name);
+            const image_name = $('input[name="image_name"]').val();
+            const node_name = $('input[name="node_group2"]:checked').val();
+            const aid = add_activity("Saving Image on Node: " + node_name);
             saving_image(node_name, image_name, aid);
         });
 
         function loading_image(node_name, os_id, os_type, aid) {
-            for (var x in aid) {
+            for (let x in aid) {
                 $("#" + aid[x]).text("loading ...");
             }
             openModal();
@@ -1072,9 +1079,9 @@
                         document.location.href = '/portal/lab/current/';
                     } else {
                         if (result.startsWith("success")) {
-                            for (var x in aid) {
+                            for (let x in aid) {
                                 print_recolor(aid[x], 1, result);
-                                loading_List.push([node_name[x], aid[x]]);
+                                loadingList.push([node_name[x], aid[x]]);
                             }
                         } else if (result.startsWith("warning")) {
                             print_recolor(aid, 2, result);
@@ -1085,7 +1092,7 @@
                     closeModal();
                 },
                 error: function (xhr, errmsg, err) {
-                    for (x in aid) {
+                    for (let x in aid) {
                         print_recolor(aid[x], 3, "Server Error, try again later");
                     }
                     closeModal();
@@ -1106,7 +1113,7 @@
                     } else {
                         if (result.startsWith("success")) {
                             print_recolor(aid, 1, result);
-                            saving_List.push([node_name, aid]);
+                            savingList.push([node_name, aid]);
                         } else if (result.startsWith("warning")) {
                             print_recolor(aid, 2, result);
                         } else {
@@ -1116,6 +1123,7 @@
                     closeModal();
                 },
                 error: function (xhr, errmsg, err) {
+                    console.log(err);
                     print_recolor(aid, 3, "Server Error, try again later");
                     closeModal();
                 }
@@ -1129,7 +1137,7 @@
                 data: {the_node: node_name, stype: '{{ stype }}'},
                 success: function (result) {
                     console.log(result);
-                    var is_error = result['error'];
+                    const is_error = result['error'];
                     if (is_error === false) {
                         if (result['done'] === true) {
                             print_recolor(aid, 1, "Done.");
@@ -1157,30 +1165,63 @@
         }
 
         /***** Terminal *****/
+        {% if allow_ssh %}
+            $("#terminal_con").on('click', function (event) {
+                connectTerminal();
+            });
 
-        $("#terminal_con").on('click', function (event) {
-            connect_terminal();
-        });
+            $('#terminal_access').on('click', function (event) {
+                event.preventDefault();
+                const action = "Send Access Token to user email";
+                const aid = add_activity(action);
+                send_access(action, aid);
+            });
 
-        function connect_terminal() {
-            var address = ("{{terminal_ip}}");
-            var element = ``;
-            //var url =  element.src;
-            element.src = address;
-        }
+            function connectTerminal() {
+                let address = ("{{terminal_ip}}");
+                let element = '';
+                //var url =  element.src;
+                element.src = address;
+            }
 
+            function send_access(action, aid) {
+                $("#" + aid).text(action + " ...");
+                openModal();
+                $.ajax({
+                    url: "gen_access_token",
+                    type: "POST",
+                    data: {the_action: action, stype: '{{ stype }}'},
+                    success: function (result) {
+                        if (result === "eof") {
+                            document.location.href = '/portal/lab/current/';
+                        } else if (result.startsWith("Success")) {
+                            print_recolor(aid, 1, result);
+                        } else {
+                            print_recolor(aid, 3, result);
+                        }
+                        closeModal();
+                    },
+                    error: function (xhr, errmsg, err) {
+                        print_recolor(aid, 3, "Unexpected Error, try again later");
+                        closeModal();
+                    }
+                });
+            }
+        {% endif %}
         /*********************************************** ALL ***/
         function add_activity(a_name) {
-            count++;
             /*var table = activityTable;*/
-            var row = activityTable.insertRow();
-            var cell0 = row.insertCell(0);
-            var cell1 = row.insertCell(1);
-            var cell2 = row.insertCell(2);
-            var cell3 = row.insertCell(3);
+            const row = activityTable.insertRow();
+            const cell0 = row.insertCell(0);
+            const cell1 = row.insertCell(1);
+            const cell2 = row.insertCell(2);
+            const cell3 = row.insertCell(3);
+
+            count++;
             cell2.id = "activity_" + count;
             cell3.id = cell2.id + "_ico";
             row.id = cell2.id + "_row";
+
             cell0.innerHTML = count;
             cell1.innerHTML = a_name;
             cell2.innerHTML = "-";
@@ -1197,16 +1238,16 @@
 
         $("#get_last_btn").on('click', function (event) {
             {% for n in node_list %}
-                var node_id = '{{ n.node_ref.vm_name }}';
-                var l = '{{n.details}}';
+                let node_id = '{{ n.node_ref.vm_name }}';
+                let l = '{{n.details}}';
                 if (l !== 'NA') {
-                    var node_name = '{{ n.node_ref.vm_name }}';
-                    var aid = add_activity(node_name + ', {{n.details}} image at {{n.last_action}}');
+                    let node_name = '{{ n.node_ref.vm_name }}';
+                    let aid = add_activity(node_name + ', {{n.details}} image at {{n.last_action}}');
 
                     if (l === "save")
-                        saving_List.push([node_name, aid]);
+                        savingList.push([node_name, aid]);
                     else if (l === "load")
-                        loading_List.push([node_name, aid]);
+                        loadingList.push([node_name, aid]);
                 }
             {% endfor %}
         });
@@ -1264,7 +1305,7 @@
         function update_testbeds() {
             disableRefresh();
             {% for n in node_list %}
-                var node_id = '{{ n.node_ref.vm_name }}';
+                let node_id = String('{{ n.node_ref.vm_name }}');
                 check_status(node_id);
             {% endfor %}
             enableRefresh();
@@ -1295,19 +1336,21 @@
                 type: "POST",
                 data: {the_post: node_id},
                 success: function (json) {
-                    var result = json['status'];
+                    let result = json['status'];
                     update_node(node_id, result);
                 },
                 error: function (xhr, errmsg, err) {
+                    console.log(err);
                     update_node(node_id, "error");
                 }
             });
-        };
+        }
+
         /****************Lab*************************************/
         {% if show_lab %}
             $('#run_exp_lab').on('click', function (event) {
                 event.preventDefault();
-                aid = add_activity("Running Experiment");
+                let aid = add_activity("Running Experiment");
                 $('#run_exp_lab').attr("disabled", "disabled");
                 create_lab_post(aid);
             });
@@ -1321,7 +1364,7 @@
                     success: function (json) {
                         $('#exp_output').val("");
                         print_recolor(aid, 2, "In progress...");
-                        lab_list.push([json['exp_id'], aid]);
+                        labList.push([json['exp_id'], aid]);
                         closeModal();
                         $('#run_exp_lab').removeAttr("disabled");
                     },
@@ -1339,11 +1382,12 @@
                     type: "POST",
                     data: {the_eid: eid},
                     success: function (result) {
-                        var video = document.getElementById('exp_result');
+                        const video = document.getElementById('exp_result');
                         result = result + "?t=" + new Date();
                         video.setAttribute("src", result);
                     },
                     error: function (xhr, errmsg, err) {
+                        console.log(err);
                     }
                 });
             }
@@ -1355,12 +1399,12 @@
                     data: {the_eid: eid},
                     success: function (result) {
                         /*console.log(result);*/
-                        var is_done = result['done'];
-                        var log, output;
+                        let is_done = result['done'];
+                        let log, output;
                         if (is_done === false) {
                             log = result['log'];
                             output = '';
-                            for (var txt in log) {
+                            for (let txt in log) {
                                 output += log[txt] + '\n';
                             }
 
@@ -1370,7 +1414,7 @@
                         } else {
                             log = result['log'];
                             output = '';
-                            for (txt in log) {
+                            for (let txt in log) {
                                 output += log[txt] + '\n';
                             }
 

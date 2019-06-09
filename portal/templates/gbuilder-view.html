@@ -77,14 +77,14 @@
     </div-->
 
     <script type="text/javascript">
-        var graph;
-        var paper;
-        var nodes = [];
-        var links_w = [];
-        var links_usrp = [];
-        var links_rtl = [];
-        var n_nodes = 0;
-        var n_links = 0;
+        let graph;
+        let paper;
+        let nodes = [];
+        let links_w = [];
+        let links_usrp = [];
+        let links_rtl = [];
+        let n_nodes = 0;
+        let n_links = 0;
         jQuery(document).ready(function () {
             graph = new joint.dia.Graph;
 
@@ -99,29 +99,20 @@
                 restrictTranslate: true
             });
 
-            //events
-
-            //paper.on('render:done', function(easdvt, asdx, ay) {
-            //   alert('pointerdown on a blank area in the paper.')
-//})
-
             graph.on('add', function (cell) {
-                //alert('New asdasdasdasd with id ' + cell.id + ' added to the graph.')
                 updateData();
-            })
+            });
 
             graph.on('remove', function (cell) {
-                // alert('REEEEEEEEE s id ' + cell.id + ' added to.')
                 updateData();
-            })
-
+            });
 
             //  drawBaseMap();
         });
 
         $('#g_add_node').on('click', function (event) {
             n_nodes += 1;
-            var rect1 = new joint.shapes.basic.Circle({
+            let rect1 = new joint.shapes.basic.Circle({
                 position: {x: 100, y: 30},
                 size: {width: 100, height: 30},
                 attrs: {
@@ -140,7 +131,7 @@
         $('#g_add_wlink').on('click', function (event) {
 
             n_links += 1;
-            var link = new joint.dia.Link({
+            let link = new joint.dia.Link({
                 source: {x: 100, y: 200},
                 target: {x: 200, y: 250},
                 attrs: {},
@@ -158,7 +149,7 @@
                 '.marker-target': {stroke: '#3498DB', d: 'M 10 0 L 0 5 L 10 10 z'}
 
 
-            })
+            });
 
             link.set('router', {name: 'orthogonal'});
             link.set('smooth', true);
@@ -169,7 +160,7 @@
         //usrp
         $('#g_add_blink').on('click', function (event) {
             n_links += 1;
-            var link = new joint.dia.Link({
+            let link = new joint.dia.Link({
                 source: {x: 100, y: 200},
                 target: {x: 200, y: 250},
                 attrs: {},
@@ -177,17 +168,13 @@
                     {position: 0.5, attrs: {text: {text: 'USRP', fill: 'red'}}}
                 ]
             });
-
-
             //event
             //link.on('transition:end', function() { alert('source of the link changed') })
             link.attr({
                 '.connection': {stroke: 'red', 'stroke-width': 2},
                 '.marker-source': {stroke: '#4b4a67', d: 'M 10 0 L 0 5 L 10 10 z'},
-                '.marker-target': {stroke: '#4b4a67', d: 'M 10 0 L 0 5 L 10 10 z'}
-
-
-            })
+                '.marker-target': {stroke: '#4b4a67', d: 'M 10 0 L 0 5 L 10 10 z'},
+            });
             link.set('router', {name: 'orthogonal'});
             link.set('smooth', true);
             links_usrp.push(link);
@@ -197,7 +184,7 @@
         //RTL
         $('#g_add_glink').on('click', function (event) {
             n_links += 1;
-            var link = new joint.dia.Link({
+            let link = new joint.dia.Link({
                 source: {x: 100, y: 200},
                 target: {x: 200, y: 250},
                 attrs: {},
@@ -210,10 +197,8 @@
             link.attr({
                 '.connection': {stroke: 'green', 'stroke-width': 2},
                 '.marker-source': {stroke: 'green', d: 'M 10 0 L 0 5 L 10 10 z'},
-                '.marker-target': {stroke: 'green', d: 'M 10 0 L 0 5 L 10 10 z'}
-
-
-            })
+                '.marker-target': {stroke: 'green', d: 'M 10 0 L 0 5 L 10 10 z'},
+            });
 
             link.set('smooth', true);
             link.set('router', {name: 'orthogonal'});
@@ -241,13 +226,13 @@
             links_usrp = [];
             links_rtl = [];
             updateData();
-        };
+        }
 
         function drawBaseMap() {
             clear();
-            for (i = 0; i < 8; i++) {
+            for (let i = 0; i < 8; i++) {
                 n_nodes += 1;
-                var rect1 = new joint.shapes.basic.Circle({
+                let rect1 = new joint.shapes.basic.Circle({
                     position: {x: 100 * n_nodes, y: 30 * n_nodes},
                     size: {width: 100, height: 30},
                     attrs: {
@@ -261,10 +246,10 @@
                 nodes.push(rect1);
             }
             graph.addCells(nodes);
-            for (i = 0; i < 8; i++) {
-                for (j = i + 1; j < 8; j++) {
+            for (let i = 0; i < 8; i++) {
+                for (let j = i + 1; j < 8; j++) {
                     n_links += 1;
-                    var link = new joint.dia.Link({
+                    let link = new joint.dia.Link({
                         source: {id: nodes[i].id},
                         target: {id: nodes[j].id}
                     });
@@ -273,14 +258,14 @@
                 }
             }
             graph.addCells(links_w);
-        };
+        }
 
         function updateData() {
             document.getElementById('nodes_n').textContent = "Nodes:" + nodes.length;
             document.getElementById('link_w').textContent = "Wireless Links:" + links_w.length;
             document.getElementById('link_usrp').textContent = "USRP Links:" + links_usrp.length;
             document.getElementById('link_rtl').textContent = "RTL Links:" + links_rtl.length;
-        };
+        }
 
     </script>
 

@@ -4,8 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 
-from portal.models import PhysicalNode, VirtualNode
-from federate.models import Site
+from portal.models import VirtualNode
 from portal.user_access_profile import UserAccessProfile
 # from portal.actions import  get_user_by_email, get_user_type
 from ui.topmenu import topmenu_items  # , the_user

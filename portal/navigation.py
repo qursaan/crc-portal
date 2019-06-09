@@ -4,17 +4,19 @@ from django.http import HttpResponseRedirect, Http404, HttpResponse
 from django.shortcuts import render
 from django.contrib import messages
 from django.utils import timezone
-#
+from django.core.mail import send_mail
 from crc.settings import BASE_IMAGE_DIR
 from ui.topmenu import topmenu_items #, the_user
 from portal.models import UserImage, TestbedImage, Reservation, SimReservation, SimulationImage
 from portal.actions import get_task_id, update_task_testbed, check_next_task_duration, \
-    get_username_by_email
+    randomStringDigits
 from portal.user_access_profile import UserAccessProfile
 from portal.backend_actions import load_images, save_images, vm_restart, vm_shutdown, vm_start, exe_script, exe_check, \
     check_load_images, check_save_images, exe_abort, commlab_exe, commlab_check, commlab_result
 from .reservation_status import ReservationStatus
 from unfold.page import Page
+from crc.settings import SUPPORT_EMAIL,DEFAULT_FROM_EMAIL
+from django.template.loader import render_to_string
 
 #  ********** Non Completed Page ************* #
 def un_complete_page(request):
@@ -23,6 +25,49 @@ def un_complete_page(request):
         #'topmenu_items': topmenu_items('test_page', request),
         'title': 'TEST PAGE',
     })
+
+
+def access_token_gen(request):
+    stype = request.POST.get('stype', None)
+    if stype is None:
+        return HttpResponse("error: Please go back and try again", content_type="text/plain")
+
+    if not slice_on_time(request, stype):
+        return HttpResponse('eof', content_type="text/plain")
+
+    else:
+        r =-1
+        usera = UserAccessProfile(request)
+        slice_id = request.session.get('slice_id', None)
+        slice_id = int(slice_id)
+        current_slice = None
+        if stype == "omf":
+            current_slice = Reservation.objects.get(id=slice_id)
+        elif stype == "sim":
+            current_slice = SimReservation.objects.get(id=slice_id)
+
+        username = usera.user_obj.first_name + randomStringDigits(6)
+        password = randomStringDigits(10)
+
+        recipients = []
+        recipients.append(usera.user_obj.email)
+        ctx = {
+            'slice_name': current_slice.slice_name,
+            'slice_duration': current_slice.slice_duration,
+            'password': password,
+            'access_token': username,
+        }
+        # TODO: qursaan@ call backend here
+        r = 1
+        # if cc_myself:
+        recipients.append(SUPPORT_EMAIL)
+        msg = render_to_string('access-token-email.txt', ctx)
+        # print "email, msg, email, recipients", email , msg, email, recipients
+        send_mail("CRCLAB user %s requested Access Password" % usera.username, msg, DEFAULT_FROM_EMAIL, recipients)
+
+        if r == 1:
+            return HttpResponse("Success", content_type="text/plain")
+    return HttpResponse("Fail, Try again!", content_type="text/plain")
 
 
 # OK OK OK OK
@@ -45,6 +90,8 @@ def remote_node(request):
             r = vm_shutdown(node_name)
         elif action_name == "Start":  # in request.POST:
             r = vm_start(node_name)
+        else:
+            r = -1
 
         if r == 1:
             return HttpResponse("success", content_type="text/plain")

@@ -41,9 +41,8 @@
                 <div class="row">
                     <div class="form-group col-md-6">
                         <label for="authority_hrn" class="col-form-label">Authority</label>
-                        <select id="authority_hrn" name="authority_hrn" class="custom-select form-control"
-                                value="{{ authority_hrn }}"
-                                required>
+                        <select id="authority_hrn" name="authority_hrn"
+                                class="custom-select form-control" required>
                             {% for row in authorities %}
                                 <option value="{{ row.authority_hrn }}"
                                         label="{{ row.site_name }}">{{ row.site_name }}
@@ -90,9 +89,7 @@
                 <div class="row">
                     <div id="quota_group" class="col-md-6">
                         <label for="quota" class="col-form-label">Quota Plan</label>
-                        <select id="quota" name="quota" class="form-control custom-select "
-                                value="{{ quota }}"
-                                required>
+                        <select id="quota" name="quota" class="form-control custom-select " required>
                             {% for row in quotas %}
                                 <option value="{{ row.id }}" label="{{ row }}">{{ row }}</option>
                             {% endfor %}
@@ -115,21 +112,19 @@
                             type
                         </small>
                     </div>
-                        <div id="super_group" class="col-md-6">
-                            <label for="supervisor" class="col-form-label">Supervisor</label>
-                            <select id="supervisor" name="supervisor" class="form-control custom-select "
-                                    value="{{ supervisor }}"
-                                    required>
-                                {% for row in supervisors %}
-                                    <option value="{{ row.id }}" label="{{ row }}">{{ row }}</option>
-                                {% endfor %}
-                            </select>
-                            <!--input id="authority_hrn" name="authority_hrn" class="form-control" value="{{ authority_hrn }}" required-->
-                            <small id="groupHelp" class="form-text text-muted">A supervisor responsible for verifying your
-                                account
-                            </small>
-                        </div>
+                    <div id="super_group" class="col-md-6">
+                        <label for="supervisor" class="col-form-label">Supervisor</label>
+                        <select id="supervisor" name="supervisor" class="form-control custom-select " required>
+                            {% for row in supervisors %}
+                                <option value="{{ row.id }}" label="{{ row }}">{{ row }}</option>
+                            {% endfor %}
+                        </select>
+                        <!--input id="authority_hrn" name="authority_hrn" class="form-control" value="{{ authority_hrn }}" required-->
+                        <small id="groupHelp" class="form-text text-muted">A supervisor responsible for verifying your
+                            account
+                        </small>
                     </div>
+                </div>
                 <div class="row">
 
                 </div>
