@@ -14,7 +14,7 @@ from ui.topmenu import topmenu_items  # , the_user
 from unfold.loginrequired import LoginRequiredAutoLogoutView
 #
 from unfold.page import Page
-
+from crc.settings import SIM_RESERVATION
 
 # status 0-disabled, 1-pending, 3-active, 4-expired, 5-canceled
 class SliceHistoryView(LoginRequiredAutoLogoutView):
@@ -38,6 +38,7 @@ class SliceHistoryView(LoginRequiredAutoLogoutView):
         context['history_list_sim'] = history_list_sim
         context['time_now'] = timezone.now
         context['title'] = 'Request Log'
+        context['sim_enable'] = SIM_RESERVATION
         # the menu items on the top
         context['topmenu_items'] = topmenu_items('Request Log', page.request)  # @qursaan change from _live
         # so we can sho who is logged

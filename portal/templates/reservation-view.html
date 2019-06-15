@@ -82,7 +82,7 @@
                             <select id="server_type" name="server_type" class="custom-select form-control user-input"
                                    autocomplete="off">
                                 <option value="omf" selected="selected">Testbed Nodes</option>
-                                {% if sim_vm_list != None %}
+                                {% if sim_enable %}
                                     <option value="sim">Simulation Server</option>
                                 {% endif %}
                             </select>
@@ -156,7 +156,7 @@
 
                 </div>
 
-                {% if not maintenance %}
+                {% if not maintenance and sim_enable %}
                 <div id="sim_group">
                     <div class="row">
                         <div class="form-group col-md-6">

@@ -44,7 +44,9 @@
                         <label for="server_type" class="control-label">Hardware Type</label>
                         <select id="server_type" name="server_type" class="custom-select form-control">
                             <option value="omf" label="Testbed Nodes">Testbed Nodes</option>
+                            {% if sim_enable %}
                             <option value="sim" label="Simulation Server">Simulation Server</option>
+                            {% endif %}
                         </select>
                     </div>
                     <div class="form-group col-md-5 mb-5">

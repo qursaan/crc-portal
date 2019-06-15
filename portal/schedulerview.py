@@ -17,6 +17,7 @@ from portal.user_access_profile import UserAccessProfile
 from unfold.loginrequired import LoginRequiredAutoLogoutView
 from unfold.page import Page
 from .reservation_status import ReservationStatus
+from crc.settings import SIM_RESERVATION
 
 
 class SchedulerView(LoginRequiredAutoLogoutView):
@@ -51,6 +52,7 @@ class SchedulerView(LoginRequiredAutoLogoutView):
             #'topmenu_items': topmenu_items('Scheduler View', page.request),
             'username': usera.username,
             'server_type': request.POST.get('server_type', server_type),
+            'sim_enable': SIM_RESERVATION,
             'errors': self.errors,
             'title': "Scheduler View",
             'request_date': request_date,

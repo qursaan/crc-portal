@@ -14,7 +14,7 @@ from django.template.loader import render_to_string
 from django.utils import timezone
 
 # TODO: @qursaan
-from crc.settings import SUPPORT_EMAIL, MAX_OMF_DURATION, MAX_SIM_DURATION
+from crc.settings import SUPPORT_EMAIL, MAX_OMF_DURATION, MAX_SIM_DURATION, SIM_RESERVATION
 from lab.models import Course, Experiments, LabsTemplate
 from portal.actions import get_authority_by_user, get_authority_emails, \
     schedule_auto_online, schedule_checking, schedule_checking_freq  # schedule_sim_online, \
@@ -196,18 +196,20 @@ class ReservationView(LoginRequiredAutoLogoutView):
                         slice_duration=slice_duration,  # approve_date
                         request_date=request_date,
                         authority_hrn=authority_hrn,
-                        request_type=request_type,
-                        base_image_ref=TestbedImage.objects.get(id=omf_img),  # ref
+                        request_type=request_type,  # ref
                         purpose=purpose,
                         status=ReservationStatus.get_pending(),
                     )
+                    if omf_img :
+                        s.base_image_ref=TestbedImage.objects.get(id=omf_img)
                     s.save()
                     for i in resource_group:
                         p = ReservationDetail(
                             reservation_ref=s,
                             node_ref=VirtualNode.objects.get(id=i),
-                            image_ref=TestbedImage.objects.get(id=omf_img)
                         )
+                        if omf_img:
+                            p.image_ref=TestbedImage.objects.get(id=omf_img)
                         p.save()
 
                     for i in freq_group:
@@ -233,13 +235,14 @@ class ReservationView(LoginRequiredAutoLogoutView):
                         f_end_time=end_datetime,
                         authority_hrn=authority_hrn,
                         request_type=request_type,
-                        image_ref=SimulationImage.objects.get(id=sim_img),  # ref
                         node_ref=SimulationVM.objects.get(id=sim_vm),  # ref
                         purpose=purpose,
                         status=ReservationStatus.get_pending(),
                         n_processor=sim_no_proc,
                         n_ram=sim_ram_size,
                     )
+                    if sim_img:
+                        s.image_ref = SimulationImage.objects.get(id=sim_img)  # ref
                     s.save()
                     # TODO: @qursaan
                     if not schedule_auto_online(s.id, "sim", use_bulk, reserve_type):
@@ -355,6 +358,7 @@ class ReservationView(LoginRequiredAutoLogoutView):
             'sim_no_proc': request.POST.get('sim_no_proc', '1'),
             'sim_ram_size': request.POST.get('sim_ram_size', '1024'),
 
+            'sim_enable': SIM_RESERVATION,
             'sim_max_duration': sim_max_duration,
             'omf_max_duration': omf_max_duration,
             # 'buk_max_duration': bulk_max_duration,
@@ -438,7 +442,6 @@ def check_availability(request):
         msg = schedule_checking(the_nodes, start_datetime, end_datetime, "sim")
         # busy_list = schedule_checking_all(start_datetime, end_datetime, "sim")
         # msg = checking_sim_time(the_nodes, start_datetime, end_datetime, the_dur)
-
 
     free = "0"
     if not msg:
