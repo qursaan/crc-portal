@@ -89,7 +89,7 @@ class TestbedView(LoginRequiredAutoLogoutView):
 
         # node_list = virtualnodes.prefetch_related('node_ref')
 
-        print(node_list.values_list('id'))
+        # print(node_list.values_list('id'))
 
         vm_list = VirtualNode.objects.all().order_by('node_ref')
         #node_list = PhysicalNode.objects.all()
