@@ -34,10 +34,8 @@ from portal.experimentview import ExperimentView
 # from django.conf.urls import url, include
 # from rest_framework import routers
 # from portal import views
-
 from portal.assuitcontrolview import simple_upload, manage_variables,\
     manage_variables_user
-
 # router = routers.DefaultRouter()
 # router.register(r'users', views.UserViewSet)
 # router.register(r'groups', views.GroupViewSet)
