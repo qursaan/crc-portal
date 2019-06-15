@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand, CommandError
 import socket
 from threading import Thread
-from SocketServer import ThreadingMixIn
+from socketserver import ThreadingMixIn
 from howdy.models import output, Values
 import sys
 import os
