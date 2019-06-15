@@ -456,3 +456,43 @@ def check_availability(request):
 
     post_data = json.dumps(output)
     return HttpResponse(post_data, content_type="application/json")
+
+
+@login_required
+def check_emulation_xml(request):
+    print("check xml file start ... ")
+    if request.method != 'POST':
+        return HttpResponseRedirect("/")
+
+    # date
+    start_date = request.POST.get('date1', '')
+    start_date = parser.parse(start_date)
+    end_date = request.POST.get('date2', '')
+    end_date = parser.parse(end_date)
+    # time
+    start_time = request.POST.get('time1', '')
+    end_time = request.POST.get('time2', '')
+
+    h1 = int((parser.parse(start_time).strftime('%H')))
+    h2 = int((parser.parse(end_time).strftime('%H')))
+    m1 = int((parser.parse(start_time).strftime('%M')))
+    m2 = int((parser.parse(end_time).strftime('%M')))
+
+    start_datetime = timezone.make_aware(start_date + timedelta(hours=h1, minutes=m1))
+    end_datetime = timezone.make_aware(end_date + timedelta(hours=h2, minutes=m2))
+
+    #filename = request.POST.get('filename', None)
+    usetopology = request.POST.get('use_topology', None)
+
+    #myfile = request.FILES
+    print("XML .... ")
+    path = '/var/www/xml/%s' % request.POST.get('filename')
+    f = request.FILES['filename']
+    destination = open(path, 'wb+')
+    for chunk in f.chunks():
+        destination.write(chunk)
+    destination.close()
+    #fs = FileSystemStorage()
+    #filename = fs.save(myfile.name, myfile)
+
+    print(start_datetime, end_datetime, myfile, usetopology)

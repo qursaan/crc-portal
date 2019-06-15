@@ -9,6 +9,9 @@ import math
 import networkx as nx
 import time
 import sklearn.cluster as cluster
+import json
+from subprocess import  call
+from flask import jsonify, abort
 
 U_A = 1
 U_B = 0.8899
@@ -367,8 +370,7 @@ def node_emulation_status(task_id):
 		'progress': progress,
 		'error': error,
 		'done': not os.path.exists(lock_path) 
-		)}
-
+		})
 
 
 
