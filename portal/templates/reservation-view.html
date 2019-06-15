@@ -247,7 +247,7 @@
                                 <div class="input-group-append">
                                     <span class="input-group-text">XML File</span>
                                 </div>
-                                <input type="file" id="emu_file"  class="file-upload"/>
+                                <input type="file" id="emu_file"  class="file-upload" accept=".xml"/>
 
                             </div>
                             <small class="form-text text-muted">
@@ -268,11 +268,9 @@
                                 *
                             </small>
                         </div>
-                        <div class="form-group col-md-2">
-                            <div class="input-group">
-                                <button id="check_emu" class="btn btn-info form-control" type="button">Validate
-                                </button>
-                            </div>
+                        <div class="btn-group mr-2" role="group" aria-label="Emulation group">
+                            <button id="check_emu_btn" class="btn btn-warning form-control" type="button">Validate XML
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -554,6 +552,9 @@
             else if (select_type === "sim") {     /*SIM Selection Validation*/
                 //return true;
             }
+            else if (select_type === "emu") {    /*Emulation Selection Validation*/
+
+            }
 
             if (v_range === 0) {
                 set_validation(3, "Please check availability first before submit");
@@ -563,6 +564,57 @@
             return (true);
         }
         /*******************************************check availability*********/
+        $('#check_emu_btn').on('click', function (event) {
+            let select_node = [];
+            const d1 = $('input[name="req_time_date1"]').val();
+            const d2 = $('input[name="req_time_date2"]').val();
+            const t1 = $('input[name="req_time_time1"]').val();
+            const t2 = $('input[name="req_time_time2"]').val();
+            const filename = $("#emu_file").val();
+            const usetopology = $("#emu_topology").prop('checked');
+            if (d1 === "" || d2 === "" || t1 === "" || t2 === "") {
+                set_validation(2, "Please select date and time range");
+                return false;
+            }
+            if(filename === "") {
+                set_validation(2, "Please upload a valid XML file");
+                return false;
+            }
+            event.preventDefault();
+
+            let fileData = new FormData($('#emu_file').get(0));
+            checking_xml(d1,d2,t1,t2,filename,fileData, usetopology);
+
+        });
+
+        function checking_xml(d1,d2,t1,t2,xmlfile, fileData, usetopology){
+            console.log(d1,d2,t1,t2,xmlfile, fileData, usetopology);
+            //event.preventDefault();
+
+            $.ajax({
+                url: "check_emulation_xml",
+                type: "POST",
+                enctype:"multipart/form-data",
+                data: {
+                    date1: d1,
+                    date2: d2,
+                    time1: t1,
+                    time2: t2,
+                    use_topology: usetopology,
+                    filename: xmlfile,
+                    fileXML: fileData,
+                },
+                proccessData: false,
+                success: function (result) {
+                        set_validation(1, "success");
+                },
+                error: function (xhr, errmsg, err) {
+                    console.log(err);
+                    set_validation(2, "Server Error, try again later");
+                },
+            });
+        }
+
         $("#check_time_btn").on('click', function (event) {
             set_validation(0, "...");
             let select_node = [];
@@ -617,7 +669,7 @@
                     return false;
                 }
                 if (n_nodes == 0) {
-                    set_validation(2, "Please run validate to upload and selected resources");
+                    set_validation(2, "Please run validate to upload XML and selected resources");
                     return false;
                 }
             }

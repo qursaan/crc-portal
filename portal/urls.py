@@ -12,7 +12,8 @@ from portal.homeview import HomeView
 # from portal.documentationview import DocumentationView
 from portal.navigation import *
 from portal.registrationview import RegistrationView
-from portal.reservationview import ReservationView, check_availability
+from portal.reservationview import ReservationView, check_availability, \
+    check_emulation_xml
 from portal.resourcesview import ResourcesView
 # from portal.emulationview import EmulationView
 from portal.schedulerview import SchedulerView, check_scheduler
@@ -128,6 +129,7 @@ urlpatterns = [
     re_path(r'^lab/reservation/check_availability?$', check_availability),
     re_path(r'^lab/reservation_a/check_availability?$', check_availability),
 
+    re_path(r'^lab/reservation/check_emulation_xml?$', check_emulation_xml),
     # Others
     # url(r'/?$', un_complete_page),
     # url(r'^reservation/new/?$', uncomplete),
