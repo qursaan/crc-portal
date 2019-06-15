@@ -64,7 +64,7 @@ SECRET_KEY = '!d2c&%9oqijgj8nfbjp+2m!hbyb08b36-j#tglpo*t02yh3=)b'
 DEBUG = True
 
 #ALLOWED_HOSTS = []
-ALLOWED_HOSTS = ['127.0.0.1','localhost']
+ALLOWED_HOSTS = ['127.0.0.1','localhost','195.246.49.19']
 ####################
 ADMINS = (
     # ('your_name', 'your_email@test.com'),
@@ -81,7 +81,7 @@ EMAIL_HOST_PASSWORD = "food"
 EMAIL_HOST = "localhost"
 EMAIL_PORT = 25
 EMAIL_USE_TLS = False
-SUPPORT_EMAIL = "qursaan@gmail.com"
+SUPPORT_EMAIL = "alihussin.it@gmail.com"
 # Storage settings
 BASE_IMAGE_DIR = "/usr/local/share/storage/"
 USER_HOME = "/home/crc-users/"
