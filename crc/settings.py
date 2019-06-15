@@ -64,7 +64,7 @@ SECRET_KEY = '!d2c&%9oqijgj8nfbjp+2m!hbyb08b36-j#tglpo*t02yh3=)b'
 DEBUG = True
 
 #ALLOWED_HOSTS = []
-ALLOWED_HOSTS = ['127.0.0.1','localhost','195.246.49.19']
+ALLOWED_HOSTS = ['127.0.0.1','localhost','195.246.49.16']
 ####################
 ADMINS = (
     # ('your_name', 'your_email@test.com'),
