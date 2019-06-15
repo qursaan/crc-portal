@@ -212,7 +212,7 @@
 
                         </div>
                     </div>
-
+                    {%  if sim_img_list %}
                     <div class="row">
                         <div class="form-group col-md-12">
                             <div class="input-group">
@@ -235,6 +235,7 @@
                             </small>
                         </div>
                     </div>
+                    {% endif %}
                 </div>
                 {% endif %}
 
@@ -318,7 +319,7 @@
                                 </small>
                         </div>
                     </div>
-                    {% if not maintenance %}
+                    {% if not maintenance and omf_img_list %}
                     <div class="row">
                         <div class="form-group col-md-12">
                             <div class="input-group">

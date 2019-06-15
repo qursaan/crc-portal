@@ -139,10 +139,10 @@ class ReservationView(LoginRequiredAutoLogoutView):
             resource_group = request.POST.getlist('resource_group', [])
 
             if server_type == "omf":
-                omf_img = request.POST.get('omf_img', '1')
+                omf_img = request.POST.get('omf_img', '')
                 freq_group = request.POST.getlist('freq_group', [])
             elif server_type == "sim":
-                sim_img = request.POST.get('sim_img', '1')
+                sim_img = request.POST.get('sim_img', '')
                 sim_vm = request.POST.get('sim_vm', '1')
                 sim_no_proc = request.POST.get('sim_no_proc', '1')
                 sim_ram_size = request.POST.get('sim_ram_size', '1024')
