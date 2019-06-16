@@ -478,18 +478,33 @@ def check_emulation_xml(request):
     start_datetime = timezone.make_aware(start_date + timedelta(hours=h1, minutes=m1))
     end_datetime = timezone.make_aware(end_date + timedelta(hours=h2, minutes=m2))
 
-    #filename = request.POST.get('filename', None)
     usetopology = request.POST.get('use_topology', None)
 
-    #myfile = request.FILES
-    print("XML .... ")
-    path = '/var/www/xml/%s' % request.POST.get('filename')
-    f = request.FILES['filename']
-    destination = open(path, 'wb+')
-    for chunk in f.chunks():
-        destination.write(chunk)
-    destination.close()
-    #fs = FileSystemStorage()
-    #filename = fs.save(myfile.name, myfile)
+    # 1. save file.
+    try:
+        f = request.FILES['fileXML']
+        fs = FileSystemStorage() # Saved in media folder
+        filename = fs.save(f.name, f)
+        print("XML ... Done: saved", filename)
+    except Exception as e:
+        msg = "Error during uploading file to server, please try again."
 
-    print(start_datetime, end_datetime, myfile, usetopology)
+    # 2. get free node from start to end
+
+    # 3. validate file and return node list
+
+    # 4. dump node list
+
+    free = "0"
+    if not msg:
+        msg = "Free"
+        free = "1"
+
+    output = {
+        "free": free,
+        "msg": msg,
+        # "busy": busy_list
+    }
+
+    post_data = json.dumps(output)
+    return HttpResponse(post_data, content_type="application/json")
