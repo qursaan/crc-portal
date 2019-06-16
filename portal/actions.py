@@ -209,36 +209,30 @@ def schedule_checking_all(start_datetime, end_datetime, stype="omf"):
     busy_list = ReservationStatus.get_busy_list()
     overlap = None
     node_list = []
-    # busy_list = []
+    output_busy_list = []
 
     if stype == "omf":
         node_list = VirtualNode.objects.all()
         overlap = ReservationDetail.objects.filter(
-            reservation_ref__status__in=busy_list, node_ref__in=node_list)
+            reservation_ref__status__in=busy_list, node_ref__in=node_list,
+            reservation_ref_start_time__gte=curr_start,
+            reservation_ref_end_time__lte=curr_end)
+
     elif stype == "sim":
         node_list = SimulationVM.objects.all()
-        overlap = SimReservation.objects.filter(status__in=busy_list, node_ref__in=node_list)
+        overlap = SimReservation.objects.filter(
+            status__in=busy_list, node_ref__in=node_list,
+            start_time__gte=curr_start,
+            end_time__lte=curr_end)
 
     for n in node_list:
         for r in overlap:
             if r.node_ref.id == n.id:
-                # t1 = t2 = None
+                output_busy_list.append( n.id)
+                continue
 
-                # correct ref
-                if stype == "omf":
-                    r = r.reservation_ref
-
-                # case 0: assume  start & end between s and e
-                t1 = r.start_time
-                t2 = r.end_time
-
-                # case 1: if end & start out  s and e then discard
-                if t1 < t2 <= curr_start or curr_end <= t1 < t2:
-                    continue
-
-                busy_list += n.id
-
-    return busy_list
+    output_free_list = list(set(node_list) - set(output_busy_list))
+    return output_free_list, output_busy_list
 
 
 def schedule_checking_freq(freq_list, start_datetime, end_datetime, use_bulk=False):
