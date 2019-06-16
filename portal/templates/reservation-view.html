@@ -5,6 +5,7 @@
 {% endblock %}
 
 {% block unfold_main %}
+     <link rel="stylesheet" href='{{ STATIC_URL }}css/fade.css'/>
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/jquery.timepicker.css"/>
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/bootstrap-datetimepicker.min.css"/>
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/themes/ui-lightness/jquery-ui.min.css"/>
@@ -270,7 +271,8 @@
                             </small>
                         </div>
                         <div class="btn-group mr-2" role="group" aria-label="Emulation group">
-                            <button id="check_emu_btn" class="btn btn-warning form-control" type="button">Validate XML
+                            <button id="check_emu_btn" class="btn btn-warning form-control"
+                                    type="button">Upload and Validate
                             </button>
                         </div>
                     </div>
@@ -457,6 +459,10 @@
                     </div>
                 </div>
             </fieldset>
+        <div id="fade"></div>
+        <div id="modal">
+            <img id="loader" src="{{ STATIC_URL }}img/loading1.gif" alt="Loading..."/>
+        </div>
         </form>
     </div>
 
@@ -582,36 +588,54 @@
                 return false;
             }
             event.preventDefault();
-
-            let fileData = new FormData($('#emu_file').get(0));
-            checking_xml(d1,d2,t1,t2,filename,fileData, usetopology);
+            var formData = new FormData();
+            formData.append("date1", d1);
+            formData.append("date2", d1);
+            formData.append("time1", t1);
+            formData.append("time2", t2);
+            formData.append("use_topology", usetopology);
+            formData.append("filename", filename);
+            formData.append("fileXML", $('#emu_file')[0].files[0]);
+            checking_xml(formData);
 
         });
 
-        function checking_xml(d1,d2,t1,t2,xmlfile, fileData, usetopology){
-            console.log(d1,d2,t1,t2,xmlfile, fileData, usetopology);
-            //event.preventDefault();
+        function openModal() {
+            document.getElementById('modal').style.display = 'block';
+            document.getElementById('fade').style.display = 'block';
+        }
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+            document.getElementById('fade').style.display = 'none';
+        }
 
+        function checking_xml(fileData){
+            console.log(fileData);
+            //event.preventDefault();
+            openModal();
             $.ajax({
                 url: "check_emulation_xml",
                 type: "POST",
-                enctype:"multipart/form-data",
-                data: {
-                    date1: d1,
-                    date2: d2,
-                    time1: t1,
-                    time2: t2,
-                    use_topology: usetopology,
-                    filename: xmlfile,
-                    fileXML: fileData,
-                },
-                proccessData: false,
+                data: fileData,
+                async: false,
+                cache: false,
+                contentType: false,
+                enctype: 'multipart/form-data',
+                processData: false,
                 success: function (result) {
-                        set_validation(1, "success");
+                    if (result['free'] === "1") {
+                        set_validation(1, "<strong>Success, validate file</strong>, Free Slot/Resources Selected for Emulations");
+                        v_range = 1;
+                    } else {
+                        set_validation(3, "A <strong>Busy</strong> slot(s)" + result['msg'] + "for more details see <a href='/portal/testbeds/scheduler/'>Timeline</a>");
+                        v_range = 0;
+                    }
+                    closeModal();
                 },
                 error: function (xhr, errmsg, err) {
                     console.log(err);
                     set_validation(2, "Server Error, try again later");
+                    closeModal();
                 },
             });
         }
