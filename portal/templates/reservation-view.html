@@ -248,7 +248,7 @@
                                 <div class="input-group-append">
                                     <span class="input-group-text">XML File</span>
                                 </div>
-                                <input type="file" id="emu_file"  class="file-upload" accept=".xml"/>
+                                <input type="file" id="emu_file" name="emu_file" class="file-upload" accept=".xml"/>
 
                             </div>
                             <small class="form-text text-muted">
@@ -262,7 +262,7 @@
                                 <label for="emu_topology" class="form-check-label">Use Topology Mapping
                                 </label>
                                 <input class="form-check-input" type="checkbox"
-                                        name="emu_topology" id="emu_topology" value=""
+                                        name="emu_topology" id="emu_topology"
                                         title="Topology Mapping" autocomplete="off"/>
                             </div>
                             <small class="form-text text-muted">
@@ -587,6 +587,14 @@
                 return false;
             }
             event.preventDefault();
+            $('input[name="resource_group"]:checked').each(function () {
+                this.prop('checked',false);
+            });
+            n_nodes =0;
+            n_credits=0;
+            $('#n_nodes').val(n_nodes);
+            $('#n_credits').val(n_credits);
+
             var formData = new FormData();
             formData.append("date1", d1);
             formData.append("date2", d1);
@@ -609,7 +617,7 @@
         }
 
         function checking_xml(fileData){
-            console.log(fileData);
+            //console.log(fileData);
             //event.preventDefault();
             openModal();
             $.ajax({
@@ -624,6 +632,17 @@
                 success: function (result) {
                     if (result['free'] === "1") {
                         set_validation(1, "<strong>Success, validate file</strong>, Free Slot/Resources Selected for Emulations");
+                        for(var x in result['nodes']){
+                            $('#'+result['nodes'][x]).prop('checked','checked');
+                        }
+                         $('input[name="resource_group"]:checked').each(function () {
+                            let curr_credit = Number( $(this).attr('credit'));
+                            n_nodes += 1;
+                            n_credits += curr_credit;
+
+                        });
+                        $('#n_nodes').val(n_nodes);
+                        $('#n_credits').val(n_credits);
                         v_range = 1;
                     } else {
                         set_validation(3, "A <strong>Busy</strong> slot(s)" + result['msg'] + "for more details see <a href='/portal/testbeds/scheduler/'>Timeline</a>");
@@ -692,10 +711,22 @@
                     set_validation(2, "Please upload a valid XML file");
                     return false;
                 }
+                n_nodes = 0;
+                n_credits = 0;
+                $('input[name="resource_group"]:checked').each(function () {
+                    select_node.push($(this).val());
+                    let curr_credit = Number( $(this).attr('credit'));
+                    n_nodes += 1;
+                    n_credits += curr_credit;
+                });
                 if (n_nodes == 0) {
                     set_validation(2, "Please run validate to upload XML and selected resources");
                     return false;
                 }
+
+                slice_dur = $('input[name="slice_duration"]').val();
+
+                checking_availability(select_node, d1, d2, t1, t2, "omf", slice_dur, select_freq);
             }
         });
 
