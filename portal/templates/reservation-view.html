@@ -277,6 +277,42 @@
                         </div>
                     </div>
                 </div>
+
+                <div id="emu_group">
+                    <div class="row">
+                        <div class="form-group col-md-12">
+                            <div class="input-group">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">XML File</span>
+                                </div>
+                                <input type="file" id="emu_file" name="emu_file" class="file-upload" accept=".xml"/>
+
+                            </div>
+                            <small class="form-text text-muted">
+                                Use The GUI tools to generate your XML <a href="{{ STATIC_URL }}files/GUI_tool.tar.xz">download</a>
+                            </small>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <div class="input-group form-check">
+                                <label for="emu_topology" class="form-check-label">Use Topology Mapping
+                                </label>
+                                <input class="form-check-input" type="checkbox"
+                                        name="emu_topology" id="emu_topology"
+                                        title="Topology Mapping" autocomplete="off"/>
+                            </div>
+                            <small class="form-text text-muted">
+                                *
+                            </small>
+                        </div>
+                        <div class="btn-group mr-2" role="group" aria-label="Emulation group">
+                            <button id="check_emu_btn" class="btn btn-warning form-control"
+                                    type="button">Upload and Validate
+                            </button>
+                        </div>
+                    </div>
+                </div>
                 {% endif %}
 
                 <div id="omf_group">

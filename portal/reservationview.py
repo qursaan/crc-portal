@@ -224,6 +224,7 @@ class ReservationView(LoginRequiredAutoLogoutView):
                         p = ReservationDetail(
                             reservation_ref=s,
                             node_ref=VirtualNode.objects.get(id=i),
+                            image_ref=TestbedImage.objects.get(id=omf_img)
                         )
                         if omf_img:
                             p.image_ref=TestbedImage.objects.get(id=omf_img)
