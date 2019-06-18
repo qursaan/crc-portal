@@ -303,3 +303,53 @@ def lab_result(request):
         if ol != 0:
             return HttpResponse(ol, content_type="text/plain")
     return HttpResponse('{"error": "Error, Invalid File"}', content_type="application/json")
+
+
+def action_prepare_nodes(request):
+    stype = request.POST.get('stype', None)
+    if stype is None:
+        return HttpResponse("error: Please go back and try again", content_type="text/plain")
+
+    if not slice_on_time(request, stype):
+        return HttpResponse('eof', content_type="text/plain")
+
+    slice_id = request.session.get('slice_id', None)
+    if slice_id is None:
+        return HttpResponse("error: Please go back and try again")
+
+    slice_id = int(slice_id)
+    task_id = slice_id
+
+    if task_id:
+        if not check_next_task_duration(task_id, stype):
+            return HttpResponse('warning: wait 5 min before next try', content_type="text/plain")
+
+    r = 0
+    usera = UserAccessProfile(request)
+    user = usera.user_obj
+
+    from portal.emulation import run_node_emulation
+    from crc.settings import MEDIA_ROOT
+
+    filename = Reservation.objects.get(id=slice_id).emulation_xml
+
+    xml_file_path = MEDIA_ROOT + "/" + filename
+    try:
+        run_node_emulation(xml_file_path, task_id)
+    except Exception as e:
+        r = 0
+
+    # for any action  ##########
+    if r == 1:
+        return HttpResponse('success: start prepare nodes ...', content_type="text/plain")
+    return HttpResponse('error: Unable to execute action', content_type="text/plain")
+
+
+def check_emu(request):
+    exe_id = request.POST.get('the_eid', None)
+    if exe_id:
+        from portal.emulation import node_emulation_status
+        ol = node_emulation_status(exe_id)
+        if ol:
+            return HttpResponse(ol, content_type="application/json")
+    return HttpResponse('{"error": "Error, Invalid File"}', content_type="application/json")

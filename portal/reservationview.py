@@ -79,6 +79,9 @@ class ReservationView(LoginRequiredAutoLogoutView):
         courses_list = None
         slice_name = ''
         purpose = ''
+        enm_xml_filepath = ''
+        emu_use_topology = False
+
         if reserve_type == "I":
             courses_list = Course.objects.filter(instructor_ref=user)
             labs_list = LabsTemplate.objects.all()
@@ -138,14 +141,21 @@ class ReservationView(LoginRequiredAutoLogoutView):
             request_date = timezone.now()  # request.POST.get('request_date', '')
             resource_group = request.POST.getlist('resource_group', [])
 
-            if server_type == "omf":
-                omf_img = request.POST.get('omf_img', '')
+            if server_type == "omf" :
+                omf_img = request.POST.get('omf_img', None)
                 freq_group = request.POST.getlist('freq_group', [])
             elif server_type == "sim":
                 sim_img = request.POST.get('sim_img', '')
                 sim_vm = request.POST.get('sim_vm', '1')
                 sim_no_proc = request.POST.get('sim_no_proc', '1')
                 sim_ram_size = request.POST.get('sim_ram_size', '1024')
+            elif server_type == "emu":
+                emu_use_topology = request.POST.get('emu_topology', '') == 'on'
+                omf_img = request.POST.get('omf_img', None)
+                freq_group = request.POST.getlist('freq_group', [])
+                f = request.FILES['emu_file']
+                fs = FileSystemStorage()  # Saved in media folder
+                enm_xml_filepath = fs.save(f.name, f)
 
             purpose = request.POST.get('purpose', purpose)
 
@@ -186,7 +196,7 @@ class ReservationView(LoginRequiredAutoLogoutView):
                 self.errors.append('Purpose is mandatory')
 
             if not self.errors:
-                if server_type == "omf":
+                if server_type == "omf" or server_type == "emu":
                     s = Reservation(
                         user_ref=user,
                         username=usera.session_username,
@@ -196,12 +206,19 @@ class ReservationView(LoginRequiredAutoLogoutView):
                         slice_duration=slice_duration,  # approve_date
                         request_date=request_date,
                         authority_hrn=authority_hrn,
-                        request_type=request_type,  # ref
+                        request_type=request_type,
+                        # base_image_ref=TestbedImage.objects.get(id=omf_img),  # ref
                         purpose=purpose,
                         status=ReservationStatus.get_pending(),
                     )
-                    if omf_img :
-                        s.base_image_ref=TestbedImage.objects.get(id=omf_img)
+                    if omf_img is not None:
+                        s.base_image_ref = TestbedImage.objects.get(id=omf_img)  # ref
+
+                    if server_type == "emu":
+                        s.emulation_res = True
+                        s.emulation_xml = enm_xml_filepath
+                        s.emulation_topology = emu_use_topology
+
                     s.save()
                     for i in resource_group:
                         p = ReservationDetail(
@@ -481,8 +498,13 @@ def check_emulation_xml(request):
     start_datetime = timezone.make_aware(start_date + timedelta(hours=h1, minutes=m1))
     end_datetime = timezone.make_aware(end_date + timedelta(hours=h2, minutes=m2))
 
-    usetopology = request.POST.get('use_topology', None)
+    usetopology = request.POST.get('use_topology', False)
+    if usetopology == "true":
+        usetopology = True
+    else:
+        usetopology = False
 
+    msg = None
     # 1. save file.
     try:
         f = request.FILES['fileXML']
@@ -493,10 +515,33 @@ def check_emulation_xml(request):
         msg = "Error during uploading file to server, please try again."
 
     # 2. get free node from start to end
+    if not msg:
+        free_list = schedule_checking_freeWiFi(start_datetime, end_datetime)
+        if free_list is []:
+            msg = "No free nodes in this time slot, choose another time."
 
     # 3. validate file and return node list
+    if not msg:
+        try:
+            from portal.emulation import reserve_node_emulation
+            from crc.settings import MEDIA_ROOT
+
+            f_path = MEDIA_ROOT+"/"+filename
+            used_node = reserve_node_emulation(f_path, free_list, usetopology)
+            print(used_node)
+
+            if used_node is [] :
+                msg = "Requested nodes are not available"
+        except Exception as e:
+            msg = "Please upload a correct XML description file"
 
     # 4. dump node list
+    if not msg:
+        node_list = VirtualNode.objects.filter(device_ref__id=1, vm_name__in=used_node)
+        node_ids = []
+        for n in node_list:
+            node_ids.append(n.id)
+        print(node_ids)
 
     free = "0"
     if not msg:
@@ -506,8 +551,35 @@ def check_emulation_xml(request):
     output = {
         "free": free,
         "msg": msg,
-        # "busy": busy_list
+        "nodes": node_ids,
     }
 
     post_data = json.dumps(output)
     return HttpResponse(post_data, content_type="application/json")
+
+
+def schedule_checking_freeWiFi(start_datetime, end_datetime):
+    curr_start = start_datetime
+    curr_end = end_datetime
+
+    busy_list = ReservationStatus.get_busy_list()
+    overlap = None
+    node_list = []
+    output_busy_list = []
+
+
+    node_list = VirtualNode.objects.filter(device_ref__id=1)
+    overlap = ReservationDetail.objects.filter(
+        reservation_ref__status__in=busy_list, node_ref__in=node_list,
+        reservation_ref__start_time__gte=curr_start,
+        reservation_ref__end_time__lte=curr_end)
+
+    output_free_list =[]
+    for n in node_list:
+        for r in overlap:
+            if r.node_ref.id == n.id:
+                output_busy_list.append( n.id)
+                continue
+        if n.id not in output_busy_list:
+            output_free_list.append(n.vm_name)
+    return output_free_list

@@ -22,7 +22,8 @@ from portal.slicecontrolview import SliceControlView, \
     control_check_load, control_check_save, \
     control_remote_node, control_access_token, \
     control_exe_script, control_check_exe, control_exe_abort, \
-    control_lab_run, control_lab_check, control_lab_result
+    control_lab_run, control_lab_check, control_lab_result,  \
+    control_prepare_node, control_check_emu
 from portal.slicependingview import SliceCurrentView, SliceHistoryView, \
     slice_o_pending_process, slice_s_pending_process, \
     slice_o_pending_cancel, slice_s_pending_cancel
@@ -109,6 +110,8 @@ urlpatterns = [
     re_path(r'^lab/current/slice_s_cancel/(\d{1,10})/?$', slice_s_pending_cancel),
     re_path(r'^lab/control/?$', SliceControlView.as_view(), name="slice_control"),
     re_path(r'^lab/control/gen_access_token/?$', control_access_token),
+    re_path(r'^lab/control/control_emulation/?$', control_prepare_node),
+    re_path(r'^lab/control/control_check_emu/?$', control_check_emu),
     re_path(r'^lab/control/control_load_image/?$', control_load_image),
     re_path(r'^lab/control/control_save_image/?$', control_save_image),
     re_path(r'^lab/control/control_check_load/?$', control_check_load),

@@ -522,6 +522,12 @@
                                                         class="refresh_btn btn btn-outline-success" type="button">
                                                     Refresh Status
                                                 </button>
+                                                {% if show_emu %}
+                                                    <button id="remote_enm" name="remote_enm"
+                                                        class="btn btn-success" type="button">
+                                                        Prepare Node
+                                                    </button>
+                                                {% endif %}
                                                 <button id="remote_start" name="b_start" class="btn btn-info"
                                                         type="button">
                                                     Start
@@ -534,7 +540,6 @@
                                                         class="btn btn-danger" type="button">
                                                     Shutdown
                                                 </button>
-
                                             </div>
                                         </div>
 
@@ -738,6 +743,7 @@
     <script type="text/javascript">
         let count = 0;
         let loadingList = [];
+        let emuList =[];
         let savingList = [];
         let exeList = [];
         let labList = [];
@@ -791,9 +797,16 @@
             for (a in exeList) {
                 checking_status_exe(exeList[a][0], exeList[a][1], a, exeList);
             }
+            {% if show_lab %}
             for (a in labList) {
                 checking_status_lab(labList[a][0], labList[a][1], a, labList);
             }
+            {% endif %}
+            {% if show_emu %}
+            for( a in emuList){
+                checking_status_emu(emuList[a][0], emuList[a][1], a, emuList);
+            }
+            {% endif %}
             if (changeFlag) {
                 update_testbeds();
                 changeFlag = false;
@@ -858,6 +871,10 @@
         function pre_remote(action, node_group_name) {
             //event.preventDefault();
             const node_name = $('input[name=' + node_group_name + ']:checked').val();
+            if (node_name == undefined){
+                add_activity("Error: Select Node first !");
+                return;
+            }
             const aid = add_activity(action + " " + node_name);
             remote(action, node_name, aid);
         }
@@ -1014,8 +1031,8 @@
                         const is_done = result['done'];
                         if (is_done === false) {
                             const log = result['log'];
-                            let output = '';
-                            for (let txt in log) {
+                            var output = '';
+                            for (var txt in log) {
                                 output += log[txt] + '\n';
                             }
                             $('#output').val(output);
@@ -1040,12 +1057,12 @@
         $('#load_image_btn').on('click', function (event) {
             event.preventDefault();
             const os_type = $('input[name="image_type"]:checked').val();
-            let os_id = $('#osimage option:selected').val();
+            var os_id = $('#osimage option:selected').val();
             if (os_type === "user_image") {
                 os_id = $('#osimage_user option:selected').val();
             }
-            let select_node_list = [];                      //
-            let aid_list = [];                      //
+            var select_node_list = [];                      //
+            var aid_list = [];                      //
 
             $('input[name="node_group1"]:checked').each(function () {
                 const select_node = $(this).val();
@@ -1066,7 +1083,7 @@
         });
 
         function loading_image(node_name, os_id, os_type, aid) {
-            for (let x in aid) {
+            for (var x in aid) {
                 $("#" + aid[x]).text("loading ...");
             }
             openModal();
@@ -1079,7 +1096,7 @@
                         document.location.href = '/portal/lab/current/';
                     } else {
                         if (result.startsWith("success")) {
-                            for (let x in aid) {
+                            for (var x in aid) {
                                 print_recolor(aid[x], 1, result);
                                 loadingList.push([node_name[x], aid[x]]);
                             }
@@ -1178,8 +1195,8 @@
             });
 
             function connectTerminal() {
-                let address = ("{{terminal_ip}}");
-                let element = '';
+                var address = ("{{terminal_ip}}");
+                var element = '';
                 //var url =  element.src;
                 element.src = address;
             }
@@ -1238,11 +1255,11 @@
 
         $("#get_last_btn").on('click', function (event) {
             {% for n in node_list %}
-                let node_id = '{{ n.node_ref.vm_name }}';
-                let l = '{{n.details}}';
+                var node_id = '{{ n.node_ref.vm_name }}';
+                var l = '{{n.details}}';
                 if (l !== 'NA') {
-                    let node_name = '{{ n.node_ref.vm_name }}';
-                    let aid = add_activity(node_name + ', {{n.details}} image at {{n.last_action}}');
+                    var node_name = '{{ n.node_ref.vm_name }}';
+                    var aid = add_activity(node_name + ', {{n.details}} image at {{n.last_action}}');
 
                     if (l === "save")
                         savingList.push([node_name, aid]);
@@ -1305,7 +1322,7 @@
         function update_testbeds() {
             disableRefresh();
             {% for n in node_list %}
-                let node_id = String('{{ n.node_ref.vm_name }}');
+                var node_id = String('{{ n.node_ref.vm_name }}');
                 check_status(node_id);
             {% endfor %}
             enableRefresh();
@@ -1336,7 +1353,7 @@
                 type: "POST",
                 data: {the_post: node_id},
                 success: function (json) {
-                    let result = json['status'];
+                    var result = json['status'];
                     update_node(node_id, result);
                 },
                 error: function (xhr, errmsg, err) {
@@ -1350,7 +1367,7 @@
         {% if show_lab %}
             $('#run_exp_lab').on('click', function (event) {
                 event.preventDefault();
-                let aid = add_activity("Running Experiment");
+                var aid = add_activity("Running Experiment");
                 $('#run_exp_lab').attr("disabled", "disabled");
                 create_lab_post(aid);
             });
@@ -1399,8 +1416,8 @@
                     data: {the_eid: eid},
                     success: function (result) {
                         /*console.log(result);*/
-                        let is_done = result['done'];
-                        let log, output;
+                        var is_done = result['done'];
+                        var log, output;
                         if (is_done === false) {
                             log = result['log'];
                             output = '';
@@ -1423,6 +1440,96 @@
                             print_recolor(aid, 1, "Complete");
                             a_list.splice(idx, 1);
                             checking_result_lab(eid);
+                        }
+                    },
+                    error: function (xhr, errmsg, err) {
+                        console.log(err);
+                        print_recolor(aid, 3, "Server not connected, try again later");
+                        a_list.splice(idx, 1);
+                    }
+                });
+            }
+        {% endif %}
+
+        /****************Node Emulation **************************/
+        {% if show_emu %}
+            $('#remote_enm').on('click', function (event) {
+                event.preventDefault();
+                var select_node_list = [];                      //
+                var aid_list = [];                      //
+
+                $('input[name="node_group3"]').each(function () {
+                    const select_node = $(this).val();
+                    select_node_list.push(select_node);          //
+                    const aid = add_activity("Prepare Node: " + select_node);
+                    aid_list.push(aid);
+                });
+                prepare_emulation(aid_list);
+            });
+            function prepare_emulation(aid) {
+                for (var x in aid) {
+                    $("#" + aid[x]).text("Preparing ...");
+                }
+                openModal();
+                $.ajax({
+                    url: "control_emulation",
+                    type: "POST",
+                    data: { stype: '{{ stype }}'},
+                    success: function (result) {
+                        if (result === "eof") {
+                            document.location.href = '/portal/lab/current/';
+                        } else {
+                            if (result.startsWith("success")) {
+                                for (var x in aid) {
+                                    print_recolor(aid[x], 1, result);
+                                    emuList.push([node_name[x], aid[x]]);
+                                }
+                            } else if (result.startsWith("warning")) {
+                                print_recolor(aid, 2, result);
+                            } else {
+                                print_recolor(aid, 3, result);
+                            }
+                        }
+                        closeModal();
+                    },
+                    error: function (xhr, errmsg, err) {
+                        for (let x in aid) {
+                            print_recolor(aid[x], 3, "Server Error, try again later");
+                        }
+                        closeModal();
+                    }
+                });
+            }
+
+            function prep_button(state) {
+                if (state === 0) {  //Disable exe
+                    $('#remote_enm').attr("style", "display: none;").attr("disabled", "disabled");
+                } else if (state === 1) {
+                    $('#remote_enm').removeAttr("style").removeAttr("disabled");
+                }
+            }
+
+            function checking_status_emu(eid, aid, idx, a_list) {
+                $.ajax({
+                    url: "control_check_emu",
+                    type: "POST",
+                    data: {the_eid: eid},
+                    success: function (result) {
+                        //console.log(result);
+                        const is_done = result['done'];
+                        if (is_done === false) {
+                            const log = result['progress'];
+                            var output = '';
+                            for (var txt in log) {
+                                output += log[txt] + '\n';
+                            }
+                            $('#output').val(output);
+                            $('#output').scrollTop($('#output')[0].scrollHeight);
+                            print_recolor(aid, 2, "In progress");
+                        } else {
+                            print_recolor(aid, 1, "Complete");
+                            a_list.splice(idx, 1);
+                            prep_button(1);
                         }
                     },
                     error: function (xhr, errmsg, err) {

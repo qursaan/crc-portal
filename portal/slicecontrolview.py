@@ -13,7 +13,7 @@ from portal.models import Reservation, ReservationDetail, SimReservation, \
     TestbedImage, UserImage, SimulationImage, ReservationFrequency
 from portal.navigation import action_load_save_image, omf_exe, remote_node, \
     check_task_progress, check_exe_progress, slice_on_time, abort_exe_progress, \
-    lab_run, lab_check, lab_result, access_token_gen
+    lab_run, lab_check, lab_result, access_token_gen, action_prepare_nodes, check_emu
 # from portal.actions import get_user_by_email, get_user_type
 #
 from portal.user_access_profile import UserAccessProfile
@@ -46,6 +46,7 @@ class SliceControlView(LoginRequiredAutoLogoutView):
         allow_img = True
         supp_file = None
         show_lab = False
+        show_enm = False
         lab_ref = None
         lab_param_list = []
         # vnc_link_access = None
@@ -73,6 +74,7 @@ class SliceControlView(LoginRequiredAutoLogoutView):
                 node_list = ReservationDetail.objects.filter(reservation_ref=current_slice)
                 freq_list = ReservationFrequency.objects.filter(reservation_ref=current_slice)
                 image_list = TestbedImage.objects.all()
+                show_enm = current_slice.emulation_res
                 t = 'Testbeds Remote Control Panel'
             elif stype == "sim":
                 current_slice = SimReservation.objects.get(id=slice_id)
@@ -111,6 +113,7 @@ class SliceControlView(LoginRequiredAutoLogoutView):
             'allow_img': allow_img,
             'supp_file': supp_file,
             'show_lab': show_lab,
+            'show_emu': show_enm,
             'lab_ref': lab_ref,
             'lab_param_list': lab_param_list,
             'vnc_link_access': "http://" + BACKENDIP + ":6080/vnc.html",
@@ -224,3 +227,16 @@ def control_lab_result(request):
         return HttpResponseRedirect("/")
     return lab_result(request)
 
+
+@login_required
+def control_prepare_node(request):
+    if request.method != 'POST':
+        return HttpResponseRedirect("/")
+    return action_prepare_nodes(request)
+
+
+@login_required
+def control_check_emu(request):
+    if request.method != 'POST':
+        return HttpResponseRedirect("/")
+    return check_emu(request)

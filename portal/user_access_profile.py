@@ -16,7 +16,7 @@ class UserAccessProfile:
                 self.access_all = False
 
 
-        print("Session username:", self.username)
+        print("Session username:", self.session_username)
         if self.username:
             self.user_obj = get_user_by_email(self.username)
             self.user_type = get_user_type(self.user_obj)
