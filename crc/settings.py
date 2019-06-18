@@ -64,7 +64,7 @@ SECRET_KEY = '!d2c&%9oqijgj8nfbjp+2m!hbyb08b36-j#tglpo*t02yh3=)b'
 DEBUG = True
 
 #ALLOWED_HOSTS = []
-ALLOWED_HOSTS = ['127.0.0.1','localhost']
+ALLOWED_HOSTS = ['127.0.0.1','localhost','193.227.16.199']
 ####################
 ADMINS = (
     # ('your_name', 'your_email@test.com'),
@@ -86,7 +86,7 @@ SUPPORT_EMAIL = "qursaan@gmail.com"
 BASE_IMAGE_DIR = "/usr/local/share/storage/"
 USER_HOME = "/home/crc-users/"
 # Backend setting
-BACKENDIP = "127.0.0.1"  # ""193.227.16.199"
+BACKENDIP = "193.227.16.199"
 # Federation setting
 FED_PASS = 'XfedXuserXcrc'
 #FED_RUN = 1  # 0-STOP 1-RUNNING

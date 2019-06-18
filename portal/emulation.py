@@ -170,9 +170,9 @@ def reserve_node_emulation(xml_file_path, available_nodes, use_topology_mapping)
 
 			nodes_config = []
 			used_nodes = []
-			#f = open("/etc/dnsmasq.d/testbed.conf", "r")
+			f = open("/etc/dnsmasq.d/testbed.conf", "r")
 			# f=open("/home/nada/CRC/testbed.conf", "r")
-			f = open("/home/debian2/Downloads/testbed.conf", "r")
+			#f = open("/home/debian2/Downloads/testbed.conf", "r")
 			lines = f.readlines()
 			count = 0
 			for line in lines:
@@ -344,10 +344,10 @@ def reserve_node_emulation(xml_file_path, available_nodes, use_topology_mapping)
 # xml_file_path: string
 # task_id: string
 def run_node_emulation(xml_file_path, task_id):
-	emulation_log_path = '/root/emulation_log/log'
+	emulation_log_path = '/home/emulation_log/log'
 	call(["rm", "-rf", emulation_log_path+"{0}-load.progress".format(task_id)])
 
-	call(["/root/generate_run_scripts", "{0}".format(xml_file_path), ">>", emulation_log_path+"{0}-load.progress".format(task_id)])
+	call(["/home/generate_run_scripts", "{0}".format(xml_file_path), ">>", emulation_log_path+"{0}-load.progress".format(task_id)])
 
 # ------------------------------------------------------------------------------------------------------------------------------------
 
@@ -355,7 +355,7 @@ def run_node_emulation(xml_file_path, task_id):
 
 # task_id: string
 def node_emulation_status(task_id):
-	emulation_log_path = '/root/emulation_log/log'
+	emulation_log_path = '/home/emulation_log/log'
 	progress_log = emulation_log_path + "{0}-load.progress".format(task_id)
 	error = False
 	done = False
