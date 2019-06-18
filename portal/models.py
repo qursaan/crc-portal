@@ -189,7 +189,7 @@ class ResourcesInfo(models.Model):
 
 
 class PhysicalNode(models.Model):
-    uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
+    uid = models.UUIDField(null=True, editable=False)
     # public_name = models.TextField(default='NA')
     # false = private , true = public
     shared = models.BooleanField(default=False)
