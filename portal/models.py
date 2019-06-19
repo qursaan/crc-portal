@@ -181,7 +181,7 @@ class ResourcesInfo(models.Model):
     type = models.TextField(default='NA')
     description = models.TextField(default='NA')
     # credit value
-    credit_value = models.IntegerField(default=1)
+    credit_value = models.IntegerField(default=1,null=True)
     image_name = models.TextField(default='NA')
 
     def __str__(self):
@@ -310,9 +310,9 @@ class Reservation(models.Model):
     # status 0-disabled, 1-pending, 3-active, 4-expired, 5-canceled
     status = models.IntegerField(default=0)
     created = models.DateTimeField(default=timezone.now)
-    emulation_res = models.BooleanField(default=False)
+    emulation_res = models.BooleanField(default=False, null=True)
     emulation_xml = models.TextField(null=True)
-    emulation_topology = models.BooleanField(default=False)
+    emulation_topology = models.BooleanField(default=False, null=True)
 
     def __str__(self):
         return str(self.id)
