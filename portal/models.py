@@ -310,9 +310,9 @@ class Reservation(models.Model):
     # status 0-disabled, 1-pending, 3-active, 4-expired, 5-canceled
     status = models.IntegerField(default=0)
     created = models.DateTimeField(default=timezone.now)
-    emulation_res = models.BooleanField(default=False, null=True)
+    emulation_res = models.BooleanField(default=False)
     emulation_xml = models.TextField(null=True)
-    emulation_topology = models.BooleanField(default=False, null=True)
+    emulation_topology = models.BooleanField(default=False)
 
     def __str__(self):
         return str(self.id)
