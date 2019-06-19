@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.utils import timezone
 
-from portal.backend_actions import create_slice
+from portal.backend_actions import create_slice,create_backend_user
 from portal.models import Authority, MyUser, PendingSlice, \
     PendingAuthority, VirtualNode, FrequencyRanges, \
     Reservation, ReservationDetail, SimReservation, SimulationVM, ReservationFrequency
@@ -536,8 +536,8 @@ def portal_validate_request(wsgi_request, request_ids):
                 web_user = User.objects.get(id=up_user.id)
                 # TODO: Create user file here
                 # @qursaan : Activate user here
-                # result = create_backend_user(up_user.username, up_user.password)
-                result = 1
+                result = create_backend_user(up_user.username, up_user.password)
+                # result = 1
                 if result == 1:
                     up_user.status = 2
                     up_user.save()
