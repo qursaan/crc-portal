@@ -141,8 +141,11 @@ INSTALLED_APPS = (
     'portal',
     'lab',
     'federate',
-    'howdy',
     'rest_framework',
+    'django_nvd3',
+    'djangobower',
+    'django_extensions',
+    'howdy',
 )
 
 # CELERY_RESULT_BACKEND=('djcelery.backends.database:DatabaseBackend',)
