@@ -1,6 +1,6 @@
 # my.cnf
 [client]
-database = PORTALV2
+database = PORTAL
 user = portaluser
 password = portal123portal!
 host = localhost
