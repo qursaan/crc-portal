@@ -170,9 +170,9 @@ def reserve_node_emulation(xml_file_path, available_nodes, use_topology_mapping)
 
 			nodes_config = []
 			used_nodes = []
-			#f = open("/etc/dnsmasq.d/testbed.conf", "r")
+			f = open("/etc/dnsmasq.d/testbed.conf", "r")
 			# f=open("/home/nada/CRC/testbed.conf", "r")
-			f = open("/home/debian2/Downloads/testbed.conf", "r")
+			#f = open("/home/debian2/Downloads/testbed.conf", "r")
 			lines = f.readlines()
 			count = 0
 			for line in lines:
