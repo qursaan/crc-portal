@@ -126,4 +126,6 @@ def federate_getUsers(request):
 
 def is_fed_active():
     site = Site.objects.get(id=1)
+    if site is None:
+        return False
     return True if site.status == 2 else False
