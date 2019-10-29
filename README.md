@@ -14,3 +14,6 @@ sites.
 ![Federation system architecture design including testbed portal.](/help/credit_arch.png)*Federation system architecture design including testbed portal.*
 
 
+# QuickStart
+## Installation
+More info in ```help/install_v3.sh``` file
