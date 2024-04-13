@@ -17,7 +17,7 @@ Flask==2.3.2
 flask-crossdomain==0.1
 Flask-HTTPAuth==3.2.4
 Flask-MySQL==1.4.0
-idna==2.7
+idna==3.7
 itsdangerous==1.1.0
 Markdown==2.6.11
 MarkupSafe==1.0
