@@ -5,7 +5,7 @@ cffi==1.11.5
 chardet==3.0.4
 Click==7.0
 crypto==1.4.1
-cryptography==43.0.1
+cryptography==44.0.1
 decorators==0.1.1
 django-filer==3.3.0
 django-filter>=2.4.0
