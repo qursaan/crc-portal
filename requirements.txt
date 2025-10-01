@@ -7,7 +7,7 @@ Click==7.0
 crypto==1.4.1
 cryptography==43.0.1
 decorators==0.1.1
-django-filer==1.3.2
+django-filer==3.3.0
 django-filter>=2.4.0
 django-js-asset==1.1.0
 django-mptt==0.9.1
