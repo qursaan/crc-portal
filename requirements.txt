@@ -37,4 +37,4 @@ schedule==0.5.0
 shellescape==3.4.1
 six==1.11.0
 Unidecode==0.4.21
-Werkzeug==3.0.6
+Werkzeug==3.1.4
