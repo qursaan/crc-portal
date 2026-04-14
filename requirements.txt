@@ -15,7 +15,7 @@ django-polymorphic==2.0
 easy-thumbnails==2.5
 Flask==2.3.2
 flask-crossdomain==0.1
-Flask-HTTPAuth==3.2.4
+Flask-HTTPAuth==4.8.1
 Flask-MySQL==1.4.0
 idna==3.7
 itsdangerous==1.1.0
